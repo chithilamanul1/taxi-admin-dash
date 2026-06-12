@@ -13,6 +13,7 @@ import { PhoneInput } from 'react-international-phone';
 import 'react-international-phone/style.css';
 import VehicleCarousel from './VehicleCarousel';
 import CustomDateTimePicker from './CustomDateTimePicker';
+import { detectLocalTimezone } from '../lib/timezone-util';
 
 const STEPS = [
     { id: 1, title: 'Route & Vehicle', icon: MapPin },
@@ -163,7 +164,8 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
             if (hours12 === 0) hours12 = 12;
             const hStr = hours12.toString().padStart(2, '0');
             const mStr = adjustedMins.toString().padStart(2, '0');
-            return `${hStr}:${mStr} ${period} SLST`;
+            const localTz = detectLocalTimezone();
+            return `${hStr}:${mStr} ${period} ${localTz}`;
         })(),
         name: initialData.name || '',
         phone: initialData.phone || '',
@@ -824,44 +826,21 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                                         Arrival Date & Time <span className="text-[#FACC15]">*Required</span>
                                                     </label>
                                                     <div className="relative">
-                                                        <button 
-                                                            type="button"
-                                                            onClick={() => setIsArrivalPickerOpen(!isArrivalPickerOpen)} 
-                                                            className={`w-full h-20 bg-slate-50 dark:bg-white/5 border px-14 rounded-3xl font-black text-xl sm:text-2xl uppercase tracking-widest outline-none focus:border-[#FACC15] transition-all flex items-center justify-between text-left ${errors.date || errors.flightArrivalTime ? 'border-red-500 animate-shake' : 'border-slate-100 dark:border-white/10'}`}
-                                                        >
-                                                            <span className={formData.flightArrivalDate && formData.flightArrivalTime ? 'text-black dark:text-white' : 'text-slate-400'}>
-                                                                {formData.flightArrivalDate && formData.flightArrivalTime 
-                                                                    ? formatDisplayDateTime(formData.flightArrivalDate, formData.flightArrivalTime)
-                                                                    : 'Select Date & Time'}
-                                                            </span>
-                                                            <ChevronDown size={20} className={`opacity-50 transition-transform ${isArrivalPickerOpen ? 'rotate-180' : ''}`} />
-                                                        </button>
-                                                        <div className="absolute left-6 top-1/2 -translate-y-1/2 text-[#FACC15]">
+                                                        <CustomDateTimePicker 
+                                                            date={formData.flightArrivalDate} 
+                                                            time={formData.flightArrivalTime} 
+                                                            onChange={(d, t) => { 
+                                                                setFormData(prev => ({ ...prev, flightArrivalDate: d, date: d, flightArrivalTime: t, time: t })); 
+                                                                if (errors.date || errors.flightArrivalTime) {
+                                                                    setErrors(prev => ({ ...prev, date: false, flightArrivalTime: false, time: false }));
+                                                                }
+                                                            }} 
+                                                            className={`w-full h-20 bg-slate-50 dark:bg-white/5 border px-14 rounded-3xl font-black text-xl sm:text-2xl uppercase tracking-widest outline-none focus:border-[#FACC15] transition-all focus:ring-2 focus:ring-[#FACC15] ${errors.date || errors.flightArrivalTime ? 'border-red-500 ring-2 ring-red-500/20 animate-shake' : 'border-slate-100 dark:border-white/10'}`}
+                                                        />
+                                                        <div className="absolute left-6 top-1/2 -translate-y-1/2 text-[#FACC15] pointer-events-none">
                                                             <Calendar size={22} strokeWidth={3} />
                                                         </div>
                                                     </div>
-                                                    <AnimatePresence>
-                                                        {isArrivalPickerOpen && (
-                                                            <>
-                                                                <div className="fixed inset-0 z-[190]" onClick={() => setIsArrivalPickerOpen(false)} />
-                                                                <motion.div initial={{ opacity: 0, y: 10, scale: 0.95 }} animate={{ opacity: 1, y: 0, scale: 1 }} exit={{ opacity: 0, y: 10, scale: 0.95 }} className="absolute top-full left-0 right-0 mt-3 z-[200] shadow-2xl origin-top">
-                                                                    <CustomDateTimePicker 
-                                                                        date={formData.flightArrivalDate} 
-                                                                        time={formData.flightArrivalTime} 
-                                                                        onChange={(d, t) => { 
-                                                                            setFormData(prev => ({ ...prev, flightArrivalDate: d, date: d, flightArrivalTime: t, time: t })); 
-                                                                            if (errors.date || errors.flightArrivalTime) {
-                                                                                setErrors(prev => ({ ...prev, date: false, flightArrivalTime: false, time: false }));
-                                                                            }
-                                                                        }} 
-                                                                    />
-                                                                    <div className="bg-white rounded-b-[2.5rem] border-x-4 border-b-4 border-[#FACC15] p-4 flex justify-center max-w-[320px] mx-auto">
-                                                                        <button type="button" onClick={() => setIsArrivalPickerOpen(false)} className="px-10 py-3 bg-[#FACC15] text-black font-black text-xs uppercase tracking-[0.2em] rounded-full hover:bg-white transition-all shadow-lg active:scale-95">Done</button>
-                                                                    </div>
-                                                                </motion.div>
-                                                            </>
-                                                        )}
-                                                    </AnimatePresence>
                                                 </div>
 
                                                 {/* Customer Name on Board — shown only when Name Board is selected */}
@@ -964,44 +943,21 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                             Pickup Date & Time <span className="text-[#FACC15]">*Required</span>
                                         </label>
                                         <div className="relative">
-                                            <button 
-                                                type="button"
-                                                onClick={() => setIsPickupPickerOpen(!isPickupPickerOpen)} 
-                                                className={`w-full h-16 bg-slate-50 dark:bg-white/5 border px-14 rounded-3xl font-black text-base sm:text-xl uppercase tracking-widest outline-none focus:border-[#FACC15] transition-all flex items-center justify-between text-left ${errors.date || errors.time ? 'border-red-500 animate-shake' : 'border-slate-200 dark:border-white/10'}`}
-                                            >
-                                                <span className={formData.date && formData.time ? 'text-black dark:text-white' : 'text-slate-400'}>
-                                                    {formData.date && formData.time 
-                                                        ? formatDisplayDateTime(formData.date, formData.time)
-                                                        : 'Select Date & Time'}
-                                                </span>
-                                                <ChevronDown size={18} className={`opacity-50 transition-transform ${isPickupPickerOpen ? 'rotate-180' : ''}`} />
-                                            </button>
-                                            <div className="absolute left-6 top-1/2 -translate-y-1/2 text-[#FACC15]">
+                                            <CustomDateTimePicker 
+                                                date={formData.date} 
+                                                time={formData.time} 
+                                                onChange={(d, t) => { 
+                                                    setFormData(prev => ({ ...prev, date: d, time: t })); 
+                                                    if (errors.date || errors.time) {
+                                                        setErrors(prev => ({ ...prev, date: false, time: false }));
+                                                    }
+                                                }} 
+                                                className={`w-full h-16 bg-slate-50 dark:bg-white/5 border px-14 rounded-3xl font-black text-base sm:text-xl uppercase tracking-widest outline-none focus:border-[#FACC15] transition-all focus:ring-2 focus:ring-[#FACC15] ${errors.date || errors.time ? 'border-red-500 ring-2 ring-red-500/20 animate-shake' : 'border-slate-200 dark:border-white/10'}`}
+                                            />
+                                            <div className="absolute left-6 top-1/2 -translate-y-1/2 text-[#FACC15] pointer-events-none">
                                                 <Calendar size={20} strokeWidth={3} />
                                             </div>
                                         </div>
-                                        <AnimatePresence>
-                                            {isPickupPickerOpen && (
-                                                <>
-                                                    <div className="fixed inset-0 z-[190]" onClick={() => setIsPickupPickerOpen(false)} />
-                                                    <motion.div initial={{ opacity: 0, y: 10, scale: 0.95 }} animate={{ opacity: 1, y: 0, scale: 1 }} exit={{ opacity: 0, y: 10, scale: 0.95 }} className="absolute top-full left-0 right-0 mt-3 z-[200] shadow-2xl origin-top">
-                                                        <CustomDateTimePicker 
-                                                            date={formData.date} 
-                                                            time={formData.time} 
-                                                            onChange={(d, t) => { 
-                                                                setFormData(prev => ({ ...prev, date: d, flightArrivalDate: d, time: t, flightArrivalTime: t })); 
-                                                                if (errors.date || errors.time) {
-                                                                    setErrors(prev => ({ ...prev, date: false, time: false }));
-                                                                }
-                                                            }} 
-                                                        />
-                                                        <div className="bg-white rounded-b-[2.5rem] border-x-4 border-b-4 border-[#FACC15] p-4 flex justify-center max-w-[320px] mx-auto">
-                                                            <button type="button" onClick={() => setIsPickupPickerOpen(false)} className="px-10 py-3 bg-[#FACC15] text-black font-black text-xs uppercase tracking-[0.2em] rounded-full hover:bg-white transition-all shadow-lg active:scale-95">Done</button>
-                                                        </div>
-                                                    </motion.div>
-                                                </>
-                                            )}
-                                        </AnimatePresence>
                                     </div>
                                 )}
                                 
@@ -1138,7 +1094,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                             className={`w-full h-16 bg-slate-50 dark:bg-white/5 border px-14 rounded-3xl font-black text-xl uppercase tracking-widest outline-none focus:border-[#FACC15] transition-all flex items-center justify-between text-left ${errors.date || errors.time ? 'border-red-500 animate-shake' : 'border-slate-200 dark:border-white/10'}`}
                                         >
                                             <span className="text-black dark:text-white">
-                                                {formatDisplayDateTime(formData.date || formData.flightArrivalDate || new Date().toISOString().split('T')[0], formData.time || formData.flightArrivalTime || '12:00 PM SLST')}
+                                                {formatDisplayDateTime(formData.date || formData.flightArrivalDate || new Date().toISOString().split('T')[0], formData.time || formData.flightArrivalTime || `12:00 PM ${detectLocalTimezone()}`)}
                                             </span>
                                             <ChevronDown size={20} className={`opacity-50 transition-transform ${isMainPickerOpen2 ? 'rotate-180' : ''}`} />
                                         </button>
@@ -1182,44 +1138,21 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                             Return Date & Time (Optional)
                                         </label>
                                         <div className="relative">
-                                            <button 
-                                                type="button"
-                                                onClick={() => setIsReturnPickerOpen(!isReturnPickerOpen)} 
-                                                className={`w-full h-16 bg-slate-50 dark:bg-white/5 border px-14 rounded-3xl font-black text-xl uppercase tracking-widest outline-none focus:border-[#FACC15] transition-all flex items-center justify-between text-left ${errors.returnDate || errors.returnTime ? 'border-red-500 animate-shake' : 'border-slate-200 dark:border-white/10'}`}
-                                            >
-                                                <span className={formData.returnDate && formData.returnTime ? 'text-black dark:text-white' : 'text-slate-400'}>
-                                                    {formData.returnDate && formData.returnTime 
-                                                        ? formatDisplayDateTime(formData.returnDate, formData.returnTime)
-                                                        : 'Select Return Date & Time'}
-                                                </span>
-                                                <ChevronDown size={20} className={`opacity-50 transition-transform ${isReturnPickerOpen ? 'rotate-180' : ''}`} />
-                                            </button>
-                                            <div className="absolute left-6 top-1/2 -translate-y-1/2 text-[#FACC15]">
+                                            <CustomDateTimePicker 
+                                                date={formData.returnDate} 
+                                                time={formData.returnTime} 
+                                                onChange={(d, t) => { 
+                                                    setFormData(prev => ({ ...prev, returnDate: d, returnTime: t })); 
+                                                    if (errors.returnDate || errors.returnTime) {
+                                                        setErrors(prev => ({ ...prev, returnDate: false, returnTime: false }));
+                                                    }
+                                                }} 
+                                                className={`w-full h-16 bg-slate-50 dark:bg-white/5 border px-14 rounded-3xl font-black text-xl uppercase tracking-widest outline-none focus:border-[#FACC15] transition-all focus:ring-2 focus:ring-[#FACC15] ${errors.returnDate || errors.returnTime ? 'border-red-500 ring-2 ring-red-500/20 animate-shake' : 'border-slate-200 dark:border-white/10'}`}
+                                            />
+                                            <div className="absolute left-6 top-1/2 -translate-y-1/2 text-[#FACC15] pointer-events-none">
                                                 <Calendar size={20} strokeWidth={3} />
                                             </div>
                                         </div>
-                                        <AnimatePresence>
-                                            {isReturnPickerOpen && (
-                                                <>
-                                                    <div className="fixed inset-0 z-[190]" onClick={() => setIsReturnPickerOpen(false)} />
-                                                    <motion.div initial={{ opacity: 0, y: 10, scale: 0.95 }} animate={{ opacity: 1, y: 0, scale: 1 }} exit={{ opacity: 0, y: 10, scale: 0.95 }} className="absolute top-full left-0 right-0 mt-3 z-[200] shadow-2xl origin-top">
-                                                        <CustomDateTimePicker 
-                                                            date={formData.returnDate} 
-                                                            time={formData.returnTime} 
-                                                            onChange={(d, t) => { 
-                                                                setFormData(prev => ({ ...prev, returnDate: d, returnTime: t })); 
-                                                                if (errors.returnDate || errors.returnTime) {
-                                                                    setErrors(prev => ({ ...prev, returnDate: false, returnTime: false }));
-                                                                }
-                                                            }} 
-                                                        />
-                                                        <div className="bg-white rounded-b-[2.5rem] border-x-4 border-b-4 border-[#FACC15] p-4 flex justify-center max-w-[320px] mx-auto">
-                                                            <button type="button" onClick={() => setIsReturnPickerOpen(false)} className="px-10 py-3 bg-[#FACC15] text-black font-black text-xs uppercase tracking-[0.2em] rounded-full hover:bg-white transition-all shadow-lg active:scale-95">Done</button>
-                                                        </div>
-                                                    </motion.div>
-                                                </>
-                                            )}
-                                        </AnimatePresence>
                                     </div>
                                 </div>
                             )}

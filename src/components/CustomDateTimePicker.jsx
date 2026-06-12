@@ -3,17 +3,15 @@
 import { useEffect, useState } from 'react';
 import { parseStoredTime, detectLocalTimezone } from '../lib/timezone-util';
 
-export default function CustomDateTimePicker({ date, time, onChange }) {
+export default function CustomDateTimePicker({ date, time, onChange, className }) {
     const [dateTimeValue, setDateTimeValue] = useState('');
     const parsedTime = parseStoredTime(time);
 
-    // Sync from props
     useEffect(() => {
         if (date) {
             const time24h = parsedTime.time24h || '12:00';
             setDateTimeValue(`${date}T${time24h}`);
         } else {
-            // Provide a default if not set
             const today = new Date().toISOString().split('T')[0];
             const defaultTime24h = '12:00';
             setDateTimeValue(`${today}T${defaultTime24h}`);
@@ -45,16 +43,15 @@ export default function CustomDateTimePicker({ date, time, onChange }) {
     };
 
     return (
-        <div className="w-full">
-            <input
-                type="datetime-local"
-                value={dateTimeValue}
-                onChange={handleChange}
-                step={1800} // 30 minute intervals
-                className="w-full bg-white text-black font-bold p-4 rounded-xl border border-slate-200 shadow-sm focus:outline-none focus:ring-2 focus:ring-[#FACC15] cursor-pointer color-scheme-light"
-                style={{ colorScheme: 'light' }}
-            />
-        </div>
+        <input
+            type="datetime-local"
+            value={dateTimeValue}
+            onChange={handleChange}
+            step={1800}
+            className={`bg-white text-black font-bold outline-none cursor-pointer ${className || 'w-full p-2 text-sm rounded-xl border border-slate-200'}`}
+            style={{ colorScheme: 'light' }}
+        />
     );
 }
+
 

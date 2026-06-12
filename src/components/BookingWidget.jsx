@@ -20,6 +20,7 @@ const CustomDateTimePicker = dynamic(() => import('./CustomDateTimePicker'), { s
 
 import { useCurrency } from '../context/CurrencyContext'
 import { calculateBasePrice, calculateSurcharges, calculateTrafficSurge, ROUND_TRIP_PACKAGES } from '@/lib/pricing-util';
+import { detectLocalTimezone } from '@/lib/timezone-util';
 
 // (Helper to calculate price)
 const calculatePrice = (distance, vehicleId, tripType, pricingMap, waitingHours, hasNameBoard, nameBoardPrice = 2000, pickupName = '', dropoffName = '', destinations = [], scheduledTime = null, scheduledDate = null, surgeRules = [], roundTripPackageId = null, roundTripPackages = [], airportRoundTripPackages = [], destinationRoundTripPackages = []) => {
@@ -169,8 +170,9 @@ const BookingWidgetContent = ({ defaultTab = 'pickup' }) => {
         const hStr = hours12.toString().padStart(2, '0');
         const mStr = adjustedMins.toString().padStart(2, '0');
         
+        const localTz = detectLocalTimezone();
         setScheduledDate(`${year}-${month}-${day}`);
-        setScheduledTime(`${hStr}:${mStr} ${period} SLST`);
+        setScheduledTime(`${hStr}:${mStr} ${period} ${localTz}`);
     }, []);
 
     const pickupRef = useRef(null);
@@ -1012,36 +1014,15 @@ const BookingWidgetContent = ({ defaultTab = 'pickup' }) => {
                                                     )}
                                                 </div>
                                                 <div ref={dateTimeRef} className="relative mt-2">
-                                                    <button onClick={() => setIsDateTimePickerOpen(!isDateTimePickerOpen)} className={`w-full h-14 bg-white dark:bg-zinc-800 border rounded-2xl px-6 flex items-center justify-between text-sm font-bold text-slate-700 dark:text-white shadow-sm hover:shadow-md transition-all group ${step1Errors.dateTime ? 'border-red-500 ring-2 ring-red-500/20' : 'border-slate-400 dark:border-white/10'}`} aria-label="Select Date and Time">
-                                                        <div className="flex items-center gap-3">
-                                                            <Calendar size={18} className={scheduledDate ? 'text-emerald-500' : step1Errors.dateTime ? 'text-red-500' : 'text-slate-400'} />
-                                                            <span className="uppercase tracking-widest text-[11px]">
-                                                                {scheduledDate && scheduledTime ? formatDisplayDateTime(scheduledDate, scheduledTime) : 'Select Date & Time'}
-                                                            </span>
-                                                        </div>
-                                                        <div className="flex items-center gap-2">
-                                                            {scheduledDate && (<button onClick={(e) => { e.stopPropagation(); setScheduledDate(null); setScheduledTime(null); }} className="p-1 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg text-slate-400 hover:text-red-500"><X size={14} /></button>)}
-                                                            <ChevronDown size={16} className={`opacity-50 transition-transform ${isDateTimePickerOpen ? 'rotate-180' : ''}`} />
-                                                        </div>
-                                                    </button>
+                                                    <CustomDateTimePicker 
+                                                        date={scheduledDate} 
+                                                        time={scheduledTime} 
+                                                        onChange={(d, t) => { setScheduledDate(d); setScheduledTime(t); setStep1Errors(prev => ({ ...prev, dateTime: false })); }}
+                                                        className={`w-full h-14 bg-white dark:bg-zinc-800 border rounded-2xl px-6 text-sm font-bold text-slate-700 dark:text-white shadow-sm hover:shadow-md transition-all outline-none focus:ring-2 focus:ring-[#FACC15] ${step1Errors.dateTime ? 'border-red-500 ring-2 ring-red-500/20' : 'border-slate-400 dark:border-white/10'}`}
+                                                    />
                                                     {step1Errors.dateTime && (
                                                         <span className="text-[10px] font-bold text-red-500 mt-1 block pl-1">Please select date and time</span>
                                                     )}
-                                                    <AnimatePresence>
-                                                        {isDateTimePickerOpen && (
-                                                            <>
-                                                                <div className="fixed inset-0 z-[190]" onClick={() => setIsDateTimePickerOpen(false)} />
-                                                                <motion.div initial={{ opacity: 0, y: 10, scale: 0.95 }} animate={{ opacity: 1, y: 0, scale: 1 }} exit={{ opacity: 0, y: 10, scale: 0.95 }} className="absolute top-full left-0 right-0 mt-3 z-[200] shadow-2xl origin-top">
-                                                                    <CustomDateTimePicker date={scheduledDate} time={scheduledTime} onChange={(d, t) => { setScheduledDate(d); setScheduledTime(t); setStep1Errors(prev => ({ ...prev, dateTime: false })); }} />
-                                                                    <div className="bg-white rounded-b-[2.5rem] border-x-4 border-b-4 border-[#FACC15] p-4 flex justify-center max-w-[320px] mx-auto">
-                                                                        <button type="button" onClick={() => { 
-                                                                            setIsDateTimePickerOpen(false); 
-                                                                        }} className="px-10 py-3 bg-[#FACC15] text-black font-black text-xs uppercase tracking-[0.2em] rounded-full hover:bg-white transition-all shadow-lg active:scale-95">Done</button>
-                                                                    </div>
-                                                                </motion.div>
-                                                            </>
-                                                        )}
-                                                    </AnimatePresence>
                                                 </div>
 
                                                 {distance && distance > 0 && (
