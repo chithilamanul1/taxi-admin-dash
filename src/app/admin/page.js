@@ -259,6 +259,7 @@ export default function AdminDashboard() {
     const [isLoading, setIsLoading] = useState(false)
     const [vehiclePricing, setVehiclePricing] = useState([])
     const [pricingCategory, setPricingCategory] = useState('airport-transfer')
+    const [isPackageEditing, setIsPackageEditing] = useState(false)
     const [editingVehicle, setEditingVehicle] = useState(null)
     const [editForm, setEditForm] = useState({})
     const [pricingSettings, setPricingSettings] = useState({ longDistanceThreshold: 175, longDistanceDiscountPercentage: 10, isActive: true, nameBoardPrice: 2000, waitingHourRate: 1000, roundTripPackages: [], airportRoundTripPackages: [], destinationRoundTripPackages: [] })
