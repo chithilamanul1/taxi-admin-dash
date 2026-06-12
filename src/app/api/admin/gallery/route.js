@@ -6,7 +6,7 @@ import { isAdmin } from '@/lib/admin-check';
 export async function GET(req) {
     try {
         const adminCheck = await isAdmin();
-        if (!adminCheck) return NextResponse.json({ success: false, message: 'Unauthorized' }, { status: 401 });
+        // If not admin, still allow GET for public frontend
 
         await dbConnect();
         const images = await GalleryImage.find({}).sort({ createdAt: -1 });
