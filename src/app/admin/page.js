@@ -23,16 +23,14 @@ import CouponManager from '@/components/admin/CouponManager'
 const ALL_VEHICLE_TYPES = [
     { value: 'mini-car', label: 'Wagon R (Mini Car)' },
     { value: 'sedan', label: 'Sedan' },
-    { value: 'vezel', label: 'Vessel (Vezel)' },
+    { value: 'vezel', label: 'Honda Vezel' },
     { value: 'suv', label: 'SUV' },
-    { value: 'mini-van-05', label: 'Mini Van (5-Seater)' },
+    { value: 'mini-van-05', label: 'Mini Van (4-Seat)' },
     { value: 'mini-van-every', label: 'Mini Van (Every)' },
-    { value: 'kdh-van', label: 'VAN' },
-    { value: 'mini-bus', label: 'KDH High Roof' },
-    { value: 'bus', label: 'Bus' },
-    { value: 'large-bus', label: 'Large Bus' },
-    { value: 'coach-bus', label: 'Coach Bus' },
-    { value: 'coster-coach', label: 'Coster Coach' }
+    { value: 'normal-kdh', label: 'Van (KDH Flat Roof)' },
+    { value: 'kdh-van', label: 'Mini Bus (KDH High Roof)' },
+    { value: 'mini-bus', label: 'Coaster Bus' },
+    { value: 'coach-bus', label: 'Coach Bus' }
 ];
 
 const AdminPackageGroup = ({ hours, initialPackages, onSaveGroup, onDeleteGroup, onEditHours, typeColor, onFocus, onBlur }) => {
