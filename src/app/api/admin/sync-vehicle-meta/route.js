@@ -9,7 +9,7 @@ const VEHICLE_METADATA = {
     'sedan': { name: 'Sedan', image: '/vehicles/sedancar.png', capacity: 3, luggage: 3, handLuggage: 3, sortOrder: 2 },
     'mini-van-every': { name: 'Mini Van (Every)', image: '/vehicles/susukievery.png', capacity: 3, luggage: 3, handLuggage: 3, sortOrder: 3 },
     'mini-van-05': { name: 'Mini Van (4 Seat)', image: '/vehicles/minivan5seat.png', capacity: 4, luggage: 4, handLuggage: 4, sortOrder: 4 },
-    'suv': { name: 'SUV', image: '/vehicles/Hondavezel.png', capacity: 3, luggage: 3, handLuggage: 3, sortOrder: 5 },
+    'suv': { name: 'SUV', image: '/vehicles/suv.png', capacity: 3, luggage: 3, handLuggage: 3, sortOrder: 5 },
     'vezel': { name: 'Honda Vezel', image: '/vehicles/Hondavezel.png', capacity: 3, luggage: 3, handLuggage: 3, sortOrder: 6 },
     'normal-kdh': { name: 'Van (KDH Flat Roof)', image: '/vehicles/van.png', capacity: 6, luggage: 7, handLuggage: 7, sortOrder: 7 },
     'kdh-van': { name: 'Mini Bus (KDH High Roof)', image: '/vehicles/toyota-highroof.png', capacity: 8, luggage: 8, handLuggage: 6, sortOrder: 8 },

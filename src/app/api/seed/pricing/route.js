@@ -126,7 +126,7 @@ export async function GET(req) {
             suv: {
                 vehicleType: 'suv',
                 name: 'SUV (Luxury)',
-                image: '/vehicles/Hondavezel.png',
+                image: '/vehicles/suv.png',
                 capacity: 4, luggage: 4, handLuggage: 3,
                 basePrice: 8000, baseKm: 20, perKmRate: 160,
                 features: [...commonFeatures, 'Leather Seats']

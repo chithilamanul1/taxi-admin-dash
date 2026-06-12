@@ -71,7 +71,7 @@ const VEHICLE_DEFAULTS = {
     },
     'suv': {
         name: 'SUV',
-        image: '/vehicles/Hondavezel.png',
+        image: '/vehicles/suv.png',
         capacity: 3,
         luggage: 3,
         handLuggage: 3,

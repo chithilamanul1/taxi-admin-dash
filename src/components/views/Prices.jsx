@@ -90,7 +90,7 @@ const VEHICLE_PRICING = {
     'suv': {
         name: 'SUV',
         model: '',
-        image: '/vehicles/Hondavezel.png',
+        image: '/vehicles/suv.png',
         specs: {
             luggage: 3,
             handLuggage: 3,
