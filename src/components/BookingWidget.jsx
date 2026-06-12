@@ -1026,7 +1026,7 @@ const BookingWidgetContent = ({ defaultTab = 'pickup' }) => {
                                                 </div>
 
                                                 {distance && distance > 0 && (
-                                                    <div className={`mt-4 animate-slide-up space-y-4 ${(!scheduledDate || !scheduledTime) ? 'opacity-40 pointer-events-none' : ''}`}>
+                                                    <div className={`mt-4 animate-slide-up space-y-4`}>
                                                         <div className="flex items-center justify-between px-1">
                                                             <label className="text-xs font-black text-slate-900 dark:text-white uppercase tracking-widest leading-none">Select Vehicle</label>
                                                             <button
@@ -1245,6 +1245,11 @@ const BookingWidgetContent = ({ defaultTab = 'pickup' }) => {
                                                 })}
                                                 selectedId={vehicle}
                                                 onSelect={(vType) => {
+                                                    if (!scheduledDate || !scheduledTime) {
+                                                        setStep1Errors(prev => ({ ...prev, dateTime: true }));
+                                                        dateTimeRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                                                        return;
+                                                    }
                                                     setVehicle(vType);
                                                     setIsManualVehicle(true);
                                                     const syncTab = ['pickup', 'drop'].includes(activeTab) ? 'airport' : 'tour';
@@ -1268,6 +1273,11 @@ const BookingWidgetContent = ({ defaultTab = 'pickup' }) => {
                                             </button>
                                             <button 
                                                 onClick={() => {
+                                                    if (!scheduledDate || !scheduledTime) {
+                                                        setStep1Errors(prev => ({ ...prev, dateTime: true }));
+                                                        dateTimeRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                                                        return;
+                                                    }
                                                     if (!passengerCount.adults || passengerCount.adults < 1) {
                                                         alert("Please select at least one adult passenger.");
                                                         return;
@@ -1523,6 +1533,12 @@ const BookingWidgetContent = ({ defaultTab = 'pickup' }) => {
                 })}
                 selectedId={vehicle}
                 onSelect={(vType) => {
+                    if (!scheduledDate || !scheduledTime) {
+                        setStep1Errors(prev => ({ ...prev, dateTime: true }));
+                        setIsVehicleDrawerOpen(false);
+                        setTimeout(() => dateTimeRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' }), 100);
+                        return;
+                    }
                     setVehicle(vType);
                     setIsManualVehicle(true);
                     const syncTab = ['pickup', 'drop'].includes(activeTab) ? 'airport' : 'tour';
