@@ -1,3 +1,4 @@
+import { withSentryConfig } from '@sentry/nextjs';
 import withPWAInit from 'next-pwa';
 
 /** @type {import('next').NextConfig} */
@@ -93,4 +94,13 @@ const withPWA = withPWAInit({
     skipWaiting: true,
 });
 
-export default withPWA(nextConfig);
+export default withSentryConfig(withPWA(nextConfig), {
+  org: process.env.SENTRY_ORG,
+  project: process.env.SENTRY_PROJECT,
+  silent: !process.env.CI,
+  widenClientFileUpload: true,
+  transpileClientSDK: true,
+  tunnelRoute: "/monitoring",
+  hideSourceMaps: true,
+  disableLogger: true,
+});
