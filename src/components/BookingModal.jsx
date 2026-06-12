@@ -778,24 +778,28 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                         </label>
                                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                                             {[
-                                                { val: true, label: 'Name Board', sub: 'Standard Service', icon: Check, color: 'emerald' },
+                                                { val: true, label: 'Name Board', sub: 'Standard Service', emoji: '🪧', color: 'emerald' },
                                                 { val: false, label: 'No Board', sub: 'Direct Pickup', icon: X, color: 'rose' }
                                             ].map(opt => (
                                                 <button
                                                     key={opt.label}
                                                     onClick={() => setFormData({ ...formData, hasNameBoard: opt.val })}
-                                                    className={`p-4 sm:p-6 rounded-3xl border text-left transition-all relative overflow-hidden group ${formData.hasNameBoard === opt.val ? 'bg-[#FACC15] border-transparent text-white shadow-xl' : 'bg-slate-50 dark:bg-white/5 border-slate-100 dark:border-white/10 hover:border-[#FACC15]/50'}`}
+                                                    className={`p-4 sm:p-6 rounded-3xl border-2 text-left transition-all relative overflow-hidden group ${formData.hasNameBoard === opt.val ? 'bg-[#FACC15] border-black dark:border-white text-black shadow-xl' : 'bg-slate-50 dark:bg-white/5 border-black dark:border-white hover:bg-slate-100 dark:hover:bg-white/10'}`}
                                                 >
                                                     <div className="flex items-center justify-between mb-2 sm:mb-4">
-                                                        <div className={`w-8 h-8 sm:w-10 sm:h-10 rounded-xl sm:rounded-2xl flex items-center justify-center transition-all ${formData.hasNameBoard === opt.val ? 'bg-white/20' : 'bg-white dark:bg-zinc-900 border border-slate-100 dark:border-white/10 shadow-sm'}`}>
-                                                            <opt.icon size={16} strokeWidth={4} className={formData.hasNameBoard === opt.val ? 'text-white' : (opt.val ? 'text-emerald-500' : 'text-rose-500')} />
+                                                        <div className={`w-8 h-8 sm:w-10 sm:h-10 rounded-xl sm:rounded-2xl flex items-center justify-center transition-all border-2 border-black dark:border-white ${formData.hasNameBoard === opt.val ? 'bg-white' : 'bg-white dark:bg-zinc-900 shadow-sm'}`}>
+                                                            {opt.emoji ? (
+                                                                <span className="text-lg sm:text-xl leading-none">{opt.emoji}</span>
+                                                            ) : (
+                                                                <opt.icon size={16} strokeWidth={4} className={formData.hasNameBoard === opt.val ? 'text-black' : 'text-rose-500'} />
+                                                            )}
                                                         </div>
                                                         {formData.hasNameBoard === opt.val && (
-                                                            <div className="w-2 h-2 rounded-full bg-white animate-pulse"></div>
+                                                            <div className="w-2 h-2 rounded-full bg-black animate-pulse"></div>
                                                         )}
                                                     </div>
-                                                    <span className="block text-[10px] sm:text-xs font-black uppercase tracking-widest mb-1">{opt.label}</span>
-                                                    <span className={`text-[8px] sm:text-[9px] font-bold uppercase tracking-widest ${formData.hasNameBoard === opt.val ? 'text-white/70' : 'text-slate-400'}`}>{opt.sub}</span>
+                                                    <span className={`block text-[10px] sm:text-xs font-black uppercase tracking-widest mb-1 ${formData.hasNameBoard === opt.val ? 'text-black' : 'text-slate-900 dark:text-white'}`}>{opt.label}</span>
+                                                    <span className={`text-[8px] sm:text-[9px] font-bold uppercase tracking-widest ${formData.hasNameBoard === opt.val ? 'text-black/70' : 'text-slate-400'}`}>{opt.sub}</span>
                                                 </button>
                                             ))}
                                         </div>
