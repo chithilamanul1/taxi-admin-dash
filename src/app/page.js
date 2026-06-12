@@ -47,6 +47,7 @@ export default function Home() {
                         "@type": "WebPage",
                         "name": "Airport Taxis Sri Lanka - Home",
                         "description": "Book reliable 24/7 airport transfers and tours in Sri Lanka.",
+                        "dateModified": new Date().toISOString().split('T')[0],
                         "publisher": {
                             "@type": "Organization",
                             "name": "Airport Taxis Pvt (Ltd)",
