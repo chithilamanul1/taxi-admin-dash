@@ -895,20 +895,37 @@ const CustomTourBooking = () => {
               )}
               <AnimatePresence>
                   {isCouponOpen && (
-                      <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} exit={{ height: 0, opacity: 0 }} className="overflow-hidden">
-                          <div className="pt-3">
-                              <SmartOfferNudge
-                                  totalAmount={baseTotal}
-                                  onApplyOffer={(offer) => {
-                                      if (!appliedOffers.find(o => o.name === offer.name)) {
-                                          setAppliedOffers(prev => [...prev, offer]);
+                      <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} exit={{ height: 0, opacity: 0 }} className="overflow-hidden mt-3">
+                          <div className="relative h-14 animate-slide-up">
+                              <Tag className="absolute left-6 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
+                              <input type="text" placeholder="ENTER COUPON CODE" value={couponCode} onChange={(e) => setCouponCode(e.target.value.toUpperCase())} className="w-full h-full pl-14 pr-24 rounded-2xl bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 text-sm font-bold outline-none uppercase text-emerald-950 dark:text-white placeholder:text-slate-500 tracking-widest focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 shadow-inner" aria-label="Coupon code" />
+                              <button onClick={async () => {
+                                  if (!couponCode) return;
+                                  try {
+                                      const res = await fetch('/api/coupons/validate', {
+                                          method: 'POST',
+                                          headers: { 'Content-Type': 'application/json' },
+                                          body: JSON.stringify({ code: couponCode, pickup: locations[0], dropoff: locations[0] })
+                                      });
+                                      const data = await res.json();
+                                      if (data.valid) {
+                                          const known = data.coupon;
+                                          const couponOffer = { _id: 'coupon-' + known.code, name: known.code, discountPercentage: known.discountType === 'percentage' ? known.value : 0, discountAmount: known.discountType === 'flat' ? known.value : 0, type: 'coupon' };
+                                          setAppliedOffers(prev => {
+                                              if (!prev.find(o => o.name === couponOffer.name)) {
+                                                  return [...prev.filter(o => o.type !== 'coupon'), couponOffer];
+                                              }
+                                              return prev;
+                                          });
+                                          setCouponCode('');
+                                          setIsCouponOpen(false);
+                                      } else {
+                                          alert(data.message || "Invalid or expired coupon code.");
                                       }
-                                  }}
-                                  couponCode={couponCode}
-                                  setCouponCode={setCouponCode}
-                                  dismissedOfferIds={dismissedOfferIds}
-                                  setDismissedOfferIds={setDismissedOfferIds}
-                              />
+                                  } catch (e) {
+                                      alert("Validation failed.");
+                                  }
+                              }} aria-label="Apply Coupon" className="absolute right-2 top-2 bottom-2 bg-[#FACC15] text-black px-6 rounded-xl text-[10px] font-black uppercase hover:bg-yellow-400 transition-all shadow-lg shadow-yellow-500/10">Apply</button>
                           </div>
                       </motion.div>
                   )}

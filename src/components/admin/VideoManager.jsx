@@ -148,6 +148,10 @@ export default function VideoManager() {
                 return <img src={`https://img.youtube.com/vi/${videoId}/hqdefault.jpg`} className="w-full h-full object-cover" />;
             }
         }
+        if (platform === 'facebook') {
+            const fbUrl = `https://www.facebook.com/plugins/video.php?href=${encodeURIComponent(url)}&show_text=false&width=560`;
+            return <iframe src={fbUrl} className="w-full h-full pointer-events-none" frameBorder="0" allow="encrypted-media" allowFullScreen></iframe>;
+        }
         return (
             <div className="w-full h-full bg-slate-900 flex flex-col items-center justify-center text-white p-4 text-center">
                 <Video size={32} className="mb-2 opacity-50" />

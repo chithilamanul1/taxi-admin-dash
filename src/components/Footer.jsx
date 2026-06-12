@@ -118,10 +118,16 @@ const Footer = () => {
 
                 {/* Additional Info */}
                 <div className="pt-6 mt-8 flex flex-col gap-8 border-t border-white/5">
-                    <div className="text-[7px] text-white/50 font-bold uppercase tracking-widest text-center md:text-left">
-                        Our companies: <span className="text-white">airporttaxis.lk, airportcab.lk, srilankantaxi.lk</span>
+                    <div className="flex flex-col gap-3 items-center md:items-start">
+                        <h4 className="text-white text-base md:text-lg font-bold tracking-wide leading-none">Our Partner Network</h4>
+                        <div className="flex flex-wrap gap-2 justify-center md:justify-start">
+                            {['airportcab.lk', 'srilankantaxi.lk', 'airporttaxicab.lk', 'taxiairport.lk', 'touris.lk', 'tourtaxi.lk'].map((company, idx) => (
+                                <a key={idx} href={`https://${company}`} target="_blank" className="px-3 py-1.5 rounded-lg bg-white/5 border border-white/10 hover:border-[#FACC15] hover:bg-[#FACC15]/10 hover:text-[#FACC15] text-white/70 text-[10px] font-black uppercase tracking-widest transition-all">
+                                    {company}
+                                </a>
+                            ))}
+                        </div>
                     </div>
-
                     {/* Payment section */}
                     <div className="flex flex-col gap-3 items-center md:items-start">
                         <div className="flex flex-col gap-2 items-center md:items-start">
