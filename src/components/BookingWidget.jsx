@@ -1440,6 +1440,7 @@ const BookingWidgetContent = ({ defaultTab = 'pickup' }) => {
                                         disabled={isCheckoutDisabled}
                                         className={`w-full min-h-16 sm:h-[72px] py-2 sm:py-0 rounded-2xl shadow-md transition-all group flex items-center justify-center border
                                         ${isCheckoutDisabled
+                                            ? 'bg-slate-100 dark:bg-zinc-800 text-slate-400 dark:text-slate-500 border-slate-200 dark:border-zinc-700 cursor-not-allowed'
                                             : 'bg-gradient-to-r from-yellow-400 to-orange-500 hover:from-yellow-500 hover:to-orange-600 text-white active:scale-[0.98] border-orange-500/20'}`}
                                     >
                                         {isLoadingPricing ? (
