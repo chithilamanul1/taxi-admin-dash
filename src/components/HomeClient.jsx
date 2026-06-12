@@ -100,6 +100,16 @@ export default function HomeClient() {
     const [selectedExpressProduct, setSelectedExpressProduct] = useState(null);
     const [bookingInitialData, setBookingInitialData] = useState({});
     const [bookingStep, setBookingStep] = useState(1);
+    const [realBookingCount, setRealBookingCount] = useState(0);
+
+    useEffect(() => {
+        fetch('/api/bookings/count')
+            .then(res => res.json())
+            .then(data => {
+                if (data.count) setRealBookingCount(data.count);
+            })
+            .catch(err => console.error("Error fetching booking count:", err));
+    }, []);
 
     useEffect(() => {
         const handleStepChange = (e) => {
@@ -187,7 +197,11 @@ export default function HomeClient() {
                     <div className="h-4 md:h-10" /> {/* Spacing */}
 
                     {/* FleetSection removed */}
+                </>
+            )}
 
+            {bookingStep <= 2 && (
+                <>
                     {/* Legacy & Stats Section */}
                     <section className="py-8 md:py-12 relative overflow-hidden bg-slate-50/30 dark:bg-zinc-950/30">
                         <div className="max-w-7xl mx-auto px-6 relative z-10">
@@ -208,9 +222,9 @@ export default function HomeClient() {
                             <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
                                 {[
                                     { label: 'Happy Clients', value: '10K+', icon: Users },
-                                    { label: 'Tours Completed', value: '1.2K+', icon: MapPin },
+                                    { label: 'Tours Completed', value: `${(1200 + realBookingCount).toLocaleString()}+`, icon: MapPin },
                                     { label: 'Experience Years', value: '14+', icon: Star },
-                                    { label: 'Expert Drivers', value: '80+', icon: ShieldCheck }
+                                    { label: 'Expert Drivers', value: '310+', icon: ShieldCheck }
                                 ].map((stat, idx) => (
                                     <div key={idx} className="bg-white dark:bg-zinc-900 p-4 md:p-6 rounded-[1.5rem] border border-slate-100 dark:border-white/5 shadow-md flex flex-col items-center group hover:-translate-y-1 transition-all duration-300">
                                         <div className="w-10 h-10 md:w-12 md:h-12 bg-emerald-950 dark:bg-white/5 rounded-xl flex items-center justify-center mb-3 md:mb-4 shadow-sm group-hover:bg-[#FACC15] group-hover:text-black transition-colors duration-300">
@@ -335,9 +349,11 @@ export default function HomeClient() {
                     </section>
 
                     <FAQSection />
-
-                    <Features />
                 </>
+            )}
+
+            {bookingStep <= 2 && (
+                <Features />
             )}
         </div >
     )
