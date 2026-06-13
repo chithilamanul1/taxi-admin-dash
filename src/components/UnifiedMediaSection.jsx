@@ -69,7 +69,7 @@ const UnifiedMediaSection = () => {
     };
 
     return (
-        <section id="unified-media" className="py-12 bg-slate-50 dark:bg-[#050505] overflow-hidden transition-colors duration-300">
+        <section id="unified-media" className="pt-12 pb-0 bg-slate-50 dark:bg-[#050505] overflow-hidden transition-colors duration-300">
             <div className="container mx-auto px-4 md:px-8 max-w-[1400px]">
                 
                 {/* 1. Destinations Sub-Section */}

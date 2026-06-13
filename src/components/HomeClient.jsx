@@ -198,8 +198,6 @@ export default function HomeClient() {
                         <ArrowRight size={22} className="rotate-90 group-hover:translate-y-2 transition-transform" />
                     </button>
                     
-                    <div className="h-4 md:h-10" /> {/* Spacing */}
-
                     {/* FleetSection removed */}
                 </>
             )}
@@ -226,7 +224,7 @@ export default function HomeClient() {
                             <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
                                 {[
                                     { label: 'Happy Clients', value: '10K+', icon: Users },
-                                    { label: 'Tours Completed', value: `${(1200 + realBookingCount).toLocaleString()}+`, icon: MapPin },
+                                    { label: 'Tours Completed', value: `${(8500 + realBookingCount).toLocaleString()}+`, icon: MapPin },
                                     { label: 'Experience Years', value: '14+', icon: Star },
                                     { label: 'Expert Drivers', value: '310+', icon: ShieldCheck }
                                 ].map((stat, idx) => (
