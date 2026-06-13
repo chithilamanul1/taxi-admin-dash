@@ -16,8 +16,14 @@ const UnifiedMediaSection = () => {
             .then(res => res.json())
             .then(data => {
                 if (data.success) {
-                    // Filter active images
-                    setGalleryImages(data.data.filter(img => img.isActive !== false));
+                    let activeImages = data.data.filter(img => img.isActive !== false);
+                    const pinnedId = "gallery/dxmldi7mwuwygv9zpgh6";
+                    const pinnedImgIndex = activeImages.findIndex(img => img.public_id === pinnedId);
+                    if (pinnedImgIndex > -1) {
+                        const pinnedImg = activeImages.splice(pinnedImgIndex, 1)[0];
+                        activeImages.unshift(pinnedImg);
+                    }
+                    setGalleryImages(activeImages);
                 }
             })
             .catch(console.error);

@@ -105,6 +105,7 @@ export default function HomeClient() {
     const [bookingInitialData, setBookingInitialData] = useState({});
     const [bookingStep, setBookingStep] = useState(1);
     const [realBookingCount, setRealBookingCount] = useState(0);
+    const [activeHeroTab, setActiveHeroTab] = useState('airport-pickup');
 
     useEffect(() => {
         fetch('/api/bookings/count')
@@ -158,7 +159,7 @@ export default function HomeClient() {
 
     return (
         <div className="bg-white dark:bg-black overflow-hidden transition-colors duration-300">
-            <BookingWidget key="main-booking-widget" />
+            <BookingWidget key="main-booking-widget" onTabChange={setActiveHeroTab} />
 
             {bookingStep === 1 && (
                 <>
@@ -176,7 +177,7 @@ export default function HomeClient() {
                                     <Link href="/prices" className="hover:text-emerald-600 dark:hover:text-[#FACC15] transition-colors underline decoration-dotted underline-offset-4">Fixed Rates</Link> • Custom Stopovers • <Link href="/fleet" className="hover:text-emerald-600 dark:hover:text-[#FACC15] transition-colors underline decoration-dotted underline-offset-4">Elite Vehicles</Link>
                                 </p>
                             </div>
-                            <CustomTourBooking />
+                            {activeHeroTab !== 'tours' && <CustomTourBooking />}
                         </div>
                     </div>
 
@@ -223,7 +224,7 @@ export default function HomeClient() {
 
                             <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
                                 {[
-                                    { label: 'Happy Clients', value: '10K+', icon: Users },
+                                    { label: 'Happy Clients', value: `${(8000 + realBookingCount).toLocaleString()}+`, icon: Users },
                                     { label: 'Tours Completed', value: `${(8500 + realBookingCount).toLocaleString()}+`, icon: MapPin },
                                     { label: 'Experience Years', value: '14+', icon: Star },
                                     { label: 'Expert Drivers', value: '310+', icon: ShieldCheck }

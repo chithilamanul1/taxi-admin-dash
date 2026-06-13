@@ -52,7 +52,7 @@ const formatDisplayDateTime = (dateStr, timeStr) => {
     return `${month}/${day}/${year}, ${timePart} ${period}`;
 };
 
-const BookingWidgetContent = ({ defaultTab = 'pickup' }) => {
+const BookingWidgetContent = ({ defaultTab = 'pickup', onTabChange }) => {
     const router = useRouter();
     const [activeOffers, setActiveOffers] = useState([]);
     const [appliedOffers, setAppliedOffers] = useState([]); // Support multiple coupons
@@ -62,6 +62,13 @@ const BookingWidgetContent = ({ defaultTab = 'pickup' }) => {
     const [tripType, setTripType] = useState('one-way');
     const [pickup, setPickup] = useState({ name: 'Bandaranaike International Airport (CMB)', lat: 7.1804, lng: 79.8837 })
     const [dropoff, setDropoff] = useState({ name: '', lat: null, lng: null })
+
+    useEffect(() => {
+        if (onTabChange) {
+            onTabChange(activeTab);
+        }
+    }, [activeTab, onTabChange]);
+
     const [waypoints, setWaypoints] = useState([])
     const [pickupSearch, setPickupSearch] = useState('Bandaranaike International Airport (CMB)')
     const [dropoffSearch, setDropoffSearch] = useState('')
