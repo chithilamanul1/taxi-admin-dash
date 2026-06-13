@@ -177,9 +177,6 @@ export default function HomeClient() {
                                 </p>
                             </div>
                             <CustomTourBooking />
-                            <div className="mt-12">
-                                <RoundTripBookingWrapper />
-                            </div>
                         </div>
                     </div>
 
