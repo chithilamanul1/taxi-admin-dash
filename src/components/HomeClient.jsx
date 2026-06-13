@@ -51,10 +51,6 @@ const StatNumber = ({ value }) => {
 
 import BookingWidget from './BookingWidget'
 const BookingModal = dynamic(() => import('./BookingModal'), { ssr: false })
-const CustomTourBooking = dynamic(() => import('./CustomTourBooking'), {
-    ssr: false,
-    loading: () => <div className="min-h-[500px] bg-slate-50 dark:bg-zinc-900 animate-pulse rounded-[2.5rem]" />
-})
 
 // Dynamic imports with loading placeholders to prevent CLS
 const LoadingBox = () => <div className="w-full h-40 bg-slate-100 dark:bg-white/5 animate-pulse border border-slate-100 dark:border-white/10" />;
@@ -158,23 +154,6 @@ export default function HomeClient() {
 
             {bookingStep === 1 && (
                 <>
-                    <div id="calculator" className="py-8 md:py-12 relative border-t border-slate-100 dark:border-white/5 bg-slate-50/50 dark:bg-white/2">
-                        <div className="absolute inset-0 bg-[url('/pattern.png')] opacity-[0.06] dark:opacity-[0.02] pointer-events-none z-0"></div>
-                        <div className="max-w-6xl mx-auto px-4 relative z-10">
-                            <div className="text-center mb-6">
-                                <span className="text-emerald-600 dark:text-[#FACC15] text-[10px] font-black tracking-[0.4em] uppercase mb-4 block">
-                                    Explore Premium Island Tours
-                                </span>
-                                <h2 className="text-3xl sm:text-4xl md:text-5xl font-black text-emerald-950 dark:text-white uppercase tracking-tighter leading-none mb-4">
-                                    Tailored <span className="text-emerald-600 dark:text-[#FACC15] italic font-serif">Round Tour</span> Packages
-                                </h2>
-                                <p className="text-slate-500 dark:text-slate-400 text-xs md:text-sm font-bold uppercase tracking-[0.3em] max-w-xl mx-auto opacity-80">
-                                    <Link href="/prices" className="hover:text-emerald-600 dark:hover:text-[#FACC15] transition-colors underline decoration-dotted underline-offset-4">Fixed Rates</Link> • Custom Stopovers • <Link href="/fleet" className="hover:text-emerald-600 dark:hover:text-[#FACC15] transition-colors underline decoration-dotted underline-offset-4">Elite Vehicles</Link>
-                                </p>
-                            </div>
-                            <CustomTourBooking />
-                        </div>
-                    </div>
 
                     <SpecialOffersSection />
                     <ReviewStatsBar />
