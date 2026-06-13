@@ -2,7 +2,7 @@
 
 import dynamic from 'next/dynamic';
 
-const CustomTourBooking = dynamic(() => import('./CustomTourBooking'), { 
+const RoundTripBooking = dynamic(() => import('./RoundTripBooking'), { 
   ssr: false,
   loading: () => (
     <div className="min-h-[400px] flex items-center justify-center bg-white rounded-3xl shadow-xl border border-slate-100">
@@ -15,5 +15,5 @@ const CustomTourBooking = dynamic(() => import('./CustomTourBooking'), {
 });
 
 export default function RoundTripBookingWrapper() {
-  return <CustomTourBooking />;
+  return <RoundTripBooking />;
 }
