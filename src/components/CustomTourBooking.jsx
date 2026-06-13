@@ -100,6 +100,9 @@ const CustomTourBooking = () => {
             if (v.vehicleType?.toLowerCase() === 'sedan' || v.name?.toLowerCase().includes('sedan')) {
               img = '/vehicles/sedancar.png';
             }
+            if (v.vehicleType?.toLowerCase() === 'suv' || v.name?.toLowerCase().includes('suv')) {
+              img = '/vehicles/suv.png';
+            }
             if (v.vehicleType === 'mini-car') img = '/vehicles/minicar.png';
             return {
               ...v, // Preserve database-supplied tiers and other properties

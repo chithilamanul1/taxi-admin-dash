@@ -225,6 +225,9 @@ const BookingWidgetContent = ({ defaultTab = 'pickup' }) => {
                     if (v.vehicleType?.toLowerCase() === 'sedan' || v.name?.toLowerCase().includes('sedan')) {
                         v.image = '/vehicles/sedancar.png';
                     }
+                    if (v.vehicleType?.toLowerCase() === 'suv' || v.name?.toLowerCase().includes('suv')) {
+                        v.image = '/vehicles/suv.png';
+                    }
                     pricingMap[v.vehicleType] = v; 
                 });
                 setVehiclePricing(pricingMap);

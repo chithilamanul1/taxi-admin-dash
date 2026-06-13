@@ -33,8 +33,28 @@ const ALL_VEHICLE_TYPES = [
     { value: 'coach-bus', label: 'Coach Bus' }
 ];
 
+const ensureMissingVehicles = (packages, hours) => {
+    const pkgs = JSON.parse(JSON.stringify(packages || []));
+    ALL_VEHICLE_TYPES.forEach(vt => {
+        if (!pkgs.find(p => p.vehicleType === vt.value)) {
+            pkgs.push({
+                id: `auto-${hours}h-${vt.value}-${Date.now()}`,
+                hours: hours,
+                vehicleType: vt.value,
+                tiers: [
+                    { km: 10, price: 0 },
+                    { km: 20, price: 0 },
+                    { km: 30, price: 0 },
+                    { km: 40, price: 0 }
+                ]
+            });
+        }
+    });
+    return pkgs;
+};
+
 const AdminPackageGroup = ({ hours, initialPackages, onSaveGroup, onDeleteGroup, onEditHours, typeColor, onFocus, onBlur }) => {
-    const [formState, setFormState] = useState(() => JSON.parse(JSON.stringify(initialPackages)));
+    const [formState, setFormState] = useState(() => ensureMissingVehicles(initialPackages, hours));
     const [isSaving, setIsSaving] = useState(false);
     const [saveSuccess, setSaveSuccess] = useState(false);
     const hasInitialized = useRef(false);
@@ -52,7 +72,7 @@ const AdminPackageGroup = ({ hours, initialPackages, onSaveGroup, onDeleteGroup,
         // This prevents parent re-renders from wiping our in-progress edits
         if (incomingJSON !== lastSavedJSON.current) {
             lastSavedJSON.current = incomingJSON;
-            setFormState(JSON.parse(incomingJSON));
+            setFormState(ensureMissingVehicles(JSON.parse(incomingJSON), hours));
         }
     }, [initialPackages]);
 
