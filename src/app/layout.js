@@ -33,18 +33,18 @@ export const metadata = {
         address: false,
         telephone: false,
     },
-    metadataBase: new URL('https://srilankantaxi.lk'),
+    metadataBase: new URL('https://airporttaxis.lk'),
     alternates: {
-        canonical: 'https://srilankantaxi.lk',
+        canonical: 'https://airporttaxis.lk',
     },
     openGraph: {
         title: '🚖 Airport Taxis Sri Lanka - #1 Trusted Airport Transfers & Multi-Day Tours',
         description: 'Instant Booking! Reliable 24/7 airport transfers from Colombo Airport (CMB). Professional drivers, comfortable vehicles (Mini Car, Sedan, KDH Van). Best rates guaranteed for all-island tours.',
-        url: 'https://srilankantaxi.lk',
+        url: 'https://airporttaxis.lk',
         siteName: 'Airport Taxis Pvt (Ltd)',
         images: [
             {
-                url: '/og-image.jpg',
+                url: 'https://airporttaxis.lk/og-image.jpg',
                 width: 1200,
                 height: 630,
                 alt: 'Airport Taxis Sri Lanka - Your Trusted Airport Transfer Partner',
@@ -57,7 +57,7 @@ export const metadata = {
         card: 'summary_large_image',
         title: '🚖 Airport Taxis Sri Lanka - Premium Airport Rides & Tours',
         description: 'Trusted 24/7 airport transfers & tours. Professional drivers, instant confirmation, best rates guaranteed!',
-        images: ['/og-image.jpg'],
+        images: ['https://airporttaxis.lk/og-image.jpg'],
     },
     robots: {
         index: true,
@@ -84,10 +84,10 @@ const jsonLd = {
     '@graph': [
         {
             '@type': 'LocalBusiness',
-            '@id': 'https://srilankantaxi.lk/#localbusiness',
+            '@id': 'https://airporttaxis.lk/#localbusiness',
             name: 'Airport Taxis Pvt (Ltd)',
-            image: 'https://srilankantaxi.lk/og-image.jpg',
-            url: 'https://srilankantaxi.lk',
+            image: 'https://airporttaxis.lk/og-image.jpg',
+            url: 'https://airporttaxis.lk',
             telephone: '+94716885880',
             priceRange: '$$',
             address: {
