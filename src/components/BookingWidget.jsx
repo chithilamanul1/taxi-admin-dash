@@ -743,13 +743,13 @@ const BookingWidgetContent = ({ defaultTab = 'pickup', onTabChange }) => {
             return;
         }
 
-        if (passengerCount.luggage === undefined || passengerCount.luggage === null) {
-            alert("Please enter the number of luggage bags (enter 0 if none).");
+        if (!passengerCount.luggage || passengerCount.luggage < 1) {
+            alert("Please select at least one standard luggage bag.");
             return;
         }
 
-        if (passengerCount.handLuggage > 0 && (passengerCount.luggage || 0) === 0) {
-            alert("Please select at least one standard luggage bag when hand luggage is added.");
+        if (!passengerCount.handLuggage || passengerCount.handLuggage < 1) {
+            alert("Please select at least one hand luggage bag.");
             return;
         }
 
@@ -818,7 +818,7 @@ const BookingWidgetContent = ({ defaultTab = 'pickup', onTabChange }) => {
     const isAirportService = ['pickup', 'drop'].includes(activeTab);
     const pricingCategory = isAirportService ? 'airport-transfer' : 'ride-now';
 
-    const isStep2Disabled = !vehicle || !passengerCount.adults || passengerCount.adults < 1 || passengerCount.luggage === undefined || passengerCount.luggage === null || passengerCount.handLuggage === undefined || passengerCount.handLuggage === null || (passengerCount.handLuggage > 0 && (passengerCount.luggage || 0) === 0);
+    const isStep2Disabled = !vehicle || !passengerCount.adults || passengerCount.adults < 1 || !passengerCount.luggage || passengerCount.luggage < 1 || !passengerCount.handLuggage || passengerCount.handLuggage < 1;
     const isCheckoutDisabled = !distance || isStep2Disabled;
 
     return (
@@ -1275,8 +1275,12 @@ const BookingWidgetContent = ({ defaultTab = 'pickup', onTabChange }) => {
                                                         alert("Please select at least one adult passenger.");
                                                         return;
                                                     }
-                                                    if (passengerCount.handLuggage > 0 && (passengerCount.luggage || 0) === 0) {
-                                                        alert("Please select at least one standard luggage bag when hand luggage is added.");
+                                                    if (!passengerCount.luggage || passengerCount.luggage < 1) {
+                                                        alert("Please select at least one standard luggage bag.");
+                                                        return;
+                                                    }
+                                                    if (!passengerCount.handLuggage || passengerCount.handLuggage < 1) {
+                                                        alert("Please select at least one hand luggage bag.");
                                                         return;
                                                     }
                                                     setStep(3);
