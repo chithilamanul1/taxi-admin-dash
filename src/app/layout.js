@@ -21,7 +21,9 @@ export const metadata = {
         'Airport Taxi Sri Lanka', 'Airport Transfer Sri Lanka', 'Colombo Airport Taxi', 'Sri Lanka Taxi Service',
         'Colombo Airport Transfer', 'Airport Cab Sri Lanka', 'Taxi to Airport Sri Lanka', 'Airport Pickup Sri Lanka',
         'Private Taxi Sri Lanka', 'Airport Shuttle Sri Lanka', 'KDH Van Rental Sri Lanka', 'Sri Lanka Tour Packages',
-        'Reliable Taxi Colombo', 'Airport Drop Sri Lanka', 'Colombo Airport Cab', 'Sri Lanka Travel Transport'
+        'Reliable Taxi Colombo', 'Airport Drop Sri Lanka', 'Colombo Airport Cab', 'Sri Lanka Travel Transport',
+        'srilankantaxi.lk', 'airporttaxis.lk', 'airporttaxicab.lk', 'touris.lk', 'taxiairport.lk', 'tourtaxi.lk',
+        'sri lankan taxi', 'airport taxis', 'airport taxi cab', 'touris', 'taxi airport', 'tour taxi', 'cab'
     ],
     authors: [{ name: 'Airport Taxis Pvt (Ltd)' }],
     creator: 'Airport Taxis Pvt (Ltd)',
