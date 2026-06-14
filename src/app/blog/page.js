@@ -33,17 +33,20 @@ export default async function BlogPage() {
     return (
         <div className="min-h-screen bg-white pb-24 transition-colors">
             {/* Hero Section */}
-            <div className="bg-slate-50 py-20 md:py-24 border-b border-slate-100 relative overflow-hidden">
-                <div className="absolute top-0 left-0 w-full h-full bg-emerald-600/5 -skew-y-3 transform origin-top-left transition-transform"></div>
+            <div className="bg-slate-50 dark:bg-[#050505] py-20 md:py-32 border-b border-slate-100 dark:border-white/5 relative overflow-hidden transition-colors">
+                <div className="absolute top-0 right-0 -mr-20 -mt-20 w-96 h-96 bg-emerald-100/50 dark:bg-emerald-900/20 rounded-full blur-3xl"></div>
+                <div className="absolute bottom-0 left-0 -ml-20 -mb-20 w-80 h-80 bg-[#FACC15]/10 rounded-full blur-3xl"></div>
+                
                 <div className="container mx-auto px-6 text-center relative z-10">
-                    <div className="inline-block bg-slate-900 px-12 py-10 rounded-[3rem] border border-white/10 shadow-2xl shadow-slate-900/20">
-                        <h1 className="text-4xl md:text-7xl font-black mb-4 uppercase italic tracking-tighter leading-none text-white">
-                            TRAVEL <span className="text-emerald-500">CHRONICLES</span>
-                        </h1>
-                        <p className="text-slate-400 max-w-xl mx-auto uppercase font-black tracking-[0.4em] text-[10px] md:text-[11px] italic leading-relaxed">
-                            Expert guides and professional insights from Sri Lanka's leading airport transfer network.
-                        </p>
+                    <div className="inline-flex items-center gap-2 bg-[#FACC15] text-black px-4 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-[0.3em] mb-6 shadow-lg shadow-yellow-500/20">
+                        Latest Insights
                     </div>
+                    <h1 className="text-4xl md:text-6xl lg:text-7xl font-black mb-6 uppercase tracking-tighter leading-none text-emerald-950 dark:text-white">
+                        TRAVEL <span className="text-[#FACC15]">CHRONICLES</span>
+                    </h1>
+                    <p className="text-slate-500 dark:text-slate-400 max-w-xl mx-auto font-medium text-sm md:text-base leading-relaxed">
+                        Expert guides and professional insights from Sri Lanka's leading airport transfer network.
+                    </p>
                 </div>
             </div>
 
@@ -58,35 +61,35 @@ export default async function BlogPage() {
                     <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-10">
                         {posts.map((post) => (
                             <Link href={`/blog/${post.slug}`} key={post._id} className="group">
-                                <article className="bg-white rounded-[2.5rem] border border-slate-100 flex flex-col h-[620px] hover:border-emerald-200 shadow-xl hover:shadow-2xl hover:translate-y-[-12px] transition-all duration-500 overflow-hidden group">
-                                    <div className="relative aspect-video overflow-hidden">
+                                <article className="bg-white dark:bg-[#0a0a0a] rounded-[2rem] border border-slate-100 dark:border-white/5 flex flex-col h-[500px] shadow-lg hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 overflow-hidden group">
+                                    <div className="relative aspect-[16/10] overflow-hidden">
                                         <img
                                             src={post.imageUrl || '/logo.png'}
                                             alt={post.title}
-                                            className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700 scale-105 group-hover:scale-110"
+                                            className="w-full h-full object-cover transition-all duration-700 group-hover:scale-105"
                                         />
                                         <div className="absolute inset-0 bg-slate-900/20 group-hover:bg-transparent transition-colors" />
                                         <div className="absolute bottom-6 right-6 bg-[#FACC15] text-slate-900 text-[10px] font-black px-5 py-2.5 rounded-full shadow-lg uppercase tracking-widest">
                                             {new Date(post.createdAt).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })}
                                         </div>
                                     </div>
-                                    <div className="p-8 md:p-10 flex-1 flex flex-col pb-8">
-                                        <div className="flex items-center gap-3 text-[10px] text-emerald-600 font-black mb-6 uppercase tracking-[0.4em] italic leading-none">
-                                            <div className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></div>
+                                    <div className="p-6 md:p-8 flex-1 flex flex-col pb-6">
+                                        <div className="flex items-center gap-2 text-[10px] text-emerald-600 dark:text-emerald-400 font-bold mb-4 uppercase tracking-[0.2em] leading-none">
+                                            <div className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse"></div>
                                             LOG ENTRY
                                         </div>
-                                        <h2 className="text-3xl font-black text-slate-900 mb-6 group-hover:text-emerald-600 transition-colors line-clamp-2 uppercase italic tracking-tighter leading-[1.1]">
+                                        <h2 className="text-2xl font-black text-emerald-950 dark:text-white mb-4 group-hover:text-emerald-600 dark:group-hover:text-[#FACC15] transition-colors line-clamp-2 uppercase tracking-tight leading-[1.1]">
                                             {post.title}
                                         </h2>
-                                        <p className="text-slate-500 text-sm font-bold line-clamp-3 mb-8 flex-1 uppercase tracking-widest leading-relaxed">
-                                            {post.seo?.metaDescription || post.excerpt || "DEEP DIVE INTO SRI LANKAN TRAVEL LOGISTICS AND PROFESSIONAL INSIGHTS FROM OUR GLOBAL NETWORK."}
+                                        <p className="text-slate-500 dark:text-slate-400 text-sm line-clamp-3 mb-6 flex-1 leading-relaxed">
+                                            {post.seo?.metaDescription || post.excerpt || "Deep dive into Sri Lankan travel logistics and professional insights from our global network."}
                                         </p>
-                                        <div className="flex items-center justify-between border-t border-slate-100 pt-8 bg-slate-50 -mx-10 -mb-10 px-10 pb-10 transition-colors group-hover:bg-emerald-50/50">
-                                            <span className="text-slate-900 font-black text-[10px] uppercase tracking-widest italic flex items-center gap-2">
-                                                READ ARCHIVE
+                                        <div className="flex items-center justify-between border-t border-slate-100 dark:border-white/5 pt-6 mt-auto">
+                                            <span className="text-emerald-950 dark:text-white font-bold text-[10px] uppercase tracking-widest flex items-center gap-2 group-hover:text-emerald-600 dark:group-hover:text-[#FACC15] transition-colors">
+                                                READ ARTICLE
                                             </span>
-                                            <div className="w-12 h-12 bg-slate-900 text-white rounded-2xl flex items-center justify-center group-hover:bg-emerald-600 transition-all shadow-lg shadow-slate-900/10 group-hover:shadow-emerald-600/20">
-                                                <ArrowRight size={20} strokeWidth={3} />
+                                            <div className="w-10 h-10 bg-slate-50 dark:bg-zinc-800 text-emerald-950 dark:text-white rounded-xl flex items-center justify-center group-hover:bg-[#FACC15] group-hover:text-black transition-all shadow-sm">
+                                                <ArrowRight size={16} strokeWidth={2.5} />
                                             </div>
                                         </div>
                                     </div>

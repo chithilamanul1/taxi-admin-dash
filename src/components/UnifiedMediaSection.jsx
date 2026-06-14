@@ -41,7 +41,8 @@ const UnifiedMediaSection = () => {
 
     const featuredDestinations = [
         'mirissa', 'sigiriya', 'ella', 'kandy', 
-        'nuwaraeliya', 'trincomalee', 'galle', 'bentota'
+        'nuwaraeliya', 'trincomalee', 'galle', 'bentota',
+        'ahangama', 'arugambay', 'yala', 'colombo', 'udawalawa'
     ];
     
     const displayDestinations = destinations.filter(d => featuredDestinations.includes(d.id));
