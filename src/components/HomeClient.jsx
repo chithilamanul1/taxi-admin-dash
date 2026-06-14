@@ -186,6 +186,8 @@ export default function HomeClient() {
                     <GoogleReviews />
 
                     <UnifiedMediaSection />
+                    
+                    <TransferOptionsSection />
 
                     {/* Floating Check Availability Sidebar - Luxury Style */}
                     <button
@@ -319,8 +321,6 @@ export default function HomeClient() {
                         </div>
                     </section>
 
-                    <MobileAppSection />
-
                     <section className="py-8 bg-white dark:bg-black border-t border-slate-100 dark:border-white/5 transition-colors">
                         <div className="max-w-7xl mx-auto px-6">
                             <div className="bg-emerald-950 dark:bg-zinc-900 p-8 md:p-12 relative overflow-hidden flex flex-col md:flex-row items-center justify-between gap-8 rounded-[3rem] shadow-xl group">
@@ -352,6 +352,8 @@ export default function HomeClient() {
                     </section>
 
                     <FAQSection />
+                    
+                    <MobileAppSection />
                 </>
             )}
 

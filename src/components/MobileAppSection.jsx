@@ -13,21 +13,21 @@ export default function MobileAppSection() {
                     <div className="absolute top-0 right-0 -mr-20 -mt-20 w-96 h-96 bg-emerald-100/50 dark:bg-emerald-900/20 rounded-full blur-3xl"></div>
                     <div className="absolute bottom-0 left-0 -ml-20 -mb-20 w-80 h-80 bg-amber-50 dark:bg-amber-900/10 rounded-full blur-3xl"></div>
 
-                    <div className="relative z-10 p-6 md:p-10 lg:p-14 flex flex-col lg:flex-row items-center gap-10">
+                    <div className="relative z-10 p-5 md:p-8 lg:p-10 flex flex-col lg:flex-row items-center gap-6">
                         {/* Content */}
                         <div className="flex-1 text-center lg:text-left">
-                            <div className="inline-flex items-center gap-2 bg-emerald-50 dark:bg-emerald-500/10 border border-emerald-200 dark:border-emerald-500/20 rounded-full px-3 py-1 mb-6">
+                            <div className="inline-flex items-center gap-2 bg-emerald-50 dark:bg-emerald-500/10 border border-emerald-200 dark:border-emerald-500/20 rounded-full px-2 py-1 mb-4">
                                 <Smartphone size={12} className="text-emerald-600 dark:text-emerald-400" />
                                 <span className="text-[10px] font-bold text-emerald-700 dark:text-emerald-400 uppercase tracking-widest">Coming Soon</span>
                             </div>
 
-                            <h2 className="text-3xl md:text-5xl font-black text-emerald-950 dark:text-white mb-4 leading-tight tracking-tight">
+                            <h2 className="text-2xl md:text-4xl font-black text-emerald-950 dark:text-white mb-3 leading-tight tracking-tight">
                                 Your Premium Journey, <br />
                                 <span className="text-emerald-600 dark:text-emerald-400">In Your Pocket.</span>
                             </h2>
 
-                            <p className="text-slate-500 dark:text-slate-400 text-sm mb-8 max-w-xl mx-auto lg:mx-0 leading-relaxed">
-                                We're building the ultimate travel companion for your Sri Lankan adventures. Get instant bookings, real-time driver tracking, and exclusive app-only deals.
+                            <p className="text-slate-500 dark:text-slate-400 text-xs md:text-sm mb-6 max-w-xl mx-auto lg:mx-0 leading-relaxed">
+                                We're building the ultimate travel companion for your Sri Lankan adventures. Get instant bookings, real-time tracking, and exclusive deals.
                             </p>
 
                             <div className="flex flex-col sm:flex-row gap-3 mt-4 justify-center lg:justify-start">
@@ -65,7 +65,7 @@ export default function MobileAppSection() {
                         </div>
 
                         {/* Visual Representation (Phone Mockup Aesthetic) */}
-                        <div className="w-full lg:w-1/3 relative max-w-[280px] mx-auto lg:max-w-none">
+                        <div className="hidden md:block w-full lg:w-1/3 relative max-w-[280px] mx-auto lg:max-w-none">
                             <div className="relative z-10 w-full aspect-[4/5] bg-slate-100 dark:bg-zinc-800 rounded-[2rem] p-2.5 flex items-center justify-center shadow-2xl border border-white dark:border-white/10 overflow-hidden group">
 
                                 {/* App Screen Content */}
