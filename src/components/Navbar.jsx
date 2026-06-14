@@ -66,7 +66,7 @@ export default function Navbar() {
                 <div className="hidden lg:flex items-center gap-1 xl:gap-2">
                     {[
                         { label: 'Airport', href: '/?tab=pickup#booking' },
-                        { label: 'Intercity Rides', href: '/round-trips' },
+                        { label: 'Intercity Rides', href: '/?tab=ride#booking' },
                         { label: 'Day Tours', href: '/day-trips' },
                         { label: 'Tour Packages', href: '/tour-packages' },
                         { label: 'Round Trips', href: '/#calculator' },
@@ -191,7 +191,7 @@ export default function Navbar() {
                             {[
                                 { label: 'Airport Taxis', href: '/?tab=pickup#booking', icon: '✈️', id: 'm-drop' },
                                 { label: 'Home', href: '/', icon: '🏠', id: 'm-home' },
-                                { label: 'Intercity Rides', href: '/round-trips', icon: '🚗', id: 'm-ride' },
+                                { label: 'Intercity Rides', href: '/?tab=ride#booking', icon: '🚗', id: 'm-ride' },
                                 { label: 'Day Tours', href: '/day-trips', icon: '🌴', id: 'm-day' },
                                 { label: 'City Tours', href: '/tours', icon: '🏙️', id: 'm-city' },
                                 { label: 'Tour Packages', href: '/tour-packages', icon: '🗺️', id: 'm-pkg' },

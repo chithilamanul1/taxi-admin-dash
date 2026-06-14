@@ -57,6 +57,7 @@ const CustomTourBooking = () => {
   const [tab, setTab] = useState('airport'); // 'airport' | 'tour'
   const [vehicles, setVehicles] = useState([]);
   const [selectedVehicle, setSelectedVehicle] = useState(null);
+  const [formErrors, setFormErrors] = useState({});
   const [isCalculating, setIsCalculating] = useState(false);
   const [isBooking, setIsBooking] = useState(false);
   const [isBooked, setIsBooked] = useState(false);
@@ -496,8 +497,30 @@ const CustomTourBooking = () => {
 
 
   const handleBooking = async () => {
-    if (!formData.name || !formData.phone || !formData.email || !formData.date || !formData.time) {
-      alert("Please fill in all required contact, email, and timing details.");
+    const errors = {};
+    if (!formData.name) errors.name = true;
+    if (!formData.phone) errors.phone = true;
+    if (!formData.email) errors.email = true;
+    if (!formData.date) errors.date = true;
+    if (!formData.time) errors.time = true;
+
+    setFormErrors(errors);
+
+    if (Object.keys(errors).length > 0) {
+      setTimeout(() => {
+        const firstError = Object.keys(errors)[0];
+        const element = document.querySelector(`[name="${firstError}"]`) || document.getElementById(`field-${firstError}`);
+        if (element) {
+            element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            element.focus();
+        } else {
+            const errorInput = document.querySelector('.border-red-500');
+            if (errorInput) {
+                errorInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                errorInput.focus();
+            }
+        }
+      }, 50);
       return;
     }
     setIsBooking(true);
@@ -1176,31 +1199,32 @@ const CustomTourBooking = () => {
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div className="space-y-0.5">
                   <label className="text-[8px] uppercase font-black text-slate-400 tracking-widest px-2">Pickup Date</label>
-                  <input type="date" value={formData.date} onChange={e => setFormData({ ...formData, date: e.target.value })} className="w-full bg-white dark:bg-zinc-800 border border-slate-400 dark:border-white/10 rounded-xl py-2 px-3 outline-none font-bold text-[11px] text-black dark:text-white" />
+                  <input name="date" type="date" value={formData.date} onChange={e => setFormData({ ...formData, date: e.target.value, ...setFormErrors({...formErrors, date: false}) })} className={`w-full bg-white dark:bg-zinc-800 border ${formErrors.date ? 'border-red-500 ring-2 ring-red-500/20' : 'border-slate-400 dark:border-white/10'} rounded-xl py-2 px-3 outline-none font-bold text-[11px] text-black dark:text-white transition-all`} />
                 </div>
                 <div className="space-y-0.5">
                   <label className="text-[8px] uppercase font-black text-slate-400 tracking-widest px-2">Pickup Time</label>
-                  <input type="time" value={formData.time} onChange={e => setFormData({ ...formData, time: e.target.value })} className="w-full bg-white dark:bg-zinc-800 border border-slate-400 dark:border-white/10 rounded-xl py-2 px-3 outline-none font-bold text-[11px] text-black dark:text-white" />
+                  <input name="time" type="time" value={formData.time} onChange={e => setFormData({ ...formData, time: e.target.value, ...setFormErrors({...formErrors, time: false}) })} className={`w-full bg-white dark:bg-zinc-800 border ${formErrors.time ? 'border-red-500 ring-2 ring-red-500/20' : 'border-slate-400 dark:border-white/10'} rounded-xl py-2 px-3 outline-none font-bold text-[11px] text-black dark:text-white transition-all`} />
                 </div>
                 <div className="space-y-0.5">
                   <label className="text-[8px] uppercase font-black text-slate-400 tracking-widest px-2">Full Name</label>
-                  <input type="text" placeholder="John Doe" value={formData.name} onChange={e => setFormData({ ...formData, name: e.target.value })} className="w-full bg-white dark:bg-zinc-800 border border-slate-400 dark:border-white/10 rounded-xl py-2 px-3 outline-none font-bold text-[11px] text-black dark:text-white" />
+                  <input name="name" type="text" placeholder="John Doe" value={formData.name} onChange={e => setFormData({ ...formData, name: e.target.value, ...setFormErrors({...formErrors, name: false}) })} className={`w-full bg-white dark:bg-zinc-800 border ${formErrors.name ? 'border-red-500 ring-2 ring-red-500/20' : 'border-slate-400 dark:border-white/10'} rounded-xl py-2 px-3 outline-none font-bold text-[11px] text-black dark:text-white transition-all`} />
                 </div>
                 <div className="space-y-0.5">
                   <label className="text-[8px] uppercase font-black text-slate-400 tracking-widest px-2">Email Address</label>
-                  <input type="email" placeholder="john@example.com" value={formData.email} onChange={e => setFormData({ ...formData, email: e.target.value })} className="w-full bg-white dark:bg-zinc-800 border border-slate-400 dark:border-white/10 rounded-xl py-2 px-3 outline-none font-bold text-[11px] text-black dark:text-white" />
+                  <input name="email" type="email" placeholder="john@example.com" value={formData.email} onChange={e => setFormData({ ...formData, email: e.target.value, ...setFormErrors({...formErrors, email: false}) })} className={`w-full bg-white dark:bg-zinc-800 border ${formErrors.email ? 'border-red-500 ring-2 ring-red-500/20' : 'border-slate-400 dark:border-white/10'} rounded-xl py-2 px-3 outline-none font-bold text-[11px] text-black dark:text-white transition-all`} />
                 </div>
                 <div className="space-y-0.5">
                   <label className="text-[8px] uppercase font-black text-slate-400 tracking-widest px-2">WhatsApp / Phone</label>
-                  <div className="flex border border-slate-400 dark:border-white/10 rounded-xl overflow-hidden focus-within:border-[#FACC15] focus-within:ring-2 focus-within:ring-[#FACC15]/20 transition-all shadow-sm">
+                  <div className={`flex border ${formErrors.phone ? 'border-red-500 ring-2 ring-red-500/20' : 'border-slate-400 dark:border-white/10'} rounded-xl overflow-hidden focus-within:border-[#FACC15] focus-within:ring-2 focus-within:ring-[#FACC15]/20 transition-all shadow-sm`}>
                     <div className="bg-slate-100 dark:bg-zinc-800/80 px-3 flex items-center justify-center border-r border-slate-400 dark:border-white/10">
                       <span className="text-[11px] font-bold text-black dark:text-slate-400">+94</span>
                     </div>
                     <input 
+                      name="phone"
                       type="tel" 
                       placeholder="7X XXX XXXX" 
                       value={formData.phone.replace('+94', '').replace(/^0+/, '')} 
-                      onChange={e => setFormData({ ...formData, phone: '+94' + e.target.value.replace(/[^0-9]/g, '').slice(0, 9) })} 
+                      onChange={e => { setFormData({ ...formData, phone: '+94' + e.target.value.replace(/[^0-9]/g, '').slice(0, 9) }); setFormErrors({...formErrors, phone: false}); }} 
                       className="w-full bg-white dark:bg-zinc-800 py-2 px-3 outline-none font-bold text-[11px] text-black dark:text-white" 
                     />
                   </div>

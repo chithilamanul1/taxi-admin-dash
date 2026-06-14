@@ -1136,7 +1136,7 @@ const BookingWidgetContent = ({ defaultTab = 'pickup', onTabChange }) => {
                                                             const res = await fetch('/api/coupons/validate', {
                                                                 method: 'POST',
                                                                 headers: { 'Content-Type': 'application/json' },
-                                                                body: JSON.stringify({ code: couponCode, pickup: start, dropoff: dest })
+                                                                body: JSON.stringify({ code: couponCode, pickup: start, dropoff: dest, tripType: activeTab })
                                                             });
                                                             const data = await res.json();
                                                             if (data.valid) {

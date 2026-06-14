@@ -97,7 +97,7 @@ const FAQSection = dynamic(() => import('./FAQSection'), {
     loading: () => <div className="min-h-[500px] bg-white dark:bg-[#0a0a0a] animate-pulse" />
 })
 
-export default function HomeClient() {
+export default function HomeClient({ defaultTab = 'pickup' }) {
     const [isBookingOpen, setIsBookingOpen] = useState(false);
     const [marketingOffer, setMarketingOffer] = useState(null);
     const [isExpressOpen, setIsExpressOpen] = useState(false);
@@ -159,7 +159,7 @@ export default function HomeClient() {
 
     return (
         <div className="bg-white dark:bg-black overflow-hidden transition-colors duration-300">
-            <BookingWidget key="main-booking-widget" onTabChange={setActiveHeroTab} />
+            <BookingWidget key="main-booking-widget" defaultTab={defaultTab} onTabChange={setActiveHeroTab} />
 
             {bookingStep === 1 && (
                 <>

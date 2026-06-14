@@ -126,7 +126,8 @@ export default function CouponManager() {
                                 <label className="block text-xs font-bold text-slate-500 mb-1">Applicable For</label>
                                 <select value={formData.applicableFor} onChange={e => setFormData({ ...formData, applicableFor: e.target.value })} className="w-full p-2 border border-slate-300 rounded-lg text-sm bg-white">
                                     <option value="all">All Trips</option>
-                                    <option value="transfers">Airport Transfers Only</option>
+                                    <option value="airport-transfer">Airport Transfers Only</option>
+                                    <option value="ride-now">Ride Now (Intercity)</option>
                                     <option value="round-trips">Round Trips Only</option>
                                 </select>
                             </div>
@@ -197,7 +198,7 @@ export default function CouponManager() {
                                             {coupon.applicableLocations?.length ? coupon.applicableLocations.join(', ') : <span className="text-slate-400 italic">All Locations</span>}
                                         </td>
                                         <td className="px-4 py-3 text-xs">
-                                            {coupon.applicableFor === 'round-trips' ? 'Round Trips' : coupon.applicableFor === 'transfers' ? 'Transfers' : 'All Trips'}
+                                            {coupon.applicableFor === 'round-trips' ? 'Round Trips' : coupon.applicableFor === 'airport-transfer' ? 'Airport Transfer' : coupon.applicableFor === 'ride-now' ? 'Ride Now' : 'All Trips'}
                                         </td>
                                         <td className="px-4 py-3 text-xs">
                                             {coupon.usedCount || 0} / {coupon.usageLimit ? coupon.usageLimit : '∞'}

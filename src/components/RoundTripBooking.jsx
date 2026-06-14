@@ -28,6 +28,7 @@ const RoundTripBooking = () => {
   const [appliedCoupon, setAppliedCoupon] = useState(null);
   const [isVerifyingCoupon, setIsVerifyingCoupon] = useState(false);
   const [couponError, setCouponError] = useState('');
+  const [formErrors, setFormErrors] = useState({});
   const [locations, setLocations] = useState(['']);
   const [distance, setDistance] = useState(0);
   const [basePackage, setBasePackage] = useState({ hours: 2, km: 40 });
@@ -446,8 +447,30 @@ const RoundTripBooking = () => {
   const totalPrice = currency === 'LKR' ? totalPriceLKR : Number((totalPriceLKR * convRate).toFixed(2));
 
   const handleBooking = async () => {
-    if (!formData.name || !formData.email || !formData.phone || !formData.date || !formData.time) {
-      alert("Please fill in all required details.");
+    const errors = {};
+    if (!formData.name) errors.name = true;
+    if (!formData.phone) errors.phone = true;
+    if (!formData.email) errors.email = true;
+    if (!formData.date) errors.date = true;
+    if (!formData.time) errors.time = true;
+
+    setFormErrors(errors);
+
+    if (Object.keys(errors).length > 0) {
+      setTimeout(() => {
+        const firstError = Object.keys(errors)[0];
+        const element = document.querySelector(`[name="${firstError}"]`) || document.getElementById(`field-${firstError}`);
+        if (element) {
+            element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            element.focus();
+        } else {
+            const errorInput = document.querySelector('.border-red-500');
+            if (errorInput) {
+                errorInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                errorInput.focus();
+            }
+        }
+      }, 50);
       return;
     }
     setIsBooking(true);
@@ -816,22 +839,35 @@ const RoundTripBooking = () => {
                 <button className="flex items-center gap-2 px-4 py-2 rounded-xl bg-emerald-500/5 text-emerald-600 border border-emerald-500/10" onClick={() => alert("Optimizing...")}><Sparkles size={14} /> <span className="text-[9px] font-black uppercase tracking-widest">AI Optimizer</span></button>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                <div className="space-y-1.5"><label className="text-[8px] uppercase font-black text-slate-400 px-2 tracking-widest">Pickup Date</label><input type="date" value={formData.date} onChange={e => setFormData({ ...formData, date: e.target.value })} className="w-full bg-slate-50 border border-slate-100 rounded-2xl py-3 px-4 outline-none font-bold text-slate-900 focus:bg-white text-sm" /></div>
-                <div className="space-y-1.5"><label className="text-[8px] uppercase font-black text-slate-400 px-2 tracking-widest">Pickup Time</label><input type="time" value={formData.time} onChange={e => setFormData({ ...formData, time: e.target.value })} className="w-full bg-slate-50 border border-slate-100 rounded-2xl py-3 px-4 outline-none font-bold text-slate-900 focus:bg-white text-sm" /></div>
-                <div className="space-y-1.5"><label className="text-[8px] uppercase font-black text-slate-400 px-2 tracking-widest">Full Name</label><input type="text" value={formData.name} onChange={e => setFormData({ ...formData, name: e.target.value })} className="w-full bg-slate-50 border border-slate-100 rounded-2xl py-3 px-4 outline-none font-bold text-slate-900 focus:bg-white text-sm" /></div>
-                <div className="space-y-1.5"><label className="text-[8px] uppercase font-black text-slate-400 px-2 tracking-widest">Email</label><input type="email" value={formData.email} onChange={e => setFormData({ ...formData, email: e.target.value })} className="w-full bg-slate-50 border border-slate-100 rounded-2xl py-3 px-4 outline-none font-bold text-slate-900 focus:bg-white text-sm" /></div>
                 <div className="space-y-1.5">
-                  <label className="text-[8px] uppercase font-black text-slate-400 px-2 tracking-widest">WhatsApp</label>
-                  <div className="flex bg-slate-50 border border-slate-100 rounded-2xl overflow-hidden focus-within:bg-white transition-all shadow-sm">
-                    <div className="bg-slate-200/50 px-4 flex items-center justify-center border-r border-slate-100">
-                      <span className="text-sm font-bold text-slate-600">+94</span>
+                  <label className="text-[8px] uppercase font-black text-slate-400 tracking-widest px-2">Pickup Date</label>
+                  <input name="date" type="date" value={formData.date} onChange={e => setFormData({ ...formData, date: e.target.value, ...setFormErrors({...formErrors, date: false}) })} className={`w-full bg-white dark:bg-zinc-800 border ${formErrors.date ? 'border-red-500 ring-2 ring-red-500/20' : 'border-slate-400 dark:border-white/10'} rounded-xl py-2 px-3 outline-none font-bold text-[11px] text-black dark:text-white transition-all`} />
+                </div>
+                <div className="space-y-1.5">
+                  <label className="text-[8px] uppercase font-black text-slate-400 tracking-widest px-2">Pickup Time</label>
+                  <input name="time" type="time" value={formData.time} onChange={e => setFormData({ ...formData, time: e.target.value, ...setFormErrors({...formErrors, time: false}) })} className={`w-full bg-white dark:bg-zinc-800 border ${formErrors.time ? 'border-red-500 ring-2 ring-red-500/20' : 'border-slate-400 dark:border-white/10'} rounded-xl py-2 px-3 outline-none font-bold text-[11px] text-black dark:text-white transition-all`} />
+                </div>
+                <div className="space-y-1.5">
+                  <label className="text-[8px] uppercase font-black text-slate-400 tracking-widest px-2">Full Name</label>
+                  <input name="name" type="text" placeholder="John Doe" value={formData.name} onChange={e => setFormData({ ...formData, name: e.target.value, ...setFormErrors({...formErrors, name: false}) })} className={`w-full bg-white dark:bg-zinc-800 border ${formErrors.name ? 'border-red-500 ring-2 ring-red-500/20' : 'border-slate-400 dark:border-white/10'} rounded-xl py-2 px-3 outline-none font-bold text-[11px] text-black dark:text-white transition-all`} />
+                </div>
+                <div className="space-y-1.5">
+                  <label className="text-[8px] uppercase font-black text-slate-400 tracking-widest px-2">Email Address</label>
+                  <input name="email" type="email" placeholder="john@example.com" value={formData.email} onChange={e => setFormData({ ...formData, email: e.target.value, ...setFormErrors({...formErrors, email: false}) })} className={`w-full bg-white dark:bg-zinc-800 border ${formErrors.email ? 'border-red-500 ring-2 ring-red-500/20' : 'border-slate-400 dark:border-white/10'} rounded-xl py-2 px-3 outline-none font-bold text-[11px] text-black dark:text-white transition-all`} />
+                </div>
+                <div className="space-y-1.5">
+                  <label className="text-[8px] uppercase font-black text-slate-400 tracking-widest px-2">WhatsApp / Phone</label>
+                  <div className={`flex border ${formErrors.phone ? 'border-red-500 ring-2 ring-red-500/20' : 'border-slate-400 dark:border-white/10'} rounded-xl overflow-hidden focus-within:border-[#FACC15] focus-within:ring-2 focus-within:ring-[#FACC15]/20 transition-all shadow-sm`}>
+                    <div className="bg-slate-100 dark:bg-zinc-800/80 px-3 flex items-center justify-center border-r border-slate-400 dark:border-white/10">
+                      <span className="text-[11px] font-bold text-black dark:text-slate-400">+94</span>
                     </div>
                     <input 
+                      name="phone"
                       type="tel" 
                       placeholder="7X XXX XXXX" 
                       value={formData.phone.replace('+94', '').replace(/^0+/, '')} 
-                      onChange={e => setFormData({ ...formData, phone: '+94' + e.target.value.replace(/[^0-9]/g, '').slice(0, 9) })} 
-                      className="w-full bg-transparent py-3 px-4 outline-none font-bold text-slate-900 text-sm" 
+                      onChange={e => { setFormData({ ...formData, phone: '+94' + e.target.value.replace(/[^0-9]/g, '').slice(0, 9) }); setFormErrors({...formErrors, phone: false}); }} 
+                      className="w-full bg-white dark:bg-zinc-800 py-2 px-3 outline-none font-bold text-[11px] text-black dark:text-white" 
                     />
                   </div>
                 </div>

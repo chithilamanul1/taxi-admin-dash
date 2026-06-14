@@ -611,9 +611,23 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
         setErrors(newErrors);
         
         if (Object.keys(newErrors).length > 0) {
-            // Trigger a visual alert for hard stop
-            const firstError = Object.keys(newErrors)[0];
-            alert(`MANDATORY FIELD: Please complete the ${firstError.replace(/([A-Z])/g, ' $1').toLowerCase()} before proceeding.`);
+            // Scroll to the first error element
+            setTimeout(() => {
+                const firstError = Object.keys(newErrors)[0];
+                const errorLabel = Array.from(document.querySelectorAll('label.text-red-500'))[0];
+                if (errorLabel) {
+                    errorLabel.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    // find the next input and focus it
+                    const input = errorLabel.parentElement.querySelector('input');
+                    if (input) input.focus();
+                } else {
+                    const errorInput = document.querySelector('.border-red-500');
+                    if (errorInput) {
+                        errorInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        errorInput.focus();
+                    }
+                }
+            }, 50);
             return false;
         }
         return true;
