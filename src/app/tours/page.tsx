@@ -123,7 +123,7 @@ export default function ToursPage() {
 
                                 <CardHeader className="pb-2 px-8 pt-8">
                                     <div className="flex justify-between items-start">
-                                        <CardTitle className="text-2xl text-[#006064] leading-tight">{tour.title}</CardTitle>
+                                        <CardTitle className="text-2xl text-[#006064] leading-tight line-clamp-2">{tour.title}</CardTitle>
                                     </div>
                                     <div className="flex items-center gap-4 text-slate-400 text-xs mt-2 uppercase tracking-widest font-bold">
                                         <span className="flex items-center gap-1">

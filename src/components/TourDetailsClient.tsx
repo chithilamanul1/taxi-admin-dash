@@ -152,15 +152,15 @@ export default function TourDetailsClient({ tour }) {
 
                 <div className="absolute inset-0 flex flex-col justify-end p-6 pb-20 md:p-12 lg:p-24">
                     <div className="max-w-7xl mx-auto w-full">
-                        <div className="inline-block bg-[#FACC15] text-black px-4 py-1 text-[10px] font-black uppercase tracking-widest mb-4 border-4 border-black">
+                        <div className="inline-block bg-[#FACC15] text-black px-4 py-1 text-[10px] font-black uppercase tracking-widest mb-4 rounded-full shadow-lg">
                             {tour.category || 'Day Trip'}
                         </div>
-                        <h1 className="text-4xl md:text-7xl lg:text-8xl font-black text-white mb-8 leading-[1.1] tracking-tight max-w-5xl uppercase italic">
+                        <h1 className="text-3xl md:text-5xl lg:text-6xl font-black text-white mb-6 leading-tight tracking-tight max-w-4xl uppercase">
                             {tour.title}
                         </h1>
-                        <div className="flex items-center gap-4 text-white/90 font-black uppercase tracking-widest text-xs bg-black backdrop-blur-sm self-start p-6 border-[8px] border-[#FACC15]">
+                        <div className="flex items-center gap-3 text-white font-bold uppercase tracking-widest text-xs bg-white/20 backdrop-blur-md self-start px-5 py-2.5 rounded-full border border-white/30 shadow-xl">
                             <MapPin size={16} className="text-[#FACC15]" />
-                            <span>{Array.isArray(tour.destinations) ? tour.destinations.join(' / ') : tour.location || 'Sri Lanka'}</span>
+                            <span>{Array.isArray(tour.destinations) && tour.destinations.length > 0 ? tour.destinations.join(' / ') : tour.location || 'Sri Lanka'}</span>
                         </div>
                     </div>
                 </div>
