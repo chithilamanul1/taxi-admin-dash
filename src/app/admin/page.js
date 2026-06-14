@@ -314,6 +314,7 @@ export default function AdminDashboard() {
         description: '',
         imageUrl: '',
         displayInWidget: true,
+        applicableFor: 'all',
         usageLimit: ''
     })
     const [ordering, setOrdering] = useState('newest'); // or whatever
@@ -400,6 +401,7 @@ export default function AdminDashboard() {
                     description: '',
                     imageUrl: '',
                     displayInWidget: false,
+                    applicableFor: 'all',
                     usageLimit: ''
                 });
                 alert('Coupon created successfully!');

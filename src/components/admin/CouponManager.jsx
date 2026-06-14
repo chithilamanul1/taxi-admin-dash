@@ -10,7 +10,7 @@ export default function CouponManager() {
     const [success, setSuccess] = useState('');
     const [formData, setFormData] = useState({
         code: '', discountType: 'percentage', value: '', expiryDate: '', usageLimit: '', 
-        description: '', isActive: true, displayInWidget: false, applicableLocations: ''
+        description: '', isActive: true, displayInWidget: false, applicableLocations: '', applicableFor: 'all'
     });
 
     useEffect(() => { fetchCoupons(); }, []);
@@ -31,6 +31,7 @@ export default function CouponManager() {
             ...coupon,
             expiryDate: coupon.expiryDate ? coupon.expiryDate.split('T')[0] : '',
             applicableLocations: coupon.applicableLocations ? coupon.applicableLocations.join(', ') : '',
+            applicableFor: coupon.applicableFor || 'all',
             usageLimit: coupon.usageLimit || ''
         });
         setError(''); setSuccess('');
@@ -38,7 +39,7 @@ export default function CouponManager() {
 
     const handleCancel = () => {
         setEditingId(null);
-        setFormData({ code: '', discountType: 'percentage', value: '', expiryDate: '', usageLimit: '', description: '', isActive: true, displayInWidget: false, applicableLocations: '' });
+        setFormData({ code: '', discountType: 'percentage', value: '', expiryDate: '', usageLimit: '', description: '', isActive: true, displayInWidget: false, applicableLocations: '', applicableFor: 'all' });
         setError('');
     };
 
@@ -122,6 +123,14 @@ export default function CouponManager() {
                                 </select>
                             </div>
                             <div>
+                                <label className="block text-xs font-bold text-slate-500 mb-1">Applicable For</label>
+                                <select value={formData.applicableFor} onChange={e => setFormData({ ...formData, applicableFor: e.target.value })} className="w-full p-2 border border-slate-300 rounded-lg text-sm bg-white">
+                                    <option value="all">All Trips</option>
+                                    <option value="transfers">Airport Transfers Only</option>
+                                    <option value="round-trips">Round Trips Only</option>
+                                </select>
+                            </div>
+                            <div>
                                 <label className="block text-xs font-bold text-slate-500 mb-1">Value *</label>
                                 <input type="number" value={formData.value} onChange={e => setFormData({ ...formData, value: e.target.value })} className="w-full p-2 border border-slate-300 rounded-lg text-sm" placeholder={formData.discountType === 'percentage' ? "e.g. 10" : "e.g. 1500"} />
                             </div>
@@ -169,6 +178,7 @@ export default function CouponManager() {
                                     <th className="px-4 py-3 rounded-tl-xl">Code</th>
                                     <th className="px-4 py-3">Value</th>
                                     <th className="px-4 py-3">Locations</th>
+                                    <th className="px-4 py-3">Valid For</th>
                                     <th className="px-4 py-3">Usage</th>
                                     <th className="px-4 py-3">Status</th>
                                     <th className="px-4 py-3 rounded-tr-xl text-right">Actions</th>
@@ -185,6 +195,9 @@ export default function CouponManager() {
                                         </td>
                                         <td className="px-4 py-3 max-w-[200px] truncate" title={coupon.applicableLocations?.join(', ')}>
                                             {coupon.applicableLocations?.length ? coupon.applicableLocations.join(', ') : <span className="text-slate-400 italic">All Locations</span>}
+                                        </td>
+                                        <td className="px-4 py-3 text-xs">
+                                            {coupon.applicableFor === 'round-trips' ? 'Round Trips' : coupon.applicableFor === 'transfers' ? 'Transfers' : 'All Trips'}
                                         </td>
                                         <td className="px-4 py-3 text-xs">
                                             {coupon.usedCount || 0} / {coupon.usageLimit ? coupon.usageLimit : '∞'}

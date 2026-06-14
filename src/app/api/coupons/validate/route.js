@@ -20,12 +20,22 @@ export async function POST(req) {
             return NextResponse.json({ valid: false, message: 'Coupon expired' });
         }
 
+        const incomingTripType = tripType || ''; // Extract from raw request
+
+        if (coupon.applicableFor) {
+            if (coupon.applicableFor === 'round-trips' && incomingTripType !== 'tour') {
+                return NextResponse.json({ valid: false, message: 'This coupon is only valid for Round Trips.' });
+            }
+            if (coupon.applicableFor === 'transfers' && incomingTripType === 'tour') {
+                return NextResponse.json({ valid: false, message: 'This coupon is only valid for Airport Transfers.' });
+            }
+        }
+
         // Airport Drop and Pickup check (unless it's a tour)
         const pickupText = (typeof pickup === 'object' ? pickup?.name : pickup || '').toLowerCase();
         const dropoffText = (typeof dropoff === 'object' ? dropoff?.name : dropoff || '').toLowerCase();
-        const incomingTripType = tripType || ''; // Extract from raw request
 
-        if (incomingTripType !== 'tour') {
+        if (incomingTripType !== 'tour' && coupon.applicableFor !== 'round-trips') {
             const isAirport = (name) => {
                 if (!name) return false;
                 const n = name.toLowerCase();

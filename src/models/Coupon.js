@@ -29,6 +29,11 @@ const CouponSchema = new mongoose.Schema({
     description: { type: String, default: '' },
     imageUrl: { type: String, default: '' },
     displayInWidget: { type: Boolean, default: false },
+    applicableFor: {
+        type: String,
+        enum: ['all', 'transfers', 'round-trips'],
+        default: 'all'
+    },
     applicableLocations: [String] // Array of city names like ['Colombo', 'Negombo']
 }, { timestamps: true });
 
