@@ -5,6 +5,7 @@ import { useState, useEffect, useRef } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { ArrowRight, MapPin, Star, Compass, Clock, Users, ShieldCheck, Sparkles } from 'lucide-react'
+import TransferOptionsSection from './TransferOptionsSection'
 
 const StatNumber = ({ value }) => {
     const [count, setCount] = useState(0);
