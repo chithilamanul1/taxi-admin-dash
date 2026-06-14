@@ -226,6 +226,7 @@ export default function Navbar() {
                                                     key={sub.label}
                                                     href={sub.href}
                                                     className="p-4 bg-slate-50 hover:bg-emerald-50 hover:text-emerald-600 transition-all text-emerald-950 font-bold uppercase tracking-widest text-[10px] text-center rounded-2xl border border-slate-100"
+                                                    onClick={() => setIsMobileMenuOpen(false)}
                                                 >
                                                     {sub.label}
                                                 </Link>
@@ -237,6 +238,7 @@ export default function Navbar() {
                                         key={item.id}
                                         href={item.href}
                                         className="relative p-4 border-b border-slate-50 hover:text-emerald-600 transition-all text-emerald-950 font-bold uppercase tracking-widest text-xs flex items-center justify-between group"
+                                        onClick={() => setIsMobileMenuOpen(false)}
                                     >
                                         <span className="relative z-10 group-hover:pl-2 transition-all">{item.label}</span>
                                         <span className="absolute bottom-0 left-0 w-full h-[2px] bg-emerald-600 scale-x-0 group-hover:scale-x-100 transition-transform origin-left"></span>
