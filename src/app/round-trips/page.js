@@ -17,7 +17,7 @@ export const metadata = {
       siteName: 'Airport Taxis Pvt (Ltd)',
       images: [
           {
-              url: '/hero-bg.png',
+              url: '/logo.png',
               width: 1200,
               height: 630,
               alt: 'Round Trips and Premium City Rides',
@@ -30,7 +30,7 @@ export const metadata = {
       card: 'summary_large_image',
       title: 'Round Trip Booking | Airport Taxis Sri Lanka',
       description: 'Instant booking for premium round trips and city rides across Sri Lanka.',
-      images: ['/hero-bg.png'],
+      images: ['/logo.png'],
   }
 };
 
@@ -39,30 +39,9 @@ export default function RoundTripsPage() {
     <main className="min-h-screen bg-slate-50 dark:bg-zinc-950 transition-colors relative">
       <div className="absolute inset-0 bg-[url('/pattern.png')] opacity-[0.06] dark:opacity-[0.02] pointer-events-none z-0"></div>
       
-      {/* Premium Compact Header */}
-      <section className="pt-24 pb-32 bg-emerald-950 text-center relative overflow-hidden">
-        <div className="absolute inset-0 opacity-20">
-          <img src="/hero-bg.png" alt="" className="w-full h-full object-cover" />
-        </div>
-        <div className="absolute inset-0 bg-[url('/pattern.png')] opacity-10 mix-blend-overlay pointer-events-none"></div>
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent to-slate-50 dark:to-zinc-950"></div>
-        
-        <div className="container mx-auto px-6 relative z-10">
-          <div className="flex flex-col items-center mb-8">
-            <span className="text-emerald-400 text-[10px] font-black tracking-[0.4em] uppercase mb-4 animate-fade-in">
-              Premium City Services
-            </span>
-            <h1 className="text-4xl md:text-6xl font-black text-white mb-6 tracking-tighter uppercase leading-none max-w-3xl">
-              Round <span className="text-emerald-400 italic font-serif">Trips</span> & City Rides
-            </h1>
-            <div className="w-12 h-1 bg-emerald-400 rounded-full" />
-          </div>
-        </div>
-      </section>
-
       {/* Booking Form Section - Sleek Positioning */}
-      <section className="container mx-auto px-4 sm:px-6">
-        <div className="relative -mt-24 z-20 pb-20">
+      <section className="container mx-auto px-4 sm:px-6 pt-10">
+        <div className="relative z-20 pb-20">
           <RoundTripBookingWrapper />
         </div>
       </section>

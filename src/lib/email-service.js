@@ -163,12 +163,12 @@ const getPrintFriendlyTemplate = (content, title = 'Booking Details') => `
     <title>${title}</title>
     <style>
         @media print {
-            body { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; margin: 0; padding: 0; }
+            body { margin: 0; padding: 0; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
             .no-print { display: none !important; }
-            .print-container { width: 100% !important; max-width: 800px !important; margin: 0 !important; padding: 0 !important; }
-            table { page-break-inside: auto; }
-            tr, td { page-break-inside: avoid; }
-            .keep-together { page-break-inside: avoid !important; }
+            .print-container { width: 100% !important; max-width: 100% !important; margin: 0 !important; padding: 0 !important; }
+            table { page-break-inside: auto !important; break-inside: auto !important; }
+            tr, td { page-break-inside: auto !important; break-inside: auto !important; }
+            .keep-together { page-break-inside: avoid !important; break-inside: avoid !important; }
             * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
         }
     </style>
