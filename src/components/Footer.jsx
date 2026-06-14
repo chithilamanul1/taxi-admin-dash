@@ -52,8 +52,8 @@ const Footer = () => {
                                 <li><Link href="/" className="hover:text-[#FACC15] transition-colors">Home</Link></li>
                                 <li><Link href="/day-trips" className="hover:text-[#FACC15] transition-colors">Day Trips</Link></li>
                                 <li><Link href="/tour-packages" className="hover:text-[#FACC15] transition-colors">Tour Packages</Link></li>
-                                <li><Link href="/prices" className="hover:text-[#FACC15] transition-colors">Taxi Rates</Link></li>
-                                <li><Link href="/gallery" className="hover:text-[#FACC15] transition-colors">Gallery</Link></li>
+                                <li><Link href="/gallery" className="hover:text-[#FACC15] transition-colors">Our Fleet</Link></li>
+                                <li><Link href="/reviews" className="hover:text-[#FACC15] transition-colors">Testimonials</Link></li>
                             </ul>
                         </div>
                         <div className="space-y-5">

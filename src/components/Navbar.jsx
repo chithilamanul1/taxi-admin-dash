@@ -71,7 +71,6 @@ export default function Navbar() {
                         { label: 'Tour Packages', href: '/tour-packages' },
                         { label: 'Round Trips', href: '/#calculator' },
                         { label: 'Fleet', href: '/fleet' },
-                        { label: 'Rates', href: '/prices' },
                         { label: 'Gallery', href: '/gallery' },
                     ].map(item => (
                         <Link 
@@ -199,7 +198,6 @@ export default function Navbar() {
                                 { label: 'Round Trips', href: '/#calculator', icon: '🔄', id: 'm-round' },
                                 { label: 'Fleet', href: '/fleet', icon: '🚘', id: 'm-fleet' },
                                 { label: 'Gallery', href: '/gallery', icon: '📸', id: 'm-gallery' },
-                                { label: 'Rates', href: '/prices', icon: '💰', id: 'm-rates' },
                                 {
                                     label: 'More',
                                     icon: '➕',

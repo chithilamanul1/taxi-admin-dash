@@ -50,7 +50,7 @@ export const templates = {
             <h1>Welcome to Airport Taxis Tours!</h1>
             <p>Hi ${name},</p>
             <p>Thank you for creating an account with us. You can now easily book rides, view your history, and manage your profile.</p>
-            <p><a href="https://srilankantaxi.lk/prices">Book your first ride</a></p>
+            <p><a href="https://srilankantaxi.lk/#calculator">Book your first ride</a></p>
         </div>
     `,
     marketingOffer: (coupons) => `

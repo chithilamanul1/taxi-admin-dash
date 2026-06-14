@@ -53,13 +53,13 @@ export default function GalleryPage() {
             </section>
 
             {/* Filter Bar */}
-            <div className="sticky top-[80px] z-40 bg-white/80 dark:bg-black/80 backdrop-blur-xl border-b-4 border-black">
-                <div className="max-w-7xl mx-auto px-6 py-4 flex flex-nowrap gap-4 overflow-x-auto scrollbar-hide">
+            <div className="sticky top-[80px] z-40 bg-white/80 dark:bg-black/80 backdrop-blur-xl border-b border-slate-100 dark:border-white/5">
+                <div className="max-w-7xl mx-auto px-6 py-4 flex flex-nowrap gap-3 overflow-x-auto scrollbar-hide">
                     {categories.map(cat => (
                         <button
                             key={cat}
                             onClick={() => setFilter(cat)}
-                            className={`px-6 py-2 font-black uppercase tracking-widest text-[10px] whitespace-nowrap transition-all border-4 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] active:translate-y-[2px] active:shadow-none ${filter === cat ? 'bg-[#FACC15] text-black' : 'bg-white dark:bg-black text-black dark:text-white hover:bg-black hover:text-[#FACC15]'}`}
+                            className={`px-6 py-2.5 font-bold uppercase tracking-widest text-[10px] whitespace-nowrap transition-all rounded-full ${filter === cat ? 'bg-[#FACC15] text-black shadow-lg shadow-yellow-500/20' : 'bg-slate-100 dark:bg-zinc-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-zinc-700'}`}
                         >
                             {cat}
                         </button>
@@ -87,7 +87,7 @@ export default function GalleryPage() {
                                     transition={{ delay: (idx % 3) * 0.1 }}
                                     className="group relative"
                                 >
-                                    <div className="bg-black border-4 border-black shadow-[12px_12px_0px_0px_rgba(0,0,0,1)] dark:shadow-[12px_12px_0px_0px_rgba(250,204,21,0.5)] transition-all group-hover:translate-x-[-4px] group-hover:translate-y-[-4px] group-hover:shadow-[16px_16px_0px_0px_rgba(250,204,21,1)]">
+                                    <div className="rounded-[2rem] overflow-hidden shadow-lg border border-slate-100 dark:border-white/5 transition-all duration-500 group-hover:-translate-y-2 group-hover:shadow-2xl">
                                         <div 
                                             className="aspect-[4/5] relative overflow-hidden cursor-zoom-in"
                                             onClick={() => setSelectedImage(img)}
@@ -99,17 +99,17 @@ export default function GalleryPage() {
                                                     e.target.onerror = null;
                                                     e.target.src = 'https://images.unsplash.com/photo-1588258219511-64eb629cb833?q=80&w=1600&auto=format&fit=crop';
                                                 }}
-                                                className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700 group-hover:scale-110"
+                                                className="w-full h-full object-cover transition-all duration-700 group-hover:scale-110"
                                             />
-                                            <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                                                <Expand size={48} className="text-[#FACC15] scale-0 group-hover:scale-100 transition-transform duration-500" />
+                                            <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center backdrop-blur-sm">
+                                                <Expand size={48} className="text-white scale-0 group-hover:scale-100 transition-transform duration-500" />
                                             </div>
                                         </div>
                                     </div>
                                     
                                     <div className="mt-8 space-y-2">
                                         <div className="flex items-center gap-3">
-                                            <span className="bg-black text-[#FACC15] px-3 py-1 text-[10px] font-black uppercase tracking-widest">
+                                            <span className="bg-[#FACC15] text-black px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest shadow-sm">
                                                 {img.category}
                                             </span>
                                             <div className="flex-1 h-[2px] bg-black/10 dark:bg-white/10" />
@@ -124,9 +124,9 @@ export default function GalleryPage() {
                     )}
 
                     {!loading && filteredImages.length === 0 && (
-                        <div className="text-center py-40 border-8 border-black border-dashed">
-                            <h3 className="text-4xl font-black text-black dark:text-white uppercase tracking-tighter mb-4">No Visuals Found</h3>
-                            <p className="text-black/40 uppercase tracking-widest font-black text-xs italic">The archives are currently empty for this sector.</p>
+                        <div className="text-center py-40 border border-slate-200 dark:border-white/10 rounded-[2rem] bg-slate-50 dark:bg-[#0a0a0a]">
+                            <h3 className="text-3xl font-black text-emerald-950 dark:text-white uppercase tracking-tighter mb-4">No Visuals Found</h3>
+                            <p className="text-slate-500 uppercase tracking-widest font-bold text-xs">The archives are currently empty for this sector.</p>
                         </div>
                     )}
                 </div>
@@ -156,14 +156,14 @@ export default function GalleryPage() {
                                 <X size={48} strokeWidth={3} />
                             </button>
                             
-                            <div className="bg-[#FACC15] p-2 border-4 border-black shadow-[20px_20px_0px_0px_rgba(255,255,255,0.1)]">
+                            <div className="bg-white dark:bg-[#0a0a0a] p-2 rounded-2xl shadow-2xl border border-slate-100 dark:border-white/10 relative overflow-hidden">
                                 <img
                                     src={selectedImage.url || 'https://images.unsplash.com/photo-1588258219511-64eb629cb833?q=80&w=1600&auto=format&fit=crop'}
                                     onError={(e) => {
                                         e.target.onerror = null;
                                         e.target.src = 'https://images.unsplash.com/photo-1588258219511-64eb629cb833?q=80&w=1600&auto=format&fit=crop';
                                     }}
-                                    className="max-h-[70vh] w-auto border-4 border-black object-contain"
+                                    className="max-h-[70vh] w-auto rounded-xl object-contain"
                                     alt={selectedImage.caption}
                                 />
                             </div>
@@ -178,9 +178,9 @@ export default function GalleryPage() {
                                 <div className="flex items-center justify-center gap-6 mt-8">
                                     <button
                                         onClick={() => setSelectedImage(null)}
-                                        className="bg-white text-black px-10 py-4 font-black text-xs uppercase tracking-widest flex items-center gap-3 border-4 border-black shadow-[8px_8px_0px_0px_rgba(250,204,21,1)] active:translate-y-1 active:shadow-none transition-all"
+                                        className="bg-white text-emerald-950 px-8 py-3 rounded-full font-bold text-[10px] uppercase tracking-widest flex items-center gap-2 hover:bg-[#FACC15] hover:text-black hover:scale-105 transition-all shadow-xl"
                                     >
-                                        RETURN TO COLLECTION <ArrowRight size={18} />
+                                        RETURN TO COLLECTION <ArrowRight size={16} />
                                     </button>
                                 </div>
                             </div>

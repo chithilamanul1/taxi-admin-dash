@@ -58,8 +58,8 @@ function LoginContent() {
 
                     {/* Guest Option */}
                     <Link
-                        href="/prices"
-                        className="block w-full text-center bg-emerald-600 text-emerald-900 px-6 py-4 rounded-xl font-bold hover:bg-yellow-400 transition-colors"
+                        href="/"
+                        className="block w-full text-center bg-[#FACC15] text-emerald-950 px-6 py-4 rounded-xl font-bold hover:bg-yellow-400 transition-colors shadow-lg"
                     >
                         Continue as Guest
                     </Link>

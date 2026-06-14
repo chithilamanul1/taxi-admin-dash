@@ -174,7 +174,7 @@ export default function HomeClient() {
                                     Tailored <span className="text-emerald-600 dark:text-[#FACC15] italic font-serif">Round Tour</span> Packages
                                 </h2>
                                 <p className="text-slate-500 dark:text-slate-400 text-xs md:text-sm font-bold uppercase tracking-[0.3em] max-w-xl mx-auto opacity-80">
-                                    <Link href="/prices" className="hover:text-emerald-600 dark:hover:text-[#FACC15] transition-colors underline decoration-dotted underline-offset-4">Fixed Rates</Link> • Custom Stopovers • <Link href="/fleet" className="hover:text-emerald-600 dark:hover:text-[#FACC15] transition-colors underline decoration-dotted underline-offset-4">Elite Vehicles</Link>
+                                    Fixed Rates • Custom Stopovers • <Link href="/fleet" className="hover:text-emerald-600 dark:hover:text-[#FACC15] transition-colors underline decoration-dotted underline-offset-4">Elite Vehicles</Link>
                                 </p>
                             </div>
                             {activeHeroTab !== 'tours' && <CustomTourBooking />}

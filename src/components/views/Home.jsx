@@ -3,7 +3,6 @@
 import React, { useState } from 'react'
 import Hero from '../components/Hero'
 import Features from '../components/Features'
-import Prices from './Prices'
 import Link from 'next/link'
 import { ArrowRight } from 'lucide-react'
 

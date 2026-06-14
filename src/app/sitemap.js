@@ -13,8 +13,8 @@ export default function sitemap() {
     const staticRoutes = [
         '',
         '/about',
+        '/gallery',
         '/contact',
-        '/prices',
         '/day-trips',
         '/tour-packages',
         '/blog',
