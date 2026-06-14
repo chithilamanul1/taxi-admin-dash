@@ -42,7 +42,7 @@ const CategoryBar = () => {
         return () => window.removeEventListener('bookingStepChange', handleStepChange);
     }, []);
 
-    if (pathname?.startsWith('/admin') || pathname?.startsWith('/driver') || bookingStep > 1 || isModalActive) return null;
+    if (pathname?.startsWith('/admin') || pathname?.startsWith('/driver') || pathname?.startsWith('/tour-packages/') || pathname?.startsWith('/day-trips/') || bookingStep > 1 || isModalActive) return null;
 
     return (
         <div className="bg-white py-3 px-4 md:px-6 overflow-x-auto scrollbar-hide border-b border-black/5 flex justify-start md:justify-center items-center relative z-50">

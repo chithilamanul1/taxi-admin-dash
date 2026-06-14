@@ -161,7 +161,7 @@ export default function DayTripsClient() {
                                             <div className="flex items-baseline gap-2">
                                                 <span className="text-xs font-black text-[#FACC15] uppercase">{trip.price?.currency || 'USD'}</span>
                                                 <span className="text-4xl font-black text-black dark:text-white tracking-tighter leading-none">
-                                                    {priceAmount?.toLocaleString() || '0'}
+                                                    {priceAmount > 0 ? priceAmount.toLocaleString() : 'REQ'}
                                                 </span>
                                             </div>
                                         </div>

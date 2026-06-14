@@ -357,15 +357,15 @@ export default function TourDetailsClient({ tour }) {
                         <div className="sticky top-24 space-y-8">
                             <div className="bg-black text-white p-0">
                                 <div className="bg-white p-8 border-[12px] border-black rounded-none">
-                                    <div className="mb-8 text-center bg-black py-6 px-2 border-b-[12px] border-[#FACC15]">
-                                        <span className="text-[10px] font-black text-[#FACC15] uppercase tracking-widest block mb-2">Exclusive Web Rate</span>
+                                    <div className="mb-6 text-center bg-black py-4 px-2 border-b-[6px] border-[#FACC15]">
+                                        <span className="text-[9px] font-black text-[#FACC15] uppercase tracking-widest block mb-1">Exclusive Web Rate</span>
                                         <div className="flex items-center justify-center gap-1 text-white">
-                                            <span className="text-xl font-black">{priceCurrency}</span>
-                                            <span className="text-6xl font-black tracking-tighter">
+                                            <span className="text-lg font-black">{priceCurrency}</span>
+                                            <span className="text-5xl font-black tracking-tighter">
                                                 {totalPrice && totalPrice > 0 ? totalPrice.toLocaleString() : "Contact Us"}
                                             </span>
                                         </div>
-                                        <span className="text-[10px] font-black text-white uppercase tracking-widest mt-2 block">All-Inclusive Price</span>
+                                        <span className="text-[9px] font-black text-[#FACC15] uppercase tracking-widest mt-2 block">All-Inclusive Price</span>
                                     </div>
  
                                     <div className="space-y-4 mb-8">

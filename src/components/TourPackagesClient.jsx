@@ -131,7 +131,7 @@ export default function TourPackagesClient() {
 
                                         {/* Content Section */}
                                         <div className="p-10 flex flex-col flex-1">
-                                            <h3 className="text-3xl font-black text-black dark:text-white mb-6 uppercase tracking-tighter leading-none group-hover:text-[#FACC15] transition-colors">
+                                            <h3 className="text-3xl font-black text-[#FACC15] mb-6 uppercase tracking-tighter leading-none transition-colors">
                                                 {tour.title}
                                             </h3>
 

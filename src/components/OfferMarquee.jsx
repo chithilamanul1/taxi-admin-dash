@@ -113,7 +113,7 @@ const OfferMarquee = () => {
         return () => window.removeEventListener('bookingStepChange', handleStepChange);
     }, []);
 
-    if (pathname?.startsWith('/admin') || pathname?.startsWith('/driver') || bookingStep > 1 || isModalActive) {
+    if (pathname?.startsWith('/admin') || pathname?.startsWith('/driver') || pathname?.startsWith('/tour-packages/') || pathname?.startsWith('/day-trips/') || bookingStep > 1 || isModalActive) {
         return null;
     }
 

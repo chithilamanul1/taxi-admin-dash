@@ -94,7 +94,12 @@ export default function TourPackageDetailsClient({ tour }) {
     const priceCurrency = typeof tour.price === 'object' ? tour.price.currency : (tour.currency || 'USD');
 
     // Dynamic price calculation
-    const totalPrice = (priceAmount * memberCount.adults) + (priceAmount * 0.5 * memberCount.children);
+    let adultsPrice = 0;
+    if (memberCount.adults > 0) {
+        adultsPrice = priceAmount + (priceAmount * 0.5 * (memberCount.adults - 1));
+    }
+    const childrenPrice = priceAmount * 0.5 * memberCount.children;
+    const totalPrice = adultsPrice + childrenPrice;
 
     // Clean array logic for inclusions & exclusions
     const rawInclusions = (tour.inclusions?.length > 0 ? tour.inclusions : null) ||
@@ -143,12 +148,10 @@ export default function TourPackageDetailsClient({ tour }) {
             {/* Immersive Hero Section */}
             <div className="relative h-[75vh] w-full overflow-hidden pt-20 bg-slate-900 border-b-[16px] border-black">
                 <div className="absolute inset-0">
-                    <Image
+                    <img
                         src={tour.heroImage || tour.image || tour.images?.[0] || 'https://images.unsplash.com/photo-1544644181-1484b3fdfc63?q=80&w=1240&auto=format&fit=crop'}
                         alt={tour.title}
-                        fill
-                        className="object-cover transition-opacity duration-700"
-                        priority
+                        className="w-full h-full object-cover transition-opacity duration-700"
                     />
                     <div className="absolute inset-0 bg-black/40" />
                 </div>
@@ -363,15 +366,15 @@ export default function TourPackageDetailsClient({ tour }) {
                     <div className="lg:col-span-4 mt-[-100px] lg:mt-0">
                         <div className="sticky top-32 space-y-8">
                             <div className="bg-white p-8 border-[10px] border-black rounded-none">
-                                <div className="mb-8 text-center bg-black py-8 px-2 border-b-[12px] border-[#FACC15]">
-                                    <span className="text-[10px] font-black text-[#FACC15] uppercase tracking-widest block mb-1">Exclusive Web Rate</span>
+                                <div className="mb-6 text-center bg-black py-4 px-2 border-b-[6px] border-[#FACC15]">
+                                    <span className="text-[9px] font-black text-[#FACC15] uppercase tracking-widest block mb-1">Exclusive Web Rate</span>
                                     <div className="flex items-center justify-center gap-1 text-white">
-                                        <span className="text-xl font-black">{priceCurrency}</span>
-                                        <span className="text-7xl font-black tracking-tighter leading-none">
+                                        <span className="text-lg font-black">{priceCurrency}</span>
+                                        <span className="text-5xl font-black tracking-tighter leading-none">
                                             {totalPrice > 0 ? totalPrice.toLocaleString() : 'Price on Request'}
                                         </span>
                                     </div>
-                                    <span className="text-[10px] font-black text-[#FACC15] uppercase tracking-widest mt-2 block italic">All-Inclusive Price</span>
+                                    <span className="text-[9px] font-black text-[#FACC15] uppercase tracking-widest mt-2 block italic">All-Inclusive Price</span>
                                 </div>
 
                                 {priceAmount > 0 && (
