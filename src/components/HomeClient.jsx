@@ -286,7 +286,7 @@ export default function HomeClient() {
                                         From hidden gems to <Link href="/tour-packages" className="text-white hover:text-[#FACC15] underline decoration-dotted underline-offset-2 transition-colors">popular landmarks</Link>, let technology guide your next adventure.
                                     </p>
                                     <Link 
-                                        href="/trip-planner"
+                                        href="/?tab=tours"
                                         className="inline-flex items-center gap-2 bg-white text-emerald-950 px-6 py-3 rounded-full font-bold text-[10px] uppercase tracking-widest hover:bg-[#FACC15] hover:text-black transition-all shadow-xl group"
                                     >
                                         START PLANNING NOW
