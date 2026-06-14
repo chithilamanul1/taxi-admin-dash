@@ -30,6 +30,17 @@ export default function Navbar() {
         setIsUserMenuOpen(false)
     }, [pathname])
 
+    useEffect(() => {
+        if (isMobileMenuOpen) {
+            document.body.style.overflow = 'hidden'
+        } else {
+            document.body.style.overflow = ''
+        }
+        return () => {
+            document.body.style.overflow = ''
+        }
+    }, [isMobileMenuOpen])
+
     const isExcludedRoute = pathname?.startsWith('/admin') || pathname?.startsWith('/driver')
     if (isExcludedRoute) return null
 
@@ -40,7 +51,7 @@ export default function Navbar() {
     const needsSolidBg = isScrolled || !isTransparentPage
 
     return (
-        <nav className={`relative w-full z-[9999] transition-all duration-500 py-3 md:py-4 bg-white border-b border-slate-100 shadow-sm`}>
+        <nav className={`sticky top-0 w-full z-[9999] transition-all duration-500 py-3 md:py-4 bg-white border-b border-slate-100 shadow-sm`}>
             <div className="max-w-7xl mx-auto px-6 flex justify-between items-center">
                 <Link href="/" className="flex items-center gap-2 group shrink-0">
                     <div className="flex flex-col justify-center -ml-2 sm:-ml-6 md:-ml-10 lg:-ml-14">
@@ -175,7 +186,7 @@ export default function Navbar() {
 
             {/* Mobile Menu */}
             {isMobileMenuOpen && (
-                <div className="lg:hidden absolute top-full left-0 w-full bg-white border-t border-slate-100 shadow-2xl max-h-[85vh] overflow-y-auto animate-slide-up backdrop-blur-lg z-[9999]">
+                <div className="lg:hidden absolute top-full left-0 w-full bg-white border-t border-slate-100 shadow-2xl h-[100dvh] pb-32 overflow-y-auto animate-slide-up backdrop-blur-lg z-[9999]">
                     <div className="p-6 space-y-4">
                         <div className="grid grid-cols-1 gap-4">
                             {[
