@@ -12,7 +12,7 @@ const CategoryBar = () => {
         { name: 'Airport Taxis', icon: Plane, href: '/', active: pathname === '/' },
         { name: 'Tour Packages', icon: Map, href: '/tour-packages', active: pathname === '/tour-packages' },
         { name: 'Day Trips', icon: Compass, href: '/day-trips', active: pathname === '/day-trips' },
-        { name: 'Round Trips', icon: MapPin, href: '/round-trips', active: pathname === '/round-trips' },
+        { name: 'Round Trips', icon: MapPin, href: '/?tab=tours', active: pathname === '/' },
         { name: 'Driver Portal', icon: User, href: '/driver/login', active: pathname === '/driver/login' },
     ];
 

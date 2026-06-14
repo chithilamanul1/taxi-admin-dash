@@ -459,9 +459,9 @@ export async function sendBookingConfirmation(booking, isFailed = false) {
         </table>
 
         <!-- Customer Details -->
-        <table width="100%" cellpadding="4" cellspacing="0" style="border: 1px solid #e5e7eb; margin-bottom: 15px;">
+        <table width="100%" cellpadding="2" cellspacing="0" style="border: 1px solid #e5e7eb; margin-bottom: 8px;">
             <tr style="background-color: #f9fafb;">
-                <td colspan="2" style="font-weight: bold; font-size: 11px; color: #374151; border-bottom: 1px solid #e5e7eb; padding: 6px 10px;">
+                <td colspan="2" style="font-weight: bold; font-size: 10px; color: #374151; border-bottom: 1px solid #e5e7eb; padding: 4px 8px;">
                     CUSTOMER DETAILS
                 </td>
             </tr>
@@ -488,9 +488,9 @@ export async function sendBookingConfirmation(booking, isFailed = false) {
         </table>
 
         <!-- Trip Details -->
-        <table width="100%" cellpadding="4" cellspacing="0" style="border: 1px solid #e5e7eb; margin-bottom: 15px;">
+        <table width="100%" cellpadding="2" cellspacing="0" style="border: 1px solid #e5e7eb; margin-bottom: 8px;">
             <tr style="background-color: #f9fafb;">
-                <td colspan="2" style="font-weight: bold; font-size: 11px; color: #374151; border-bottom: 1px solid #e5e7eb; padding: 6px 10px;">
+                <td colspan="2" style="font-weight: bold; font-size: 10px; color: #374151; border-bottom: 1px solid #e5e7eb; padding: 4px 8px;">
                     TRIP DETAILS
                 </td>
             </tr>
@@ -563,9 +563,9 @@ export async function sendBookingConfirmation(booking, isFailed = false) {
         </table>
 
         <!-- Payment Summary -->
-        <table width="100%" cellpadding="4" cellspacing="0" style="border: 2px solid #064e3b; margin-bottom: 15px; page-break-inside: avoid;">
+        <table width="100%" cellpadding="2" cellspacing="0" style="border: 2px solid #064e3b; margin-bottom: 8px; page-break-inside: avoid;">
             <tr style="background-color: #064e3b; -webkit-print-color-adjust: exact;">
-                <td colspan="2" style="font-weight: 800; font-size: 12px; color: #ffffff; padding: 8px 10px; -webkit-print-color-adjust: exact;">
+                <td colspan="2" style="font-weight: 800; font-size: 10px; color: #ffffff; padding: 4px 8px; -webkit-print-color-adjust: exact;">
                     PAYMENT SUMMARY
                 </td>
             </tr>
@@ -605,7 +605,7 @@ export async function sendBookingConfirmation(booking, isFailed = false) {
             ` : ''}
         </table>
         
-        <table width="100%" cellpadding="0" cellspacing="0" style="margin-top: 10px;">
+        <table width="100%" cellpadding="0" cellspacing="0" style="margin-top: 5px;">
              <tr>
                 <td style="text-align: center;">
                     <a href="https://wa.me/${(() => {

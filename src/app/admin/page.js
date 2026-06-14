@@ -1462,8 +1462,12 @@ export default function AdminDashboard() {
                                                         });
                                                         setAirportTours(updated);
                                                     }}
-                                                    onDeleteGroup={(h) => {
+                                                    onDeleteGroup={async (h) => {
                                                         if (!confirm(`Are you sure you want to delete all airport packages for ${h} hours?`)) return;
+                                                        await Promise.all([
+                                                            fetch(`/api/admin/airport-tours/group?hours=${h}`, { method: 'DELETE' }),
+                                                            fetch(`/api/admin/heavy-airport-tours/group?hours=${h}`, { method: 'DELETE' })
+                                                        ]);
                                                         const updated = airportTours.filter(p => p.hours !== h);
                                                         setAirportTours(updated);
                                                     }}
@@ -1586,8 +1590,12 @@ export default function AdminDashboard() {
                                                         });
                                                         setNormalTours(updated);
                                                     }}
-                                                    onDeleteGroup={(h) => {
+                                                    onDeleteGroup={async (h) => {
                                                         if (!confirm(`Are you sure you want to delete all normal packages for ${h} hours?`)) return;
+                                                        await Promise.all([
+                                                            fetch(`/api/admin/normal-tours/group?hours=${h}`, { method: 'DELETE' }),
+                                                            fetch(`/api/admin/heavy-normal-tours/group?hours=${h}`, { method: 'DELETE' })
+                                                        ]);
                                                         const updated = normalTours.filter(p => p.hours !== h);
                                                         setNormalTours(updated);
                                                     }}
