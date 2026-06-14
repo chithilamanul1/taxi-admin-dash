@@ -222,7 +222,7 @@ export default function RootLayout({ children }) {
                     dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
                 />
             </head>
-            <body className="font-sans antialiased selection:bg-emerald-600 selection:text-white transition-colors duration-300">
+            <body className="font-sans antialiased selection:bg-emerald-600 selection:text-white transition-colors duration-300 overflow-x-hidden">
                 <ThemeProvider attribute="class" defaultTheme="light" enableSystem={false}>
 
                     <AuthProvider>
