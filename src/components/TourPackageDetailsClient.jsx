@@ -183,14 +183,18 @@ export default function TourPackageDetailsClient({ tour }) {
                     {/* Left Column (8/12) */}
                     <div className="lg:col-span-8 space-y-12">
                         {/* Quick Stats bar */}
-                        <div className="grid grid-cols-2 md:grid-cols-4 bg-black p-0 border-[10px] border-black">
+                        <div className="grid grid-cols-2 md:grid-cols-4 bg-black p-0 border-[4px] border-black rounded-3xl overflow-hidden">
                             {[
                                 { icon: Users, label: 'Group', val: 'Private Only' },
                                 { icon: Navigation, label: 'Transit', val: 'Luxury AC' },
                                 { icon: Hotel, label: 'Hotels', val: '3-5 Star' },
                                 { icon: ShieldCheck, label: 'Status', val: 'Verified', color: 'text-black' }
                             ].map((stat, i) => (
-                                <div key={i} className="bg-white p-6 border-r-[6px] border-black flex flex-col items-center text-center gap-2 last:border-r-0">
+                                <div key={i} className={`bg-white p-6 flex flex-col items-center text-center gap-2 border-slate-100 ${
+                                    i === 0 ? 'border-r-2 border-b-2 md:border-b-0' :
+                                    i === 1 ? 'border-b-2 md:border-b-0 md:border-r-2' :
+                                    i === 2 ? 'border-r-2' : ''
+                                }`}>
                                     <stat.icon size={20} className={stat.color || 'text-black'} />
                                     <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">{stat.label}</span>
                                     <span className="text-sm font-black text-black uppercase">{stat.val}</span>

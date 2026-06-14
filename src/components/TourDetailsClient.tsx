@@ -171,18 +171,18 @@ export default function TourDetailsClient({ tour }) {
                     {/* Left Column (8/12) */}
                     <div className="lg:col-span-8 space-y-12">
                         {/* Quick Stats bar */}
-                        <div className="grid grid-cols-2 md:grid-cols-4 bg-black p-0 border-[8px] border-black">
-                            <div className="bg-white p-6 border-r-[8px] border-black flex flex-col items-center text-center gap-2">
+                        <div className="grid grid-cols-2 md:grid-cols-4 bg-black p-0 border-[4px] border-black rounded-3xl overflow-hidden">
+                            <div className="bg-white p-6 border-r-2 border-b-2 md:border-b-0 border-slate-100 flex flex-col items-center text-center gap-2">
                                 <Clock size={20} className="text-black" />
                                 <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Duration</span>
                                 <span className="text-sm font-black text-black uppercase">{tour.duration?.days ? `${tour.duration.days} Days` : tour.duration}</span>
                             </div>
-                            <div className="bg-white p-6 border-r-[8px] md:border-r-[8px] border-black flex flex-col items-center text-center gap-2">
+                            <div className="bg-white p-6 border-b-2 md:border-b-0 md:border-r-2 border-slate-100 flex flex-col items-center text-center gap-2">
                                 <Navigation size={20} className="text-black" />
                                 <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Nature</span>
                                 <span className="text-sm font-black text-black uppercase">Private AC</span>
                             </div>
-                            <div className="bg-white p-6 border-r-[8px] border-black flex flex-col items-center text-center gap-2">
+                            <div className="bg-white p-6 border-r-2 border-slate-100 flex flex-col items-center text-center gap-2">
                                 <ShieldCheck size={20} className="text-black" />
                                 <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Security</span>
                                 <span className="text-sm font-black text-black uppercase">Fully Insured</span>
