@@ -303,21 +303,21 @@ export default function TourPackageDetailsClient({ tour }) {
 
                         {/* Experience Visual Timeline */}
                         {tour.experience && tour.experience.length > 0 && (
-                            <section className="bg-white border-[10px] border-black p-8 md:p-12 rounded-none text-black">
-                                <div className="flex items-center gap-4 mb-12">
-                                    <div className="w-4 h-8 bg-black"></div>
-                                    <h2 className="text-3xl font-black text-black uppercase tracking-tighter">
+                            <section className="bg-white border-[6px] border-black p-6 md:p-8 rounded-none text-black">
+                                <div className="flex items-center gap-3 mb-6">
+                                    <div className="w-2 h-6 bg-black"></div>
+                                    <h2 className="text-xl font-black text-black uppercase tracking-tighter">
                                         Your Experience
                                     </h2>
                                 </div>
                                 <div className="space-y-0 relative ml-2">
-                                    <div className="absolute left-1 top-0 bottom-0 w-2 bg-black opacity-20" />
+                                    <div className="absolute left-1 top-0 bottom-0 w-1 bg-black opacity-20" />
                                     {tour.experience.map((exp, idx) => (
-                                        <div key={idx} className="relative pl-12 pb-12 last:pb-0">
-                                            <div className="absolute left-0 top-1.5 w-6 h-6 bg-black border-4 border-white" />
-                                            <div className="flex flex-col gap-2">
-                                                <h4 className="text-xl font-black text-black uppercase tracking-tighter italic">{exp.heading}</h4>
-                                                <p className="text-slate-800 font-black text-base leading-relaxed max-w-2xl uppercase tracking-tight">{exp.text}</p>
+                                        <div key={idx} className="relative pl-8 pb-6 last:pb-0">
+                                            <div className="absolute left-[1px] top-1.5 w-3 h-3 bg-black border-2 border-white rounded-full" />
+                                            <div className="flex flex-col gap-1">
+                                                <h4 className="text-sm font-black text-black uppercase tracking-tighter italic">{exp.heading}</h4>
+                                                <p className="text-slate-800 font-medium text-xs leading-relaxed max-w-2xl uppercase tracking-tight">{exp.text}</p>
                                             </div>
                                         </div>
                                     ))}
