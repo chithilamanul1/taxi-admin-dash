@@ -185,7 +185,7 @@ export default function Navbar() {
 
             {/* Mobile Menu */}
             {isMobileMenuOpen && (
-                <div className="lg:hidden absolute top-full left-0 w-full bg-white border-t border-slate-100 shadow-2xl h-[100dvh] pb-32 overflow-y-auto animate-slide-up backdrop-blur-lg z-[9999]">
+                <div className="lg:hidden fixed top-[76px] left-0 w-full h-[calc(100dvh-76px)] bg-white border-t border-slate-100 shadow-2xl pb-24 overflow-y-auto overscroll-contain animate-slide-up backdrop-blur-lg z-[9999]">
                     <div className="p-6 space-y-4">
                         <div className="grid grid-cols-1 gap-4">
                             {[
