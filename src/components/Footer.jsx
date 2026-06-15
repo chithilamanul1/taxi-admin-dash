@@ -88,7 +88,15 @@ const Footer = () => {
                                 <div className="w-8 h-8 bg-[#FACC15] text-black flex items-center justify-center shrink-0 rounded-lg" aria-hidden="true">
                                     <Mail size={14} />
                                 </div>
-                                <a href="mailto:info@srilankantaxi.lk" className="hover:text-[#FACC15] pt-1.5">info@srilankantaxi.lk</a>
+                                <div className="flex flex-col pt-1.5 gap-1.5">
+                                    <a href="mailto:info@srilankantaxi.lk" className="hover:text-[#FACC15]">info@srilankantaxi.lk</a>
+                                    <a href="mailto:support@srilankantaxi.lk" className="hover:text-[#FACC15]">support@srilankantaxi.lk</a>
+                                    <a href="mailto:support@touris.lk" className="hover:text-[#FACC15]">support@touris.lk</a>
+                                    <a href="mailto:support@tourtaxi.lk" className="hover:text-[#FACC15]">support@tourtaxi.lk</a>
+                                    <a href="mailto:support@airporttaxicab.lk" className="hover:text-[#FACC15]">support@airporttaxicab.lk</a>
+                                    <a href="mailto:customer@airporttaxis.lk" className="hover:text-[#FACC15]">customer@airporttaxis.lk</a>
+                                    <a href="mailto:support@airporttaxis.lk" className="hover:text-[#FACC15]">support@airporttaxis.lk</a>
+                                </div>
                             </li>
                         </ul>
                     </div>

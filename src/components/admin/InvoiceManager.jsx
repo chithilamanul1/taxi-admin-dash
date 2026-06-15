@@ -125,11 +125,14 @@ export default function InvoiceManager() {
         doc.setTextColor(5, 150, 105);
         doc.text(result.paymentLink, 20, finalY + 45);
 
-        // Footer
         doc.setFontSize(8);
         doc.setTextColor(150, 150, 150);
-        doc.text('Thank you for choosing Airport Taxis Sri Lanka.', 105, 280, null, null, 'center');
-        doc.text('Web: srilankantaxi.lk | Tel: +94 71 688 5880', 105, 285, null, null, 'center');
+        doc.text('Thank you for choosing Airport Taxis Sri Lanka.', 105, 276, null, null, 'center');
+        doc.text('Web: srilankantaxi.lk | Tel: +94 71 688 5880', 105, 281, null, null, 'center');
+        
+        doc.setFontSize(7);
+        doc.text('Support: support@airporttaxis.lk | support@srilankantaxi.lk | support@touris.lk | support@tourtaxi.lk', 105, 286, null, null, 'center');
+        doc.text('support@airporttaxicab.lk | customer@airporttaxis.lk', 105, 290, null, null, 'center');
 
         doc.save(`Invoice_${formData.customerName.replace(/\s+/g, '_')}.pdf`);
     };

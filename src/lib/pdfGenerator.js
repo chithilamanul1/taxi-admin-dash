@@ -49,11 +49,13 @@ export const generateBookingPDF = (booking) => {
     doc.text("118/5 St. Joseph Street, Grandpass, Colombo 14", 15, 43);
     doc.text("Hotline: +94 722 885 885 | 0719 885 885 | 0712 100 500", 15, 48);
     doc.text("Email: info@srilankantaxi.lk | Web: www.srilankantaxi.lk", 15, 53);
+    doc.text("Support: support@airporttaxis.lk | support@srilankantaxi.lk | support@touris.lk", 15, 58);
+    doc.text("support@tourtaxi.lk | support@airporttaxicab.lk | customer@airporttaxis.lk", 15, 63);
 
     // -- Accent Line --
     doc.setDrawColor(...COLORS.brand);
     doc.setLineWidth(1);
-    doc.line(15, 62, 195, 62);
+    doc.line(15, 67, 195, 67);
 
     // -- Recipient Section --
     doc.setFontSize(11);
@@ -231,7 +233,9 @@ export const generateBookingPDF = (booking) => {
     doc.text("Thank you for traveling with Airport Taxis!", 105, 288, { align: 'center' });
     doc.setFontSize(7);
     doc.setFont(undefined, 'normal');
-    doc.text("24/7 Hotline: +94 722 885 885 | 0719 885 885 | 0712 100 500 | info@srilankantaxi.lk", 105, 292, { align: 'center' });
+    doc.text("24/7 Hotline: +94 722 885 885 | 0719 885 885 | 0712 100 500 | info@srilankantaxi.lk", 105, 289, { align: 'center' });
+    doc.text("Support: support@airporttaxis.lk | support@srilankantaxi.lk | support@touris.lk | support@tourtaxi.lk | support@airporttaxicab.lk", 105, 293, { align: 'center' });
+    doc.text("customer@airporttaxis.lk", 105, 297, { align: 'center' });
 
     // Save
     const fileName = `${isCash ? 'Receipt' : 'Invoice'}_${booking._id.slice(-8).toUpperCase()}.pdf`;
