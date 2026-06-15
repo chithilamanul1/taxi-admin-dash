@@ -1,17 +1,17 @@
 'use client';
 
 import React from 'react';
-import { PlaneArrival, PlaneDeparture, Building2, Home } from 'lucide-react';
+import { PlaneLanding, PlaneTakeoff, Building2, Home } from 'lucide-react';
 
 export default function TransferOptionsSection() {
     const options = [
         {
-            icon: PlaneArrival,
+            icon: PlaneLanding,
             title: "AIRPORT PICKUPS",
             desc: "Arrive stress-free. We pick you up directly from the arrivals hall at Bandaranaike International Airport and take you anywhere in Sri Lanka."
         },
         {
-            icon: PlaneDeparture,
+            icon: PlaneTakeoff,
             title: "AIRPORT DROP-OFFS",
             desc: "Never miss a flight. Reliable, on-time transfers from any location, hotel, or home directly to the airport departures."
         },
