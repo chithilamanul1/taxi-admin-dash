@@ -559,10 +559,11 @@ export default function AdminDashboard() {
                     fetch('/api/admin/airport-tours', { cache: 'no-store' }).then(res => res.json()),
                     fetch('/api/admin/heavy-airport-tours', { cache: 'no-store' }).then(res => res.json())
                 ]).then(([normalData, heavyData]) => {
-                    const combined = [
-                        ...(normalData.success && Array.isArray(normalData.data) ? normalData.data : []),
-                        ...(heavyData.success && Array.isArray(heavyData.data) ? heavyData.data : [])
-                    ];
+                    const heavyTypes = ['kdh', 'van', 'mini-bus', 'bus', 'coaster', 'coach', 'kdh-van', 'kdh-flatroof', 'kdh-highroof'];
+                    const nData = normalData.success && Array.isArray(normalData.data) ? normalData.data : [];
+                    const hData = heavyData.success && Array.isArray(heavyData.data) ? heavyData.data : [];
+                    const cleanedNData = nData.filter(p => !heavyTypes.some(t => p.vehicleType === t || p.vehicleType.includes(t)));
+                    const combined = [...cleanedNData, ...hData];
                     setAirportTours(combined);
                 }).catch(err => console.error(err));
 
