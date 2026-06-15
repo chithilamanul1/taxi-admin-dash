@@ -223,6 +223,25 @@ export default function RootLayout({ children }) {
                     type="application/ld+json"
                     dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
                 />
+                
+                {/* Unregister stale service workers to fix Vercel DEPLOYMENT_NOT_FOUND errors */}
+                <script
+                    dangerouslySetInnerHTML={{
+                        __html: `
+                            if (typeof window !== 'undefined' && 'serviceWorker' in navigator) {
+                                window.addEventListener('load', function() {
+                                    navigator.serviceWorker.getRegistrations().then(function(registrations) {
+                                        for(let registration of registrations) {
+                                            registration.unregister();
+                                        }
+                                    }).catch(function(err) {
+                                        console.log('Service Worker unregistration failed: ', err);
+                                    });
+                                });
+                            }
+                        `
+                    }}
+                />
             </head>
             <body className="font-sans antialiased selection:bg-emerald-600 selection:text-white transition-colors duration-300 overflow-x-hidden">
                 <ThemeProvider attribute="class" defaultTheme="light" enableSystem={false}>
