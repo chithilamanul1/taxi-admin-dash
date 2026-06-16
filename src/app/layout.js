@@ -189,7 +189,7 @@ import { CurrencyProvider } from '../context/CurrencyContext'
 
 // ... existing imports
 
-import { Inter, Montserrat } from 'next/font/google'
+import { Inter, Montserrat, Dancing_Script } from 'next/font/google'
 
 const inter = Inter({
     subsets: ['latin'],
@@ -203,9 +203,15 @@ const montserrat = Montserrat({
     display: 'swap',
 })
 
+const dancingScript = Dancing_Script({
+    subsets: ['latin'],
+    variable: '--font-dancing-script',
+    display: 'swap',
+})
+
 export default function RootLayout({ children }) {
     return (
-        <html lang="en" suppressHydrationWarning className={`${inter.variable} ${montserrat.variable} scroll-smooth scroll-pt-[240px] md:scroll-pt-[180px]`}>
+        <html lang="en" suppressHydrationWarning className={`${inter.variable} ${montserrat.variable} ${dancingScript.variable} scroll-smooth scroll-pt-[240px] md:scroll-pt-[180px]`}>
             <head>
                 <meta name="theme-color" content="#059669" />
                 <link rel="preconnect" href="https://fonts.googleapis.com" />

@@ -41,39 +41,49 @@ const GoogleReviews = () => {
                 ]);
 
                 // Process Google Reviews
-                if (googleRes.status === 'fulfilled') {
-                    const googleData = await googleRes.value.json();
-                    if (googleData.success && googleData.data?.reviews?.length > 0) {
-                        setGoogleReviews(googleData.data.reviews.map(r => ({ ...r, source: 'google' })));
-                        setStats(prev => ({
-                            ...prev,
-                            google: {
-                                rating: googleData.data.rating || 5.0,
-                                total: googleData.data.totalReviews || 316
-                            }
-                        }));
-                    } else {
+                if (googleRes.status === 'fulfilled' && googleRes.value.ok) {
+                    try {
+                        const googleData = await googleRes.value.json();
+                        if (googleData.success && googleData.data?.reviews?.length > 0) {
+                            setGoogleReviews(googleData.data.reviews.map(r => ({ ...r, source: 'google' })));
+                            setStats(prev => ({
+                                ...prev,
+                                google: {
+                                    rating: googleData.data.rating || 5.0,
+                                    total: googleData.data.totalReviews || 316
+                                }
+                            }));
+                        } else {
+                            setGoogleReviews(FALLBACK_REVIEWS.map(r => ({ ...r, source: 'google' })));
+                        }
+                    } catch (e) {
                         setGoogleReviews(FALLBACK_REVIEWS.map(r => ({ ...r, source: 'google' })));
                     }
+                } else {
+                    setGoogleReviews(FALLBACK_REVIEWS.map(r => ({ ...r, source: 'google' })));
                 }
 
                 // Process TripAdvisor Reviews
-                if (tripRes.status === 'fulfilled') {
-                    const tripData = await tripRes.value.json();
-                    if (tripData.success && tripData.data?.reviews?.length > 0) {
-                        setTripReviews(tripData.data.reviews.map(r => ({ ...r, source: 'tripadvisor' })));
-                        setStats(prev => ({
-                            ...prev,
-                            tripadvisor: {
-                                rating: parseFloat(tripData.data.rating) || 5.0,
-                                total: parseInt(tripData.data.num_reviews) || 100
-                            }
-                        }));
-                    } else {
+                if (tripRes.status === 'fulfilled' && tripRes.value.ok) {
+                    try {
+                        const tripData = await tripRes.value.json();
+                        if (tripData.success && tripData.data?.reviews?.length > 0) {
+                            setTripReviews(tripData.data.reviews.map(r => ({ ...r, source: 'tripadvisor' })));
+                            setStats(prev => ({
+                                ...prev,
+                                tripadvisor: {
+                                    rating: parseFloat(tripData.data.rating) || 5.0,
+                                    total: parseInt(tripData.data.num_reviews) || 100
+                                }
+                            }));
+                        } else {
+                            setTripReviews(FALLBACK_REVIEWS.map(r => ({ ...r, source: 'tripadvisor' })));
+                        }
+                    } catch (e) {
                         setTripReviews(FALLBACK_REVIEWS.map(r => ({ ...r, source: 'tripadvisor' })));
                     }
                 } else {
-                    // Handle Rejection
+                    // Handle Rejection or bad status
                     setTripReviews(FALLBACK_REVIEWS.map(r => ({ ...r, source: 'tripadvisor' })));
                 }
             } catch (err) {

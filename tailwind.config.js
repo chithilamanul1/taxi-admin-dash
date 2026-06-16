@@ -32,6 +32,7 @@ export default {
             fontFamily: {
                 'sans': ['var(--font-inter)', 'sans-serif'],
                 'montserrat': ['var(--font-montserrat)', 'sans-serif'],
+                'cursive': ['var(--font-dancing-script)', 'cursive'],
             },
             keyframes: {
                 'slide-up': {
