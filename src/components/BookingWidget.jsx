@@ -216,7 +216,7 @@ const BookingWidgetContent = ({ defaultTab = 'pickup', onTabChange }) => {
                 const category = categoryMap[activeTab] || 'airport-transfer';
 
                 setIsLoadingPricing(true);
-                const res = await fetch(`/api/pricing?category=${category}`, { cache: 'no-store' });
+                const res = await fetch(`/api/pricing?category=${category}`);
                 if (!res.ok) {
                     console.error('Pricing Fetch Failed', res.status);
                     return;

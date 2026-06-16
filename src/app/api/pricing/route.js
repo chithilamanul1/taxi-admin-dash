@@ -2,8 +2,7 @@ import { NextResponse } from 'next/server';
 import dbConnect from '../../../lib/db';
 import Pricing from '../../../models/Pricing';
 
-export const dynamic = 'force-dynamic';
-export const revalidate = 0;
+export const revalidate = 3600; // Cache for 1 hour
 
 export async function GET(req) {
     try {
@@ -21,14 +20,7 @@ export async function GET(req) {
         const settings = await PricingSetting.findOne({ key: 'global_settings' });
         const nameBoardPrice = settings ? settings.nameBoardPrice : 2000;
 
-        return NextResponse.json({ success: true, data: pricing, meta: { nameBoardPrice } }, {
-            headers: {
-                'Cache-Control': 'no-store, max-age=0, must-revalidate',
-                'Pragma': 'no-cache',
-                'Expires': '0',
-                'X-Accel-Buffering': 'no'
-            }
-        });
+        return NextResponse.json({ success: true, data: pricing, meta: { nameBoardPrice } });
     } catch (error) {
         console.error('Error fetching pricing:', error);
         return NextResponse.json({ success: false, error: 'Internal Server Error' }, { status: 500 });

@@ -3,6 +3,8 @@ import dbConnect from '@/lib/db';
 import Coupon from '@/models/Coupon';
 import LocationOffer from '@/models/LocationOffer';
 
+export const revalidate = 3600; // Cache for 1 hour
+
 // GET: Fetch all coupons and offers
 export async function GET(request) {
     try {
