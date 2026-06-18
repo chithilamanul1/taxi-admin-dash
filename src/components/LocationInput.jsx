@@ -143,7 +143,7 @@ const LocationInput = ({
                     initGoogleMaps();
                 }}
                 disabled={disabled}
-                placeholder={googleLoaded ? placeholder : 'Loading maps...'}
+                placeholder={placeholder}
                 aria-label={label || placeholder}
                 className={`w-full pl-12 sm:pl-14 pr-10 sm:pr-14 h-14 rounded-2xl text-sm sm:text-base font-medium transition-all outline-none border
                 ${disabled 
