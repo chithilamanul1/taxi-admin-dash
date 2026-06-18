@@ -27,7 +27,7 @@ const getVehicleTransform = (imagePath, isSelected, isHovered = false, h_target 
         'sedancar.png': { h_orig: 0.4668, c_prime_orig: 0.5310 },
         'sedancar2.png': { h_orig: 0.4300, c_prime_orig: 0.4801 },
         'susukievery.png': { h_orig: 0.5543, c_prime_orig: 1 - 228.5/433 },
-        'toyota-highroof.png': { h_orig: 1.0, c_prime_orig: 1 - 227.5/433 },
+        'toyota-highroof.png': { h_orig: 0.65, c_prime_orig: 1 - 227.5/433 },
         'van.png': { h_orig: 0.5497, c_prime_orig: 1 - 227.5/433 },
     }[filename] || { h_orig: 0.55, c_prime_orig: 0.5 }; // Default fallback
 
@@ -828,7 +828,7 @@ const CustomTourBooking = () => {
                       <div className="flex gap-2.5 mt-2 ml-1 text-slate-500 justify-start w-full px-4">
                         <span className="flex items-center gap-1 text-[8px] font-bold"><User size={8} /> {v.capacity}</span>
                         <span className="flex items-center gap-1 text-[8px] font-bold"><Briefcase size={8} /> {v.luggage || v.suitcases}</span>
-                      </div>   </div>
+                      </div>
                     </button>
                   );
                 })}

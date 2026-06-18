@@ -29,6 +29,7 @@ const nextConfig = {
         // unoptimized: true, // Commented out to enable Vercel Image Optimization
     },
     productionBrowserSourceMaps: false,
+    cacheMaxMemorySize: 2048 * 1024 * 1024, // 2GB memory cache size for Next.js ISR (default is 50MB)
     compiler: {
         removeConsole: process.env.NODE_ENV === 'production',
     },
