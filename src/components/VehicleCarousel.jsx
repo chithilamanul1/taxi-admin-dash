@@ -148,7 +148,7 @@ const VehicleCarousel = ({ vehicles, selectedId, onSelect, passengerCount, picku
                     <div className="flex flex-wrap items-center gap-2 sm:gap-3 mt-1 sm:mt-1.5">
                         {[
                             { icon: Users, val: vehicle.capacity || 4 },
-                            { icon: Briefcase, val: vehicle.suitcases || 2 },
+                            { icon: Briefcase, val: vehicle.luggage || vehicle.suitcases || 2 },
                         ].map((item, i) => (
                             <div key={i} className="flex items-center gap-1 text-slate-500 dark:text-slate-400">
                                 <item.icon size={10} className="text-emerald-600 shrink-0" />
@@ -292,9 +292,9 @@ const VehicleCarousel = ({ vehicles, selectedId, onSelect, passengerCount, picku
                             <div className="px-3 sm:px-4 pb-4 mt-1 relative z-10 shrink-0">
                                 <div className="grid grid-cols-4 gap-1.5">
                                     {[
-                                        { icon: Users, label: 'PAX', value: vehicle.capacity || 4 },
-                                        { icon: Briefcase, label: 'LUG', value: vehicle.suitcases || 2 },
-                                        { icon: ShoppingBag, label: 'HAND', value: vehicle.handLuggage || 2 },
+                                        { icon: Users, label: 'MAX PAX', value: vehicle.capacity || 4 },
+                                        { icon: Briefcase, label: 'MAX LUG', value: vehicle.luggage || vehicle.suitcases || 2 },
+                                        { icon: ShoppingBag, label: 'MAX HAND', value: vehicle.handLuggage || 2 },
                                         { icon: Wind, label: 'AC', value: 'ON' }
                                     ].map((item, i) => (
                                         <div key={i} className={`flex flex-col items-center justify-center p-2 sm:p-2.5 rounded-[14px] border ${isSelected ? 'bg-[#FACC15] border-[#FACC15] text-black shadow-md' : 'bg-zinc-900 border-black text-[#FACC15] dark:bg-black dark:border-white/10 dark:text-[#FACC15]'}`}>

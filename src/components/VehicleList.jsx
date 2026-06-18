@@ -76,9 +76,9 @@ const VehicleList = ({ vehicles, selectedId, onSelect, onInspect, passengerCount
                                 {/* Spec Grid - Aligned */}
                                 <div className="grid grid-cols-4 gap-2 md:gap-4 mb-6">
                                     {[
-                                        { icon: Users, val: vehicle.capacity, label: 'PAX' },
-                                        { icon: Briefcase, val: vehicle.luggage, label: 'LUG' },
-                                        { icon: ShoppingBag, val: vehicle.handLuggage || 0, label: 'HAND' },
+                                        { icon: Users, val: vehicle.capacity, label: 'MAX PAX' },
+                                        { icon: Briefcase, val: vehicle.luggage || vehicle.suitcases || 2, label: 'MAX LUG' },
+                                        { icon: ShoppingBag, val: vehicle.handLuggage || 0, label: 'MAX HAND' },
                                         { icon: Wind, val: 'ON', label: 'AC', color: 'text-emerald-500' }
                                     ].map((item, i) => (
                                         <div key={i} className="flex flex-col items-center justify-center p-2 rounded-xl bg-slate-50 dark:bg-zinc-900/50 border border-slate-100 dark:border-white/5">

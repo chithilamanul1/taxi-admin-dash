@@ -1069,9 +1069,9 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                         </div>
                                         <div className="grid grid-cols-4 gap-2.5">
                                             {[
-                                                { icon: Users, label: 'PAX', value: selectedVehicle?.capacity || 4 },
-                                                { icon: Briefcase, label: 'LUG', value: selectedVehicle?.suitcases || 2 },
-                                                { icon: ShoppingBag, label: 'HAND', value: selectedVehicle?.handLuggage || 2 },
+                                                { icon: Users, label: 'MAX PAX', value: selectedVehicle?.capacity || 4 },
+                                                { icon: Briefcase, label: 'MAX LUG', value: selectedVehicle?.luggage || selectedVehicle?.suitcases || 2 },
+                                                { icon: ShoppingBag, label: 'MAX HAND', value: selectedVehicle?.handLuggage || 2 },
                                                 { icon: Wind, label: 'AC', value: 'ON' }
                                             ].map((item, i) => (
                                                 <div key={i} className="bg-slate-50 dark:bg-white/5 rounded-xl p-3 border border-slate-100 dark:border-white/10 flex flex-col items-center justify-center">
@@ -1081,6 +1081,39 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                                 </div>
                                             ))}
                                         </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className="bg-slate-50 dark:bg-white/5 border border-slate-100 dark:border-white/10 rounded-2xl p-4 sm:p-6 flex flex-wrap gap-4 sm:gap-8 items-center justify-between">
+                                <div className="flex flex-col">
+                                    <span className="text-[9px] font-black uppercase tracking-widest text-slate-400 mb-1">Your Passengers</span>
+                                    <div className="flex items-center gap-2">
+                                        <div className="flex items-center gap-1.5 bg-white dark:bg-zinc-800 px-3 py-1.5 rounded-lg border border-slate-200 dark:border-white/10 shadow-sm">
+                                            <Users size={12} className="text-[#FACC15]" />
+                                            <span className="text-xs font-black text-slate-800 dark:text-white">{formData.passengerCount.adults || 0} Adults</span>
+                                        </div>
+                                        {formData.passengerCount.children > 0 && (
+                                            <div className="flex items-center gap-1.5 bg-white dark:bg-zinc-800 px-3 py-1.5 rounded-lg border border-slate-200 dark:border-white/10 shadow-sm">
+                                                <User size={12} className="text-[#FACC15]" />
+                                                <span className="text-xs font-black text-slate-800 dark:text-white">{formData.passengerCount.children} Children</span>
+                                            </div>
+                                        )}
+                                    </div>
+                                </div>
+                                <div className="flex flex-col">
+                                    <span className="text-[9px] font-black uppercase tracking-widest text-slate-400 mb-1">Your Luggage</span>
+                                    <div className="flex items-center gap-2">
+                                        <div className="flex items-center gap-1.5 bg-white dark:bg-zinc-800 px-3 py-1.5 rounded-lg border border-slate-200 dark:border-white/10 shadow-sm">
+                                            <Briefcase size={12} className="text-[#FACC15]" />
+                                            <span className="text-xs font-black text-slate-800 dark:text-white">{formData.passengerCount.luggage || 0} Bags</span>
+                                        </div>
+                                        {formData.passengerCount.handLuggage > 0 && (
+                                            <div className="flex items-center gap-1.5 bg-white dark:bg-zinc-800 px-3 py-1.5 rounded-lg border border-slate-200 dark:border-white/10 shadow-sm">
+                                                <ShoppingBag size={12} className="text-[#FACC15]" />
+                                                <span className="text-xs font-black text-slate-800 dark:text-white">{formData.passengerCount.handLuggage} Hand</span>
+                                            </div>
+                                        )}
                                     </div>
                                 </div>
                             </div>

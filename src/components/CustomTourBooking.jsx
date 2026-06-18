@@ -825,10 +825,10 @@ const CustomTourBooking = () => {
                       <p className="text-[10px] font-black text-emerald-700 dark:text-emerald-400 mb-1">{convertPrice(dynamicPrice).symbol} {convertPrice(dynamicPrice).value.toLocaleString()}</p>
                       
                       {/* Passenger capacity and baggage count details */}
-                      <div className="flex items-center gap-2 text-slate-500 dark:text-slate-400 border-t border-slate-400 dark:border-white/20 pt-1 w-full justify-center">
+                      <div className="flex gap-2.5 mt-2 ml-1 text-slate-500 justify-start w-full px-4">
                         <span className="flex items-center gap-1 text-[8px] font-bold"><User size={8} /> {v.capacity}</span>
-                        <span className="flex items-center gap-0.5 text-[8px] font-bold">💼 {v.suitcases}</span>
-                      </div>
+                        <span className="flex items-center gap-1 text-[8px] font-bold"><Briefcase size={8} /> {v.luggage || v.suitcases}</span>
+                      </div>   </div>
                     </button>
                   );
                 })}
@@ -1024,9 +1024,9 @@ const CustomTourBooking = () => {
                   <AlertCircle className="text-orange-500 shrink-0 mt-0.5" size={14} />
                   <div>
                     <p className="text-[10px] font-black uppercase tracking-widest text-orange-700 dark:text-orange-400">Strict Vehicle Capacity</p>
-                    <p className="text-[10px] font-bold text-slate-600 dark:text-slate-400 mt-0.5 leading-tight">
-                      Maximum {selectedVehicle?.capacity || 2} Passengers & {selectedVehicle?.suitcases || 4} Luggage Bags.
-                    </p>
+                    <div className="text-[10px] font-bold uppercase tracking-widest text-slate-500 dark:text-slate-400 mt-2">
+                      Maximum {selectedVehicle?.capacity || 2} Passengers & {selectedVehicle?.luggage || selectedVehicle?.suitcases || 4} Luggage Bags.
+                    </div>
                   </div>
                 </div>
 
