@@ -712,7 +712,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
 
     return (
         <div className="fixed inset-0 z-[10000] flex items-center justify-center p-0 sm:p-4 md:p-8 bg-emerald-950/20 backdrop-blur-xl">
-            <div className="w-full h-full max-w-7xl bg-white dark:bg-zinc-950 sm:rounded-[3rem] shadow-[0_0_100px_rgba(0,0,0,0.2)] dark:shadow-none overflow-hidden flex flex-col relative border border-white/20">
+            <div className="w-full h-[100dvh] sm:h-[95vh] max-h-full max-w-7xl bg-white dark:bg-zinc-950 sm:rounded-[3rem] shadow-[0_0_100px_rgba(0,0,0,0.2)] dark:shadow-none overflow-hidden flex flex-col relative border border-white/20">
                 {/* Header */}
                 <div className="p-6 sm:p-10 border-b border-slate-100 dark:border-white/5 bg-white/80 dark:bg-zinc-950/80 backdrop-blur-md sticky top-0 z-50 shrink-0">
                     <div className="flex items-center justify-between">
@@ -1377,19 +1377,31 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                         <div className="flex flex-row items-center justify-between gap-3 sm:gap-4">
                             <button
                                 onClick={() => (step > 1 ? setStep(step - 1) : onClose())}
-                                className="flex-1 sm:flex-none flex items-center justify-center gap-2 px-3 sm:px-8 py-3 sm:py-4 text-[9px] sm:text-xs font-black uppercase tracking-widest text-slate-500 hover:text-black transition-all bg-slate-50 dark:bg-white/5 rounded-2xl border border-slate-100 dark:border-white/5"
+                                className="flex-none flex items-center justify-center gap-2 px-3 sm:px-8 py-3 sm:py-4 text-[9px] sm:text-xs font-black uppercase tracking-widest text-slate-500 hover:text-black transition-all bg-slate-50 dark:bg-white/5 rounded-2xl border border-slate-100 dark:border-white/5"
                             >
                                 {step === 1 ? 'Cancel' : 'Back'}
                             </button>
 
-                            <button
-                                onClick={handleNext}
-                                disabled={loading}
-                                className="flex-[2] sm:flex-none flex items-center justify-center gap-2 sm:gap-3 px-4 sm:px-12 py-3 sm:py-5 bg-gradient-to-br from-yellow-400 via-orange-500 to-orange-600 hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 text-white rounded-[2rem] text-[9px] sm:text-xs font-black uppercase tracking-[0.2em] transition-all group"
-                            >
-                                {step === 1 ? 'Select Details' : step === 2 ? 'Review & Checkout' : loading ? 'Securing...' : 'Confirm Order'}
-                                <ArrowRight size={14} strokeWidth={3} className="group-hover:translate-x-1 transition-transform" />
-                            </button>
+                            <div className="flex flex-1 sm:flex-none gap-2">
+                                <button
+                                    onClick={() => {
+                                        const text = `Hi, I'm trying to book a taxi but need help.\nRoute: ${formData.pickup || 'Not set'} -> ${formData.dropoff || 'Not set'}\nDate: ${formData.date || ''}\nTime: ${formData.time || ''}\nVehicle: ${formData.vehicle || ''}`;
+                                        window.open(`https://wa.me/94716885880?text=${encodeURIComponent(text)}`, '_blank');
+                                    }}
+                                    className="flex-1 sm:flex-none flex items-center justify-center gap-1 sm:gap-2 px-2 sm:px-6 py-3 sm:py-5 bg-emerald-500 text-white rounded-2xl text-[9px] sm:text-xs font-black uppercase tracking-widest hover:bg-emerald-600 transition-all shadow-md active:scale-95"
+                                >
+                                    <MessageSquare size={14} />
+                                    <span className="hidden xs:inline">WhatsApp</span>
+                                </button>
+                                <button
+                                    onClick={handleNext}
+                                    disabled={loading}
+                                    className="flex-[2] sm:flex-none flex items-center justify-center gap-1 sm:gap-3 px-3 sm:px-12 py-3 sm:py-5 bg-gradient-to-br from-yellow-400 via-orange-500 to-orange-600 hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 text-white rounded-[2rem] text-[9px] sm:text-xs font-black uppercase tracking-[0.2em] transition-all group"
+                                >
+                                    {step === 1 ? 'Next Step' : step === 2 ? 'Checkout' : loading ? 'Wait...' : 'Confirm'}
+                                    <ArrowRight size={14} strokeWidth={3} className="group-hover:translate-x-1 transition-transform" />
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>

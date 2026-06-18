@@ -1,15 +1,15 @@
 import TourPackagesClient from '@/components/TourPackagesClient'
 
 export const metadata = {
-    title: '🐘 Sri Lanka Tour Packages - Authentic Multi-Day Sightseeing Tours',
-    description: 'Explore Sri Lanka with our expertly designed multi-day tour packages. Quality accommodation, private AC transport, and professional guides included. Customizable itineraries for families, couples, and adventurers.',
-    keywords: 'Sri Lanka Tour Packages, Multi-day Sri Lanka Tours, Sri Lanka Sightseeing Packages, Customized Sri Lanka Trips, Best Sri Lanka Tour Operator, Sri Lanka Honeymoon Packages, Wildlife Tours Sri Lanka, Cultural Tours Sri Lanka, Adventure Tours Sri Lanka',
+    title: 'Sri Lanka Round Tour Packages | Island-Wide Private Drivers & Custom Itineraries',
+    description: 'Discover Sri Lanka with our custom round tour packages. Explore ancient Sigiriya, scenic Ella tea estates, wild Yala safaris & pristine beaches. Book today!',
+    keywords: 'round tour packages, multi day tour packages, all inclusive round tours, full country tour packages, guided round trips, multi day itinerary planner, complete sightseeing packages, cross country tour package, customized round tours, complete travel itinerary tours with hotel stay included, round trip transportation packages, expert local tour guides, entrance fees included packages, private driver tour itinerary, curated holiday packages, milestone travel packages end to end travel services, meals and stays tour package, multi city vacation logistics',
     alternates: {
         canonical: 'https://srilankantaxi.lk/tour-packages',
     },
     openGraph: {
-        title: 'Authentic Sri Lanka Tour Packages & Adventures',
-        description: 'Complete tour packages with transport, hotels, and expert guides. Experience the best of Sri Lanka with our trusted local team.',
+        title: 'Sri Lanka Round Tour Packages | Island-Wide Private Drivers & Custom Itineraries',
+        description: 'Discover Sri Lanka with our custom round tour packages. Explore ancient Sigiriya, scenic Ella tea estates, wild Yala safaris & pristine beaches. Book today!',
         url: 'https://srilankantaxi.lk/tour-packages',
         siteName: 'Airport Taxis Pvt (Ltd)',
         images: [
@@ -25,8 +25,8 @@ export const metadata = {
     },
     twitter: {
         card: 'summary_large_image',
-        title: 'Book Your Dream Sri Lanka Tour',
-        description: 'Customizable 5-14 day tour packages exploring Kandy, Nuwara Eliya, Ella, and the South Coast.',
+        title: 'Sri Lanka Round Tour Packages | Island-Wide Private Drivers & Custom Itineraries',
+        description: 'Discover Sri Lanka with our custom round tour packages. Explore ancient Sigiriya, scenic Ella tea estates, wild Yala safaris & pristine beaches. Book today!',
         images: ['/sigiriya-new-hero.png'],
     }
 }

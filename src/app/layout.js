@@ -234,16 +234,32 @@ export default function RootLayout({ children }) {
                 <script
                     dangerouslySetInnerHTML={{
                         __html: `
-                            if (typeof window !== 'undefined' && 'serviceWorker' in navigator) {
-                                window.addEventListener('load', function() {
-                                    navigator.serviceWorker.getRegistrations().then(function(registrations) {
-                                        for(let registration of registrations) {
-                                            registration.unregister();
+                            if (typeof window !== 'undefined') {
+                                // Catch Webpack ChunkLoadErrors and force a reload
+                                const handleChunkError = (e) => {
+                                    const msg = (e.message || (e.reason && e.reason.message) || '');
+                                    if (/Loading chunk [\d]+ failed/.test(msg) || /ChunkLoadError/.test(msg)) {
+                                        if (!sessionStorage.getItem('chunk_error_reloaded')) {
+                                            sessionStorage.setItem('chunk_error_reloaded', 'true');
+                                            window.location.reload();
                                         }
-                                    }).catch(function(err) {
-                                        console.log('Service Worker unregistration failed: ', err);
+                                    }
+                                };
+                                window.addEventListener('error', handleChunkError);
+                                window.addEventListener('unhandledrejection', handleChunkError);
+
+                                // Unregister stale service workers
+                                if ('serviceWorker' in navigator) {
+                                    window.addEventListener('load', function() {
+                                        navigator.serviceWorker.getRegistrations().then(function(registrations) {
+                                            for(let registration of registrations) {
+                                                registration.unregister();
+                                            }
+                                        }).catch(function(err) {
+                                            console.log('Service Worker unregistration failed: ', err);
+                                        });
                                     });
-                                });
+                                }
                             }
                         `
                     }}
