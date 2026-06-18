@@ -15,6 +15,7 @@ export default function sitemap() {
         '/about',
         '/gallery',
         '/contact',
+        '/roundtrip',
         '/day-trips',
         '/tour-packages',
         '/blog',

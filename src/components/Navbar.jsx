@@ -69,7 +69,7 @@ export default function Navbar() {
                         { label: 'Intercity Rides', href: '/?tab=ride#booking' },
                         { label: 'Day Tours', href: '/day-trips' },
                         { label: 'Tour Packages', href: '/tour-packages' },
-                        { label: 'Round Trips', href: '/#calculator' },
+                        { label: 'Round Trips', href: '/roundtrip' },
                         { label: 'Fleet', href: '/fleet' },
                         { label: 'Gallery', href: '/gallery' },
                     ].map(item => (
@@ -195,7 +195,7 @@ export default function Navbar() {
                                 { label: 'Day Tours', href: '/day-trips', icon: '🌴', id: 'm-day' },
                                 { label: 'City Tours', href: '/tours', icon: '🏙️', id: 'm-city' },
                                 { label: 'Tour Packages', href: '/tour-packages', icon: '🗺️', id: 'm-pkg' },
-                                { label: 'Round Trips', href: '/#calculator', icon: '🔄', id: 'm-round' },
+                                { label: 'Round Trips', href: '/roundtrip', icon: '🔄', id: 'm-round' },
                                 { label: 'Fleet', href: '/fleet', icon: '🚘', id: 'm-fleet' },
                                 { label: 'Gallery', href: '/gallery', icon: '📸', id: 'm-gallery' },
                                 {
