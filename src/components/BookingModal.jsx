@@ -37,6 +37,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
     const { data: session } = useSession();
     const [step, setStep] = useState(1);
     const scrollContainerRef = useRef(null);
+    const passengerRef = useRef(null);
 
     useEffect(() => {
         if (scrollContainerRef.current) {
@@ -586,31 +587,37 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
         if (targetStep >= 1) {
             if (!formData.pickup) newErrors.pickup = true;
             if (!formData.dropoff) newErrors.dropoff = true;
+            
             if (isAirportPickup) {
                 if (formData.hasNameBoard === null) newErrors.hasNameBoard = true;
                 if (!formData.flightNumber) newErrors.flightNumber = true;
                 if (!formData.flightArrivalTime) newErrors.flightArrivalTime = true;
                 if (formData.hasNameBoard && !formData.nameBoardText) newErrors.nameBoardText = true;
             }
-        }
-        if (targetStep >= 2) {
-            if (!formData.name) newErrors.name = true;
-            if (!formData.phone) newErrors.phone = true;
-            if (!formData.email) newErrors.email = true;
-            if (isAirportPickup || formData.hasNameBoard) {
-                if (!formData.flightArrivalDate && !formData.date) newErrors.date = true;
-                if (!formData.flightArrivalTime && !formData.time) newErrors.time = true;
-                if (!formData.flightNumber) newErrors.flightNumber = true;
-            }
+
             // Enforce luggage selection and adult count (Hard Stop)
             if (!formData.passengerCount.luggage || formData.passengerCount.luggage < 1) newErrors.luggage = true;
             if (!formData.passengerCount.handLuggage || formData.passengerCount.handLuggage < 1) newErrors.handLuggage = true;
             if (!formData.passengerCount.adults || formData.passengerCount.adults < 1) newErrors.adults = true;
         }
         
+        if (targetStep >= 2) {
+            if (!formData.name) newErrors.name = true;
+            if (!formData.phone) newErrors.phone = true;
+            if (!formData.email) newErrors.email = true;
+            if (!formData.whatsapp && !formData.phone) newErrors.whatsapp = true;
+        }
+        
         setErrors(newErrors);
         
         if (Object.keys(newErrors).length > 0) {
+            if (newErrors.adults || newErrors.luggage || newErrors.handLuggage) {
+                alert("Please enter passenger and luggage count to proceed");
+                if (passengerRef.current) {
+                    passengerRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    return false;
+                }
+            }
             // Scroll to the first error element
             setTimeout(() => {
                 const firstError = Object.keys(newErrors)[0];
@@ -893,6 +900,27 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                         )}
                                     </div>
                                 )}
+                            </div>
+
+                            <div className="space-y-4 pt-8 border-t border-slate-100 dark:border-white/10" ref={passengerRef}>
+                                <label className="text-xs font-black text-slate-900 dark:text-white uppercase tracking-widest pl-1 leading-none flex items-center gap-2">
+                                    Passenger and Luggage <span className="text-[9px] bg-red-600 text-white px-2 py-0.5 rounded-full lowercase tracking-tight shadow-sm">required</span>
+                                </label>
+                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-4">
+                                    {[{ id: 'adults', label: 'Adults' }, { id: 'children', label: 'Children' }, { id: 'luggage', label: 'Luggage' }, { id: 'handLuggage', label: 'Hand Luggage' }].map(c => {
+                                        const isFieldUnselected = (errors.adults && c.id === 'adults') || (errors.luggage && c.id === 'luggage') || (errors.handLuggage && c.id === 'handLuggage');
+                                        return (
+                                            <div key={c.id} className={`bg-slate-50 dark:bg-white/5 border p-4 rounded-2xl flex items-center justify-between transition-all h-16 ${isFieldUnselected ? 'border-red-500 ring-2 ring-red-500/20 animate-pulse' : 'border-slate-100 dark:border-white/10'}`}>
+                                                <span className={`text-[11px] font-black uppercase tracking-widest ${isFieldUnselected ? 'text-red-500' : 'text-slate-800 dark:text-slate-200'}`}>{c.label}</span>
+                                                <div className="flex items-center gap-3 shrink-0">
+                                                    <button onClick={() => setFormData(p => ({ ...p, passengerCount: { ...p.passengerCount, [c.id]: Math.max(0, (Number(p.passengerCount[c.id]) || 0) - 1) } }))} className="w-8 h-8 rounded-lg bg-white dark:bg-zinc-800 border border-slate-200 dark:border-white/10 flex items-center justify-center hover:bg-slate-100 active:scale-95 transition-all text-slate-600 dark:text-white"><Minus size={14} strokeWidth={2.5} /></button>
+                                                    <span className={`font-bold text-base min-w-[20px] text-center ${isFieldUnselected ? 'text-red-500' : 'text-slate-800 dark:text-white'}`}>{formData.passengerCount[c.id] || 0}</span>
+                                                    <button onClick={() => setFormData(p => ({ ...p, passengerCount: { ...p.passengerCount, [c.id]: (Number(p.passengerCount[c.id]) || 0) + 1 } }))} className="w-8 h-8 rounded-lg bg-[#FACC15] text-black flex items-center justify-center hover:bg-yellow-400 active:scale-95 transition-all shadow-sm"><Plus size={14} strokeWidth={2.5} /></button>
+                                                </div>
+                                            </div>
+                                        );
+                                    })}
+                                </div>
                             </div>
 
                             <div className="space-y-10 pt-10 border-t border-slate-100 dark:border-white/10">

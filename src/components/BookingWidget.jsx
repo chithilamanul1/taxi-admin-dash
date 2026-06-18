@@ -1171,8 +1171,8 @@ const BookingWidgetContent = ({ defaultTab = 'pickup', onTabChange }) => {
                                                 </div>
                                             )}
                                         </div>
-                                        <div className="space-y-4 mb-6">
-<label className="text-xs font-black text-slate-900 dark:text-white uppercase tracking-widest pl-1 leading-none block mb-4 flex items-center gap-2">
+                                        <div className="space-y-4 mb-6" id="booking-widget-passengers">
+                                            <label className="text-xs font-black text-slate-900 dark:text-white uppercase tracking-widest pl-1 leading-none block mb-4 flex items-center gap-2">
                                                 Passenger and Luggage <span className="text-[9px] bg-red-600 text-white px-2 py-0.5 rounded-full lowercase tracking-tight shadow-sm">required</span>
                                             </label>
                                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-4">
@@ -1271,16 +1271,10 @@ const BookingWidgetContent = ({ defaultTab = 'pickup', onTabChange }) => {
                                                         dateTimeRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
                                                         return;
                                                     }
-                                                    if (!passengerCount.adults || passengerCount.adults < 1) {
-                                                        alert("Please select at least one adult passenger.");
-                                                        return;
-                                                    }
-                                                    if (!passengerCount.luggage || passengerCount.luggage < 1) {
-                                                        alert("Please select at least one standard luggage bag.");
-                                                        return;
-                                                    }
-                                                    if (!passengerCount.handLuggage || passengerCount.handLuggage < 1) {
-                                                        alert("Please select at least one hand luggage bag.");
+                                                    if (!passengerCount.adults || passengerCount.adults < 1 || !passengerCount.luggage || passengerCount.luggage < 1 || !passengerCount.handLuggage || passengerCount.handLuggage < 1) {
+                                                        alert("Please enter passenger and luggage count to proceed");
+                                                        const passengerContainer = document.getElementById('booking-widget-passengers');
+                                                        if (passengerContainer) passengerContainer.scrollIntoView({ behavior: 'smooth', block: 'center' });
                                                         return;
                                                     }
                                                     setStep(3);

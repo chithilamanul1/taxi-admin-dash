@@ -5,16 +5,7 @@ import { Clock, MapPin, CheckCircle, ArrowRight, Star, Filter, Loader2 } from 'l
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '@/components/ui/Card';
 import Link from 'next/link';
 
-export const metadata = {
-    title: 'Sri Lanka Tour Packages | Best All-Island Tours & Safaris',
-    description: 'Explore our curated Sri Lanka tour packages. From wildlife safaris to cultural heritage tours, enjoy premium private transport and expert guides.',
-    alternates: { canonical: 'https://srilankantaxi.lk/tours' },
-    openGraph: {
-        title: 'Sri Lanka Tour Packages | Airport Taxis',
-        description: 'Discover curated Sri Lanka tour packages with premium private transport.',
-        url: 'https://srilankantaxi.lk/tours',
-    }
-};
+
 
 interface Tour {
     _id: string;
