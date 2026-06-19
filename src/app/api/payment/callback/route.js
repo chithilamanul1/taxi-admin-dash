@@ -12,13 +12,14 @@ import { logPaymentReceived, logError } from '@/lib/discord';
  */
 export async function GET(request) {
     try {
-        const { searchParams } = new URL(request.url);
+        const { searchParams, origin: requestOrigin } = new URL(request.url);
         const reqid = searchParams.get('reqid');
         const clientRef = searchParams.get('clientRef');
 
         console.log('PayCorp Callback (GET):', { reqid, clientRef });
 
-        const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://taxi-admin-dash.vercel.app/';
+        let baseUrl = requestOrigin || process.env.NEXT_PUBLIC_BASE_URL || 'https://taxi-admin-dash.vercel.app';
+        if (baseUrl.endsWith('/')) baseUrl = baseUrl.slice(0, -1);
 
         // 1. Validate Input
         if (!reqid) {
@@ -185,7 +186,7 @@ export async function GET(request) {
         }
 
     } catch (error) {
-        const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://taxi-admin-dash.vercel.app/';
+        const baseUrl = new URL(request.url).origin;
         return NextResponse.redirect(`${baseUrl}/payment/failed?reason=callback_system_error`);
     }
 }

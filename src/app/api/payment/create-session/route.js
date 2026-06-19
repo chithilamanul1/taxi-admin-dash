@@ -28,7 +28,15 @@ export async function POST(req) {
             performedBy: 'Driver',
         });
 
-        const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://taxi-admin-dash.vercel.app/';
+        let baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://taxi-admin-dash.vercel.app';
+        if (baseUrl.endsWith('/')) baseUrl = baseUrl.slice(0, -1);
+        
+        const origin = req.headers.get('origin') || req.headers.get('referer');
+        if (origin) {
+            try {
+                baseUrl = new URL(origin).origin;
+            } catch (e) { }
+        }
 
         // 2. Initiate Payment based on Gateway
         let paymentUrl;

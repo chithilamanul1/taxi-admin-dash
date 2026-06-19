@@ -100,7 +100,17 @@ export async function POST(req) {
             console.error('[Notification Error]', notificationError);
         }
 
-        const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://taxi-admin-dash.vercel.app/';
+        let baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://taxi-admin-dash.vercel.app';
+        if (baseUrl.endsWith('/')) baseUrl = baseUrl.slice(0, -1);
+
+        const origin = req.headers.get('origin') || req.headers.get('referer');
+        if (origin) {
+            try {
+                baseUrl = new URL(origin).origin;
+            } catch (e) {
+                // Ignore parsing errors
+            }
+        }
 
         // 2. Handle CASH payments (No gateway init needed)
         if (data.paymentMethod === 'cash') {
@@ -115,7 +125,7 @@ export async function POST(req) {
             return NextResponse.json({
                 success: true,
                 bookingId: booking._id,
-                paymentUrl: `${baseUrl}/payment/success?bookingId=${booking._id}`,
+                paymentUrl: `/payment/success?bookingId=${booking._id}`,
                 gateway: 'cash'
             });
         }
@@ -127,7 +137,7 @@ export async function POST(req) {
             // Mock payment: Redirect to our mock payment page
             // CRITICAL FIX: Use paidAmount (which reflects Partial Payment) instead of totalPrice
             const chargeAmount = booking.paidAmount > 0 ? booking.paidAmount : booking.totalPrice;
-            paymentUrl = `${baseUrl}/payment/mock?bookingId=${booking._id}&amount=${chargeAmount}`;
+            paymentUrl = `/payment/mock?bookingId=${booking._id}&amount=${chargeAmount}`;
         } else if (gateway === 'sampath') {
             // Sampath PayCorp (REST API)
             const { initiatePayCorpTransaction } = require('@/lib/payment');
@@ -147,7 +157,7 @@ export async function POST(req) {
         } else if (gateway === 'payhere') {
             // PayHere (Form Post)
             // We redirect to an intermediate page that will auto-submit the form
-            paymentUrl = `${baseUrl}/payment/payhere?bookingId=${booking._id}`;
+            paymentUrl = `/payment/payhere?bookingId=${booking._id}`;
         }
 
         return NextResponse.json({
