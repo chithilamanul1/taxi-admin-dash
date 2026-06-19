@@ -329,13 +329,14 @@ export async function sendBookingConfirmation(booking, isFailed = false) {
             ${components.infoCard('🚗', 'Vehicle', booking.vehicleType || 'Standard')}
             ${components.infoCard('📏', 'Distance', `${booking.distanceKm || 0} km`)}
             ${components.infoCard('👥', 'Passengers', `${(booking.passengerCount?.adults || 0) + (booking.passengerCount?.children || 0)} Pax / ${booking.passengerCount?.luggage || 0} Luggage`)}
+            ${booking.waitingHours ? components.infoCard('⏱️', 'Total Waiting Time', `${booking.waitingHours} Hour(s)`) : ''}
             ${booking.tripType === 'round-trip' ? components.infoCard('🔄', 'Return Journey', `${booking.returnDate || 'TBA'} ${booking.returnTime ? `at ${booking.returnTime}` : ''}`) : ''}
             ${booking.waypoints && booking.waypoints.length > 0 ? `
             <tr>
                 <td style="padding: 16px 20px; border-bottom: 1px solid ${COLORS.border};">
                     <p style="margin: 0 0 4px; color: ${COLORS.textMuted}; font-size: 11px; text-transform: uppercase; letter-spacing: 1px;">Additional Stops</p>
                     <div style="color: ${COLORS.text}; font-size: 13px; font-weight: 500;">
-                        ${booking.waypoints.map(wp => `<div style="margin-top: 4px;">• ${wp.address || wp.name} ${wp.hours ? `(${wp.hours} hr)` : ''}</div>`).join('')}
+                        ${booking.waypoints.map((wp, idx) => `<div style="margin-top: 4px;">• <strong>Stop ${idx + 1}:</strong> ${wp.address || wp.name} ${(wp.waitingTime || wp.hours) ? `(${(wp.waitingTime || wp.hours)} hr wait)` : ''}</div>`).join('')}
                     </div>
                 </td>
             </tr>
@@ -534,8 +535,14 @@ export async function sendBookingConfirmation(booking, isFailed = false) {
                 <td style="border-bottom: 1px solid #f3f4f6; color: #6b7280; font-size: 12px;">Duration</td>
                 <td style="border-bottom: 1px solid #f3f4f6; font-weight: 600; font-size: 13px;">${booking.duration || '-'}</td>
             </tr>
+            ${booking.waitingHours ? `
             <tr>
-                <td style="border-bottom: 1px solid #f3f4f6; color: #6b7280; font-size: 12px;">Selected Vehical</td>
+                <td style="border-bottom: 1px solid #f3f4f6; color: #6b7280; font-size: 12px;">Total Waiting Time</td>
+                <td style="border-bottom: 1px solid #f3f4f6; font-weight: 600; font-size: 13px; color: #059669;">${booking.waitingHours} Hour(s)</td>
+            </tr>
+            ` : ''}
+            <tr>
+                <td style="border-bottom: 1px solid #f3f4f6; color: #6b7280; font-size: 12px;">Selected Vehicle</td>
                 <td style="border-bottom: 1px solid #f3f4f6; font-weight: 600; font-size: 13px;">${booking.vehicleType || 'Standard'}</td>
             </tr>
             <tr>
@@ -556,7 +563,7 @@ export async function sendBookingConfirmation(booking, isFailed = false) {
             <tr>
                 <td style="border-bottom: 1px solid #f3f4f6; color: #6b7280; font-size: 12px;">Additional Stops</td>
                 <td style="border-bottom: 1px solid #f3f4f6; font-size: 11px; font-weight: 500;">
-                    ${booking.waypoints.map((wp, idx) => `<div style="margin-bottom: 4px;">• ${wp.address || wp.name} ${wp.hours ? `(${wp.hours} hrs wait)` : ''}</div>`).join('')}
+                    ${booking.waypoints.map((wp, idx) => `<div style="margin-bottom: 4px;">• <strong>Stop ${idx + 1}:</strong> ${wp.address || wp.name} ${(wp.waitingTime || wp.hours) ? `(${(wp.waitingTime || wp.hours)} hrs wait)` : ''}</div>`).join('')}
                 </td>
             </tr>
             ` : ''}
