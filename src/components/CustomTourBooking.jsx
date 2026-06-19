@@ -3,6 +3,8 @@
 import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import dynamic from 'next/dynamic';
+import { PhoneInput } from 'react-international-phone';
+import 'react-international-phone/style.css';
 import { Tag, X, MapPin, Clock, Navigation, ChevronRight, ChevronLeft, Plane, Car, Minus, Plus, Send, CheckCircle2, User, Mail, Phone, Loader2, AlertCircle, Info, Sparkles, CreditCard, ChevronDown, Briefcase } from 'lucide-react';
 import { calculateBasePrice, calculateTrafficSurge, TAXI_TOUR_PACKAGES } from '@/lib/pricing-util';
 const SmartOfferNudge = dynamic(() => import('./SmartOfferNudge'), { ssr: false });
@@ -68,6 +70,31 @@ const CustomTourBooking = () => {
   const [appliedOffers, setAppliedOffers] = useState([]);
   const [isCouponOpen, setIsCouponOpen] = useState(false);
   const [couponCode, setCouponCode] = useState('');
+
+  // Auto-swap vehicle if capacity exceeded
+  useEffect(() => {
+    if (!selectedVehicle || vehicles.length === 0) return;
+    
+    const pax = formData.passengers || 1;
+    const lug = formData.luggage || 0;
+    
+    const vehiclePax = selectedVehicle.capacity || 4;
+    const vehicleLug = selectedVehicle.suitcases || selectedVehicle.luggage || 4;
+
+    if (pax > vehiclePax || lug > vehicleLug) {
+      const suitable = vehicles.filter(v => {
+         const vPax = v.capacity || 4;
+         const vLug = v.suitcases || v.luggage || 4;
+         return pax <= vPax && lug <= vLug;
+      });
+      if (suitable.length > 0) {
+        suitable.sort((a,b) => (a.baseRate || a.totalPrice) - (b.baseRate || b.totalPrice));
+        if (suitable[0].id !== selectedVehicle.id) {
+          setSelectedVehicle(suitable[0]);
+        }
+      }
+    }
+  }, [formData.passengers, formData.luggage, selectedVehicle, vehicles]);
   const [dismissedOfferIds, setDismissedOfferIds] = useState([]);
   const [duration, setDuration] = useState('');
   const [pricingSettings, setPricingSettings] = useState(null);
@@ -932,7 +959,7 @@ const CustomTourBooking = () => {
                                       const res = await fetch('/api/coupons/validate', {
                                           method: 'POST',
                                           headers: { 'Content-Type': 'application/json' },
-                                          body: JSON.stringify({ code: couponCode, pickup: locations[0], dropoff: locations[0] })
+                                          body: JSON.stringify({ code: couponCode, pickup: locations[0], dropoff: locations[locations.length - 1] || locations[0], tripType: 'tour' })
                                       });
                                       const data = await res.json();
                                       if (data.valid) {
@@ -1215,19 +1242,16 @@ const CustomTourBooking = () => {
                 </div>
                 <div className="space-y-0.5">
                   <label className="text-[8px] uppercase font-black text-slate-400 tracking-widest px-2">WhatsApp / Phone</label>
-                  <div className={`flex border ${formErrors.phone ? 'border-red-500 ring-2 ring-red-500/20' : 'border-slate-400 dark:border-white/10'} rounded-xl overflow-hidden focus-within:border-[#FACC15] focus-within:ring-2 focus-within:ring-[#FACC15]/20 transition-all shadow-sm`}>
-                    <div className="bg-slate-100 dark:bg-zinc-800/80 px-3 flex items-center justify-center border-r border-slate-400 dark:border-white/10">
-                      <span className="text-[11px] font-bold text-black dark:text-slate-400">+94</span>
-                    </div>
-                    <input 
-                      name="phone"
-                      type="tel" 
-                      placeholder="7X XXX XXXX" 
-                      value={formData.phone.replace('+94', '').replace(/^0+/, '')} 
-                      onChange={e => { setFormData({ ...formData, phone: '+94' + e.target.value.replace(/[^0-9]/g, '').slice(0, 9) }); setFormErrors({...formErrors, phone: false}); }} 
-                      className="w-full bg-white dark:bg-zinc-800 py-2 px-3 outline-none font-bold text-[11px] text-black dark:text-white" 
-                    />
-                  </div>
+                  <PhoneInput
+                    defaultCountry="lk"
+                    value={formData.phone}
+                    onChange={(phone) => { setFormData({ ...formData, phone }); setFormErrors({...formErrors, phone: false}); }}
+                    inputClassName={`!w-full !bg-white dark:!bg-zinc-800 !border-none !py-2 !px-3 !outline-none !font-bold !text-[11px] !text-black dark:!text-white !transition-all`}
+                    countrySelectorStyleProps={{
+                      buttonClassName: "!bg-slate-100 dark:!bg-zinc-800/80 !border-r !border-slate-400 dark:!border-white/10 !h-full !px-3",
+                    }}
+                    className={`flex border ${formErrors.phone ? 'border-red-500 ring-2 ring-red-500/20' : 'border-slate-400 dark:border-white/10'} rounded-xl overflow-hidden focus-within:border-[#FACC15] focus-within:ring-2 focus-within:ring-[#FACC15]/20 transition-all shadow-sm`}
+                  />
                 </div>
                 <div className="space-y-0.5">
                   <label className="text-[8px] uppercase font-black text-slate-400 tracking-widest px-2">Payment Method</label>

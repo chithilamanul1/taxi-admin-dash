@@ -96,8 +96,8 @@ const BookingWidgetContent = ({ defaultTab = 'pickup', onTabChange }) => {
     const [isBookingOpen, setIsBookingOpen] = useState(false)
     const [showModal, setShowModal] = useState(false)
     const [isVehicleDrawerOpen, setIsVehicleDrawerOpen] = useState(false)
-    const [bookingInitialData, setBookingInitialData] = useState({})
     const [step, setStep] = useState(1); // 1=Route, 2=Passengers+Vehicle, 3=Summary(mobile)
+    const [isPassengerVerified, setIsPassengerVerified] = useState(false);
 
     useEffect(() => {
         const event = new CustomEvent('bookingStepChange', { detail: { step } });
@@ -1193,7 +1193,19 @@ const BookingWidgetContent = ({ defaultTab = 'pickup', onTabChange }) => {
                                                         </div>
                                                     );
                                                 })}
+                                                })}
                                             </div>
+                                            <label className="flex items-center gap-3 mt-4 p-3 bg-emerald-50/50 dark:bg-emerald-900/10 border border-emerald-100 dark:border-emerald-900/30 rounded-xl cursor-pointer">
+                                                <input 
+                                                    type="checkbox" 
+                                                    className="w-4 h-4 text-emerald-600 rounded focus:ring-emerald-500 cursor-pointer"
+                                                    checked={isPassengerVerified}
+                                                    onChange={(e) => setIsPassengerVerified(e.target.checked)}
+                                                />
+                                                <span className="text-[10px] font-black uppercase tracking-widest text-emerald-900 dark:text-emerald-300">
+                                                    I confirm these details are accurate
+                                                </span>
+                                            </label>
                                         </div>
                                         <div className="mb-6 mt-6">
                                             <div className="flex items-center justify-between mb-4 px-1">
@@ -1277,6 +1289,12 @@ const BookingWidgetContent = ({ defaultTab = 'pickup', onTabChange }) => {
                                                     }
                                                     if (!passengerCount.adults || passengerCount.adults < 1 || !passengerCount.luggage || passengerCount.luggage < 1 || !passengerCount.handLuggage || passengerCount.handLuggage < 1) {
                                                         alert("Please enter passenger and luggage count to proceed");
+                                                        const passengerContainer = document.getElementById('booking-widget-passengers');
+                                                        if (passengerContainer) passengerContainer.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                                                        return;
+                                                    }
+                                                    if (!isPassengerVerified) {
+                                                        alert("Please confirm that your passenger and luggage details are accurate.");
                                                         const passengerContainer = document.getElementById('booking-widget-passengers');
                                                         if (passengerContainer) passengerContainer.scrollIntoView({ behavior: 'smooth', block: 'center' });
                                                         return;

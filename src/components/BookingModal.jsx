@@ -63,6 +63,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
     const [isPickupPickerOpen, setIsPickupPickerOpen] = useState(false);
     const [isMainPickerOpen2, setIsMainPickerOpen2] = useState(false);
     const [isReturnPickerOpen, setIsReturnPickerOpen] = useState(false);
+    const [isPassengerVerified, setIsPassengerVerified] = useState(false);
 
     const { currency, rates, changeCurrency } = useCurrency();
     const currentSymbol = rates?.[currency]?.symbol || (currency === 'LKR' ? 'Rs' : currency === 'USD' ? '$' : currency === 'EUR' ? '€' : currency === 'GBP' ? '£' : currency === 'INR' ? '₹' : '$');
@@ -74,6 +75,48 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
         { code: 'GBP', symbol: '£', name: 'British Pound', flag: 'https://flagcdn.com/w40/gb.png' },
         { code: 'INR', symbol: '₹', name: 'Indian Rupee', flag: 'https://flagcdn.com/w40/in.png' },
     ];
+
+    // Auto-swap vehicle if capacity exceeded
+    useEffect(() => {
+        if (!formData.vehicle || !pricing || pricing.length === 0) return;
+        
+        const currentVehicle = pricing.find(p => p.vehicleType === formData.vehicle);
+        if (!currentVehicle) return;
+
+        const adults = Number(formData.passengerCount?.adults) || 1;
+        const children = Number(formData.passengerCount?.children) || 0;
+        const luggage = Number(formData.passengerCount?.luggage) || 0;
+        const handLuggage = Number(formData.passengerCount?.handLuggage) || 0;
+        const totalPax = adults + children;
+
+        const vehiclePax = currentVehicle.capacity || 4;
+        const vehicleLargeBags = currentVehicle.luggage || 0;
+        const vehicleSmallBags = currentVehicle.handLuggage || 0;
+        
+        const spareSeats = Math.max(0, vehiclePax - totalPax);
+        const extraBagCapacity = spareSeats * 1.5;
+        const maxBagUnits = vehicleLargeBags + (vehicleSmallBags * 0.5) + extraBagCapacity;
+        const requestedBagUnits = luggage + (handLuggage * 0.5);
+
+        if (totalPax > vehiclePax || requestedBagUnits > maxBagUnits) {
+            // Find a suitable vehicle
+            const suitableVehicles = pricing.filter(v => {
+                const vPax = v.capacity || 4;
+                if (totalPax > vPax) return false;
+                const vSpare = Math.max(0, vPax - totalPax);
+                const vMaxBag = (v.luggage || 0) + ((v.handLuggage || 0) * 0.5) + (vSpare * 1.5);
+                return requestedBagUnits <= vMaxBag;
+            });
+            
+            if (suitableVehicles.length > 0) {
+                // Sort by basePrice or totalPrice
+                suitableVehicles.sort((a, b) => (a.basePrice || a.totalPrice) - (b.basePrice || b.totalPrice));
+                if (suitableVehicles[0].vehicleType !== formData.vehicle) {
+                    setFormData(prev => ({ ...prev, vehicle: suitableVehicles[0].vehicleType }));
+                }
+            }
+        }
+    }, [formData.passengerCount, pricing, formData.vehicle]);
 
     // Fetch Settings and Destinations
     useEffect(() => {
@@ -641,8 +684,25 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
     };
 
     const handleNext = () => {
-        if (step === 1 && validateForm(1)) setStep(2);
-        else if (step === 2 && validateForm(2)) setStep(3);
+        if (step === 1) {
+            if (!formData.pickup || !formData.dropoff || !formData.distance || !formData.vehicle) {
+                alert("Please fill all required fields in Step 1.");
+                return;
+            }
+            if ((Number(formData.passengerCount?.adults) || 0) === 0 && (Number(formData.passengerCount?.luggage) || 0) === 0) {
+                setErrors(prev => ({ ...prev, adults: true, luggage: true }));
+                alert("Please enter passenger and luggage count to proceed");
+                passengerRef.current?.scrollIntoView({ behavior: 'smooth' });
+                return;
+            }
+            if (!isPassengerVerified) {
+                alert("Please confirm that your passenger and luggage details are accurate.");
+                passengerRef.current?.scrollIntoView({ behavior: 'smooth' });
+                return;
+            }
+            setErrors({});
+            setStep(2);
+        } else if (step === 2 && validateForm(2)) setStep(3);
         else if (step === 3) handleSubmit();
     };
 
@@ -921,6 +981,17 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                         );
                                     })}
                                 </div>
+                                <label className="flex items-center gap-3 mt-4 p-3 bg-blue-50/50 dark:bg-blue-900/10 border border-blue-100 dark:border-blue-900/30 rounded-xl cursor-pointer">
+                                    <input 
+                                        type="checkbox" 
+                                        className="w-4 h-4 text-blue-600 rounded focus:ring-blue-500 cursor-pointer"
+                                        checked={isPassengerVerified}
+                                        onChange={(e) => setIsPassengerVerified(e.target.checked)}
+                                    />
+                                    <span className="text-[10px] font-black uppercase tracking-widest text-blue-900 dark:text-blue-300">
+                                        I confirm these details are accurate
+                                    </span>
+                                </label>
                             </div>
 
                             <div className="space-y-10 pt-10 border-t border-slate-100 dark:border-white/10">
