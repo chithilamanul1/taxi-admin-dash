@@ -65,36 +65,45 @@ const RoundTripBookingWrapper = dynamic(() => import('./RoundTripBookingWrapper'
 const LoadingBox = () => <div className="w-full h-40 bg-slate-100 dark:bg-white/5 animate-pulse border border-slate-100 dark:border-white/10" />;
 
 const FleetSection = dynamic(() => import('./FleetSection'), { 
+    ssr: false,
     loading: () => <div className="min-h-[800px] bg-white dark:bg-zinc-900 border-t border-slate-200 dark:border-white/10 animate-pulse" />
 })
 const UnifiedMediaSection = dynamic(() => import('./UnifiedMediaSection'), { 
+    ssr: false,
     loading: () => <div className="min-h-[1200px] bg-white dark:bg-zinc-900 animate-pulse" />
 })
 const Features = dynamic(() => import('./Features'), { 
+    ssr: false,
     loading: () => <div className="min-h-[400px] bg-white dark:bg-zinc-900 animate-pulse" />
 })
 const ReviewStatsBar = dynamic(() => import('./ReviewStatsBar'), { 
+    ssr: false,
     loading: () => <div className="h-20 bg-black animate-pulse" />
 })
 import { destinations } from '@/lib/destinations'
 
 // Dynamic imports for components below the fold
 const GoogleReviews = dynamic(() => import('./GoogleReviews'), { 
+    ssr: false,
     loading: () => <div className="min-h-[400px] bg-white dark:bg-[#0a0a0a] animate-pulse" />
 })
 const RecentPosts = dynamic(() => import('./RecentPosts'), { 
+    ssr: false,
     loading: () => <div className="min-h-[400px] bg-white dark:bg-[#0a0a0a] animate-pulse" />
 })
 
 const SpecialOffersSection = dynamic(() => import('./SpecialOffersSection'), { 
+    ssr: false,
     loading: () => <div className="min-h-[500px] bg-white dark:bg-[#0a0a0a] animate-pulse" />
 })
 const MobileAppSection = dynamic(() => import('./MobileAppSection'), { 
+    ssr: false,
     loading: () => <div className="min-h-[600px] bg-white dark:bg-[#0a0a0a] animate-pulse" />
 })
 const MarketingPopup = dynamic(() => import('./MarketingPopup'), { ssr: false })
 const ExpressCheckoutModal = dynamic(() => import('./ExpressCheckoutModal'), { ssr: false })
 const FAQSection = dynamic(() => import('./FAQSection'), { 
+    ssr: false,
     loading: () => <div className="min-h-[500px] bg-white dark:bg-[#0a0a0a] animate-pulse" />
 })
 

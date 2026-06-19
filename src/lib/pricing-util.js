@@ -362,11 +362,14 @@ export const calculateSurcharges = (params, vehicleData) => {
     let surcharges = 0;
     const { waitingHours, hasNameBoard } = params;
 
-    if (waitingHours > 0) {
-        if (vehicleData.waitingCharges && Array.isArray(vehicleData.waitingCharges) && vehicleData.waitingCharges.length >= waitingHours) {
-            surcharges += Number(vehicleData.waitingCharges[waitingHours - 1]) || 0;
+    // Strict Operator Validation: enforce integers to prevent string concatenation or inverse division bugs
+    const waitTime = parseInt(waitingHours || 0, 10);
+
+    if (waitTime > 0) {
+        if (vehicleData.waitingCharges && Array.isArray(vehicleData.waitingCharges) && vehicleData.waitingCharges.length >= waitTime) {
+            surcharges += Number(vehicleData.waitingCharges[waitTime - 1]) || 0;
         } else {
-            surcharges += (Number(waitingHours) * (Number(vehicleData.hourlyRate) || 500));
+            surcharges += (waitTime * (Number(vehicleData.hourlyRate) || 500));
         }
     }
 

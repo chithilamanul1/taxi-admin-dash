@@ -691,8 +691,8 @@ const BookingWidgetContent = ({ defaultTab = 'pickup', onTabChange }) => {
     }, [dropoff, dropoffSearch, pickup, pickupSearch, availableCoupons, activeOffers, distance, pricingSettings]);
 
 
-    // Calculate total waiting hours including waypoints
-    const totalWaitingHours = waitingHours + waypoints.reduce((sum, wp) => sum + (wp.waitingTime || 0), 0);
+    // Calculate total waiting hours including waypoints securely with integers
+    const totalWaitingHours = parseInt(waitingHours || 0, 10) + waypoints.reduce((sum, wp) => sum + parseInt(wp.waitingTime || 0, 10), 0);
     // Current time for "Ride Now" estimation
     const now = new Date();
     const currentTime = activeTab === 'ride' ? `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}` : null;
