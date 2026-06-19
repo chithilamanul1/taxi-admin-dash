@@ -71,6 +71,33 @@ const CustomTourBooking = () => {
   const [isCouponOpen, setIsCouponOpen] = useState(false);
   const [couponCode, setCouponCode] = useState('');
 
+  const [dismissedOfferIds, setDismissedOfferIds] = useState([]);
+  const [duration, setDuration] = useState('');
+  const [pricingSettings, setPricingSettings] = useState(null);
+  const [airportTours, setAirportTours] = useState([]);
+  const [roundTours, setRoundTours] = useState([]);
+  const [destinations, setDestinations] = useState([]);
+  const [surgeRules, setSurgeRules] = useState([]);
+
+  const [formData, setFormData] = useState({
+    date: '',
+    time: '',
+    passengers: 1,
+    luggage: 0,
+    flightNumber: '',
+    whatsapp: '',
+    couponCode: '',
+    specialRequests: '',
+    name: '',
+    email: '',
+    phone: '',
+    notes: '',
+    placesList: [''],
+    taxiTourHours: 2,
+    taxiTourKm: 40,
+    paymentMethod: 'card'
+  });
+
   // Auto-swap vehicle if capacity exceeded
   useEffect(() => {
     if (!selectedVehicle || vehicles.length === 0) return;
@@ -95,28 +122,6 @@ const CustomTourBooking = () => {
       }
     }
   }, [formData.passengers, formData.luggage, selectedVehicle, vehicles]);
-  const [dismissedOfferIds, setDismissedOfferIds] = useState([]);
-  const [duration, setDuration] = useState('');
-  const [pricingSettings, setPricingSettings] = useState(null);
-  const [airportTours, setAirportTours] = useState([]);
-  const [roundTours, setRoundTours] = useState([]);
-  const [destinations, setDestinations] = useState([]);
-  const [surgeRules, setSurgeRules] = useState([]);
-
-  const [formData, setFormData] = useState({
-    date: '',
-    time: '',
-    passengers: 1,
-    luggage: 0,
-    name: '',
-    email: '',
-    phone: '',
-    notes: '',
-    placesList: [''],
-    taxiTourHours: 2,
-    taxiTourKm: 40,
-    paymentMethod: 'card'
-  });
 
   // Load vehicles and settings
   useEffect(() => {
