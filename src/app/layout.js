@@ -13,7 +13,7 @@ import MobileBottomNav from '../components/MobileBottomNav'
 
 export const metadata = {
     title: {
-        default: 'AIRPORT TAXIS (PVT) LTD SRILANKA - #1 Airport Transfer & Tour Service',
+        default: 'Airport Taxis | Tour taxi | Taxi Service | Airport Cab | Price List | Booking Contact | Touris| Round Tours | Day Trip | Sri Lankan taxi | Shuttle',
         template: '%s | AIRPORT TAXIS (PVT) LTD SRILANKA'
     },
     description: '🚕 Sri Lanka\'s most trusted 24/7 Airport Taxi & Tour service. Book Colombo Airport (CMB) transfers, luxury KDH vans, and curated Sri Lanka tour packages. Fixed rates, professional English-speaking drivers, and instant online booking.',
