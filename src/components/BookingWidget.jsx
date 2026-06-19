@@ -1193,7 +1193,6 @@ const BookingWidgetContent = ({ defaultTab = 'pickup', onTabChange }) => {
                                                         </div>
                                                     );
                                                 })}
-                                                })}
                                             </div>
                                             <label className="flex items-center gap-3 mt-4 p-3 bg-emerald-50/50 dark:bg-emerald-900/10 border border-emerald-100 dark:border-emerald-900/30 rounded-xl cursor-pointer">
                                                 <input 
