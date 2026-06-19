@@ -96,6 +96,7 @@ const BookingWidgetContent = ({ defaultTab = 'pickup', onTabChange }) => {
     const [isBookingOpen, setIsBookingOpen] = useState(false)
     const [showModal, setShowModal] = useState(false)
     const [isVehicleDrawerOpen, setIsVehicleDrawerOpen] = useState(false)
+    const [bookingInitialData, setBookingInitialData] = useState({})
     const [step, setStep] = useState(1); // 1=Route, 2=Passengers+Vehicle, 3=Summary(mobile)
     const [isPassengerVerified, setIsPassengerVerified] = useState(false);
 
