@@ -16,7 +16,7 @@ export const metadata = {
         title: '🚖 Airport Taxis Sri Lanka - Trusted Airport Transfers & Multi-Day Tours',
         description: 'Reliable 24/7 airport transfers from Colombo Airport (CMB). Professional drivers, comfortable vehicles, instant confirmation. Best rates guaranteed.',
         url: 'https://srilankantaxi.lk',
-        siteName: 'Airport Taxis Pvt (Ltd)',
+        siteName: 'AIRPORT TAXIS (PVT) LTD SRILANKA',
         images: [
             {
                 url: '/hero-bg.jpg',
