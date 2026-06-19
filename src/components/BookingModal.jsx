@@ -1444,16 +1444,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                             </button>
 
                             <div className="flex flex-1 sm:flex-none gap-2">
-                                <button
-                                    onClick={() => {
-                                        const text = `Hi, I'm trying to book a taxi but need help.\nRoute: ${formData.pickup || 'Not set'} -> ${formData.dropoff || 'Not set'}\nDate: ${formData.date || ''}\nTime: ${formData.time || ''}\nVehicle: ${formData.vehicle || ''}`;
-                                        window.open(`https://wa.me/94716885880?text=${encodeURIComponent(text)}`, '_blank');
-                                    }}
-                                    className="flex-1 sm:flex-none flex items-center justify-center gap-1 sm:gap-2 px-2 sm:px-6 py-3 sm:py-5 bg-emerald-500 text-white rounded-2xl text-[9px] sm:text-xs font-black uppercase tracking-widest hover:bg-emerald-600 transition-all shadow-md active:scale-95"
-                                >
-                                    <MessageSquare size={14} />
-                                    <span className="hidden xs:inline">WhatsApp</span>
-                                </button>
+
                                 <button
                                     onClick={handleNext}
                                     disabled={loading}
