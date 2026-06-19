@@ -65,6 +65,61 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
     const [isReturnPickerOpen, setIsReturnPickerOpen] = useState(false);
     const [isPassengerVerified, setIsPassengerVerified] = useState(false);
 
+    // Form State
+    const [formData, setFormData] = useState({
+        vehicle: initialData.vehicle || 'mini-car',
+        pickup: initialData.pickup || '',
+        pickupCoords: initialData.pickupCoords || null,
+        waypoints: initialData.waypoints || [],
+        dropoff: initialData.dropoff || '',
+        dropoffCoords: initialData.dropoffCoords || null,
+        tripType: initialData.tripType || 'one-way',
+        roundTripPackageId: initialData.roundTripPackageId || null,
+        taxiTourHours: initialData.taxiTourHours || 4,
+        taxiTourKm: initialData.taxiTourKm || 80,
+        passengerCount: initialData.passengerCount || { adults: 0, children: 0, luggage: 0, handLuggage: 0 },
+        hasNameBoard: (initialData.hasNameBoard === true || initialData.hasNameBoard === false) ? initialData.hasNameBoard : null,
+        nameBoardText: initialData.nameBoardText || '',
+        couponCode: initialData.couponCode || '',
+        date: initialData.date || new Date().toISOString().split('T')[0],
+        time: initialData.time || (() => {
+            const today = new Date();
+            let hours = today.getHours() + 1;
+            const mins = Math.ceil(today.getMinutes() / 5) * 5;
+            let adjustedMins = mins;
+            if (adjustedMins === 60) {
+                adjustedMins = 0;
+                hours += 1;
+            }
+            hours = hours % 24;
+            const period = hours >= 12 ? 'PM' : 'AM';
+            let hours12 = hours % 12;
+            if (hours12 === 0) hours12 = 12;
+            const hStr = hours12.toString().padStart(2, '0');
+            const mStr = adjustedMins.toString().padStart(2, '0');
+            const localTz = detectLocalTimezone();
+            return `${hStr}:${mStr} ${period} ${localTz}`;
+        })(),
+        name: initialData.name || '',
+        phone: initialData.phone || '',
+        whatsapp: initialData.whatsapp || '',
+        passport: initialData.passport || '',
+        email: initialData.email || '',
+        flightNumber: initialData.flightNumber || '',
+        flightArrivalDate: initialData.flightArrivalDate || '',
+        flightArrivalTime: initialData.flightArrivalTime || '',
+        arrivalDate: initialData.arrivalDate || '',
+        returnDate: initialData.returnDate || '',
+        returnTime: initialData.returnTime || '',
+        notes: initialData.notes || '',
+        duration: initialData.duration || '',
+        paymentMethod: 'cash',
+        paymentType: 'full',
+        billingName: '',
+        billingAddress: '',
+        billingCity: '',
+        billingCountry: '',
+    });
     const { currency, rates, changeCurrency } = useCurrency();
     const currentSymbol = rates?.[currency]?.symbol || (currency === 'LKR' ? 'Rs' : currency === 'USD' ? '$' : currency === 'EUR' ? '€' : currency === 'GBP' ? '£' : currency === 'INR' ? '₹' : '$');
 
@@ -176,61 +231,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
         }
     }, [isOpen]);
 
-    // Form State
-    const [formData, setFormData] = useState({
-        vehicle: initialData.vehicle || 'mini-car',
-        pickup: initialData.pickup || '',
-        pickupCoords: initialData.pickupCoords || null,
-        waypoints: initialData.waypoints || [],
-        dropoff: initialData.dropoff || '',
-        dropoffCoords: initialData.dropoffCoords || null,
-        tripType: initialData.tripType || 'one-way',
-        roundTripPackageId: initialData.roundTripPackageId || null,
-        taxiTourHours: initialData.taxiTourHours || 4,
-        taxiTourKm: initialData.taxiTourKm || 80,
-        passengerCount: initialData.passengerCount || { adults: 0, children: 0, luggage: 0, handLuggage: 0 },
-        hasNameBoard: (initialData.hasNameBoard === true || initialData.hasNameBoard === false) ? initialData.hasNameBoard : null,
-        nameBoardText: initialData.nameBoardText || '',
-        couponCode: initialData.couponCode || '',
-        date: initialData.date || new Date().toISOString().split('T')[0],
-        time: initialData.time || (() => {
-            const today = new Date();
-            let hours = today.getHours() + 1;
-            const mins = Math.ceil(today.getMinutes() / 5) * 5;
-            let adjustedMins = mins;
-            if (adjustedMins === 60) {
-                adjustedMins = 0;
-                hours += 1;
-            }
-            hours = hours % 24;
-            const period = hours >= 12 ? 'PM' : 'AM';
-            let hours12 = hours % 12;
-            if (hours12 === 0) hours12 = 12;
-            const hStr = hours12.toString().padStart(2, '0');
-            const mStr = adjustedMins.toString().padStart(2, '0');
-            const localTz = detectLocalTimezone();
-            return `${hStr}:${mStr} ${period} ${localTz}`;
-        })(),
-        name: initialData.name || '',
-        phone: initialData.phone || '',
-        whatsapp: initialData.whatsapp || '',
-        passport: initialData.passport || '',
-        email: initialData.email || '',
-        flightNumber: initialData.flightNumber || '',
-        flightArrivalDate: initialData.flightArrivalDate || '',
-        flightArrivalTime: initialData.flightArrivalTime || '',
-        arrivalDate: initialData.arrivalDate || '',
-        returnDate: initialData.returnDate || '',
-        returnTime: initialData.returnTime || '',
-        notes: initialData.notes || '',
-        duration: initialData.duration || '',
-        paymentMethod: 'cash',
-        paymentType: 'full',
-        billingName: '',
-        billingAddress: '',
-        billingCity: '',
-        billingCountry: '',
-    });
+
 
     // Initialize State from initialData
     useEffect(() => {
