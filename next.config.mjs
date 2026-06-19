@@ -26,7 +26,10 @@ const nextConfig = {
             }
         ],
         formats: ['image/avif', 'image/webp'],
-        // unoptimized: true, // Commented out to enable Vercel Image Optimization
+        minimumCacheTTL: 604800, // Cache optimized images for 7 days
+        deviceSizes: [375, 640, 750, 828, 1080, 1200, 1920],
+        imageSizes: [16, 32, 48, 64, 96, 128, 160, 256],
+        dangerouslyAllowSVG: false,
     },
     productionBrowserSourceMaps: false,
     cacheMaxMemorySize: 2048 * 1024 * 1024, // 2GB memory cache size for Next.js ISR (default is 50MB)
@@ -59,6 +62,33 @@ const nextConfig = {
                     {
                         key: 'Cache-Control',
                         value: 'public, max-age=31536000, immutable',
+                    },
+                ],
+            },
+            {
+                source: '/vehicles/(.*)',
+                headers: [
+                    {
+                        key: 'Cache-Control',
+                        value: 'public, max-age=31536000, immutable',
+                    },
+                ],
+            },
+            {
+                source: '/:path*.png',
+                headers: [
+                    {
+                        key: 'Cache-Control',
+                        value: 'public, max-age=604800, stale-while-revalidate=86400',
+                    },
+                ],
+            },
+            {
+                source: '/:path*.jpg',
+                headers: [
+                    {
+                        key: 'Cache-Control',
+                        value: 'public, max-age=604800, stale-while-revalidate=86400',
                     },
                 ],
             },

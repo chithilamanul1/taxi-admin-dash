@@ -184,6 +184,19 @@ body.booking-active nextjs-portal {
     animation: marquee-slower 60s linear infinite;
 }
 
+/* Accessibility: stop animations for users who prefer reduced motion */
+@media (prefers-reduced-motion: reduce) {
+    .animate-marquee-slower {
+        animation: none;
+        transform: none;
+    }
+    * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
 @keyframes slide-in {
     0% { transform: translateX(30px); opacity: 0; }
     100% { transform: translateX(0); opacity: 1; }

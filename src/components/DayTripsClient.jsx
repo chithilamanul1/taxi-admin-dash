@@ -38,7 +38,7 @@ export default function DayTripsClient() {
     const types = ['all', 'day-trip']
 
     return (
-        <main className="min-h-screen bg-white dark:bg-black pt-32 pb-20 text-black dark:text-white transition-colors duration-300">
+        <div className="min-h-screen bg-white dark:bg-black pt-32 pb-20 text-black dark:text-white transition-colors duration-300">
             <div className="container mx-auto px-6">
                 <div className="text-center mb-16">
                     <div className="inline-flex items-center gap-3 px-6 py-2 bg-[#FACC15] text-black text-[10px] font-black uppercase tracking-[0.3em] mb-8">
@@ -210,6 +210,6 @@ export default function DayTripsClient() {
                     </div>
                 </div>
             </div>
-        </main>
+        </div>
     )
 }

@@ -839,7 +839,7 @@ const BookingWidgetContent = ({ defaultTab = 'pickup', onTabChange }) => {
                             aria-selected={activeTab === tab.id}
                             aria-controls={`panel-${tab.id}`}
                             id={`tab-${tab.id}`}
-                            aria-label={`Switch to ${tab.label} tab`}
+                            aria-label={tab.label}
                             onClick={() => handleTabChange(tab.id)}
                             className={`flex flex-col sm:flex-row items-center justify-center gap-1.5 md:gap-2.5 px-2 sm:px-6 py-3 rounded-xl text-[9px] sm:text-xs md:text-sm font-bold transition-all duration-300 ${activeTab === tab.id
                                 ? 'bg-emerald-950 dark:bg-yellow-400 text-white dark:text-black shadow-lg border-2 border-emerald-950 dark:border-yellow-400'
@@ -854,7 +854,11 @@ const BookingWidgetContent = ({ defaultTab = 'pickup', onTabChange }) => {
             </div>
 
             {/* Widget Main Content - Modern Flat Luxury Style */}
-            <div className={`animate-slide-up relative z-10 w-full box-border ${
+            <div
+            id={`panel-${activeTab}`}
+            role="tabpanel"
+            aria-labelledby={`tab-${activeTab}`}
+            className={`animate-slide-up relative z-10 w-full box-border ${
                 activeTab === 'tours' 
                 ? '' 
                 : 'bg-white dark:bg-zinc-900 rounded-[2rem] border border-slate-400 dark:border-white/10 p-4 sm:p-6 md:p-8 shadow-xl shadow-slate-200/50 dark:shadow-none'
@@ -870,7 +874,7 @@ const BookingWidgetContent = ({ defaultTab = 'pickup', onTabChange }) => {
                                         <button
                                             onClick={() => s.n < step && setStep(s.n)}
                                             className={`flex items-center gap-2 ${s.mobileOnly ? 'flex lg:hidden' : 'flex'} ${s.n < step ? 'cursor-pointer' : 'cursor-default'}`}
-                                            aria-label={`Step ${s.n}: ${s.label}`}
+                                            aria-label={`${s.n}${s.label}`}
                                         >
                                             <div className="flex items-center justify-center w-8 h-8">
                                                 {step === s.n ? (
@@ -904,7 +908,7 @@ const BookingWidgetContent = ({ defaultTab = 'pickup', onTabChange }) => {
                                     <button
                                         onClick={() => setIsCurrencyOpen(!isCurrencyOpen)}
                                         className="flex items-center gap-1.5 bg-white dark:bg-zinc-800 border border-slate-200 dark:border-white/10 rounded-xl px-3 py-2 text-[10px] font-bold text-slate-700 dark:text-white shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all"
-                                        aria-label="Select Currency"
+                                        aria-label={`Select currency: Current currency is ${currency}`}
                                     >
                                         <div className="w-4 h-4 overflow-hidden rounded-full border border-slate-200 dark:border-white/20">
                                             <img src={SUPPORTED_CURRENCIES.find(c => c.code === currency)?.flag} alt={`${currency} flag`} className="w-full h-full object-cover scale-150" />
@@ -981,7 +985,7 @@ const BookingWidgetContent = ({ defaultTab = 'pickup', onTabChange }) => {
                                                     <>
                                                         {waypointSearches.length === 0 && (
                                                             <div className="flex justify-start pl-10 md:pl-14 py-2">
-                                                                <button onClick={() => setWaypointSearches([{ active: true }])} aria-label="Add Stop" className="text-slate-800 dark:text-slate-100 bg-white dark:bg-zinc-800 text-[10px] font-black uppercase tracking-wider flex items-center gap-2 py-3 px-5 rounded-xl border border-slate-400 dark:border-white/10 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all">
+                                                                <button onClick={() => setWaypointSearches([{ active: true }])} aria-label={`Add Stop (${waypoints.length} of 4)`} className="text-slate-800 dark:text-slate-100 bg-white dark:bg-zinc-800 text-[10px] font-black uppercase tracking-wider flex items-center gap-2 py-3 px-5 rounded-xl border border-slate-400 dark:border-white/10 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all">
                                                                     <Plus size={14} strokeWidth={4} className="text-emerald-500" /> ADD STOP ({waypoints.length}/4)
                                                                 </button>
                                                             </div>

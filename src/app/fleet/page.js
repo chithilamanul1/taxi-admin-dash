@@ -7,8 +7,8 @@ export const metadata = {
 
 export default function FleetPage() {
   return (
-    <main className="min-h-screen bg-slate-50 dark:bg-black transition-colors pt-12">
+    <div className="min-h-screen bg-slate-50 dark:bg-black transition-colors pt-12">
       <FleetSection />
-    </main>
+    </div>
   );
 }

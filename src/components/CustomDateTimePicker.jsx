@@ -66,6 +66,7 @@ export default function CustomDateTimePicker({ date, time, onChange, className }
                 type="date"
                 value={dateVal}
                 onChange={handleDateChange}
+                aria-label="Pickup date"
                 className="w-[55%] bg-transparent text-black font-bold outline-none cursor-pointer h-full"
                 style={{ colorScheme: 'light' }}
             />
@@ -75,6 +76,7 @@ export default function CustomDateTimePicker({ date, time, onChange, className }
                 value={timeVal}
                 onChange={handleTimeChange}
                 step={1800}
+                aria-label="Pickup time"
                 className="w-[40%] bg-transparent text-black font-bold outline-none cursor-pointer h-full"
                 style={{ colorScheme: 'light' }}
             />
