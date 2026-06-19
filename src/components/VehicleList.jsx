@@ -7,6 +7,14 @@ import { useCurrency } from '../context/CurrencyContext';
 
 const displayName = (name) => (name || '').replace(/\bKDH\s*/gi, '').trim();
 
+const toWebpSrc = (src) => {
+    if (!src) return src;
+    if (src.startsWith('/vehicles/') && (src.endsWith('.png') || src.endsWith('.jpg'))) {
+        return src.replace(/\.(png|jpg)$/, '.webp');
+    }
+    return src;
+};
+
 const VehicleList = ({ vehicles, selectedId, onSelect, onInspect, passengerCount }) => {
     const { convertPrice, rates } = useCurrency();
 
@@ -34,7 +42,7 @@ const VehicleList = ({ vehicles, selectedId, onSelect, onInspect, passengerCount
                         <div className="w-full md:w-80 h-56 md:h-auto bg-slate-50 dark:bg-zinc-900/50 flex items-center justify-center p-6 relative shrink-0">
                             <div className="relative w-full h-full transform group-hover:scale-110 transition-transform duration-500">
                                 <Image
-                                    src={vehicle.image || "/vehicles/minicar.png"}
+                                    src={toWebpSrc(vehicle.image) || "/vehicles/minicar.webp"}
                                     alt={vehicle.name}
                                     fill
                                     className={`object-contain drop-shadow-2xl transition-transform duration-500 ${vehicle.vehicleType === 'sedan' || vehicle.name?.toLowerCase().includes('sedan') ? 'scale-[1.55] sm:scale-[1.65]' : 'scale-125'}`}

@@ -106,7 +106,7 @@ export default function ReviewsPage() {
 
             {/* Header Section */}
             <div className="pt-32 pb-16 bg-emerald-900 relative overflow-hidden">
-                <div className="absolute inset-0 bg-[url('/pattern.png')] opacity-10 mix-blend-overlay"></div>
+                <div className="absolute inset-0 bg-[url('/pattern.webp')] opacity-10 mix-blend-overlay"></div>
                 <div className="container mx-auto px-4 relative z-10 text-center text-white">
                     <h1 className="text-4xl md:text-6xl font-black mb-4 tracking-tight">
                         Client <span className="text-emerald-400">Stories</span>

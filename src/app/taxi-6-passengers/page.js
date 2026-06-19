@@ -100,7 +100,7 @@ export default function SixPassengerTaxiPage() {
 
             {/* Booking & Fleet */}
             <section className="py-24 bg-emerald-900 relative overflow-hidden">
-                <div className="absolute inset-0 opacity-10 bg-[url('/pattern.png')]"></div>
+                <div className="absolute inset-0 opacity-10 bg-[url('/pattern.webp')]"></div>
                 <div className="container mx-auto px-6 relative z-10">
                     <div className="max-w-4xl mx-auto bg-white p-2 rounded-[3.5rem] shadow-2xl border-8 border-black">
                         <div className="p-12">

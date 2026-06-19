@@ -167,7 +167,7 @@ export default function HomeClient({ defaultTab = 'pickup' }) {
                     {activeHeroTab !== 'tours' && (
                         <>
                             <div id="calculator" className="py-8 md:py-12 relative border-t border-slate-100 dark:border-white/5 bg-slate-50/50 dark:bg-white/2">
-                                <div className="absolute inset-0 bg-[url('/pattern.png')] opacity-[0.06] dark:opacity-[0.02] pointer-events-none z-0"></div>
+                                <div className="absolute inset-0 bg-[url('/pattern.webp')] opacity-[0.06] dark:opacity-[0.02] pointer-events-none z-0"></div>
                                 <div className="max-w-6xl mx-auto px-4 relative z-10">
                                     <div className="text-center mb-6">
                                         <span className="text-emerald-600 dark:text-[#FACC15] text-[10px] font-black tracking-[0.4em] uppercase mb-4 block">
@@ -243,7 +243,7 @@ export default function HomeClient({ defaultTab = 'pickup' }) {
                                         <span className="text-2xl md:text-4xl font-black text-emerald-950 dark:text-white uppercase tracking-tighter mb-1">
                                             <StatNumber value={stat.value} />
                                         </span>
-                                        <span className="text-[8px] md:text-[9px] font-black text-slate-400 uppercase tracking-[0.2em] text-center">{stat.label}</span>
+                                        <span className="text-[8px] md:text-[9px] font-black text-slate-600 dark:text-slate-400 uppercase tracking-[0.2em] text-center">{stat.label}</span>
                                     </div>
                                 ))}
                             </div>

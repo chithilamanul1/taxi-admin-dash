@@ -7,6 +7,15 @@ const displayName = (name) => (name || '')
     .replace(/\bKDH\s*/gi, '')
     .trim();
 
+// Auto-serve WebP if available (vehicles/ directory has WebP versions)
+const toWebpSrc = (src) => {
+    if (!src) return src;
+    if (src.startsWith('/vehicles/') && (src.endsWith('.png') || src.endsWith('.jpg'))) {
+        return src.replace(/\.(png|jpg)$/, '.webp');
+    }
+    return src;
+};
+
 const isMiniCar = (vehicle) => {
     const t = (vehicle.vehicleType || '').toLowerCase();
     const n = (vehicle.name || '').toLowerCase();
@@ -135,7 +144,7 @@ const VehicleCarousel = ({ vehicles, selectedId, onSelect, passengerCount, picku
             >
                 <div className="w-16 sm:w-28 h-12 sm:h-20 bg-slate-50 dark:bg-zinc-800 rounded-2xl flex items-center justify-center p-1.5 sm:p-2 shrink-0 overflow-hidden border border-slate-100 dark:border-white/5">
                     <img
-                        src={vehicle.image}
+                        src={toWebpSrc(vehicle.image)}
                         alt={vehicle.name}
                         className="w-full h-full object-contain transition-transform duration-500"
                         style={{
@@ -277,7 +286,7 @@ const VehicleCarousel = ({ vehicles, selectedId, onSelect, passengerCount, picku
                                 {/* Vehicle Image — uniform premium dimensions */}
                                 <div className="w-full flex justify-center items-center relative z-10 mt-auto h-[110px] sm:h-[130px] py-1">
                                     <img
-                                        src={vehicle.image}
+                                        src={toWebpSrc(vehicle.image)}
                                         alt={vehicle.name}
                                         className="w-full h-full object-contain transition-transform duration-500"
                                         style={{

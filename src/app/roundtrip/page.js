@@ -34,7 +34,7 @@ export const metadata = {
 export default function RoundTripsPage() {
   return (
     <div className="min-h-screen bg-slate-50 dark:bg-zinc-950 transition-colors relative">
-      <div className="absolute inset-0 bg-[url('/pattern.png')] opacity-[0.06] dark:opacity-[0.02] pointer-events-none z-0"></div>
+      <div className="absolute inset-0 bg-[url('/pattern.webp')] opacity-[0.06] dark:opacity-[0.02] pointer-events-none z-0"></div>
       
       {/* Booking Form Section - Sleek Positioning */}
       <section className="container mx-auto px-4 sm:px-6 pt-10">

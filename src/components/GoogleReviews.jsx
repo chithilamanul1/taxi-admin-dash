@@ -120,7 +120,7 @@ const GoogleReviews = () => {
 
     return (
         <section className="py-12 bg-white dark:bg-[#0a0a0a] overflow-hidden relative transition-colors duration-300">
-            <div className="absolute inset-0 bg-[url('/destinations_pattern.png')] bg-cover bg-center opacity-5 dark:opacity-[0.02] pointer-events-none"></div>
+            <div className="absolute inset-0 bg-[url('/destinations_pattern.webp')] bg-cover bg-center opacity-5 dark:opacity-[0.02] pointer-events-none"></div>
             <div className="container mx-auto px-4 relative z-10 max-w-7xl">
                 <div className="flex flex-col md:flex-row items-end justify-between mb-8 gap-4">
                     <div className="max-w-2xl">
@@ -251,7 +251,8 @@ const GoogleReviews = () => {
                                     {!isExpanded && review.text.length > 120 && (
                                         <button 
                                             onClick={() => toggleReview(idx)}
-                                            className="mt-3 self-start text-[10px] font-bold uppercase tracking-widest text-emerald-600 dark:text-emerald-400 hover:text-emerald-700 transition-colors"
+                                            aria-label="Read the full review"
+                                            className="mt-3 self-start text-[10px] font-bold uppercase tracking-widest text-emerald-700 dark:text-emerald-400 hover:text-emerald-900 dark:hover:text-emerald-300 transition-colors focus-visible:outline-2 focus-visible:outline-emerald-600 focus-visible:outline-offset-2 rounded"
                                         >
                                             Read More
                                         </button>

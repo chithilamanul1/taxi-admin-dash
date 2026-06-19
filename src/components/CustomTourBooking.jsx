@@ -672,7 +672,7 @@ const CustomTourBooking = () => {
 
   return (
     <div className="max-w-2xl mx-auto bg-white/95 dark:bg-zinc-900/95 backdrop-blur-xl rounded-[2rem] shadow-2xl overflow-hidden border border-slate-200/80 dark:border-white/10 p-4 sm:p-6 relative">
-      <div className="absolute inset-0 bg-[url('/pattern.png')] opacity-[0.06] dark:opacity-[0.02] pointer-events-none z-0"></div>
+      <div className="absolute inset-0 bg-[url('/pattern.webp')] opacity-[0.06] dark:opacity-[0.02] pointer-events-none z-0"></div>
       
       {/* Dynamic Header Step Indicator */}
       <div className="flex items-center justify-between mb-5 px-2 border-b border-slate-100 dark:border-white/5 pb-3">

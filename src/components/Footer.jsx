@@ -37,10 +37,11 @@ const Footer = () => {
                                     href={url}
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    className="w-10 h-10 bg-white/5 flex items-center justify-center hover:bg-[#FACC15] hover:text-black transition-all border border-white/10 hover:border-[#FACC15] rounded-xl"
-                                    aria-label={`Visit our ${label} page`}
+                                    title={`Visit our ${label} page (opens in new tab)`}
+                                    className="w-10 h-10 bg-white/5 flex items-center justify-center hover:bg-[#FACC15] hover:text-black transition-all border border-white/10 hover:border-[#FACC15] rounded-xl focus-visible:ring-2 focus-visible:ring-[#FACC15] focus-visible:outline-none"
+                                    aria-label={`Visit our ${label} page (opens in new tab)`}
                                 >
-                                    <Icon size={16} />
+                                    <Icon size={16} aria-hidden="true" />
                                 </a>
                             ))}
                         </div>
@@ -132,7 +133,7 @@ const Footer = () => {
                         <h4 className="text-white text-base md:text-lg font-bold tracking-wide leading-none">Our Partner Network</h4>
                         <div className="flex flex-wrap gap-2 justify-center md:justify-start">
                             {['airportcab.lk', 'srilankantaxi.lk', 'airporttaxicab.lk', 'taxiairport.lk', 'touris.lk', 'tourtaxi.lk'].map((company, idx) => (
-                                <a key={idx} href={`https://${company}`} target="_blank" className="px-3 py-1.5 rounded-lg bg-white/5 border border-white/10 hover:border-[#FACC15] hover:bg-[#FACC15]/10 hover:text-[#FACC15] text-white/70 text-[10px] font-black uppercase tracking-widest transition-all">
+                                <a key={idx} href={`https://${company}`} target="_blank" rel="noopener noreferrer" title={`Visit ${company} (opens in new tab)`} className="px-3 py-1.5 rounded-lg bg-white/5 border border-white/10 hover:border-[#FACC15] hover:bg-[#FACC15]/10 hover:text-[#FACC15] text-white/70 text-[10px] font-black uppercase tracking-widest transition-all focus-visible:ring-2 focus-visible:ring-[#FACC15] focus-visible:outline-none">
                                     {company}
                                 </a>
                             ))}
