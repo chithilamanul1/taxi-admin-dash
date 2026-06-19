@@ -7,17 +7,17 @@ import { useSearchParams, useRouter } from 'next/navigation'
 import { MapPin, Navigation, ArrowRightLeft, Loader2, Info, Users, Briefcase, ShoppingBag, Wind, Calendar, Clock, ChevronRight, Plus, Minus, Tag, Zap, Check, Car, ChevronDown, ShieldCheck, Lock, Signpost, X, ArrowRight, PlaneTakeoff, PlaneLanding, CircleDot, Route } from 'lucide-react'
 
 import Image from 'next/image'
-const ToursWidget = dynamic(() => import('./ToursWidget'), { ssr: false })
-const RentalsWidget = dynamic(() => import('./RentalsWidget'), { ssr: false })
-const CustomTourBooking = dynamic(() => import('./CustomTourBooking'), { ssr: false })
-const RoundTripBooking = dynamic(() => import('./RoundTripBooking'), { ssr: false })
+import ToursWidget from './ToursWidget'
+import RentalsWidget from './RentalsWidget'
+import CustomTourBooking from './CustomTourBooking'
+import RoundTripBooking from './RoundTripBooking'
 const BookingModal = dynamic(() => import('./BookingModal'), { ssr: false })
 const VehicleSelectionDrawer = dynamic(() => import('./VehicleSelectionDrawer'), { ssr: false })
-const VehicleCarousel = dynamic(() => import('./VehicleCarousel'), { ssr: false })
-const LocationInput = dynamic(() => import('./LocationInput'), { ssr: false })
-const SmartOfferNudge = dynamic(() => import('./SmartOfferNudge'), { ssr: false })
+import VehicleCarousel from './VehicleCarousel'
+import LocationInput from './LocationInput'
+import SmartOfferNudge from './SmartOfferNudge'
 const TripMap = dynamic(() => import('./TripMap'), { ssr: false })
-const CustomDateTimePicker = dynamic(() => import('./CustomDateTimePicker'), { ssr: false })
+import CustomDateTimePicker from './CustomDateTimePicker'
 
 import { useCurrency } from '../context/CurrencyContext'
 import { calculateBasePrice, calculateSurcharges, calculateTrafficSurge, ROUND_TRIP_PACKAGES } from '@/lib/pricing-util';

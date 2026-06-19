@@ -80,7 +80,7 @@ const ToursWidget = () => {
                 <div className="animate-fade-in bg-white dark:bg-zinc-900 rounded-[2.5rem] border border-slate-200 dark:border-white/10 overflow-hidden shadow-xl">
                     <div className="relative h-72 md:h-96 bg-slate-900">
                         {selectedTour.heroImage || selectedTour.image || selectedTour.images?.[0] ? (
-                            <img src={selectedTour.heroImage || selectedTour.image || selectedTour.images[0]} alt={selectedTour.title} className="w-full h-full object-cover opacity-80" />
+                            <Image src={selectedTour.heroImage || selectedTour.image || selectedTour.images[0]} alt={selectedTour.title} fill className="object-cover opacity-80" sizes="(max-width: 1024px) 100vw, 1024px" />
                         ) : (
                             <div className="w-full h-full flex items-center justify-center text-slate-500">No Image Available</div>
                         )}
@@ -216,7 +216,9 @@ const ToursWidget = () => {
             ) : activeCategory === 'Custom Trip' ? (
                 <div className="grid grid-cols-1 animate-slide-up px-2">
                     <Link href="/custom-trip" className="group relative rounded-[2.5rem] overflow-hidden min-h-[380px] md:h-[450px] flex items-center justify-center bg-emerald-950 transition-all duration-500 shadow-2xl">
-                        <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1546708973-4903328e19ba?q=80&w=1600')] bg-cover bg-center opacity-30 group-hover:opacity-40 transition-opacity duration-700"></div>
+                        <div className="absolute inset-0 opacity-30 group-hover:opacity-40 transition-opacity duration-700">
+                            <Image src="https://images.unsplash.com/photo-1546708973-4903328e19ba?q=80&w=1600" alt="Sri Lanka Tours" fill className="object-cover object-center" sizes="(max-width: 768px) 100vw, 50vw" />
+                        </div>
                         <div className="absolute inset-0 bg-gradient-to-t from-emerald-950 via-emerald-950/40 to-transparent"></div>
                         <div className="relative z-10 text-center space-y-6 px-8 max-w-2xl py-12">
                             <div className="w-20 h-20 bg-white/10 backdrop-blur-md rounded-3xl border border-white/20 flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-500">
@@ -253,10 +255,12 @@ const ToursWidget = () => {
                             >
                                 <div className="relative h-56 overflow-hidden bg-emerald-900 flex items-center justify-center">
                                     {tour.heroImage || tour.image || tour.images?.[0] ? (
-                                        <img
+                                        <Image
                                             src={tour.heroImage || tour.image || tour.images[0]}
                                             alt={tour.title}
-                                            className="w-full h-full object-cover opacity-90 transition-transform duration-700 group-hover:scale-110"
+                                            fill
+                                            sizes="(max-width: 768px) 100vw, 33vw"
+                                            className="object-cover opacity-90 transition-transform duration-700 group-hover:scale-110"
                                             onError={(e) => { e.target.style.display = 'none'; e.target.nextSibling.style.display = 'flex'; }}
                                         />
                                     ) : null}

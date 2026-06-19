@@ -303,7 +303,15 @@ export default function HomeClient({ defaultTab = 'pickup' }) {
                                 <div className="order-1 lg:order-2 relative group max-w-sm mx-auto w-full">
                                     <div className="absolute inset-0 bg-gradient-to-tr from-[#FACC15]/20 to-transparent rounded-3xl blur-2xl opacity-50 group-hover:opacity-80 transition-opacity"></div>
                                     <div className="relative bg-zinc-900 border border-white/10 rounded-3xl p-4 shadow-2xl overflow-hidden aspect-video flex items-center justify-center">
-                                        <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?q=80&w=2574&auto=format&fit=crop')] bg-cover bg-center opacity-40"></div>
+                                        <div className="absolute inset-0 opacity-40">
+                                            <Image 
+                                                src="https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?q=80&w=2574&auto=format&fit=crop"
+                                                alt="Join our fleet"
+                                                fill
+                                                className="object-cover object-center"
+                                                sizes="(max-width: 1024px) 100vw, 50vw"
+                                            />
+                                        </div>
                                         <div className="absolute inset-0 bg-gradient-to-t from-emerald-950 via-emerald-950/40 to-transparent"></div>
                                         <div className="relative z-10 text-center p-6">
                                             <div className="w-16 h-16 bg-[#FACC15] rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-2xl shadow-yellow-500/40 -rotate-12 group-hover:rotate-0 transition-transform duration-700">
