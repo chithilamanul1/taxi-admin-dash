@@ -24,24 +24,24 @@ const isMiniCar = (vehicle) => {
 
 // Calculate normalized scale and translation to visual alignment (wheels aligned to baseline, equal size)
 const getVehicleTransform = (imagePath, isSelected, isHovered = false, h_target = 0.58, b_target = 0.12) => {
-    const filename = (imagePath || '').split('/').pop().split('?')[0].toLowerCase();
+    const baseFilename = (imagePath || '').split('/').pop().split('?')[0].toLowerCase().replace(/\.(png|jpg|webp)$/, '');
     
     // Bounding box data for transparency correction
     const imgData = {
-        'coach-bus.png': { h_orig: 0.7772, c_prime_orig: 1 - 183.5/359 },
-        'costerbus.png': { h_orig: 0.6373, c_prime_orig: 1 - 216.5/408 },
-        'hondavezel.png': { h_orig: 0.6889, c_prime_orig: 1 - 216.0/360 },
-        'suv.png': { h_orig: 0.6889, c_prime_orig: 0.6 },
-        'minicar.png': { h_orig: 0.5220, c_prime_orig: 1 - 251.0/500 },
-        'minivan5seat.png': { h_orig: 0.4642, c_prime_orig: 1 - 227.5/433 },
-        'sedan.png': { h_orig: 0.3040, c_prime_orig: 0.4934 },
-        'sedan2.png': { h_orig: 0.4300, c_prime_orig: 0.4801 },
-        'sedancar.png': { h_orig: 0.4668, c_prime_orig: 0.5310 },
-        'sedancar2.png': { h_orig: 0.4300, c_prime_orig: 0.4801 },
-        'susukievery.png': { h_orig: 0.5543, c_prime_orig: 1 - 228.5/433 },
-        'toyota-highroof.png': { h_orig: 0.65, c_prime_orig: 1 - 227.5/433 },
-        'van.png': { h_orig: 0.5497, c_prime_orig: 1 - 227.5/433 },
-    }[filename] || { h_orig: 0.55, c_prime_orig: 0.5 }; // Default fallback
+        'coach-bus': { h_orig: 0.7772, c_prime_orig: 1 - 183.5/359 },
+        'costerbus': { h_orig: 0.6373, c_prime_orig: 1 - 216.5/408 },
+        'hondavezel': { h_orig: 0.6889, c_prime_orig: 1 - 216.0/360 },
+        'suv': { h_orig: 0.6889, c_prime_orig: 0.6 },
+        'minicar': { h_orig: 0.5220, c_prime_orig: 1 - 251.0/500 },
+        'minivan5seat': { h_orig: 0.4642, c_prime_orig: 1 - 227.5/433 },
+        'sedan': { h_orig: 0.3040, c_prime_orig: 0.4934 },
+        'sedan2': { h_orig: 0.4300, c_prime_orig: 0.4801 },
+        'sedancar': { h_orig: 0.4668, c_prime_orig: 0.5310 },
+        'sedancar2': { h_orig: 0.4300, c_prime_orig: 0.4801 },
+        'susukievery': { h_orig: 0.5543, c_prime_orig: 1 - 228.5/433 },
+        'toyota-highroof': { h_orig: 0.65, c_prime_orig: 1 - 227.5/433 },
+        'van': { h_orig: 0.5497, c_prime_orig: 1 - 227.5/433 },
+    }[baseFilename] || { h_orig: 0.55, c_prime_orig: 0.5 }; // Default fallback
 
     // Base scale to make bbox height exactly h_target
     let scale = h_target / imgData.h_orig;
