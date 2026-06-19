@@ -19,7 +19,7 @@ const getVehicleTransform = (imagePath, isSelected, isHovered = false, h_target 
         'coach-bus': { h_orig: 0.7772, c_prime_orig: 1 - 183.5/359 },
         'costerbus': { h_orig: 0.6373, c_prime_orig: 1 - 216.5/408 },
         'hondavezel': { h_orig: 0.6889, c_prime_orig: 1 - 216.0/360 },
-        'suv': { h_orig: 0.6889, c_prime_orig: 0.6 },
+        'suv': { h_orig: 0.52, c_prime_orig: 0.45 },
         'minicar': { h_orig: 0.5220, c_prime_orig: 1 - 251.0/500 },
         'minivan5seat': { h_orig: 0.4642, c_prime_orig: 1 - 227.5/433 },
         'sedan': { h_orig: 0.3040, c_prime_orig: 0.4934 },

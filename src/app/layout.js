@@ -214,8 +214,7 @@ export default function RootLayout({ children }) {
         <html lang="en" suppressHydrationWarning className={`${inter.variable} ${montserrat.variable} ${dancingScript.variable} scroll-smooth scroll-pt-[240px] md:scroll-pt-[180px]`}>
             <head>
                 <meta name="theme-color" content="#059669" />
-                <link rel="preconnect" href="https://fonts.googleapis.com" />
-                <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+
                 <link rel="dns-prefetch" href="https://maps.googleapis.com" />
                 <link rel="dns-prefetch" href="https://maps.gstatic.com" />
 

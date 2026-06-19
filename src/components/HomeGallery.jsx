@@ -57,9 +57,7 @@ export default function HomeGallery() {
 
     return (
         <section className="py-12 relative overflow-hidden bg-[#0a0a0a] border-t border-white/5">
-            <style dangerouslySetInnerHTML={{__html: `
-                @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap');
-            `}} />
+
 
             <div className="container mx-auto px-6 relative z-10">
                 <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10">
@@ -71,7 +69,7 @@ export default function HomeGallery() {
                             <span className="text-[10px] font-medium uppercase tracking-[0.2em] text-white">Travel Memories</span>
                         </div>
                         <h2 className="text-white leading-[1.1]">
-                            <span className="text-5xl md:text-7xl mb-2 block" style={{ fontFamily: "'Dancing Script', cursive" }}>Experience</span>
+                            <span className="text-5xl md:text-7xl mb-2 block font-cursive">Experience</span>
                             <span className="text-3xl md:text-5xl text-[#FACC15] font-serif uppercase tracking-[0.2em] font-medium block mt-1">Sri Lanka</span>
                         </h2>
                     </div>
