@@ -20,49 +20,33 @@ const TourBookingModal = ({ isOpen, onClose, tourTitle, tourId, duration, price,
         specialRequests: ''
     });
 
+    const [showErrors, setShowErrors] = useState(false);
+
     if (!isOpen) return null;
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        
+        if (!formData.name || !formData.phone || !formData.date || !formData.travelers) {
+            setShowErrors(true);
+            return;
+        }
+
         setIsLoading(true);
-        setError('');
 
         try {
-            const isPerPerson = tourTitle.toLowerCase().includes('per person') || !!price && price < 500; // Heuristic if type not passed
+            const message = `*New Safari/Tour Enquiry*\n\n*Tour:* ${tourTitle}\n*Name:* ${formData.name}\n*Phone:* ${formData.phone}\n*Email:* ${formData.email || 'N/A'}\n*Date:* ${formData.date}\n*Adults:* ${formData.travelers}\n*Kids:* ${formData.children}\n*Special Requests:* ${formData.specialRequests || 'None'}`;
             
-            let totalPrice = 0;
-            const totalPax = parseInt(formData.travelers || 0) + parseInt(formData.children || 0);
-            if (price) {
-                if (isPerPerson && totalPax > 0) {
-                    totalPrice = price + (totalPax - 1) * (price * 0.5);
-                } else {
-                    totalPrice = price;
-                }
-            }
-
-            const res = await fetch('/api/bookings/tour', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    ...formData,
-                    tourTitle,
-                    tourId,
-                    duration,
-                    totalPrice,
-                    currency,
-                    isPerPerson,
-                    scheduledDate: formData.date,
-                    arrivalDate: formData.arrivalDate,
-                    arrivalTime: formData.arrivalTime,
-                    passengerCount: { adults: parseInt(formData.travelers), children: parseInt(formData.children) }
-                })
-            });
-
-            const data = await res.json();
-
-            if (!res.ok) throw new Error(data.message || 'Booking failed');
-
+            const whatsappUrl = `https://wa.me/94722885885?text=${encodeURIComponent(message)}`;
+            window.open(whatsappUrl, '_blank');
+            
             setIsSuccess(true);
+        } catch (err) {
+            setError('Something went wrong. Please try again.');
+        } finally {
+            setIsLoading(false);
+        }
+    };
         } catch (err) {
             setError(err.message || 'Something went wrong. Please try again.');
         } finally {
@@ -120,43 +104,42 @@ const TourBookingModal = ({ isOpen, onClose, tourTitle, tourId, duration, price,
 
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div className="space-y-2">
-                                <label className="text-sm font-bold text-slate-700 dark:text-slate-300">Your Name</label>
+                                <label className={`text-sm font-bold ${showErrors && !formData.name ? 'text-red-500' : 'text-slate-700 dark:text-slate-300'}`}>Your Name *</label>
                                 <div className="relative">
-                                    <User size={18} className="absolute left-3 top-3 text-slate-400" />
+                                    <User size={18} className={`absolute left-3 top-3 ${showErrors && !formData.name ? 'text-red-400' : 'text-slate-400'}`} />
                                     <input
                                         type="text"
                                         required
-                                        className="w-full pl-10 pr-4 py-2.5 bg-slate-50 dark:bg-slate-800 border-none rounded-xl focus:ring-2 focus:ring-emerald-500 transition-all font-medium"
+                                        className={`w-full pl-10 pr-4 py-2.5 bg-slate-50 dark:bg-slate-800 border-2 rounded-xl outline-none focus:ring-2 focus:ring-emerald-500 transition-all font-medium ${showErrors && !formData.name ? 'border-red-500' : 'border-transparent'}`}
                                         placeholder="John Doe"
                                         value={formData.name}
-                                        onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                                        onChange={(e) => { setFormData({ ...formData, name: e.target.value }); setShowErrors(false); }}
                                     />
                                 </div>
                             </div>
                             <div className="space-y-2">
-                                <label className="text-sm font-bold text-slate-700 dark:text-slate-300">Phone Number</label>
+                                <label className={`text-sm font-bold ${showErrors && !formData.phone ? 'text-red-500' : 'text-slate-700 dark:text-slate-300'}`}>Phone Number *</label>
                                 <div className="relative">
-                                    <Phone size={18} className="absolute left-3 top-3 text-slate-400" />
+                                    <Phone size={18} className={`absolute left-3 top-3 ${showErrors && !formData.phone ? 'text-red-400' : 'text-slate-400'}`} />
                                     <input
                                         type="tel"
                                         required
-                                        className="w-full pl-10 pr-4 py-2.5 bg-slate-50 dark:bg-slate-800 border-none rounded-xl focus:ring-2 focus:ring-emerald-500 transition-all font-medium"
+                                        className={`w-full pl-10 pr-4 py-2.5 bg-slate-50 dark:bg-slate-800 border-2 rounded-xl outline-none focus:ring-2 focus:ring-emerald-500 transition-all font-medium ${showErrors && !formData.phone ? 'border-red-500' : 'border-transparent'}`}
                                         placeholder="+1 234 567 890"
                                         value={formData.phone}
-                                        onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                                        onChange={(e) => { setFormData({ ...formData, phone: e.target.value }); setShowErrors(false); }}
                                     />
                                 </div>
                             </div>
                         </div>
 
                         <div className="space-y-2">
-                            <label className="text-sm font-bold text-slate-700 dark:text-slate-300">Email Address</label>
+                            <label className="text-sm font-bold text-slate-700 dark:text-slate-300">Email Address (Optional)</label>
                             <div className="relative">
                                 <Mail size={18} className="absolute left-3 top-3 text-slate-400" />
                                 <input
                                     type="email"
-                                    required
-                                    className="w-full pl-10 pr-4 py-2.5 bg-slate-50 dark:bg-slate-800 border-none rounded-xl focus:ring-2 focus:ring-emerald-500 transition-all font-medium"
+                                    className="w-full pl-10 pr-4 py-2.5 bg-slate-50 dark:bg-slate-800 border-2 border-transparent rounded-xl outline-none focus:ring-2 focus:ring-emerald-500 transition-all font-medium"
                                     placeholder="john@example.com"
                                     value={formData.email}
                                     onChange={(e) => setFormData({ ...formData, email: e.target.value })}
@@ -164,65 +147,39 @@ const TourBookingModal = ({ isOpen, onClose, tourTitle, tourId, duration, price,
                             </div>
                         </div>
 
-                        {/* Arrival Details */}
-                        <div className="grid grid-cols-2 gap-4">
-                            <div className="space-y-2">
-                                <label className="text-xs font-bold text-slate-500 uppercase tracking-wider flex items-center gap-2">
-                                    <Calendar size={14} className="text-emerald-600" /> Arrival Date
-                                </label>
-                                <input
-                                    type="date"
-                                    required
-                                    value={formData.arrivalDate}
-                                    onChange={(e) => setFormData({ ...formData, arrivalDate: e.target.value })}
-                                    className="w-full px-4 py-3 bg-slate-50 border border-slate-100 rounded-xl focus:ring-2 focus:ring-emerald-500/20 outline-none transition-all font-medium"
-                                />
-                            </div>
-                            <div className="space-y-2">
-                                <label className="text-xs font-bold text-slate-500 uppercase tracking-wider flex items-center gap-2">
-                                    <Clock size={14} className="text-emerald-600" /> Arrival Time
-                                </label>
-                                <input
-                                    type="time"
-                                    required
-                                    value={formData.arrivalTime}
-                                    onChange={(e) => setFormData({ ...formData, arrivalTime: e.target.value })}
-                                    className="w-full px-4 py-3 bg-slate-50 border border-slate-100 rounded-xl focus:ring-2 focus:ring-emerald-500/20 outline-none transition-all font-medium"
-                                />
-                            </div>
-                        </div>
+                        {/* Removed Arrival Details */}
 
                         {/* Travel Date */}
                         <div className="space-y-2">
-                            <label className="text-xs font-bold text-slate-500 uppercase tracking-wider flex items-center gap-2">
-                                <Calendar size={14} className="text-emerald-600" /> Planned Start Date
+                            <label className={`text-xs font-bold uppercase tracking-wider flex items-center gap-2 ${showErrors && !formData.date ? 'text-red-500' : 'text-slate-500'}`}>
+                                <Calendar size={14} className={showErrors && !formData.date ? 'text-red-500' : 'text-emerald-600'} /> Planned Start Date *
                             </label>
                             <input
                                 type="date"
                                 required
                                 value={formData.date}
-                                onChange={(e) => setFormData({ ...formData, date: e.target.value })}
-                                className="w-full px-4 py-3 bg-slate-50 border border-slate-100 rounded-xl focus:ring-2 focus:ring-emerald-500/20 outline-none transition-all font-medium"
+                                onChange={(e) => { setFormData({ ...formData, date: e.target.value }); setShowErrors(false); }}
+                                className={`w-full px-4 py-3 bg-slate-50 border-2 rounded-xl outline-none focus:ring-2 focus:ring-emerald-500/20 transition-all font-medium ${showErrors && !formData.date ? 'border-red-500' : 'border-slate-100'}`}
                             />
                         </div>
 
                         <div className="space-y-2">
-                            <label className="text-sm font-bold text-slate-700 dark:text-slate-300">Passengers</label>
+                            <label className={`text-sm font-bold ${showErrors && (!formData.travelers || formData.travelers < 1) ? 'text-red-500' : 'text-slate-700 dark:text-slate-300'}`}>Passengers *</label>
                             <div className="relative">
                                 <Users size={18} className="absolute left-3 top-3 text-slate-400" />
                                 <div className="grid grid-cols-2 gap-2">
                                     <input
                                         type="number"
                                         min="1"
-                                        className="w-full pl-10 pr-2 py-2.5 bg-slate-50 dark:bg-slate-800 border-none rounded-xl focus:ring-2 focus:ring-emerald-500 transition-all font-medium text-sm"
+                                        className={`w-full pl-10 pr-2 py-2.5 bg-slate-50 dark:bg-slate-800 border-2 rounded-xl outline-none focus:ring-2 focus:ring-emerald-500 transition-all font-medium text-sm ${showErrors && (!formData.travelers || formData.travelers < 1) ? 'border-red-500' : 'border-transparent'}`}
                                         placeholder="Adults"
                                         value={formData.travelers}
-                                        onChange={(e) => setFormData({ ...formData, travelers: parseInt(e.target.value) || 0 })}
+                                        onChange={(e) => { setFormData({ ...formData, travelers: parseInt(e.target.value) || 0 }); setShowErrors(false); }}
                                     />
                                     <input
                                         type="number"
                                         min="0"
-                                        className="w-full pl-2 pr-2 py-2.5 bg-slate-50 dark:bg-slate-800 border-none rounded-xl focus:ring-2 focus:ring-emerald-500 transition-all font-medium text-sm"
+                                        className="w-full pl-2 pr-2 py-2.5 bg-slate-50 dark:bg-slate-800 border-2 border-transparent rounded-xl outline-none focus:ring-2 focus:ring-emerald-500 transition-all font-medium text-sm"
                                         placeholder="Kids"
                                         value={formData.children}
                                         onChange={(e) => setFormData({ ...formData, children: parseInt(e.target.value) || 0 })}
@@ -243,14 +200,9 @@ const TourBookingModal = ({ isOpen, onClose, tourTitle, tourId, duration, price,
 
                         {price && (
                             <div className="bg-emerald-50 dark:bg-emerald-900/20 p-4 rounded-xl flex justify-between items-center">
-                                <span className="text-sm font-bold text-emerald-900 dark:text-emerald-100 uppercase tracking-wider">Estimated Total</span>
+                                <span className="text-sm font-bold text-emerald-900 dark:text-emerald-100 uppercase tracking-wider">Per Person</span>
                                 <span className="text-xl font-black text-emerald-900 dark:text-white">
-                                    {currency} {(() => {
-                                        const totalPax = parseInt(formData.travelers || 0) + parseInt(formData.children || 0);
-                                        const isPerPerson = tourTitle.toLowerCase().includes('per person') || !!price && price < 500;
-                                        if (!isPerPerson || totalPax === 0) return price.toLocaleString();
-                                        return (price + (totalPax - 1) * (price * 0.5)).toLocaleString();
-                                    })()}
+                                    {currency} {price.toLocaleString()}
                                 </span>
                             </div>
                         )}

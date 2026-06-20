@@ -16,10 +16,12 @@ const BookingForm = () => {
         destination: '',
         notes: '',
         boardShow: false,
-        boardName: ''
+        boardName: '',
+        inquiryType: 'transfer' // 'transfer' or 'tour'
     })
 
     const [isSubmitting, setIsSubmitting] = useState(false)
+    const [showErrors, setShowErrors] = useState(false)
 
     const handleChange = (e) => {
         const { name, value, type, checked } = e.target
@@ -35,6 +37,12 @@ const BookingForm = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault()
+        
+        if (!formData.name || !formData.email || !formData.phone || (formData.inquiryType === 'transfer' && !formData.flightNumber) || !formData.destination) {
+            setShowErrors(true)
+            return
+        }
+
         setIsSubmitting(true)
 
         const formattedDate = formData.arrivalDate.toLocaleDateString()
@@ -98,51 +106,72 @@ ${boardInfo}
     }
 
     return (
-        <form onSubmit={handleSubmit} className="p-10 rounded-none border-4 border-black bg-white text-black max-w-4xl mx-auto transition-colors">
+        <form onSubmit={handleSubmit} noValidate className="p-10 rounded-none border-4 border-black bg-white text-black max-w-4xl mx-auto transition-colors">
+            
+            {/* Inquiry Type Toggle */}
+            <div className="mb-8 flex gap-4">
+                <button
+                    type="button"
+                    onClick={() => setFormData({ ...formData, inquiryType: 'transfer' })}
+                    className={`flex-1 py-4 font-black uppercase tracking-widest text-sm border-4 transition-all ${formData.inquiryType === 'transfer' ? 'bg-black text-[#FACC15] border-black' : 'bg-slate-50 text-slate-500 border-slate-200 hover:border-black'}`}
+                >
+                    ✈️ Airport Transfer
+                </button>
+                <button
+                    type="button"
+                    onClick={() => setFormData({ ...formData, inquiryType: 'tour' })}
+                    className={`flex-1 py-4 font-black uppercase tracking-widest text-sm border-4 transition-all ${formData.inquiryType === 'tour' ? 'bg-black text-[#FACC15] border-black' : 'bg-slate-50 text-slate-500 border-slate-200 hover:border-black'}`}
+                >
+                    🐘 Safari / Tour
+                </button>
+            </div>
+
             <div className="grid md:grid-cols-2 gap-8">
                 {/* Row 1 */}
                 <div className="space-y-2">
-                    <label className="text-sm font-bold uppercase tracking-wider text-gray-500">Full Name</label>
+                    <label className={`text-sm font-bold uppercase tracking-wider ${showErrors && !formData.name ? 'text-red-500' : 'text-gray-500'}`}>Full Name *</label>
                     <input
                         required
-                        type="text" name="name" value={formData.name} onChange={handleChange}
+                        type="text" name="name" value={formData.name} onChange={(e) => { handleChange(e); setShowErrors(false); }}
                         placeholder="John Doe"
-                        className="w-full bg-slate-50 border-4 border-black px-6 py-4 rounded-none focus:ring-0 focus:border-[#FACC15] outline-none transition-all font-black uppercase text-sm"
+                        className={`w-full bg-slate-50 border-4 px-6 py-4 rounded-none focus:ring-0 focus:border-[#FACC15] outline-none transition-all font-black uppercase text-sm ${showErrors && !formData.name ? 'border-red-500 bg-red-50/50' : 'border-black'}`}
                     />
                 </div>
                 <div className="space-y-2">
-                    <label className="text-sm font-bold uppercase tracking-wider text-gray-500">Email Address</label>
+                    <label className={`text-sm font-bold uppercase tracking-wider ${showErrors && !formData.email ? 'text-red-500' : 'text-gray-500'}`}>Email Address *</label>
                     <input
                         required
-                        type="email" name="email" value={formData.email} onChange={handleChange}
+                        type="email" name="email" value={formData.email} onChange={(e) => { handleChange(e); setShowErrors(false); }}
                         placeholder="john@example.com"
-                        className="w-full bg-slate-50 border-4 border-black px-6 py-4 rounded-none focus:ring-0 focus:border-[#FACC15] outline-none transition-all font-black uppercase text-sm"
+                        className={`w-full bg-slate-50 border-4 px-6 py-4 rounded-none focus:ring-0 focus:border-[#FACC15] outline-none transition-all font-black uppercase text-sm ${showErrors && !formData.email ? 'border-red-500 bg-red-50/50' : 'border-black'}`}
                     />
                 </div>
 
                 {/* Row 2 */}
                 <div className="space-y-2">
-                    <label className="text-sm font-bold uppercase tracking-wider text-gray-500">Phone / WhatsApp</label>
+                    <label className={`text-sm font-bold uppercase tracking-wider ${showErrors && !formData.phone ? 'text-red-500' : 'text-gray-500'}`}>Phone / WhatsApp *</label>
                     <input
                         required
-                        type="tel" name="phone" value={formData.phone} onChange={handleChange}
+                        type="tel" name="phone" value={formData.phone} onChange={(e) => { handleChange(e); setShowErrors(false); }}
                         placeholder="+1 234 567 890"
-                        className="w-full bg-slate-50 border-4 border-black px-6 py-4 rounded-none focus:ring-0 focus:border-[#FACC15] outline-none transition-all font-black uppercase text-sm"
+                        className={`w-full bg-slate-50 border-4 px-6 py-4 rounded-none focus:ring-0 focus:border-[#FACC15] outline-none transition-all font-black uppercase text-sm ${showErrors && !formData.phone ? 'border-red-500 bg-red-50/50' : 'border-black'}`}
                     />
                 </div>
-                <div className="space-y-2">
-                    <label className="text-sm font-bold uppercase tracking-wider text-gray-500">Flight Number</label>
-                    <input
-                        required
-                        type="text" name="flightNumber" value={formData.flightNumber} onChange={handleChange}
-                        placeholder="EK 650"
-                        className="w-full bg-slate-50 border-4 border-black px-6 py-4 rounded-none focus:ring-0 focus:border-[#FACC15] outline-none transition-all font-black uppercase text-sm"
-                    />
-                </div>
+                {formData.inquiryType === 'transfer' && (
+                    <div className="space-y-2">
+                        <label className={`text-sm font-bold uppercase tracking-wider ${showErrors && !formData.flightNumber ? 'text-red-500' : 'text-gray-500'}`}>Flight Number *</label>
+                        <input
+                            required
+                            type="text" name="flightNumber" value={formData.flightNumber} onChange={(e) => { handleChange(e); setShowErrors(false); }}
+                            placeholder="EK 650"
+                            className={`w-full bg-slate-50 border-4 px-6 py-4 rounded-none focus:ring-0 focus:border-[#FACC15] outline-none transition-all font-black uppercase text-sm ${showErrors && !formData.flightNumber ? 'border-red-500 bg-red-50/50' : 'border-black'}`}
+                        />
+                    </div>
+                )}
 
                 {/* Row 3 - Date Picker */}
-                <div className="space-y-2 md:col-span-2">
-                    <label className="text-sm font-bold uppercase tracking-wider text-gray-500">Arrival Date & Time</label>
+                <div className={`space-y-2 ${formData.inquiryType === 'tour' ? 'md:col-span-1' : 'md:col-span-2'}`}>
+                    <label className="text-sm font-bold uppercase tracking-wider text-gray-500">{formData.inquiryType === 'tour' ? 'Travel Date' : 'Arrival Date & Time'}</label>
                     <DatePicker
                         selected={formData.arrivalDate}
                         onChange={handleDateChange}
@@ -165,62 +194,64 @@ ${boardInfo}
                     </select>
                 </div>
                 <div className="space-y-2">
-                    <label className="text-sm font-bold uppercase tracking-wider text-gray-500">Drop-off Destination</label>
+                    <label className={`text-sm font-bold uppercase tracking-wider ${showErrors && !formData.destination ? 'text-red-500' : 'text-gray-500'}`}>{formData.inquiryType === 'tour' ? 'Tour / Destination *' : 'Drop-off Destination *'}</label>
                     <input
                         required
-                        type="text" name="destination" value={formData.destination} onChange={handleChange}
-                        placeholder="Galle, Colombo, etc."
-                        className="w-full bg-slate-50 border-4 border-black px-6 py-4 rounded-none focus:ring-0 focus:border-[#FACC15] outline-none transition-all font-black uppercase text-sm"
+                        type="text" name="destination" value={formData.destination} onChange={(e) => { handleChange(e); setShowErrors(false); }}
+                        placeholder="Galle, Yala, Colombo, etc."
+                        className={`w-full bg-slate-50 border-4 px-6 py-4 rounded-none focus:ring-0 focus:border-[#FACC15] outline-none transition-all font-black uppercase text-sm ${showErrors && !formData.destination ? 'border-red-500 bg-red-50/50' : 'border-black'}`}
                     />
                 </div>
             </div>
 
             {/* Display Name Board Toggle */}
-            <div className="mt-8 p-6 bg-slate-50 rounded-none border-4 border-black">
-                <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-4">
-                        <img src="https://cdn-icons-png.flaticon.com/512/3284/3284646.png" alt="NAME BORD" className="h-10 w-10 opacity-70" />
-                        <div>
-                            <div className="flex items-center gap-3">
-                                <Signpost size={20} className={formData.boardShow ? 'text-black' : 'text-slate-400'} />
-                                <div className="text-left">
-                                    <span className="text-xs font-bold block uppercase tracking-tight text-slate-700">Display Name Board</span>
-                                    <span className="text-[10px] font-medium text-slate-400">Driver waits with name sign</span>
+            {formData.inquiryType === 'transfer' && (
+                <div className="mt-8 p-6 bg-slate-50 rounded-none border-4 border-black">
+                    <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-4">
+                            <img src="https://cdn-icons-png.flaticon.com/512/3284/3284646.png" alt="NAME BORD" className="h-10 w-10 opacity-70" />
+                            <div>
+                                <div className="flex items-center gap-3">
+                                    <Signpost size={20} className={formData.boardShow ? 'text-black' : 'text-slate-400'} />
+                                    <div className="text-left">
+                                        <span className="text-xs font-bold block uppercase tracking-tight text-slate-700">Display Name Board</span>
+                                        <span className="text-[10px] font-medium text-slate-400">Driver waits with name sign</span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
+                        <div className="text-right">
+                            <span className="font-black text-black uppercase tracking-tight">NAME BOARD</span>
+                            <span className="block font-black text-[#FACC15] text-sm">+ Rs 2000.00</span>
+                            <label className="relative inline-flex items-center cursor-pointer mt-1">
+                                <input
+                                    type="checkbox"
+                                    name="boardShow"
+                                    checked={formData.boardShow}
+                                    onChange={handleChange}
+                                    className="sr-only peer"
+                                />
+                                <div className="w-12 h-6 bg-gray-200 rounded-none peer peer-checked:after:translate-x-6 peer-checked:after:border-black after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-black after:border-2 after:rounded-none after:h-5 after:w-5 after:transition-all peer-checked:bg-black"></div>
+                            </label>
+                        </div>
                     </div>
-                    <div className="text-right">
-                        <span className="font-black text-black uppercase tracking-tight">NAME BOARD</span>
-                        <span className="block font-black text-[#FACC15] text-sm">+ Rs 2000.00</span>
-                        <label className="relative inline-flex items-center cursor-pointer mt-1">
-                            <input
-                                type="checkbox"
-                                name="boardShow"
-                                checked={formData.boardShow}
-                                onChange={handleChange}
-                                className="sr-only peer"
-                            />
-                            <div className="w-12 h-6 bg-gray-200 rounded-none peer peer-checked:after:translate-x-6 peer-checked:after:border-black after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-black after:border-2 after:rounded-none after:h-5 after:w-5 after:transition-all peer-checked:bg-black"></div>
-                        </label>
-                    </div>
-                </div>
 
-                {formData.boardShow && (
-                    <div className="mt-4 animate-fade-in">
-                        <label className="text-xs font-bold uppercase tracking-wider text-gray-500 mb-1 block">Name to Display on Board</label>
-                        <input
-                            required
-                            type="text"
-                            name="boardName"
-                            value={formData.boardName}
-                            onChange={handleChange}
-                            placeholder="e.g. Mr. John Doe"
-                            className="w-full bg-white border-4 border-black px-4 py-3 rounded-none focus:ring-0 focus:border-[#FACC15] outline-none text-xs font-black uppercase tracking-widest"
-                        />
-                    </div>
-                )}
-            </div>
+                    {formData.boardShow && (
+                        <div className="mt-4 animate-fade-in">
+                            <label className="text-xs font-bold uppercase tracking-wider text-gray-500 mb-1 block">Name to Display on Board</label>
+                            <input
+                                required
+                                type="text"
+                                name="boardName"
+                                value={formData.boardName}
+                                onChange={handleChange}
+                                placeholder="e.g. Mr. John Doe"
+                                className="w-full bg-white border-4 border-black px-4 py-3 rounded-none focus:ring-0 focus:border-[#FACC15] outline-none text-xs font-black uppercase tracking-widest"
+                            />
+                        </div>
+                    )}
+                </div>
+            )}
 
             <div className="mt-8 space-y-2">
                 <label className="text-sm font-bold uppercase tracking-wider text-gray-500">Extra Notes / Luggage Info</label>

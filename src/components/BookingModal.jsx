@@ -640,8 +640,10 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
             }
 
             // Enforce luggage selection and adult count (Hard Stop)
-            if (!formData.passengerCount.luggage || formData.passengerCount.luggage < 1) newErrors.luggage = true;
-            if (!formData.passengerCount.handLuggage || formData.passengerCount.handLuggage < 1) newErrors.handLuggage = true;
+            if (formData.tripType !== 'tour') {
+                if (!formData.passengerCount.luggage || formData.passengerCount.luggage < 1) newErrors.luggage = true;
+                if (!formData.passengerCount.handLuggage || formData.passengerCount.handLuggage < 1) newErrors.handLuggage = true;
+            }
             if (!formData.passengerCount.adults || formData.passengerCount.adults < 1) newErrors.adults = true;
         }
         
@@ -656,7 +658,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
         
         if (Object.keys(newErrors).length > 0) {
             if (newErrors.adults || newErrors.luggage || newErrors.handLuggage) {
-                alert("Please enter passenger and luggage count to proceed");
+                alert(formData.tripType === 'tour' ? "Please enter passenger count to proceed" : "Please enter passenger and luggage count to proceed");
                 if (passengerRef.current) {
                     passengerRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
                     return false;
@@ -690,9 +692,9 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                 alert("Please fill all required fields in Step 1.");
                 return;
             }
-            if ((Number(formData.passengerCount?.adults) || 0) === 0 && (Number(formData.passengerCount?.luggage) || 0) === 0) {
-                setErrors(prev => ({ ...prev, adults: true, luggage: true }));
-                alert("Please enter passenger and luggage count to proceed");
+            if ((Number(formData.passengerCount?.adults) || 0) === 0 && (formData.tripType === 'tour' || (Number(formData.passengerCount?.luggage) || 0) === 0)) {
+                setErrors(prev => ({ ...prev, adults: true, luggage: formData.tripType !== 'tour' }));
+                alert(formData.tripType === 'tour' ? "Please enter passenger count to proceed" : "Please enter passenger and luggage count to proceed");
                 passengerRef.current?.scrollIntoView({ behavior: 'smooth' });
                 return;
             }
@@ -853,7 +855,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                     </div>
                                 </div>
 
-                                {isAirportService && initialData.isAirportPickup && (
+                                {isAirportService && initialData.isAirportPickup && formData.tripType !== 'tour' && (
                                     <div className="space-y-8">
                                         <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-4 flex items-center gap-3">
                                             <Signpost size={14} className="text-[#FACC15]" strokeWidth={3} /> Airport Greeting Service
@@ -968,7 +970,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                     Passenger and Luggage <span className="text-[9px] bg-red-600 text-white px-2 py-0.5 rounded-full lowercase tracking-tight shadow-sm">required</span>
                                 </label>
                                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-4">
-                                    {[{ id: 'adults', label: 'Adults' }, { id: 'children', label: 'Children' }, { id: 'luggage', label: 'Luggage' }, { id: 'handLuggage', label: 'Hand Luggage' }].map(c => {
+                                    {[{ id: 'adults', label: 'Adults' }, { id: 'children', label: 'Children' }, ...(formData.tripType === 'tour' ? [] : [{ id: 'luggage', label: 'Luggage' }, { id: 'handLuggage', label: 'Hand Luggage' }])].map(c => {
                                         const isFieldUnselected = (errors.adults && c.id === 'adults') || (errors.luggage && c.id === 'luggage') || (errors.handLuggage && c.id === 'handLuggage');
                                         return (
                                             <div key={c.id} className={`bg-slate-50 dark:bg-white/5 border p-4 rounded-2xl flex items-center justify-between transition-all h-16 ${isFieldUnselected ? 'border-red-500 ring-2 ring-red-500/20 animate-pulse' : 'border-slate-100 dark:border-white/10'}`}>
@@ -1178,14 +1180,20 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                     <div className="flex items-center gap-2">
                                         <div className="flex items-center gap-1.5 bg-white dark:bg-zinc-800 px-3 py-1.5 rounded-lg border border-slate-200 dark:border-white/10 shadow-sm">
                                             <Briefcase size={12} className="text-[#FACC15]" />
-                                            <span className="text-xs font-black text-slate-800 dark:text-white">{formData.passengerCount.luggage || 0} Bags</span>
+                                            {formData.tripType !== 'tour' ? (
+                                                <>
+                                                    <span className="text-xs font-black text-slate-800 dark:text-white">{formData.passengerCount.luggage || 0} Bags</span>
+                                                    {formData.passengerCount.handLuggage > 0 && (
+                                                        <>
+                                                            <span className="text-slate-300 dark:text-slate-600 font-bold">•</span>
+                                                            <span className="text-xs font-black text-slate-800 dark:text-white">{formData.passengerCount.handLuggage} Hand</span>
+                                                        </>
+                                                    )}
+                                                </>
+                                            ) : (
+                                                <span className="text-xs font-black text-slate-800 dark:text-white">N/A</span>
+                                            )}
                                         </div>
-                                        {formData.passengerCount.handLuggage > 0 && (
-                                            <div className="flex items-center gap-1.5 bg-white dark:bg-zinc-800 px-3 py-1.5 rounded-lg border border-slate-200 dark:border-white/10 shadow-sm">
-                                                <ShoppingBag size={12} className="text-[#FACC15]" />
-                                                <span className="text-xs font-black text-slate-800 dark:text-white">{formData.passengerCount.handLuggage} Hand</span>
-                                            </div>
-                                        )}
                                     </div>
                                 </div>
                             </div>
