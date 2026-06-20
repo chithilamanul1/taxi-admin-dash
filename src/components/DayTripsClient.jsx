@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react'
 import { Clock, MapPin, Users, Tag, Star, ArrowRight, Filter, Search, Loader2 } from 'lucide-react'
 import Link from 'next/link'
+import { getFallbackImage } from '@/lib/imageFallback'
 
 export default function DayTripsClient() {
     const [trips, setTrips] = useState([])
@@ -104,12 +105,13 @@ export default function DayTripsClient() {
                                 {/* Image Section */}
                                 <div className="relative h-80 overflow-hidden shrink-0">
                                     <img
-                                        src={trip.image || trip.heroImage || trip.images?.[0] || '/sigiriya-new-hero.png'}
+                                        src={trip.image || trip.heroImage || trip.images?.[0] || getFallbackImage(trip.title)}
                                         alt={trip.title}
                                         className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110 grayscale group-hover:grayscale-0"
                                         onError={(e) => {
-                                            if (e.target.src !== window.location.origin + '/sigiriya-new-hero.png') {
-                                                e.target.src = '/sigiriya-new-hero.png';
+                                            const fallback = window.location.origin + getFallbackImage(trip.title);
+                                            if (e.target.src !== fallback) {
+                                                e.target.src = getFallbackImage(trip.title);
                                             }
                                         }}
                                     />

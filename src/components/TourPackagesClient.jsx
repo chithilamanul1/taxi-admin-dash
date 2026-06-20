@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react'
 import { tourPackages } from '@/data/tours-data'
 import { Clock, MapPin, Check, ArrowRight, Calendar, Users, Plane, Hotel, Car, Utensils, Loader2 } from 'lucide-react'
 import Link from 'next/link'
+import { getFallbackImage } from '@/lib/imageFallback'
 
 export default function TourPackagesClient() {
     const [activeCategory, setActiveCategory] = useState('All')
@@ -101,12 +102,13 @@ export default function TourPackagesClient() {
                                         {/* Image Section */}
                                         <div className="relative h-80 overflow-hidden shrink-0">
                                             <img
-                                                src={tour.image || tour.heroImage || tour.images?.[0] || '/sigiriya-new-hero.png'}
+                                                src={tour.image || tour.heroImage || tour.images?.[0] || getFallbackImage(tour.title)}
                                                 alt={tour.title}
                                                 className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110 grayscale group-hover:grayscale-0"
                                                 onError={(e) => {
-                                                    if (e.target.src !== window.location.origin + '/sigiriya-new-hero.png') {
-                                                        e.target.src = '/sigiriya-new-hero.png';
+                                                    const fallback = window.location.origin + getFallbackImage(tour.title);
+                                                    if (e.target.src !== fallback) {
+                                                        e.target.src = getFallbackImage(tour.title);
                                                     }
                                                 }}
                                             />
