@@ -62,7 +62,7 @@ export async function PUT(req, { params }) {
             if (!isAdmin) ticket.status = 'open'; // Re-open if user replies
 
             // Email Notification
-            const recipient = isAdmin ? ticket.user.email : 'admin@srilankantaxi.lk'; // Simplified admin email
+            const recipient = isAdmin ? ticket.user.email : 'admin@airporttaxis.lk'; // Simplified admin email
             const subject = `New Reply on Ticket #${ticket._id.toString().slice(-6)}`;
 
             if (isAdmin) {

@@ -33,7 +33,7 @@ export async function generateMetadata({ params }) {
         openGraph: {
             title: tour.title,
             description: tour.description || '',
-            url: `https://srilankantaxi.lk/tours/${slug}`,
+            url: `https://airporttaxis.lk/tours/${slug}`,
             images: [{ url: tour.heroImage || tour.images?.[0], width: 1200, height: 630, alt: tour.title }]
         }
     };

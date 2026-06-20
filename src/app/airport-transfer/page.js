@@ -8,12 +8,12 @@ export const metadata = {
       'Airport Cab Booking', 'Airport Shuttle Sri Lanka', 'CMB Airport Taxi', 'Private Taxi Sri Lanka'
   ],
   alternates: {
-      canonical: 'https://srilankantaxi.lk/airport-transfer',
+      canonical: 'https://airporttaxis.lk/airport-transfer',
   },
   openGraph: {
       title: 'Airport Transfer Booking | Airport Taxis Sri Lanka',
       description: 'Reliable 24/7 airport transfers from Colombo Airport (CMB). Professional drivers, comfortable vehicles, instant confirmation. Best rates guaranteed.',
-      url: 'https://srilankantaxi.lk/airport-transfer',
+      url: 'https://airporttaxis.lk/airport-transfer',
       siteName: 'Airport Taxis Pvt (Ltd)',
       images: [
           {

@@ -5,12 +5,12 @@ export const metadata = {
     description: 'Explore Sri Lanka with our expertly designed multi-day tour packages. Quality accommodation, private AC transport, and professional guides included. Customizable itineraries for families, couples, and adventurers.',
     keywords: 'Sri Lanka Tour Packages, Multi-day Sri Lanka Tours, Sri Lanka Sightseeing Packages, Customized Sri Lanka Trips, Best Sri Lanka Tour Operator, Sri Lanka Honeymoon Packages, Wildlife Tours Sri Lanka, Cultural Tours Sri Lanka, Adventure Tours Sri Lanka',
     alternates: {
-        canonical: 'https://srilankantaxi.lk/tour-packages',
+        canonical: 'https://airporttaxis.lk/tour-packages',
     },
     openGraph: {
         title: 'Authentic Sri Lanka Tour Packages & Adventures',
         description: 'Complete tour packages with transport, hotels, and expert guides. Experience the best of Sri Lanka with our trusted local team.',
-        url: 'https://srilankantaxi.lk/tour-packages',
+        url: 'https://airporttaxis.lk/tour-packages',
         siteName: 'Airport Taxis Pvt (Ltd)',
         images: [
             {

@@ -69,8 +69,8 @@ export default function ReviewsPage() {
         "@context": "https://schema.org",
         "@type": "LocalBusiness",
         "name": "Airport Taxis Pvt (Ltd)",
-        "image": "https://srilankantaxi.lk/og-image.jpg",
-        "url": "https://srilankantaxi.lk/reviews",
+        "image": "https://airporttaxis.lk/og-image.jpg",
+        "url": "https://airporttaxis.lk/reviews",
         "aggregateRating": {
             "@type": "AggregateRating",
             "ratingValue": combinedStats.rating || "5.0",

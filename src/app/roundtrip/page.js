@@ -5,12 +5,12 @@ export const metadata = {
   description: 'Discover Sri Lanka with our custom round tour packages. Explore ancient Sigiriya, scenic Ella tea estates, wild Yala safaris & pristine beaches. Book today!',
   keywords: 'round tour packages, multi day tour packages, all inclusive round tours, full country tour packages, guided round trips, multi day itinerary planner, complete sightseeing packages, cross country tour package, customized round tours, complete travel itinerary tours with hotel stay included, round trip transportation packages, expert local tour guides, entrance fees included packages, private driver tour itinerary, curated holiday packages, milestone travel packages end to end travel services, meals and stays tour package, multi city vacation logistics',
   alternates: {
-      canonical: 'https://srilankantaxi.lk/roundtrip',
+      canonical: 'https://airporttaxis.lk/roundtrip',
   },
   openGraph: {
       title: 'Sri Lanka Round Tour Packages | Island-Wide Private Drivers & Custom Itineraries',
       description: 'Discover Sri Lanka with our custom round tour packages. Explore ancient Sigiriya, scenic Ella tea estates, wild Yala safaris & pristine beaches. Book today!',
-      url: 'https://srilankantaxi.lk/roundtrip',
+      url: 'https://airporttaxis.lk/roundtrip',
       siteName: 'Airport Taxis Pvt (Ltd)',
       images: [
           {

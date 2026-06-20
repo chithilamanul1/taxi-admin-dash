@@ -22,7 +22,7 @@ export const metadata = {
         'Colombo Airport Transfer', 'Airport Cab Sri Lanka', 'Taxi to Airport Sri Lanka', 'Airport Pickup Sri Lanka',
         'Private Taxi Sri Lanka', 'Airport Shuttle Sri Lanka', 'KDH Van Rental Sri Lanka', 'Sri Lanka Tour Packages',
         'Reliable Taxi Colombo', 'Airport Drop Sri Lanka', 'Colombo Airport Cab', 'Sri Lanka Travel Transport',
-        'srilankantaxi.lk', 'airporttaxis.lk', 'airporttaxicab.lk', 'touris.lk', 'taxiairport.lk', 'tourtaxi.lk',
+        'airporttaxis.lk', 'airporttaxis.lk', 'airporttaxicab.lk', 'touris.lk', 'taxiairport.lk', 'tourtaxi.lk',
         'sri lankan taxi', 'airport taxis', 'airport taxi cab', 'touris', 'taxi airport', 'tour taxi', 'cab'
     ],
     authors: [{ name: 'Airport Taxis Pvt (Ltd)' }],
@@ -124,8 +124,8 @@ const jsonLd = {
             '@type': 'TaxiService',
             name: 'AIRPORT TAXIS (PVT) LTD SRILANKA',
             description: 'Premium airport transfer and private tour service in Sri Lanka across Colombo, Kandy, Galle and more.',
-            url: 'https://srilankantaxi.lk',
-            provider: { '@id': 'https://srilankantaxi.lk/#localbusiness' },
+            url: 'https://airporttaxis.lk',
+            provider: { '@id': 'https://airporttaxis.lk/#localbusiness' },
             hasOfferCatalog: {
                 "@type": "OfferCatalog",
                 "name": "Airport Transfer Services",
@@ -159,12 +159,12 @@ const jsonLd = {
         },
         {
             '@type': 'Organization',
-            '@id': 'https://srilankantaxi.lk/#organization',
+            '@id': 'https://airporttaxis.lk/#organization',
             name: 'AIRPORT TAXIS (PVT) LTD SRILANKA',
-            url: 'https://srilankantaxi.lk',
+            url: 'https://airporttaxis.lk',
             logo: {
                 '@type': 'ImageObject',
-                'url': 'https://srilankantaxi.lk/logo.png',
+                'url': 'https://airporttaxis.lk/logo.png',
                 'width': 512,
                 'height': 512
             },

@@ -10,12 +10,12 @@ export const metadata = {
         'Sri Lanka Private Tours', 'KDH Van Rental Sri Lanka', 'Reliable Taxi Colombo', '24/7 Airport Taxi Sri Lanka', 'Sri Lanka Travel Transport'
     ],
     alternates: {
-        canonical: 'https://srilankantaxi.lk',
+        canonical: 'https://airporttaxis.lk',
     },
     openGraph: {
         title: '🚖 Airport Taxis Sri Lanka - Trusted Airport Transfers & Multi-Day Tours',
         description: 'Reliable 24/7 airport transfers from Colombo Airport (CMB). Professional drivers, comfortable vehicles, instant confirmation. Best rates guaranteed.',
-        url: 'https://srilankantaxi.lk',
+        url: 'https://airporttaxis.lk',
         siteName: 'AIRPORT TAXIS (PVT) LTD SRILANKA',
         images: [
             {
@@ -51,7 +51,7 @@ export default function Home() {
                         "publisher": {
                             "@type": "Organization",
                             "name": "Airport Taxis Pvt (Ltd)",
-                            "logo": "https://srilankantaxi.lk/logo.png"
+                            "logo": "https://airporttaxis.lk/logo.png"
                         }
                     })
                 }}
