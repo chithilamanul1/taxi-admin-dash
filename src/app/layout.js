@@ -1,4 +1,4 @@
-impor)t './globals.css'
+import './globals.css'
 import Navbar from '../components/Navbar'
 import CategoryBar from '../components/CategoryBar'
 import OfferMarquee from '../components/OfferMarquee'
@@ -195,7 +195,7 @@ const getJsonLd = (baseUrl) => ({
             ]
         }
     ]
-}
+})
 
 import { CurrencyProvider } from '../context/CurrencyContext'
 
