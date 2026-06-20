@@ -4,74 +4,7 @@ import React, { useState, useEffect } from 'react'
 import { Clock, MapPin, Users, ArrowRight, Loader2, Binoculars, TreePine, Camera, Shield } from 'lucide-react'
 import Link from 'next/link'
 
-const SAFARI_FALLBACK = [
-    {
-        _id: 'safari-yala',
-        slug: 'yala-national-park-leopard-safari',
-        title: 'Yala National Park Leopard Safari',
-        description: 'Discover Sri Lanka\'s most famous national park with the highest leopard density in the world. Spot elephants, sloth bears, crocodiles, and exotic birds on a thrilling full-day jeep safari.',
-        heroImage: '/yala-new.png',
-        category: 'safari',
-        duration: { days: 1, nights: 0 },
-        destinations: ['Yala'],
-        price: { amount: 85, currency: 'USD', type: 'per-person' },
-    },
-    {
-        _id: 'safari-udawalawe',
-        slug: 'udawalawe-national-park-wildlife-safari',
-        title: 'Udawalawe National Park Wildlife Safari',
-        description: 'Home to over 500 wild elephants, Udawalawe offers an unforgettable safari experience. See herds roaming freely alongside water buffalo, deer, and birds of prey.',
-        heroImage: '/wilpattu-new.png',
-        category: 'safari',
-        duration: { days: 1, nights: 0 },
-        destinations: ['Udawalawe'],
-        price: { amount: 75, currency: 'USD', type: 'per-person' },
-    },
-    {
-        _id: 'safari-minneriya',
-        slug: 'sigiriya-rock-minneriya-safari-from-negombo',
-        title: 'Sigiriya Rock & Minneriya Safari',
-        description: 'Combine the iconic Sigiriya Rock Fortress climb with an evening jeep safari at Minneriya, famous for "The Gathering" — the largest wild elephant congregation in Asia.',
-        heroImage: '/sigiriya-new-hero.png',
-        category: 'safari',
-        duration: { days: 1, nights: 0 },
-        destinations: ['Sigiriya', 'Minneriya'],
-        price: { amount: 95, currency: 'USD', type: 'per-person' },
-    },
-    {
-        _id: 'safari-pinnawala',
-        slug: 'pinnawala-elephant-experience',
-        title: 'Pinnawala Elephant Experience',
-        description: 'Visit the world-renowned Pinnawala Elephant Orphanage and watch rescued elephants bathe in the river. An intimate experience perfect for families and wildlife lovers.',
-        heroImage: '/kandy-new.png',
-        category: 'safari',
-        duration: { days: 1, nights: 0 },
-        destinations: ['Pinnawala'],
-        price: { amount: 55, currency: 'USD', type: 'per-person' },
-    },
-    {
-        _id: 'safari-whale',
-        slug: 'mirissa-whale-watching-expedition',
-        title: 'Mirissa Whale Watching Expedition',
-        description: 'Set sail from Mirissa harbor at dawn for a once-in-a-lifetime encounter with blue whales, sperm whales, and playful dolphins in the Indian Ocean.',
-        heroImage: '/mirissa-new-fix.png',
-        category: 'safari',
-        duration: { days: 1, nights: 0 },
-        destinations: ['Mirissa'],
-        price: { amount: 65, currency: 'USD', type: 'per-person' },
-    },
-    {
-        _id: 'safari-wilpattu',
-        slug: 'wilpattu-national-park-safari',
-        title: 'Wilpattu National Park Safari',
-        description: 'Explore Sri Lanka\'s largest and oldest national park. Wilpattu is known for its unique natural lakes (villus) and sightings of leopards, sloth bears, and spotted deer.',
-        heroImage: '/wilpattu-new.png',
-        category: 'safari',
-        duration: { days: 1, nights: 0 },
-        destinations: ['Wilpattu'],
-        price: { amount: 80, currency: 'USD', type: 'per-person' },
-    },
-]
+import { SAFARI_FALLBACK } from '@/lib/safariData'
 
 export default function SafariClient() {
     const [trips, setTrips] = useState(SAFARI_FALLBACK)

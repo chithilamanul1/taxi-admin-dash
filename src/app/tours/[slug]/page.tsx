@@ -6,6 +6,8 @@ import Tour from '@/models/Tour';
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
 
+import { SAFARI_FALLBACK } from '@/lib/safariData';
+
 async function getTour(slug) {
     try {
         await dbConnect();
@@ -13,11 +15,17 @@ async function getTour(slug) {
         if (tour) {
             return JSON.parse(JSON.stringify(tour));
         }
-        return null;
     } catch (e) {
         console.error("Tour fetch error", e);
-        return null;
     }
+    
+    // Fallback to static safari data if not found in DB
+    const fallbackTour = SAFARI_FALLBACK.find(t => t.slug === slug);
+    if (fallbackTour) {
+        return fallbackTour;
+    }
+
+    return null;
 }
 
 export async function generateMetadata({ params }) {
