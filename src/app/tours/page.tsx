@@ -215,7 +215,7 @@ export default function ToursPage() {
                         <div className="relative z-10 pt-20 px-6 md:px-12 pb-12">
                             <h3 className="text-4xl md:text-5xl font-black text-white drop-shadow-md mb-12">Yala National Park</h3>
                             
-                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
                                 {/* Morning Safari */}
                                 <div className="bg-white rounded-3xl p-6 shadow-[0_8px_30px_rgb(0,0,0,0.08)] border border-slate-100 hover:-translate-y-2 transition-transform duration-300">
                                     <div className="inline-block px-3 py-1 bg-[#FFC107]/20 text-[#D4A000] text-sm font-bold rounded-full mb-4">Half Day</div>
@@ -236,51 +236,13 @@ export default function ToursPage() {
                                 </div>
 
                                 {/* Evening Safari */}
-                                <div className="bg-white rounded-3xl p-6 shadow-[0_8px_30px_rgb(0,0,0,0.08)] border border-slate-100 hover:-translate-y-2 transition-transform duration-300">
+                                <div className="bg-white rounded-3xl p-6 shadow-[0_8px_30px_rgb(0,0,0,0.08)] border border-slate-100 hover:-translate-y-2 transition-transform duration-300 relative">
+                                    <div className="absolute top-0 right-0 bg-[#FFC107] text-[#006064] text-[10px] font-black px-3 py-1.5 tracking-wider rounded-bl-2xl rounded-tr-[1.3rem]">POPULAR</div>
                                     <div className="inline-block px-3 py-1 bg-[#FFC107]/20 text-[#D4A000] text-sm font-bold rounded-full mb-4">Half Day</div>
                                     <h4 className="text-xl font-black text-[#006064] mb-2">Evening Safari</h4>
                                     <div className="flex items-center gap-2 text-slate-500 text-sm mb-5">
                                         <Clock size={16} />
                                         <span>2:30 PM - 6:00 PM</span>
-                                    </div>
-                                    <ul className="space-y-3 mb-8 text-sm font-medium text-slate-600">
-                                        <li className="flex items-start gap-2"><Car size={16} className="text-[#00A99D] shrink-0 mt-0.5" /> 4x4 Safari Jeep</li>
-                                        <li className="flex items-start gap-2"><UserCircle size={16} className="text-[#00A99D] shrink-0 mt-0.5" /> Experienced Driver</li>
-                                        <li className="flex items-start gap-2"><Ticket size={16} className="text-[#00A99D] shrink-0 mt-0.5" /> Park Entry Included</li>
-                                        <li className="flex items-start gap-2"><MapPin size={16} className="text-[#00A99D] shrink-0 mt-0.5" /> Free Pickup/Drop-off</li>
-                                    </ul>
-                                    <Link href="/safari">
-                                        <button className="w-full py-3.5 bg-[#006064] text-white rounded-2xl font-bold hover:bg-[#004D40] transition-colors">Book Now</button>
-                                    </Link>
-                                </div>
-
-                                {/* 3-Hour Quick Safari */}
-                                <div className="bg-white rounded-3xl p-6 shadow-[0_8px_30px_rgb(0,0,0,0.08)] border border-slate-100 hover:-translate-y-2 transition-transform duration-300">
-                                    <div className="inline-block px-3 py-1 bg-[#00A99D]/20 text-[#00897B] text-sm font-bold rounded-full mb-4">3 Hours</div>
-                                    <h4 className="text-xl font-black text-[#006064] mb-2">Quick Safari</h4>
-                                    <div className="flex items-center gap-2 text-slate-500 text-sm mb-5">
-                                        <Clock size={16} />
-                                        <span>Flexible Timing</span>
-                                    </div>
-                                    <ul className="space-y-3 mb-8 text-sm font-medium text-slate-600">
-                                        <li className="flex items-start gap-2"><Car size={16} className="text-[#00A99D] shrink-0 mt-0.5" /> 4x4 Safari Jeep</li>
-                                        <li className="flex items-start gap-2"><UserCircle size={16} className="text-[#00A99D] shrink-0 mt-0.5" /> Experienced Driver</li>
-                                        <li className="flex items-start gap-2"><Ticket size={16} className="text-[#00A99D] shrink-0 mt-0.5" /> Park Entry Included</li>
-                                        <li className="flex items-start gap-2"><MapPin size={16} className="text-[#00A99D] shrink-0 mt-0.5" /> Free Pickup/Drop-off</li>
-                                    </ul>
-                                    <Link href="/safari">
-                                        <button className="w-full py-3.5 bg-[#006064] text-white rounded-2xl font-bold hover:bg-[#004D40] transition-colors">Book Now</button>
-                                    </Link>
-                                </div>
-
-                                {/* Full Day Safari */}
-                                <div className="bg-white rounded-3xl p-6 shadow-[0_15px_40px_rgb(0,0,0,0.12)] border-2 border-[#FFC107] relative hover:-translate-y-2 transition-transform duration-300">
-                                    <div className="absolute top-0 right-0 bg-[#FFC107] text-[#006064] text-[10px] font-black px-3 py-1.5 tracking-wider rounded-bl-2xl rounded-tr-[1.3rem]">POPULAR</div>
-                                    <div className="inline-block px-3 py-1 bg-[#006064]/10 text-[#006064] text-sm font-bold rounded-full mb-4">Full Day</div>
-                                    <h4 className="text-xl font-black text-[#006064] mb-2">1-Day Safari</h4>
-                                    <div className="flex items-center gap-2 text-slate-500 text-sm mb-5">
-                                        <Clock size={16} />
-                                        <span>Full Day Experience</span>
                                     </div>
                                     <ul className="space-y-3 mb-8 text-sm font-medium text-slate-600">
                                         <li className="flex items-start gap-2"><Car size={16} className="text-[#00A99D] shrink-0 mt-0.5" /> 4x4 Safari Jeep</li>
@@ -306,7 +268,7 @@ export default function ToursPage() {
                         <div className="relative z-10 pt-20 px-6 md:px-12 pb-12">
                             <h3 className="text-4xl md:text-5xl font-black text-white drop-shadow-md mb-12">Udawalawe National Park</h3>
                             
-                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
                                 {/* Morning Safari */}
                                 <div className="bg-white rounded-3xl p-6 shadow-[0_8px_30px_rgb(0,0,0,0.08)] border border-slate-100 hover:-translate-y-2 transition-transform duration-300">
                                     <div className="inline-block px-3 py-1 bg-[#FFC107]/20 text-[#D4A000] text-sm font-bold rounded-full mb-4">Half Day</div>
@@ -327,51 +289,13 @@ export default function ToursPage() {
                                 </div>
 
                                 {/* Evening Safari */}
-                                <div className="bg-white rounded-3xl p-6 shadow-[0_8px_30px_rgb(0,0,0,0.08)] border border-slate-100 hover:-translate-y-2 transition-transform duration-300">
+                                <div className="bg-white rounded-3xl p-6 shadow-[0_8px_30px_rgb(0,0,0,0.08)] border border-slate-100 hover:-translate-y-2 transition-transform duration-300 relative">
+                                    <div className="absolute top-0 right-0 bg-[#FFC107] text-[#006064] text-[10px] font-black px-3 py-1.5 tracking-wider rounded-bl-2xl rounded-tr-[1.3rem]">POPULAR</div>
                                     <div className="inline-block px-3 py-1 bg-[#FFC107]/20 text-[#D4A000] text-sm font-bold rounded-full mb-4">Half Day</div>
                                     <h4 className="text-xl font-black text-[#006064] mb-2">Evening Safari</h4>
                                     <div className="flex items-center gap-2 text-slate-500 text-sm mb-5">
                                         <Clock size={16} />
                                         <span>2:30 PM - 6:00 PM</span>
-                                    </div>
-                                    <ul className="space-y-3 mb-8 text-sm font-medium text-slate-600">
-                                        <li className="flex items-start gap-2"><Car size={16} className="text-[#00A99D] shrink-0 mt-0.5" /> 4x4 Safari Jeep</li>
-                                        <li className="flex items-start gap-2"><UserCircle size={16} className="text-[#00A99D] shrink-0 mt-0.5" /> Experienced Driver</li>
-                                        <li className="flex items-start gap-2"><Ticket size={16} className="text-[#00A99D] shrink-0 mt-0.5" /> Park Entry Included</li>
-                                        <li className="flex items-start gap-2"><MapPin size={16} className="text-[#00A99D] shrink-0 mt-0.5" /> Free Pickup/Drop-off</li>
-                                    </ul>
-                                    <Link href="/safari">
-                                        <button className="w-full py-3.5 bg-[#006064] text-white rounded-2xl font-bold hover:bg-[#004D40] transition-colors">Book Now</button>
-                                    </Link>
-                                </div>
-
-                                {/* 3-Hour Quick Safari */}
-                                <div className="bg-white rounded-3xl p-6 shadow-[0_8px_30px_rgb(0,0,0,0.08)] border border-slate-100 hover:-translate-y-2 transition-transform duration-300">
-                                    <div className="inline-block px-3 py-1 bg-[#00A99D]/20 text-[#00897B] text-sm font-bold rounded-full mb-4">3 Hours</div>
-                                    <h4 className="text-xl font-black text-[#006064] mb-2">Quick Safari</h4>
-                                    <div className="flex items-center gap-2 text-slate-500 text-sm mb-5">
-                                        <Clock size={16} />
-                                        <span>Flexible Timing</span>
-                                    </div>
-                                    <ul className="space-y-3 mb-8 text-sm font-medium text-slate-600">
-                                        <li className="flex items-start gap-2"><Car size={16} className="text-[#00A99D] shrink-0 mt-0.5" /> 4x4 Safari Jeep</li>
-                                        <li className="flex items-start gap-2"><UserCircle size={16} className="text-[#00A99D] shrink-0 mt-0.5" /> Experienced Driver</li>
-                                        <li className="flex items-start gap-2"><Ticket size={16} className="text-[#00A99D] shrink-0 mt-0.5" /> Park Entry Included</li>
-                                        <li className="flex items-start gap-2"><MapPin size={16} className="text-[#00A99D] shrink-0 mt-0.5" /> Free Pickup/Drop-off</li>
-                                    </ul>
-                                    <Link href="/safari">
-                                        <button className="w-full py-3.5 bg-[#006064] text-white rounded-2xl font-bold hover:bg-[#004D40] transition-colors">Book Now</button>
-                                    </Link>
-                                </div>
-
-                                {/* Full Day Safari */}
-                                <div className="bg-white rounded-3xl p-6 shadow-[0_15px_40px_rgb(0,0,0,0.12)] border-2 border-[#FFC107] relative hover:-translate-y-2 transition-transform duration-300">
-                                    <div className="absolute top-0 right-0 bg-[#FFC107] text-[#006064] text-[10px] font-black px-3 py-1.5 tracking-wider rounded-bl-2xl rounded-tr-[1.3rem]">POPULAR</div>
-                                    <div className="inline-block px-3 py-1 bg-[#006064]/10 text-[#006064] text-sm font-bold rounded-full mb-4">Full Day</div>
-                                    <h4 className="text-xl font-black text-[#006064] mb-2">1-Day Safari</h4>
-                                    <div className="flex items-center gap-2 text-slate-500 text-sm mb-5">
-                                        <Clock size={16} />
-                                        <span>Full Day Experience</span>
                                     </div>
                                     <ul className="space-y-3 mb-8 text-sm font-medium text-slate-600">
                                         <li className="flex items-start gap-2"><Car size={16} className="text-[#00A99D] shrink-0 mt-0.5" /> 4x4 Safari Jeep</li>
