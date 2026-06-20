@@ -100,15 +100,16 @@ export default function TourPackagesClient() {
                                     <div key={tour.slug || tour._id || index} className="bg-white dark:bg-zinc-900 overflow-hidden transition-all duration-500 hover:-translate-y-2 group flex flex-col h-full border border-slate-200 dark:border-zinc-800 shadow-xl rounded-3xl">
                                         {/* Image Section */}
                                         <div className="relative h-80 overflow-hidden shrink-0">
-                                            {tour.image || tour.heroImage || (tour.images && tour.images.length > 0) ? (
-                                                <img
-                                                    src={tour.image || tour.heroImage || tour.images?.[0]}
-                                                    alt={tour.title}
-                                                    className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110 grayscale group-hover:grayscale-0"
-                                                />
-                                            ) : (
-                                                <div className="absolute inset-0 bg-black/10 dark:bg-white/10 flex items-center justify-center text-black/20 dark:text-white/20 uppercase font-black">No Image</div>
-                                            )}
+                                            <img
+                                                src={tour.image || tour.heroImage || tour.images?.[0] || '/sigiriya-new-hero.png'}
+                                                alt={tour.title}
+                                                className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110 grayscale group-hover:grayscale-0"
+                                                onError={(e) => {
+                                                    if (e.target.src !== window.location.origin + '/sigiriya-new-hero.png') {
+                                                        e.target.src = '/sigiriya-new-hero.png';
+                                                    }
+                                                }}
+                                            />
                                             <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent" />
 
                                             <div className="absolute top-6 left-6 flex flex-wrap gap-2">
