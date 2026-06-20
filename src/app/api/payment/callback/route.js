@@ -85,11 +85,14 @@ export async function GET(request) {
                 await sendBookingConfirmation(booking, false).catch(err => console.error("Error sending booking confirmation:", err));
                 await sendPaymentConfirmation(booking).catch(err => console.error("Error sending receipt:", err));
 
-                // Notify Owner
+                const isPartial = booking.paymentType === 'partial';
                 await sendOwnerNotification('Payment Received', {
                     BookingId: booking._id.toString().slice(-8),
                     Customer: booking.customerName,
-                    Amount: `${booking.currency || 'LKR'} ${((booking.currency && booking.currency !== 'LKR' && booking.displayPaidAmount) ? booking.displayPaidAmount : (booking.paidAmount || 0)).toLocaleString()}`,
+                    TotalAmount: `${booking.currency || 'LKR'} ${((booking.currency && booking.currency !== 'LKR' && booking.displayPrice) ? booking.displayPrice : (booking.totalPrice || 0)).toLocaleString()}`,
+                    PaidAmount: `${booking.currency || 'LKR'} ${((booking.currency && booking.currency !== 'LKR' && booking.displayPaidAmount) ? booking.displayPaidAmount : (booking.paidAmount || 0)).toLocaleString()}`,
+                    BalanceAmount: `${booking.currency || 'LKR'} ${((booking.currency && booking.currency !== 'LKR' && booking.displayBalanceAmount) ? booking.displayBalanceAmount : (booking.balanceAmount || 0)).toLocaleString()}`,
+                    PaymentStatus: isPartial ? 'Advance Payment (Half)' : 'Full Payment',
                     Reference: verification.data.txnId || reqid,
                     Type: booking.type || 'Transfer'
                 }).catch(console.error);

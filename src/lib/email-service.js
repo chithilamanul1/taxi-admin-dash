@@ -54,11 +54,18 @@ const getPremiumTemplate = (content, title = 'Airport Taxis Pvt (Ltd)') => `
     <![endif]-->
     <style>
         @media print {
-            body { background-color: #ffffff !important; -webkit-print-color-adjust: exact; }
+            body { background-color: #ffffff !important; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
             table, td, tr, div { background-color: #ffffff !important; background: none !important; color: #000000 !important; }
             h1, h2, h3, p, span, a { color: #000000 !important; }
             table { border-color: #cccccc !important; }
             td { border-color: #cccccc !important; }
+            .print-header { background: #ffffff !important; color: #000000 !important; padding: 20px 0 !important; }
+            .print-header h1 { color: #000000 !important; }
+            .print-header p { color: #666666 !important; }
+            .print-header div { display: none !important; }
+            .print-alert-banner { background-color: #f3f4f6 !important; color: #000000 !important; border: 2px solid #000000 !important; border-bottom: none !important; }
+            .print-table { background-color: transparent !important; border: 2px solid #000000 !important; }
+            .print-table td { background-color: transparent !important; color: #000000 !important; border-bottom: 1px solid #000000 !important; }
             .no-print { display: none !important; }
         }
     </style>
@@ -71,7 +78,7 @@ const getPremiumTemplate = (content, title = 'Airport Taxis Pvt (Ltd)') => `
                     
                     <!-- Premium Header with Gradient -->
                     <tr>
-                        <td style="background: linear-gradient(135deg, ${COLORS.primary} 0%, #047857 50%, ${COLORS.primary} 100%); padding: 40px 30px; text-align: center; position: relative;">
+                        <td class="print-header" style="background: linear-gradient(135deg, ${COLORS.primary} 0%, #047857 50%, ${COLORS.primary} 100%); padding: 40px 30px; text-align: center; position: relative;">
                             <!-- Gold Accent Line -->
                             <div style="width: 60px; height: 3px; background: linear-gradient(90deg, transparent, ${COLORS.gold}, transparent); margin: 0 auto 20px;"></div>
                             
@@ -1317,12 +1324,12 @@ export async function sendOwnerNotification(subject, details) {
         const content = `
         <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom: 20px;">
         <tr>
-            <td style="background-color: ${COLORS.primary}; color: #ffffff; padding: 12px 16px; font-size: 18px; font-weight: bold;">
+            <td class="print-alert-banner" style="background-color: ${COLORS.primary}; color: #ffffff; padding: 12px 16px; font-size: 18px; font-weight: bold;">
                 SYSTEM ALERT: ${subject.toUpperCase()}
             </td>
         </tr>
             </table >
-            <table width="100%" cellpadding="10" cellspacing="0" style="border: 1px solid ${COLORS.border}; background-color: rgba(15, 23, 42, 0.5);">
+            <table class="print-table" width="100%" cellpadding="10" cellspacing="0" style="border: 1px solid ${COLORS.border}; background-color: rgba(15, 23, 42, 0.5);">
                 ${Object.entries(details).map(([key, value]) => `
                     <tr>
                         <td width="30%" style="color: ${COLORS.textMuted}; border-bottom: 1px solid ${COLORS.border}; font-size: 12px; text-transform: uppercase;">${key.replace(/([A-Z])/g, ' $1')}</td>
@@ -1331,7 +1338,9 @@ export async function sendOwnerNotification(subject, details) {
                 `).join('')}
             </table>
             <br/>
-            ${components.button('Open Admin Panel', `${BASE_URL}/admin`)}
+            <div class="no-print">
+                ${components.button('Open Admin Panel', `${BASE_URL}/admin`)}
+            </div>
 `;
 
         await transporter.sendMail({
