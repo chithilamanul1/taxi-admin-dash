@@ -69,6 +69,83 @@ const SEED_TOURS = [
         description: "Set sail to sea to witness the Blue Whales, the largest animals on earth. A once-in-a-lifetime experience off the coast of Mirissa.",
         isActive: true,
         sortOrder: 6
+    },
+    {
+        title: "Yala Safari Tour – Block 1",
+        slug: "yala-safari-tour-block-1",
+        category: "safari",
+        duration: { days: 1, nights: 0 },
+        price: { amount: 25000, currency: 'LKR', type: 'from' },
+        heroImage: "https://images.unsplash.com/photo-1614088661608-410a8ea944f2?q=80&w=1600&auto=format&fit=crop",
+        description: "Experience the most popular sector of Yala National Park, famous for its high density of leopards. Block 1 offers a diverse landscape of open parkland, dense jungle, and picturesque lagoons, providing exceptional opportunities for wildlife photography and thrilling encounters.",
+        isActive: true,
+        sortOrder: 7
+    },
+    {
+        title: "Yala Safari Tour – Block 5",
+        slug: "yala-safari-tour-block-5",
+        category: "safari",
+        duration: { days: 1, nights: 0 },
+        price: { amount: 22000, currency: 'LKR', type: 'from' },
+        heroImage: "https://images.unsplash.com/photo-1588241050774-6045f2bd648b?q=80&w=1600&auto=format&fit=crop",
+        description: "For a quieter, more serene safari experience away from the crowds, Block 5 is the perfect choice. Characterized by lush forests and scenic waterholes, this block offers excellent bird watching and regular sightings of elephants, deer, and occasional leopards.",
+        isActive: true,
+        sortOrder: 8
+    },
+    {
+        title: "Lunugamvehera Safari",
+        slug: "lunugamvehera-safari",
+        category: "safari",
+        duration: { days: 1, nights: 0 },
+        price: { amount: 20000, currency: 'LKR', type: 'from' },
+        heroImage: "https://images.unsplash.com/photo-1549488398-aa66870ac45b?q=80&w=1600&auto=format&fit=crop",
+        description: "Explore the untouched wilderness of Lunugamvehera National Park, an important corridor for elephants migrating between Yala and Udawalawe. This park boasts stunning landscapes around its vast reservoir and is a haven for elephants and diverse birdlife.",
+        isActive: true,
+        sortOrder: 9
+    },
+    {
+        title: "Yala Morning Tour (4 Hrs)",
+        slug: "yala-morning-tour-4hrs",
+        category: "safari",
+        duration: { days: 1, nights: 0 },
+        price: { amount: 18000, currency: 'LKR', type: 'from' },
+        heroImage: "https://images.unsplash.com/photo-1614088661608-410a8ea944f2?q=80&w=1600&auto=format&fit=crop",
+        description: "Start your day with the golden sunrise over the wilderness. This 4-hour morning safari is ideal for witnessing predators on the prowl and the jungle coming to life as the morning mist clears. Perfect for early risers and photography enthusiasts.",
+        isActive: true,
+        sortOrder: 10
+    },
+    {
+        title: "Yala Morning Tour (6 Hrs)",
+        slug: "yala-morning-tour-6hrs",
+        category: "safari",
+        duration: { days: 1, nights: 0 },
+        price: { amount: 25000, currency: 'LKR', type: 'from' },
+        heroImage: "https://images.unsplash.com/photo-1588241050774-6045f2bd648b?q=80&w=1600&auto=format&fit=crop",
+        description: "An extended morning adventure for wildlife enthusiasts. Spend 6 hours exploring deeper into the park, maximizing your chances of encountering the elusive Sri Lankan leopard, sloth bears, and large herds of elephants at watering holes.",
+        isActive: true,
+        sortOrder: 11
+    },
+    {
+        title: "Yala Evening Tour (4 Hrs)",
+        slug: "yala-evening-tour-4hrs",
+        category: "safari",
+        duration: { days: 1, nights: 0 },
+        price: { amount: 18000, currency: 'LKR', type: 'from' },
+        heroImage: "https://images.unsplash.com/photo-1549488398-aa66870ac45b?q=80&w=1600&auto=format&fit=crop",
+        description: "Witness the dramatic transition as the day cools down. The 4-hour evening safari is one of the best times to spot leopards emerging from the shade and elephants making their way to water sources against a spectacular sunset backdrop.",
+        isActive: true,
+        sortOrder: 12
+    },
+    {
+        title: "Yala Full Day Tour",
+        slug: "yala-full-day-tour",
+        category: "safari",
+        duration: { days: 1, nights: 0 },
+        price: { amount: 45000, currency: 'LKR', type: 'from' },
+        heroImage: "https://images.unsplash.com/photo-1614088661608-410a8ea944f2?q=80&w=1600&auto=format&fit=crop",
+        description: "Immerse yourself completely in the wild with a comprehensive Full Day Safari. Spend the entire day tracking diverse wildlife, enjoy a picnic lunch amidst nature, and experience the changing moods of the jungle from dawn till dusk.",
+        isActive: true,
+        sortOrder: 13
     }
 ];
 
