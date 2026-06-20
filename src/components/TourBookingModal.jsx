@@ -47,12 +47,7 @@ const TourBookingModal = ({ isOpen, onClose, tourTitle, tourId, duration, price,
             setIsLoading(false);
         }
     };
-        } catch (err) {
-            setError(err.message || 'Something went wrong. Please try again.');
-        } finally {
-            setIsLoading(false);
-        }
-    };
+
 
     if (isSuccess) {
         return (
