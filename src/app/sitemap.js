@@ -1,5 +1,10 @@
-export default function sitemap() {
-    const baseUrl = 'https://airporttaxis.lk';
+import { headers } from 'next/headers';
+
+export default async function sitemap() {
+    const headersList = await headers();
+    const host = headersList.get('host') || 'airporttaxis.lk';
+    const protocol = host.includes('localhost') ? 'http' : 'https';
+    const baseUrl = `${protocol}://${host}`;
 
     const { routes } = require('../lib/routes');
 

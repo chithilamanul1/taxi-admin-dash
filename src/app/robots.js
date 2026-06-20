@@ -1,4 +1,11 @@
-export default function robots() {
+import { headers } from 'next/headers';
+
+export default async function robots() {
+    const headersList = await headers();
+    const host = headersList.get('host') || 'airporttaxis.lk';
+    const protocol = host.includes('localhost') ? 'http' : 'https';
+    const baseUrl = `${protocol}://${host}`;
+
     return {
         rules: [
             {
@@ -11,6 +18,6 @@ export default function robots() {
                 allow: '/',
             }
         ],
-        sitemap: 'https://airporttaxis.lk/sitemap.xml',
+        sitemap: `${baseUrl}/sitemap.xml`,
     }
 }
