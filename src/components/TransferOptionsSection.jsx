@@ -42,16 +42,16 @@ export default function TransferOptionsSection() {
                     </p>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
                     {options.map((option, idx) => (
-                        <div key={idx} className="bg-slate-50 dark:bg-[#0a0a0a] rounded-[2rem] p-8 border border-slate-100 dark:border-white/5 hover:border-emerald-600/30 dark:hover:border-[#FACC15]/30 hover:shadow-2xl transition-all duration-300 group">
-                            <div className="w-14 h-14 bg-[#FACC15] rounded-2xl flex items-center justify-center mb-6 shadow-lg shadow-yellow-500/20 group-hover:scale-110 transition-transform">
-                                <option.icon size={24} className="text-black" />
+                        <div key={idx} className="bg-slate-50 dark:bg-[#0a0a0a] rounded-[1.5rem] md:rounded-[2rem] p-5 md:p-8 border border-slate-100 dark:border-white/5 hover:border-emerald-600/30 dark:hover:border-[#FACC15]/30 hover:shadow-2xl transition-all duration-300 group">
+                            <div className="w-12 h-12 md:w-14 md:h-14 bg-[#FACC15] rounded-2xl flex items-center justify-center mb-4 md:mb-6 shadow-lg shadow-yellow-500/20 group-hover:scale-110 transition-transform">
+                                <option.icon size={20} className="text-black md:w-6 md:h-6 w-5 h-5" />
                             </div>
-                            <h3 className="text-xl font-black text-emerald-950 dark:text-white uppercase tracking-tight mb-4">
+                            <h3 className="text-lg md:text-xl font-black text-emerald-950 dark:text-white uppercase tracking-tight mb-2 md:mb-4">
                                 {option.title}
                             </h3>
-                            <p className="text-slate-500 dark:text-slate-400 text-sm leading-relaxed font-medium">
+                            <p className="text-slate-500 dark:text-slate-400 text-xs md:text-sm leading-relaxed font-medium">
                                 {option.desc}
                             </p>
                         </div>
