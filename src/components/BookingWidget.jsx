@@ -809,7 +809,7 @@ const BookingWidgetContent = ({ defaultTab = 'pickup', onTabChange }) => {
     const isAirportService = ['pickup', 'drop'].includes(activeTab);
     const pricingCategory = isAirportService ? 'airport-transfer' : 'ride-now';
 
-    const isStep2Disabled = !vehicle || !passengerCount.adults || passengerCount.adults < 1;
+    const isStep2Disabled = !vehicle || !passengerCount.adults || passengerCount.adults < 1 || passengerCount.luggage < 1 || passengerCount.handLuggage < 1 || !isPassengerVerified;
     const isCheckoutDisabled = !distance || isStep2Disabled;
 
     return (
@@ -1185,6 +1185,17 @@ const BookingWidgetContent = ({ defaultTab = 'pickup', onTabChange }) => {
                                                     );
                                                 })}
                                             </div>
+                                            <label className="flex items-center gap-3 mt-4 p-3 bg-emerald-50/50 dark:bg-emerald-900/10 border border-emerald-100 dark:border-emerald-900/30 rounded-xl cursor-pointer">
+                                                <input 
+                                                    type="checkbox" 
+                                                    className="w-4 h-4 text-emerald-600 rounded focus:ring-emerald-500 cursor-pointer"
+                                                    checked={isPassengerVerified}
+                                                    onChange={(e) => setIsPassengerVerified(e.target.checked)}
+                                                />
+                                                <span className="text-[10px] font-black uppercase tracking-widest text-emerald-900 dark:text-emerald-300">
+                                                    I confirm these details are accurate
+                                                </span>
+                                            </label>
                                         </div>
                                         <div className="mb-6 mt-6">
                                             <div className="flex items-center justify-between mb-4 px-1">
@@ -1266,15 +1277,22 @@ const BookingWidgetContent = ({ defaultTab = 'pickup', onTabChange }) => {
                                                         dateTimeRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
                                                         return;
                                                     }
-                                                    if (!passengerCount.adults || passengerCount.adults < 1) {
-                                                        alert("Please select at least one adult passenger to proceed");
+                                                    if (!passengerCount.adults || passengerCount.adults < 1 || passengerCount.luggage < 1 || passengerCount.handLuggage < 1) {
+                                                        alert("Please enter passenger and luggage count to proceed");
+                                                        const passengerContainer = document.getElementById('booking-widget-passengers');
+                                                        if (passengerContainer) passengerContainer.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                                                        return;
+                                                    }
+                                                    if (!isPassengerVerified) {
+                                                        alert("Please confirm that your passenger and luggage details are accurate.");
                                                         const passengerContainer = document.getElementById('booking-widget-passengers');
                                                         if (passengerContainer) passengerContainer.scrollIntoView({ behavior: 'smooth', block: 'center' });
                                                         return;
                                                     }
                                                     setStep(3);
                                                 }}
-                                                className="flex-1 flex items-center justify-center gap-3 font-black text-xs uppercase tracking-widest py-4 rounded-2xl transition-all active:scale-[0.98] lg:hidden bg-gradient-to-r from-yellow-400 to-orange-500 hover:from-yellow-500 hover:to-orange-600 text-white hover:-translate-y-0.5" 
+                                                disabled={isStep2Disabled}
+                                                className={`flex-1 flex items-center justify-center gap-3 font-black text-xs uppercase tracking-widest py-4 rounded-2xl transition-all lg:hidden ${isStep2Disabled ? 'bg-slate-100 dark:bg-zinc-800 text-slate-400 dark:text-slate-500 cursor-not-allowed border border-slate-200 dark:border-zinc-700' : 'active:scale-[0.98] bg-gradient-to-r from-yellow-400 to-orange-500 hover:from-yellow-500 hover:to-orange-600 text-white hover:-translate-y-0.5'}`} 
                                                 aria-label="Continue to review"
                                             >
                                                 Continue to Review <ArrowRight size={16} strokeWidth={3}/>
