@@ -187,7 +187,7 @@ export default function TourPackageDetailsClient({ tour }) {
                         <div className="grid grid-cols-2 md:grid-cols-4 bg-white dark:bg-[#0a0a0a] p-0 border border-slate-100 dark:border-white/10 rounded-[2rem] overflow-hidden shadow-xl">
                             {[
                                 { icon: Users, label: 'Group', val: 'Private Only' },
-                                { icon: Navigation, label: 'Transit', val: '{isSafari ? 'Open Safari Jeep' : 'Luxury AC'}' },
+                                { icon: Navigation, label: 'Transit', val: isSafari ? 'Open Safari Jeep' : 'Luxury AC' },
                                 { icon: Hotel, label: 'Hotels', val: '3-5 Star' },
                                 { icon: ShieldCheck, label: 'Status', val: 'Verified', color: 'text-black' }
                             ].map((stat, i) => (
