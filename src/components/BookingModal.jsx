@@ -111,6 +111,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
         arrivalDate: initialData.arrivalDate || '',
         returnDate: initialData.returnDate || '',
         returnTime: initialData.returnTime || '',
+        waitingHours: initialData.waitingHours || 0,
         notes: initialData.notes || '',
         duration: initialData.duration || '',
         paymentMethod: 'cash',
@@ -234,18 +235,21 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
 
 
     // Initialize State from initialData
+    const isInitializedRef = useRef(false);
+
     useEffect(() => {
-        if (isOpen) {
+        if (isOpen && !isInitializedRef.current) {
             setFormData(prev => ({ 
                 ...prev, 
                 ...initialData,
                 pickup: initialData.pickup || prev.pickup,
                 dropoff: initialData.drop || initialData.dropoff || prev.dropoff,
                 vehicle: initialData.vehicle || prev.vehicle,
-                passengerCount: { ...prev.passengerCount, ...(initialData.passengerCount || {}) },
+                passengerCount: Object.keys(prev.passengerCount || {}).length > 0 && prev.passengerCount.adults > 0 ? prev.passengerCount : { ...prev.passengerCount, ...(initialData.passengerCount || {}) },
                 waypoints: initialData.waypoints || prev.waypoints,
+                waitingHours: initialData.waitingHours !== undefined ? initialData.waitingHours : prev.waitingHours,
                 roundTripPackageId: initialData.roundTripPackageId || prev.roundTripPackageId,
-                hasNameBoard: !isAirportService ? false : ((initialData.hasNameBoard === true || initialData.hasNameBoard === false) ? initialData.hasNameBoard : null)
+                hasNameBoard: !isAirportService ? false : (prev.hasNameBoard !== null ? prev.hasNameBoard : ((initialData.hasNameBoard === true || initialData.hasNameBoard === false) ? initialData.hasNameBoard : null))
             }));
             
             setIsVehicleExpanded(!initialData.vehicle);
@@ -258,6 +262,9 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                 setCouponInput(initialData.couponCode);
                 handleApplyCoupon(initialData.couponCode, initialData.pickup || formData.pickup, initialData.dropoff || formData.dropoff);
             }
+            isInitializedRef.current = true;
+        } else if (!isOpen) {
+            isInitializedRef.current = false;
         }
     }, [isOpen, initialData, isAirportService]);
 
@@ -402,7 +409,8 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
 
             const surcharges = calculateSurcharges({
                 hasNameBoard: formData.hasNameBoard,
-                nameBoardPrice: pricingSettings?.nameBoardPrice
+                nameBoardPrice: pricingSettings?.nameBoardPrice,
+                waitingHours: formData.waitingHours
             }, vehicleData);
 
             // Traffic Surge Calculation
@@ -632,18 +640,8 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
             if (!formData.pickup) newErrors.pickup = true;
             if (!formData.dropoff) newErrors.dropoff = true;
             
-            if (isAirportPickup) {
-                if (formData.hasNameBoard === null) newErrors.hasNameBoard = true;
-                if (!formData.flightNumber) newErrors.flightNumber = true;
-                if (!formData.flightArrivalTime) newErrors.flightArrivalTime = true;
-                if (formData.hasNameBoard && !formData.nameBoardText) newErrors.nameBoardText = true;
-            }
+            // Flight Details & Name Board are optional
 
-            // Enforce luggage selection and adult count (Hard Stop)
-            if (formData.tripType !== 'tour') {
-                if (!formData.passengerCount.luggage || formData.passengerCount.luggage < 1) newErrors.luggage = true;
-                if (!formData.passengerCount.handLuggage || formData.passengerCount.handLuggage < 1) newErrors.handLuggage = true;
-            }
             if (!formData.passengerCount.adults || formData.passengerCount.adults < 1) newErrors.adults = true;
         }
         
@@ -657,8 +655,8 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
         setErrors(newErrors);
         
         if (Object.keys(newErrors).length > 0) {
-            if (newErrors.adults || newErrors.luggage || newErrors.handLuggage) {
-                alert(formData.tripType === 'tour' ? "Please enter passenger count to proceed" : "Please enter passenger and luggage count to proceed");
+            if (newErrors.adults) {
+                alert("Please select at least one adult passenger to proceed.");
                 if (passengerRef.current) {
                     passengerRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
                     return false;
@@ -692,17 +690,13 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                 alert("Please fill all required fields in Step 1.");
                 return;
             }
-            if ((Number(formData.passengerCount?.adults) || 0) === 0 && (formData.tripType === 'tour' || (Number(formData.passengerCount?.luggage) || 0) === 0)) {
-                setErrors(prev => ({ ...prev, adults: true, luggage: formData.tripType !== 'tour' }));
-                alert(formData.tripType === 'tour' ? "Please enter passenger count to proceed" : "Please enter passenger and luggage count to proceed");
+            if ((Number(formData.passengerCount?.adults) || 0) === 0) {
+                setErrors(prev => ({ ...prev, adults: true }));
+                alert("Please select at least one adult passenger to proceed");
                 passengerRef.current?.scrollIntoView({ behavior: 'smooth' });
                 return;
             }
-            if (!isPassengerVerified) {
-                alert("Please confirm that your passenger and luggage details are accurate.");
-                passengerRef.current?.scrollIntoView({ behavior: 'smooth' });
-                return;
-            }
+
             setErrors({});
             setStep(2);
         } else if (step === 2 && validateForm(2)) setStep(3);
@@ -984,17 +978,6 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                         );
                                     })}
                                 </div>
-                                <label className="flex items-center gap-3 mt-4 p-3 bg-blue-50/50 dark:bg-blue-900/10 border border-blue-100 dark:border-blue-900/30 rounded-xl cursor-pointer">
-                                    <input 
-                                        type="checkbox" 
-                                        className="w-4 h-4 text-blue-600 rounded focus:ring-blue-500 cursor-pointer"
-                                        checked={isPassengerVerified}
-                                        onChange={(e) => setIsPassengerVerified(e.target.checked)}
-                                    />
-                                    <span className="text-[10px] font-black uppercase tracking-widest text-blue-900 dark:text-blue-300">
-                                        I confirm these details are accurate
-                                    </span>
-                                </label>
                             </div>
 
                             <div className="space-y-10 pt-10 border-t border-slate-100 dark:border-white/10">
@@ -1219,7 +1202,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                                 countrySelectorStyleProps={{
                                                     buttonClassName: "!bg-transparent !border-none !h-16 !pl-6 !pr-2 hover:!bg-slate-100/50 dark:hover:!bg-white/5 !transition-colors !rounded-l-3xl",
                                                 }}
-                                                className={`w-full bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-3xl flex items-center transition-all overflow-hidden ${errors[f.key] ? 'border-red-500' : ''}`}
+                                                className={`w-full bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-3xl flex items-center transition-all overflow-hidden ${errors[f.key] ? '!border-red-500 ring-2 ring-red-500/50 animate-shake' : ''}`}
                                             />
                                         ) : (
                                             <input
@@ -1235,7 +1218,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                                         return updated;
                                                     });
                                                 }}
-                                                className={`w-full h-16 bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 px-10 rounded-3xl outline-none font-black text-black dark:text-white placeholder:text-slate-700 dark:placeholder:text-slate-300 text-sm uppercase tracking-widest ${errors[f.key] ? 'border-red-500' : ''}`}
+                                                className={`w-full h-16 bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 px-10 rounded-3xl outline-none font-black text-black dark:text-white placeholder:text-slate-700 dark:placeholder:text-slate-300 text-sm uppercase tracking-widest ${errors[f.key] ? '!border-red-500 ring-2 ring-red-500/50 animate-shake' : ''}`}
                                                 placeholder={f.placeholder}
                                             />
                                         )}

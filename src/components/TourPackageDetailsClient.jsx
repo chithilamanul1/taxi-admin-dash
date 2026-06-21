@@ -224,6 +224,25 @@ export default function TourPackageDetailsClient({ tour }) {
                             </div>
                         </section>
 
+                        {/* Image Gallery Section */}
+                        {tour.images && tour.images.length > 0 && (
+                            <section className="bg-white border border-slate-100 dark:border-white/10 shadow-xl p-8 md:p-12 rounded-[2rem] mb-12">
+                                <div className="flex items-center gap-4 mb-8">
+                                    <div className="w-2 h-8 bg-[#FACC15] border border-black"></div>
+                                    <h2 className="text-3xl font-black text-emerald-950 dark:text-white uppercase tracking-tight">
+                                        Tour Gallery
+                                    </h2>
+                                </div>
+                                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+                                    {tour.images.map((img, idx) => (
+                                        <div key={idx} className="aspect-[4/3] rounded-2xl overflow-hidden border-4 border-black group">
+                                            <img src={img} alt={`${tour.title} - Image ${idx + 1}`} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
+                                        </div>
+                                    ))}
+                                </div>
+                            </section>
+                        )}
+
                         {/* Visual Route Section */}
                         <section className="bg-white border border-slate-100 dark:border-white/10 shadow-xl p-8 md:p-12 rounded-[2rem]">
                             <div className="flex items-center gap-4 mb-10">
