@@ -109,9 +109,10 @@ export default function DayTripsClient() {
                                         alt={trip.title}
                                         className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110 grayscale group-hover:grayscale-0"
                                         onError={(e) => {
-                                            const fallback = window.location.origin + getFallbackImage(trip.title);
-                                            if (e.target.src !== fallback) {
-                                                e.target.src = getFallbackImage(trip.title);
+                                            const fallbackUrl = getFallbackImage(trip.title);
+                                            const finalFallback = fallbackUrl.startsWith('http') ? fallbackUrl : window.location.origin + fallbackUrl;
+                                            if (e.target.src !== finalFallback && e.target.src !== fallbackUrl) {
+                                                e.target.src = fallbackUrl;
                                             }
                                         }}
                                     />

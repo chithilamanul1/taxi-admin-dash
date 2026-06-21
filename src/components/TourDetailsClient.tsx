@@ -65,6 +65,7 @@ export default function TourDetailsClient({ tour }) {
 
     // Helper for icons mapping
     const getIcon = (name: string) => {
+        const isSafari = tour.title?.toLowerCase().includes('safari') || tour.category?.toLowerCase() === 'safari' || tour.title?.toLowerCase().includes('yala') || tour.title?.toLowerCase().includes('udawalawe') || tour.title?.toLowerCase().includes('minneriya');
         const icons: { [key: string]: React.ReactNode } = {
             MapPin: <MapPin size={18} />,
             Ship: <Ship size={18} />,
@@ -171,23 +172,23 @@ export default function TourDetailsClient({ tour }) {
                     {/* Left Column (8/12) */}
                     <div className="lg:col-span-8 space-y-12">
                         {/* Quick Stats bar */}
-                        <div className="grid grid-cols-2 md:grid-cols-4 bg-black p-0 border-[4px] border-black rounded-3xl overflow-hidden">
-                            <div className="bg-white p-6 border-r-2 border-b-2 md:border-b-0 border-slate-100 flex flex-col items-center text-center gap-2">
+                        <div className="grid grid-cols-2 md:grid-cols-4 bg-white dark:bg-[#0a0a0a] p-0 border border-slate-100 dark:border-white/10 rounded-[2rem] overflow-hidden shadow-xl">
+                            <div className="bg-slate-50 dark:bg-white/5 p-6 border-r border-b md:border-b-0 border-slate-200 dark:border-white/10 flex flex-col items-center text-center gap-2 transition-colors">
                                 <Clock size={20} className="text-black" />
                                 <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Duration</span>
                                 <span className="text-sm font-black text-black uppercase">{tour.duration?.days ? `${tour.duration.days} Days` : tour.duration}</span>
                             </div>
-                            <div className="bg-white p-6 border-b-2 md:border-b-0 md:border-r-2 border-slate-100 flex flex-col items-center text-center gap-2">
+                            <div className="bg-slate-50 dark:bg-white/5 p-6 border-b md:border-b-0 md:border-r border-slate-200 dark:border-white/10 flex flex-col items-center text-center gap-2 transition-colors">
                                 <Navigation size={20} className="text-black" />
                                 <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Nature</span>
-                                <span className="text-sm font-black text-black uppercase">Private AC</span>
+                                <span className="text-sm font-black text-black uppercase">{isSafari ? 'Open Safari Jeep' : 'Private AC'}</span>
                             </div>
-                            <div className="bg-white p-6 border-r-2 border-slate-100 flex flex-col items-center text-center gap-2">
+                            <div className="bg-slate-50 dark:bg-white/5 p-6 border-r border-slate-200 dark:border-white/10 flex flex-col items-center text-center gap-2 transition-colors">
                                 <ShieldCheck size={20} className="text-black" />
                                 <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Security</span>
                                 <span className="text-sm font-black text-black uppercase">Fully Insured</span>
                             </div>
-                            <div className="bg-white p-6 flex flex-col items-center text-center gap-2">
+                            <div className="bg-slate-50 dark:bg-white/5 p-6 flex flex-col items-center text-center gap-2 transition-colors">
                                 <Star size={20} className="text-[#FACC15]" fill="currentColor" />
                                 <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Rating</span>
                                 <span className="text-sm font-black text-black uppercase">5.0 Star</span>
@@ -195,20 +196,20 @@ export default function TourDetailsClient({ tour }) {
                         </div>
 
                         {/* Overview */}
-                        <section className="bg-white border-[8px] border-black p-8 md:p-12 rounded-none">
+                        <section className="bg-white border border-slate-100 dark:border-white/10 shadow-lg p-8 md:p-12 rounded-[2rem]">
                             <div className="flex items-center gap-4 mb-8">
-                                <div className="w-4 h-8 bg-[#FACC15] border-2 border-black"></div>
-                                <h2 className="text-3xl font-black text-black uppercase tracking-tighter">
+                                <div className="w-2 h-8 bg-[#FACC15] rounded-full"></div>
+                                <h2 className="text-3xl font-black text-emerald-950 dark:text-white uppercase tracking-tight">
                                     Tour Overview
                                 </h2>
                             </div>
                             <div className="prose prose-slate max-w-none text-slate-800 leading-relaxed text-lg mb-10 font-medium font-sans">
                                 {tour.description}
                             </div>
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-0 border-t-[8px] border-black">
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-0 border-t-0 mt-6">
                                 {tour.highlights?.map((h, i) => (
-                                    <div key={i} className="flex items-center gap-4 p-5 bg-white group hover:bg-slate-50 transition-colors border-r-[8px] border-b-[8px] border-black last:border-b-0 md:even:border-r-0">
-                                        <Check size={18} className="text-black shrink-0" strokeWidth={4} />
+                                    <div key={i} className="flex items-center gap-4 p-5 bg-white group hover:bg-slate-50 transition-colors border border-slate-100 dark:border-white/10 rounded-2xl shadow-sm last:border-b-0 md:even:border-r-0">
+                                        <Check size={18} className="text-emerald-600 dark:text-[#FACC15] shrink-0" strokeWidth={4} />
                                         <span className="font-black text-black text-sm uppercase tracking-tight">{h}</span>
                                     </div>
                                 ))}
@@ -218,10 +219,10 @@ export default function TourDetailsClient({ tour }) {
 
                         {/* Itinerary */}
                         {(tour.itinerary?.length || 0) > 0 && (
-                            <section className="bg-white border-[10px] border-black p-8 md:p-12 rounded-none">
+                            <section className="bg-white border border-slate-100 dark:border-white/10 shadow-xl p-8 md:p-12 rounded-[2rem]">
                                 <div className="flex items-center gap-4 mb-10">
-                                    <div className="w-4 h-8 bg-[#FACC15] border-2 border-black"></div>
-                                    <h2 className="text-3xl font-black text-black uppercase tracking-tighter">
+                                    <div className="w-2 h-8 bg-[#FACC15] rounded-full"></div>
+                                    <h2 className="text-3xl font-black text-emerald-950 dark:text-white uppercase tracking-tight">
                                         Excursion Itinerary
                                     </h2>
                                 </div>
@@ -229,12 +230,12 @@ export default function TourDetailsClient({ tour }) {
                                     {tour.itinerary.map((item, idx) => {
                                         const isExpanded = collapsedDay !== item.day;
                                         return (
-                                            <div key={item.day || idx} className="border-[6px] border-black rounded-none overflow-hidden mb-4">
+                                            <div key={item.day || idx} className="border border-slate-100 dark:border-white/10 shadow-md rounded-[2rem] overflow-hidden mb-4">
                                                 <button
                                                     onClick={() => setCollapsedDay(collapsedDay === item.day ? null : item.day)}
                                                     className={`w-full flex items-center gap-6 py-6 px-4 transition-colors text-left ${isExpanded ? 'bg-[#FACC15]' : 'bg-white hover:bg-slate-50'}`}
                                                 >
-                                                    <div className={`w-12 h-12 shrink-0 flex flex-col items-center justify-center font-black transition-colors border-2 border-black ${isExpanded ? 'bg-black text-[#FACC15]' : 'bg-[#FACC15] text-black'}`}>
+                                                    <div className={`w-12 h-12 shrink-0 flex flex-col items-center justify-center font-black transition-colors rounded-xl ${isExpanded ? 'bg-[#FACC15] text-black shadow-lg shadow-yellow-500/20' : 'bg-slate-100 dark:bg-white/10 text-slate-500 dark:text-white'}`}>
                                                         <span className="text-[8px] uppercase">DAY</span>
                                                         <span className="text-xl -mt-1">{item.day}</span>
                                                     </div>
@@ -248,7 +249,7 @@ export default function TourDetailsClient({ tour }) {
                                                         {isExpanded ? <Minus size={20} strokeWidth={4} /> : <Plus size={20} strokeWidth={4} />}
                                                     </div>
                                                 </button>
-                                                <div className={`overflow-hidden transition-all duration-300 ${isExpanded ? 'max-h-[1000px] opacity-100 border-t-[6px] border-black' : 'max-h-0 opacity-0'}`}>
+                                                <div className={`overflow-hidden transition-all duration-300 ${isExpanded ? 'max-h-[1000px] opacity-100 border-t border-slate-100 dark:border-white/10' : 'max-h-0 opacity-0'}`}>
                                                     <div className="p-8 bg-white">
                                                         <p className="text-slate-800 leading-relaxed text-base font-bold mb-6">
                                                             {item.description || item.desc}
@@ -270,7 +271,7 @@ export default function TourDetailsClient({ tour }) {
                         )}
 
                         {/* Inclusions & Exclusions */}
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-0 border-[10px] border-black rounded-none overflow-hidden">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-0 border border-slate-100 dark:border-white/10 shadow-xl rounded-[2rem] overflow-hidden">
                             <section className="bg-white p-10 border-b-[6px] md:border-b-0 border-black">
                                 <h3 className="text-2xl font-black text-black mb-8 uppercase tracking-tighter flex items-center gap-3">
                                     <CheckSquare size={24} className="text-[#FACC15] bg-black" />
@@ -279,21 +280,21 @@ export default function TourDetailsClient({ tour }) {
                                 <ul className="space-y-4">
                                     {validInclusions.length > 0 ? validInclusions.map((item: string, i: number) => (
                                         <li key={i} className="flex gap-3 text-black items-start group">
-                                            <div className="shrink-0 mt-1 w-2 h-2 bg-black rounded-none"></div>
+                                            <div className="shrink-0 mt-1 w-2 h-2 bg-black rounded-[2rem]"></div>
                                             <span className="text-sm font-black uppercase tracking-tight">{item}</span>
                                         </li>
                                     )) : (
                                         <>
                                             <li className="flex gap-3 text-black items-start group">
-                                                <div className="shrink-0 mt-1 w-2 h-2 bg-black rounded-none"></div>
+                                                <div className="shrink-0 mt-1 w-2 h-2 bg-black rounded-[2rem]"></div>
                                                 <span className="text-sm font-black uppercase tracking-tight">Private Transport (AC Car/Van)</span>
                                             </li>
                                             <li className="flex gap-3 text-black items-start group">
-                                                <div className="shrink-0 mt-1 w-2 h-2 bg-black rounded-none"></div>
+                                                <div className="shrink-0 mt-1 w-2 h-2 bg-black rounded-[2rem]"></div>
                                                 <span className="text-sm font-black uppercase tracking-tight">All Tolls & Parking Fees</span>
                                             </li>
                                             <li className="flex gap-3 text-black items-start group">
-                                                <div className="shrink-0 mt-1 w-2 h-2 bg-black rounded-none"></div>
+                                                <div className="shrink-0 mt-1 w-2 h-2 bg-black rounded-[2rem]"></div>
                                                 <span className="text-sm font-black uppercase tracking-tight">Fluent English Speaking Driver</span>
                                             </li>
                                         </>
@@ -308,17 +309,17 @@ export default function TourDetailsClient({ tour }) {
                                 <ul className="space-y-4">
                                     {validExclusions.length > 0 ? validExclusions.map((item: string, i: number) => (
                                         <li key={i} className="flex gap-3 text-slate-500 items-start group">
-                                            <div className="shrink-0 mt-1 w-2 h-2 bg-slate-300 rounded-none"></div>
+                                            <div className="shrink-0 mt-1 w-2 h-2 bg-slate-300 rounded-[2rem]"></div>
                                             <span className="text-sm font-black uppercase tracking-tight line-through opacity-70">{item}</span>
                                         </li>
                                     )) : (
                                         <>
                                             <li className="flex gap-3 text-slate-500 items-start group">
-                                                <div className="shrink-0 mt-1 w-2 h-2 bg-slate-300 rounded-none"></div>
+                                                <div className="shrink-0 mt-1 w-2 h-2 bg-slate-300 rounded-[2rem]"></div>
                                                 <span className="text-sm font-black uppercase tracking-tight line-through opacity-70">Entrance Tickets & Activity Fees</span>
                                             </li>
                                             <li className="flex gap-3 text-slate-500 items-start group">
-                                                <div className="shrink-0 mt-1 w-2 h-2 bg-slate-300 rounded-none"></div>
+                                                <div className="shrink-0 mt-1 w-2 h-2 bg-slate-300 rounded-[2rem]"></div>
                                                 <span className="text-sm font-black uppercase tracking-tight line-through opacity-70">Personal Expenses & Tips</span>
                                             </li>
                                         </>
@@ -329,10 +330,10 @@ export default function TourDetailsClient({ tour }) {
 
                         {/* Experience Timeline */}
                         {tour.experience && tour.experience.length > 0 && (
-                            <section className="bg-white border-[6px] border-black p-6 md:p-8 rounded-none">
+                            <section className="bg-white border border-slate-100 dark:border-white/10 shadow-md p-6 md:p-8 rounded-[2rem]">
                                 <div className="flex items-center gap-3 mb-6">
                                     <div className="w-2 h-6 bg-black"></div>
-                                    <h2 className="text-xl font-black text-black uppercase tracking-tighter">
+                                    <h2 className="text-xl font-black text-emerald-950 dark:text-white uppercase tracking-tight">
                                         Your Experience
                                     </h2>
                                 </div>
@@ -342,7 +343,7 @@ export default function TourDetailsClient({ tour }) {
                                         <div key={idx} className="relative pl-8 pb-6 last:pb-0">
                                             <div className="absolute left-[1px] top-1.5 w-3 h-3 bg-black border-2 border-white rounded-full" />
                                             <div className="flex flex-col gap-1">
-                                                <h4 className="text-sm font-black text-black uppercase tracking-tighter">{exp.heading}</h4>
+                                                <h4 className="text-sm font-black text-emerald-950 dark:text-white uppercase tracking-tight">{exp.heading}</h4>
                                                 <p className="text-slate-800 font-medium text-xs leading-relaxed max-w-2xl">{exp.text}</p>
                                             </div>
                                         </div>
@@ -356,8 +357,8 @@ export default function TourDetailsClient({ tour }) {
                     <div className="lg:col-span-4 space-y-8">
                         <div className="sticky top-24 space-y-8">
                             <div className="bg-black text-white p-0">
-                                <div className="bg-white p-8 border-[12px] border-black rounded-none">
-                                    <div className="mb-6 text-center bg-black py-4 px-2 border-b-[6px] border-[#FACC15]">
+                                <div className="bg-white p-8 border-[12px] border-black rounded-[2rem]">
+                                    <div className="mb-6 text-center bg-slate-50 dark:bg-white/5 py-6 px-4 rounded-2xl border border-slate-100 dark:border-white/10">
                                         <span className="text-[9px] font-black text-[#FACC15] uppercase tracking-widest block mb-1">Exclusive Web Rate</span>
                                         <div className="flex items-center justify-center gap-1 text-white">
                                             <span className="text-lg font-black">{priceCurrency}</span>
@@ -369,7 +370,7 @@ export default function TourDetailsClient({ tour }) {
                                     </div>
  
                                     <div className="space-y-4 mb-8">
-                                        <div className="flex items-center justify-between border-[6px] border-black p-2 bg-slate-50">
+                                        <div className="flex items-center justify-between border border-slate-100 dark:border-white/10 shadow-md p-2 bg-slate-50">
                                             <span className="text-[10px] font-black uppercase tracking-widest px-4">Adults</span>
                                             <div className="flex items-center bg-black p-1 border-4 border-black">
                                                 <button onClick={() => setMemberCount(prev => ({ ...prev, adults: Math.max(1, prev.adults - 1) }))} className="w-8 h-8 flex items-center justify-center text-white hover:text-[#FACC15]"><Minus size={16} /></button>
@@ -377,7 +378,7 @@ export default function TourDetailsClient({ tour }) {
                                                 <button onClick={() => setMemberCount(prev => ({ ...prev, adults: prev.adults + 1 }))} className="w-8 h-8 flex items-center justify-center text-white hover:text-[#FACC15]"><Plus size={16} /></button>
                                             </div>
                                         </div>
-                                        <div className="flex items-center justify-between border-[6px] border-black p-2 bg-slate-50">
+                                        <div className="flex items-center justify-between border border-slate-100 dark:border-white/10 shadow-md p-2 bg-slate-50">
                                             <span className="text-[10px] font-black uppercase tracking-widest px-4">Children</span>
                                             <div className="flex items-center bg-black p-1 border-4 border-black">
                                                 <button onClick={() => setMemberCount(prev => ({ ...prev, children: Math.max(0, prev.children - 1) }))} className="w-8 h-8 flex items-center justify-center text-white hover:text-[#FACC15]"><Minus size={16} /></button>
@@ -388,10 +389,10 @@ export default function TourDetailsClient({ tour }) {
                                     </div>
  
                                     <div className="space-y-4">
-                                        <button onClick={() => setIsBookingOpen(true)} className="w-full h-20 bg-[#FACC15] text-black font-black uppercase tracking-[0.2em] text-lg hover:bg-black hover:text-[#FACC15] transition-all border-[6px] border-black">
+                                        <button onClick={() => setIsBookingOpen(true)} className="w-full h-20 bg-[#FACC15] text-black font-black uppercase tracking-[0.2em] text-lg rounded-xl hover:bg-yellow-400 transition-all shadow-xl shadow-yellow-500/20 border-none">
                                             Instant Booking
                                         </button>
-                                        <a href={`https://wa.me/+94716885880?text=${encodeURIComponent(`Hi, I'm interested in booking "${tour.title}".`)}`} target="_blank" className="w-full h-20 bg-white text-black font-black uppercase tracking-[0.2em] text-lg border-[6px] border-black flex items-center justify-center gap-3 hover:bg-black hover:text-white transition-all">
+                                        <a href={`https://wa.me/+94716885880?text=${encodeURIComponent(`Hi, I'm interested in booking "${tour.title}".`)}`} target="_blank" className="w-full h-20 bg-white text-black font-black uppercase tracking-[0.2em] text-lg border border-slate-100 dark:border-white/10 shadow-md flex items-center justify-center gap-3 hover:bg-black hover:text-white transition-all">
                                             <MessageCircle size={22} /> WhatsApp Inquiry
                                         </a>
                                     </div>
@@ -399,7 +400,7 @@ export default function TourDetailsClient({ tour }) {
                             </div>
 
                             {/* Trust Seals */}
-                            <div className="bg-white border-[10px] border-black p-6 grid grid-cols-2 gap-4 rounded-none">
+                            <div className="bg-white border border-slate-100 dark:border-white/10 shadow-xl p-6 grid grid-cols-2 gap-4 rounded-[2rem]">
                                 <div className="flex flex-col items-center gap-2 text-center p-3 grayscale group-hover:grayscale-0 transition-all border-r-4 border-black">
                                     <ShieldCheck size={24} className="text-[#FACC15] bg-black" />
                                     <span className="text-[8px] font-black text-black uppercase tracking-tight">Secured Booking</span>

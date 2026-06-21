@@ -58,6 +58,7 @@ export default function TourPackageDetailsClient({ tour }) {
         return points;
     };
 
+    const isSafari = tour.title?.toLowerCase().includes('safari') || tour.category?.toLowerCase() === 'safari' || tour.title?.toLowerCase().includes('yala') || tour.title?.toLowerCase().includes('udawalawe') || tour.title?.toLowerCase().includes('minneriya');
     const mapPoints = getMapPoints();
     const pickup = mapPoints[0] || null;
     const dropoff = mapPoints.length > 1 ? mapPoints[mapPoints.length - 1] : null;
@@ -183,10 +184,10 @@ export default function TourPackageDetailsClient({ tour }) {
                     {/* Left Column (8/12) */}
                     <div className="lg:col-span-8 space-y-12">
                         {/* Quick Stats bar */}
-                        <div className="grid grid-cols-2 md:grid-cols-4 bg-black p-0 border-[4px] border-black rounded-3xl overflow-hidden">
+                        <div className="grid grid-cols-2 md:grid-cols-4 bg-white dark:bg-[#0a0a0a] p-0 border border-slate-100 dark:border-white/10 rounded-[2rem] overflow-hidden shadow-xl">
                             {[
                                 { icon: Users, label: 'Group', val: 'Private Only' },
-                                { icon: Navigation, label: 'Transit', val: 'Luxury AC' },
+                                { icon: Navigation, label: 'Transit', val: '{isSafari ? 'Open Safari Jeep' : 'Luxury AC'}' },
                                 { icon: Hotel, label: 'Hotels', val: '3-5 Star' },
                                 { icon: ShieldCheck, label: 'Status', val: 'Verified', color: 'text-black' }
                             ].map((stat, i) => (
@@ -203,10 +204,10 @@ export default function TourPackageDetailsClient({ tour }) {
                         </div>
 
                         {/* Overview Section */}
-                        <section className="bg-white border-[10px] border-black p-8 md:p-12 rounded-none">
+                        <section className="bg-white border border-slate-100 dark:border-white/10 shadow-xl p-8 md:p-12 rounded-[2rem]">
                             <div className="flex items-center gap-4 mb-8">
                                 <div className="w-2 h-8 bg-[#FACC15] border border-black"></div>
-                                <h2 className="text-3xl font-black text-black uppercase tracking-tighter">
+                                <h2 className="text-3xl font-black text-emerald-950 dark:text-white uppercase tracking-tight">
                                     Package Overview
                                 </h2>
                             </div>
@@ -216,7 +217,7 @@ export default function TourPackageDetailsClient({ tour }) {
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-0 border-t-[10px] border-black">
                                 {tour.highlights?.map((h, i) => (
                                     <div key={i} className="flex items-center gap-4 p-5 bg-white border-r-[6px] border-b-[6px] border-black last:border-b-0 md:even:border-r-0">
-                                        <Check size={18} className="text-black shrink-0" strokeWidth={4} />
+                                        <Check size={18} className="text-emerald-600 dark:text-[#FACC15] shrink-0" strokeWidth={4} />
                                         <span className="font-black text-black text-sm uppercase tracking-tight">{h}</span>
                                     </div>
                                 ))}
@@ -224,14 +225,14 @@ export default function TourPackageDetailsClient({ tour }) {
                         </section>
 
                         {/* Visual Route Section */}
-                        <section className="bg-white border-[10px] border-black p-8 md:p-12 rounded-none">
+                        <section className="bg-white border border-slate-100 dark:border-white/10 shadow-xl p-8 md:p-12 rounded-[2rem]">
                             <div className="flex items-center gap-4 mb-10">
-                                <div className="w-2 h-8 bg-black"></div>
-                                <h2 className="text-3xl font-black text-black uppercase tracking-tighter">
+                                <div className="w-2 h-8 bg-[#FACC15] rounded-full"></div>
+                                <h2 className="text-3xl font-black text-emerald-950 dark:text-white uppercase tracking-tight">
                                     Journey Visualization
                                 </h2>
                             </div>
-                            <div className="w-full h-[450px] bg-slate-100 border-[6px] border-black relative overflow-hidden mb-6">
+                            <div className="w-full h-[450px] bg-slate-100 border border-slate-100 dark:border-white/10 shadow-md relative overflow-hidden mb-6">
                                 {pickup ? (
                                     <TripMap
                                         pickup={pickup}
@@ -254,10 +255,10 @@ export default function TourPackageDetailsClient({ tour }) {
 
                         {/* Itinerary Section */}
                         {tour.itinerary && tour.itinerary.length > 0 && (
-                            <section className="bg-white border-[10px] border-black p-8 md:p-12 rounded-none">
+                            <section className="bg-white border border-slate-100 dark:border-white/10 shadow-xl p-8 md:p-12 rounded-[2rem]">
                                 <div className="flex items-center gap-4 mb-10">
                                     <div className="w-2 h-8 bg-[#FACC15] border-4 border-black"></div>
-                                    <h2 className="text-3xl font-black text-black uppercase tracking-tighter">
+                                    <h2 className="text-3xl font-black text-emerald-950 dark:text-white uppercase tracking-tight">
                                         Day-by-Day Experience
                                     </h2>
                                 </div>
@@ -265,7 +266,7 @@ export default function TourPackageDetailsClient({ tour }) {
                                     {tour.itinerary.map((item, idx) => {
                                         const isExpanded = collapsedDay !== item.day;
                                         return (
-                                            <div key={item.day || idx} className="border-[6px] border-black rounded-none overflow-hidden mb-4">
+                                            <div key={item.day || idx} className="border border-slate-100 dark:border-white/10 shadow-md rounded-[2rem] overflow-hidden mb-4">
                                                 <button
                                                     onClick={() => setCollapsedDay(collapsedDay === item.day ? null : item.day)}
                                                     className={`w-full flex items-center gap-6 py-6 px-4 transition-colors text-left ${isExpanded ? 'bg-[#FACC15]' : 'bg-white'}`}
@@ -284,7 +285,7 @@ export default function TourPackageDetailsClient({ tour }) {
                                                         {isExpanded ? <Minus size={20} strokeWidth={6} /> : <Plus size={20} strokeWidth={6} />}
                                                     </div>
                                                 </button>
-                                                <div className={`overflow-hidden transition-all duration-300 ${isExpanded ? 'max-h-[1000px] opacity-100 border-t-[6px] border-black' : 'max-h-0 opacity-0'}`}>
+                                                <div className={`overflow-hidden transition-all duration-300 ${isExpanded ? 'max-h-[1000px] opacity-100 border-t border-slate-100 dark:border-white/10' : 'max-h-0 opacity-0'}`}>
                                                     <div className="p-8 bg-white">
                                                         <p className="text-slate-800 leading-relaxed text-base font-black mb-6 uppercase">
                                                             {item.description || item.desc}
@@ -307,10 +308,10 @@ export default function TourPackageDetailsClient({ tour }) {
 
                         {/* Experience Visual Timeline */}
                         {tour.experience && tour.experience.length > 0 && (
-                            <section className="bg-white border-[6px] border-black p-6 md:p-8 rounded-none text-black">
+                            <section className="bg-white border border-slate-100 dark:border-white/10 shadow-md p-6 md:p-8 rounded-[2rem] text-black">
                                 <div className="flex items-center gap-3 mb-6">
                                     <div className="w-2 h-6 bg-black"></div>
-                                    <h2 className="text-xl font-black text-black uppercase tracking-tighter">
+                                    <h2 className="text-xl font-black text-emerald-950 dark:text-white uppercase tracking-tight">
                                         Your Experience
                                     </h2>
                                 </div>
@@ -320,7 +321,7 @@ export default function TourPackageDetailsClient({ tour }) {
                                         <div key={idx} className="relative pl-8 pb-6 last:pb-0">
                                             <div className="absolute left-[1px] top-1.5 w-3 h-3 bg-black border-2 border-white rounded-full" />
                                             <div className="flex flex-col gap-1">
-                                                <h4 className="text-sm font-black text-black uppercase tracking-tighter italic">{exp.heading}</h4>
+                                                <h4 className="text-sm font-black text-emerald-950 dark:text-white uppercase tracking-tight italic">{exp.heading}</h4>
                                                 <p className="text-slate-800 font-medium text-xs leading-relaxed max-w-2xl uppercase tracking-tight">{exp.text}</p>
                                             </div>
                                         </div>
@@ -330,8 +331,8 @@ export default function TourPackageDetailsClient({ tour }) {
                         )}
 
                         {/* Inclusions & Exclusions */}
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-0 border-[10px] border-black rounded-none overflow-hidden">
-                            <section className="bg-white p-10 border-b-[10px] md:border-b-0 border-black">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-0 border border-slate-100 dark:border-white/10 shadow-xl rounded-[2rem] overflow-hidden">
+                            <section className="bg-white dark:bg-[#0a0a0a] rounded-[2rem] border border-slate-100 dark:border-white/10 p-10 shadow-lg">
                                 <h3 className="text-2xl font-black text-black mb-8 uppercase tracking-tighter flex items-center gap-3">
                                     <CheckCircle size={24} className="text-[#FACC15] bg-black border-2 border-black" />
                                     INCLUSIONS
@@ -339,7 +340,7 @@ export default function TourPackageDetailsClient({ tour }) {
                                 <ul className="space-y-4">
                                     {validInclusions.length > 0 ? validInclusions.map((item, i) => (
                                         <li key={i} className="flex gap-3 text-black items-start group">
-                                            <div className="shrink-0 mt-1 w-2 h-2 bg-black rounded-none" />
+                                            <div className="shrink-0 mt-1 w-2 h-2 bg-black rounded-[2rem]" />
                                             <span className="text-sm font-black uppercase tracking-tight">{item}</span>
                                         </li>
                                     )) : (
@@ -347,7 +348,7 @@ export default function TourPackageDetailsClient({ tour }) {
                                     )}
                                 </ul>
                             </section>
-                            <section className="bg-white p-10 md:border-l-[10px] border-black">
+                            <section className="bg-white dark:bg-[#0a0a0a] rounded-[2rem] border border-slate-100 dark:border-white/10 p-10 shadow-lg">
                                 <h3 className="text-2xl font-black text-black mb-8 uppercase tracking-tighter flex items-center gap-3">
                                     <XCircle size={24} className="text-white bg-red-600 border-2 border-black" />
                                     EXCLUSIONS
@@ -355,7 +356,7 @@ export default function TourPackageDetailsClient({ tour }) {
                                 <ul className="space-y-4">
                                     {validExclusions.length > 0 ? validExclusions.map((item, i) => (
                                         <li key={i} className="flex gap-3 text-slate-500 items-start group">
-                                            <div className="shrink-0 mt-1 w-2 h-2 bg-slate-300 rounded-none border border-black" />
+                                            <div className="shrink-0 mt-1 w-2 h-2 bg-slate-300 rounded-[2rem] border border-black" />
                                             <span className="text-sm font-black uppercase tracking-tight line-through opacity-70">{item}</span>
                                         </li>
                                     )) : (
@@ -369,8 +370,8 @@ export default function TourPackageDetailsClient({ tour }) {
                     {/* Right Column (Sidebar) */}
                     <div className="lg:col-span-4 mt-[-100px] lg:mt-0">
                         <div className="sticky top-32 space-y-8">
-                            <div className="bg-white p-8 border-[10px] border-black rounded-none">
-                                <div className="mb-6 text-center bg-black py-4 px-2 border-b-[6px] border-[#FACC15]">
+                            <div className="bg-white p-8 border border-slate-100 dark:border-white/10 shadow-xl rounded-[2rem]">
+                                <div className="mb-6 text-center bg-slate-50 dark:bg-white/5 py-6 px-4 rounded-2xl border border-slate-100 dark:border-white/10">
                                     <span className="text-[9px] font-black text-[#FACC15] uppercase tracking-widest block mb-1">Exclusive Web Rate</span>
                                     <div className="flex items-center justify-center gap-1 text-white">
                                         <span className="text-lg font-black">{priceCurrency}</span>
@@ -403,19 +404,19 @@ export default function TourPackageDetailsClient({ tour }) {
                                 )}
 
                                 <div className="space-y-4">
-                                    <button onClick={() => setIsModalOpen(true)} className="w-full h-16 bg-[#FACC15] text-black font-black uppercase tracking-[0.2em] text-sm hover:bg-black hover:text-[#FACC15] transition-all border-[6px] border-black">
+                                    <button onClick={() => setIsModalOpen(true)} className="w-full h-16 bg-[#FACC15] text-black font-black uppercase tracking-[0.2em] text-sm rounded-xl hover:bg-yellow-400 transition-all shadow-xl shadow-yellow-500/20 border-none">
                                         INSTANT BOOKING
                                     </button>
-                                    <a href={`https://wa.me/+94716885880?text=${encodeURIComponent(`Hi, I'm interested in booking "${tour.title}".`)}`} target="_blank" className="w-full h-16 bg-white text-black font-black uppercase tracking-[0.2em] text-[10px] border-[6px] border-black flex items-center justify-center gap-3 transition-all hover:bg-slate-50">
+                                    <a href={`https://wa.me/+94716885880?text=${encodeURIComponent(`Hi, I'm interested in booking "${tour.title}".`)}`} target="_blank" className="w-full h-16 bg-white text-black font-black uppercase tracking-[0.2em] text-[10px] rounded-xl border border-slate-200 dark:border-white/10 flex items-center justify-center gap-3 transition-all hover:bg-slate-50 dark:hover:bg-zinc-700 shadow-sm dark:bg-zinc-800 dark:text-white">
                                         <MessageCircle size={20} /> WHATSAPP INQUIRY
                                     </a>
                                 </div>
                             </div>
 
                             {/* Trust Features */}
-                            <div className="bg-white p-8 border-[10px] border-black rounded-none flex flex-col gap-6">
+                            <div className="bg-white p-8 border border-slate-100 dark:border-white/10 shadow-xl rounded-[2rem] flex flex-col gap-6">
                                 <div className="flex items-center gap-4 border-b-[6px] border-black pb-4">
-                                    <div className="w-12 h-12 bg-black flex items-center justify-center text-[#FACC15] border-4 border-black">
+                                    <div className="w-12 h-12 rounded-xl bg-[#FACC15]/10 flex items-center justify-center text-[#FACC15]">
                                         <ShieldCheck size={24} />
                                     </div>
                                     <div className="flex flex-col">
