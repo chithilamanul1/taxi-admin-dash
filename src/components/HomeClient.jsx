@@ -262,6 +262,7 @@ export default function HomeClient({ defaultTab = 'pickup' }) {
                         <div className="absolute top-0 right-0 -mr-64 -mt-64 w-[600px] h-[600px] bg-[#FACC15]/5 rounded-full blur-[120px]"></div>
                         <div className="absolute bottom-0 left-0 -ml-64 -mb-64 w-[600px] h-[600px] bg-emerald-500/5 rounded-full blur-[120px]"></div>
                     </section>
+                    <Features />
                 </>
             )}
 
@@ -378,9 +379,6 @@ export default function HomeClient({ defaultTab = 'pickup' }) {
                     <MobileAppSection />
                 </>
             )}
-
-            {bookingStep <= 2 && (
-                <Features />
             )}
         </div >
     )

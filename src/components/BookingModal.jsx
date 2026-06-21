@@ -640,8 +640,12 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
             if (!formData.pickup) newErrors.pickup = true;
             if (!formData.dropoff) newErrors.dropoff = true;
             
-            // Flight Details & Name Board are optional
-
+            if (isAirportPickup) {
+                if (formData.hasNameBoard === null) newErrors.hasNameBoard = true;
+                if (!formData.flightNumber) newErrors.flightNumber = true;
+                if (!formData.flightArrivalDate) newErrors.date = true;
+                if (!formData.flightArrivalTime) newErrors.time = true;
+            }
             if (!formData.passengerCount.adults || formData.passengerCount.adults < 1) newErrors.adults = true;
         }
         
@@ -851,8 +855,8 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
 
                                 {isAirportService && initialData.isAirportPickup && formData.tripType !== 'tour' && (
                                     <div className="space-y-8">
-                                        <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-4 flex items-center gap-3">
-                                            <Signpost size={14} className="text-[#FACC15]" strokeWidth={3} /> Airport Greeting Service
+                                        <label className={`text-[10px] font-black uppercase tracking-widest mb-4 flex items-center gap-3 ${errors.hasNameBoard ? 'text-red-500 animate-pulse' : 'text-slate-500'}`}>
+                                            <Signpost size={14} className={errors.hasNameBoard ? 'text-red-500' : 'text-[#FACC15]'} strokeWidth={3} /> Airport Greeting Service {errors.hasNameBoard && <span className="text-red-500 lowercase">*required</span>}
                                         </label>
                                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                                             {[
@@ -861,8 +865,8 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                             ].map(opt => (
                                                 <button
                                                     key={opt.label}
-                                                    onClick={() => setFormData({ ...formData, hasNameBoard: opt.val })}
-                                                    className={`p-5 rounded-3xl border-2 text-left transition-all relative overflow-hidden group flex items-center justify-between gap-4 ${formData.hasNameBoard === opt.val ? 'bg-[#FACC15] border-black dark:border-white text-black shadow-xl' : 'bg-slate-50 dark:bg-white/5 border-black dark:border-white hover:bg-slate-100 dark:hover:bg-white/10'}`}
+                                                    onClick={() => { setFormData({ ...formData, hasNameBoard: opt.val }); setErrors(prev => ({ ...prev, hasNameBoard: false })); }}
+                                                    className={`p-5 rounded-3xl border-2 text-left transition-all relative overflow-hidden group flex items-center justify-between gap-4 ${formData.hasNameBoard === opt.val ? 'bg-[#FACC15] border-black dark:border-white text-black shadow-xl' : (errors.hasNameBoard ? 'bg-red-50/50 border-red-500 animate-shake ring-2 ring-red-500/20' : 'bg-slate-50 dark:bg-white/5 border-black dark:border-white hover:bg-slate-100 dark:hover:bg-white/10')}`}
                                                 >
                                                     <div className="flex flex-col min-w-0">
                                                         <span className={`block text-[11px] sm:text-xs font-black uppercase tracking-widest mb-1 ${formData.hasNameBoard === opt.val ? 'text-black' : 'text-slate-900 dark:text-white'}`}>{opt.label}</span>
