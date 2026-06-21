@@ -64,8 +64,8 @@ export default function TourDetailsClient({ tour }) {
 
 
     // Helper for icons mapping
+    const isSafari = tour.title?.toLowerCase().includes('safari') || tour.category?.toLowerCase() === 'safari' || tour.title?.toLowerCase().includes('yala') || tour.title?.toLowerCase().includes('udawalawe') || tour.title?.toLowerCase().includes('minneriya');
     const getIcon = (name: string) => {
-        const isSafari = tour.title?.toLowerCase().includes('safari') || tour.category?.toLowerCase() === 'safari' || tour.title?.toLowerCase().includes('yala') || tour.title?.toLowerCase().includes('udawalawe') || tour.title?.toLowerCase().includes('minneriya');
         const icons: { [key: string]: React.ReactNode } = {
             MapPin: <MapPin size={18} />,
             Ship: <Ship size={18} />,
