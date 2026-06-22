@@ -89,17 +89,17 @@ const getJsonLd = (baseUrl) => ({
     '@graph': [
         {
             '@type': 'WebSite',
-            '@id': '${baseUrl}/#website',
-            url: '${baseUrl}/',
+            '@id': `${baseUrl}/#website`,
+            url: `${baseUrl}/`,
             name: 'AIRPORT TAXIS (PVT) LTD SRILANKA',
             alternateName: 'Airport Taxis',
         },
         {
             '@type': 'LocalBusiness',
-            '@id': '${baseUrl}/#localbusiness',
+            '@id': `${baseUrl}/#localbusiness`,
             name: 'AIRPORT TAXIS (PVT) LTD SRILANKA',
-            image: '${baseUrl}/og-image.jpg',
-            url: '${baseUrl}',
+            image: `${baseUrl}/og-image.jpg`,
+            url: `${baseUrl}`,
             telephone: '+94716885880',
             priceRange: '$$',
             address: {
@@ -130,8 +130,8 @@ const getJsonLd = (baseUrl) => ({
             '@type': 'TaxiService',
             name: 'AIRPORT TAXIS (PVT) LTD SRILANKA',
             description: 'Premium airport transfer and private tour service in Sri Lanka across Colombo, Kandy, Galle and more.',
-            url: '${baseUrl}',
-            provider: { '@id': '${baseUrl}/#localbusiness' },
+            url: `${baseUrl}`,
+            provider: { '@id': `${baseUrl}/#localbusiness` },
             hasOfferCatalog: {
                 "@type": "OfferCatalog",
                 "name": "Airport Transfer Services",
@@ -165,12 +165,12 @@ const getJsonLd = (baseUrl) => ({
         },
         {
             '@type': 'Organization',
-            '@id': '${baseUrl}/#organization',
+            '@id': `${baseUrl}/#organization`,
             name: 'AIRPORT TAXIS (PVT) LTD SRILANKA',
-            url: '${baseUrl}',
+            url: `${baseUrl}`,
             logo: {
                 '@type': 'ImageObject',
-                'url': '${baseUrl}/logo.png',
+                'url': `${baseUrl}/logo.png`,
                 'width': 512,
                 'height': 512
             },

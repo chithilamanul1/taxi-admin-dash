@@ -14,7 +14,7 @@ for (const [dir, data] of Object.entries(layouts)) {
   const content = `export const metadata = {
     title: '${data.title}',
     description: '${data.desc}',
-    alternates: { canonical: 'https://srilankantaxi.lk/${dir}' }
+    alternates: { canonical: 'https://airporttaxis.lk/${dir}' }
 };
 export default function Layout({ children }) { return children; }
 `;
