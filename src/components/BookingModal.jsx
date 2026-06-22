@@ -13,7 +13,7 @@ import { PhoneInput } from 'react-international-phone';
 import 'react-international-phone/style.css';
 import VehicleCarousel from './VehicleCarousel';
 import CustomDateTimePicker from './CustomDateTimePicker';
-import { detectLocalTimezone } from '../lib/timezone-util';
+import { detectLocalTimezone, parseStoredTime } from '../lib/timezone-util';
 
 const STEPS = [
     { id: 1, title: 'Route & Vehicle', icon: MapPin },
@@ -101,6 +101,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
             return `${hStr}:${mStr} ${period} ${localTz}`;
         })(),
         name: initialData.name || '',
+        additionalPassengers: [],
         phone: initialData.phone || '',
         whatsapp: initialData.whatsapp || '',
         passport: initialData.passport || '',
@@ -654,12 +655,21 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
             if (!formData.phone) newErrors.phone = true;
             if (!formData.email) newErrors.email = true;
             if (!formData.whatsapp && !formData.phone) newErrors.whatsapp = true;
+
+            const numExtra = Math.max(0, (Number(formData.passengerCount?.adults) || 1) + (Number(formData.passengerCount?.children) || 0) - 1);
+            for (let i = 0; i < numExtra; i++) {
+                if (!formData.additionalPassengers?.[i] || formData.additionalPassengers[i].trim() === '') {
+                    newErrors[`additionalPassenger_${i}`] = true;
+                }
+            }
         }
         
         setErrors(newErrors);
-        
         if (Object.keys(newErrors).length > 0) {
-            if (newErrors.adults) {
+            const isMissingExtraPass = Object.keys(newErrors).some(k => k.startsWith('additionalPassenger_'));
+            if (isMissingExtraPass) {
+                alert("✓ Please enter the names for all your passengers.");
+            } else if (newErrors.adults) {
                 alert("Please select at least one adult passenger to proceed.");
                 if (passengerRef.current) {
                     passengerRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
@@ -694,13 +704,29 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                 alert("Please fill all required fields in Step 1.");
                 return;
             }
+            const isAirportPickup = (formData.pickup?.toLowerCase().includes('airport') || (typeof initialData.pickup === 'string' && initialData.pickup.toLowerCase().includes('airport')));
+            if (isAirportPickup && initialData.isAirportPickup && formData.tripType !== 'tour') {
+                const newErrors = {};
+                if (formData.hasNameBoard === null) newErrors.hasNameBoard = true;
+                if (!formData.flightNumber) newErrors.flightNumber = true;
+                if (!formData.flightArrivalDate) newErrors.date = true;
+                if (!formData.flightArrivalTime) newErrors.time = true;
+                if (Object.keys(newErrors).length > 0) {
+                    setErrors(prev => ({ ...prev, ...newErrors }));
+                    if (newErrors.hasNameBoard) {
+                        alert("✓ Please select either 'Name Board' or 'No Board' before proceeding.");
+                    } else {
+                        alert("✓ Please fill in your Flight Number and Arrival Date & Time.");
+                    }
+                    return;
+                }
+            }
             if ((Number(formData.passengerCount?.adults) || 0) === 0) {
                 setErrors(prev => ({ ...prev, adults: true }));
                 alert("Please select at least one adult passenger to proceed");
                 passengerRef.current?.scrollIntoView({ behavior: 'smooth' });
                 return;
             }
-
             setErrors({});
             setStep(2);
         } else if (step === 2 && validateForm(2)) setStep(3);
@@ -866,14 +892,14 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                                 <button
                                                     key={opt.label}
                                                     onClick={() => { setFormData({ ...formData, hasNameBoard: opt.val }); setErrors(prev => ({ ...prev, hasNameBoard: false })); }}
-                                                    className={`p-5 rounded-3xl border-2 text-left transition-all relative overflow-hidden group flex items-center justify-between gap-4 ${formData.hasNameBoard === opt.val ? 'bg-[#FACC15] border-black dark:border-white text-black shadow-xl' : (errors.hasNameBoard ? 'bg-red-50/50 border-red-500 animate-shake ring-2 ring-red-500/20' : 'bg-slate-50 dark:bg-white/5 border-black dark:border-white hover:bg-slate-100 dark:hover:bg-white/10')}`}
+                                                    className={`p-3 sm:p-4 rounded-2xl border-2 text-left transition-all relative overflow-hidden group flex items-center justify-between gap-4 ${formData.hasNameBoard === opt.val ? 'bg-[#FACC15] border-black dark:border-white text-black shadow-xl' : (errors.hasNameBoard ? 'bg-red-50/50 border-red-500 animate-shake ring-2 ring-red-500/20' : 'bg-slate-50 dark:bg-white/5 border-black dark:border-white hover:bg-slate-100 dark:hover:bg-white/10')}`}
                                                 >
                                                     <div className="flex flex-col min-w-0">
                                                         <span className={`block text-[11px] sm:text-xs font-black uppercase tracking-widest mb-1 ${formData.hasNameBoard === opt.val ? 'text-black' : 'text-slate-900 dark:text-white'}`}>{opt.label}</span>
                                                         <span className={`text-[9px] sm:text-[10px] font-bold uppercase tracking-widest ${formData.hasNameBoard === opt.val ? 'text-black/70' : 'text-slate-400'}`}>{opt.sub}</span>
                                                     </div>
                                                     <div className="flex items-center gap-3 shrink-0">
-                                                        <div className={`w-12 h-12 sm:w-14 sm:h-14 rounded-2xl flex items-center justify-center transition-all border-2 border-black dark:border-white ${formData.hasNameBoard === opt.val ? 'bg-white' : 'bg-white dark:bg-zinc-900 shadow-sm'}`}>
+                                                        <div className={`w-10 h-10 sm:w-12 sm:h-12 rounded-2xl flex items-center justify-center transition-all border-2 border-black dark:border-white ${formData.hasNameBoard === opt.val ? 'bg-white' : 'bg-white dark:bg-zinc-900 shadow-sm'}`}>
                                                             {opt.emoji ? (
                                                                 <span className="text-2xl sm:text-3xl leading-none">{opt.emoji}</span>
                                                             ) : (
@@ -899,7 +925,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                                         <input
                                                             value={formData.flightNumber || ''}
                                                             onChange={e => setFormData({ ...formData, flightNumber: e.target.value })}
-                                                            className={`w-full h-14 bg-slate-50 dark:bg-white/5 border px-12 rounded-2xl font-black text-sm sm:text-base uppercase tracking-widest outline-none focus:border-[#FACC15] transition-all placeholder:text-xs placeholder:font-black ${errors.flightNumber ? 'border-red-500 animate-shake' : 'border-slate-100 dark:border-white/10'}`}
+                                                            className={`w-full h-11 sm:h-12 bg-slate-50 dark:bg-white/5 border px-12 rounded-2xl font-black text-xs sm:text-sm uppercase tracking-widest outline-none focus:border-[#FACC15] transition-all placeholder:text-[10px] placeholder:font-black ${errors.flightNumber ? 'border-red-500 ring-2 ring-red-500/20 animate-shake' : 'border-slate-300 dark:border-white/15'}`}
                                                             placeholder="E.G. UL 504"
                                                         />
                                                         <div className="absolute left-4 top-1/2 -translate-y-1/2 text-[#FACC15]">
@@ -923,7 +949,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                                                     setErrors(prev => ({ ...prev, date: false, flightArrivalTime: false, time: false }));
                                                                 }
                                                             }} 
-                                                            className={`w-full h-14 bg-slate-50 dark:bg-white/5 border px-12 rounded-2xl font-black text-sm sm:text-base uppercase tracking-widest outline-none focus:border-[#FACC15] transition-all focus:ring-2 focus:ring-[#FACC15] ${errors.date || errors.flightArrivalTime ? 'border-red-500 ring-2 ring-red-500/20 animate-shake' : 'border-slate-100 dark:border-white/10'}`}
+                                                            className={`w-full h-11 sm:h-12 bg-slate-50 dark:bg-white/5 border px-12 rounded-2xl font-black text-xs sm:text-sm uppercase tracking-widest outline-none focus:border-[#FACC15] transition-all focus:ring-2 focus:ring-[#FACC15] ${errors.date || errors.flightArrivalTime ? 'border-red-500 ring-2 ring-red-500/20 animate-shake' : 'border-slate-300 dark:border-white/15'}`}
                                                         />
                                                         <div className="absolute left-4 top-1/2 -translate-y-1/2 text-[#FACC15] pointer-events-none">
                                                             <Calendar size={18} strokeWidth={3} />
@@ -948,7 +974,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                                                         name: prev.name ? prev.name : val
                                                                     }));
                                                                 }}
-                                                                className={`w-full h-14 bg-slate-50 dark:bg-white/5 border px-12 rounded-2xl font-black text-sm sm:text-base uppercase tracking-widest outline-none focus:border-[#FACC15] transition-all placeholder:text-[10px] sm:placeholder:text-xs placeholder:font-black ${errors.nameBoardText ? 'border-red-500 animate-shake' : 'border-slate-100 dark:border-white/10'}`}
+                                                                className={`w-full h-11 sm:h-12 bg-slate-50 dark:bg-white/5 border px-12 rounded-2xl font-black text-xs sm:text-sm uppercase tracking-widest outline-none focus:border-[#FACC15] transition-all placeholder:text-[10px] sm:placeholder:text-xs placeholder:font-black ${errors.nameBoardText ? 'border-red-500 ring-2 ring-red-500/20 animate-shake' : 'border-slate-300 dark:border-white/15'}`}
                                                                 placeholder="ENTER NAME FOR WELCOME BOARD"
                                                             />
                                                             <div className="absolute left-4 top-1/2 -translate-y-1/2 text-[#FACC15]">
@@ -1185,7 +1211,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                 </div>
                             </div>
 
-                            <div className="grid md:grid-cols-2 gap-10">
+                            <div className="grid md:grid-cols-2 gap-4 sm:gap-6">
                                 {[
                                     { label: 'Full Legal Name', key: 'name', type: 'text', placeholder: 'Passenger Name', icon: User },
                                     { label: 'Email Address', key: 'email', type: 'email', placeholder: 'for confirmation', icon: Mail },
@@ -1202,11 +1228,11 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                                 defaultCountry="lk"
                                                 value={formData[f.key] || ''}
                                                 onChange={(phone) => setFormData({ ...formData, [f.key]: phone })}
-                                                inputClassName="!w-full !h-16 !bg-transparent !border-none !pl-2 !pr-8 !outline-none !font-black !text-black dark:!text-white placeholder:text-slate-700 dark:placeholder:text-slate-300 !text-sm !uppercase !tracking-widest"
+                                                inputClassName="!w-full !h-12 sm:!h-14 !bg-transparent !border-none !pl-2 !pr-8 !outline-none !font-black !text-black dark:!text-white placeholder:text-slate-700 dark:placeholder:text-slate-300 !text-sm !uppercase !tracking-widest"
                                                 countrySelectorStyleProps={{
-                                                    buttonClassName: "!bg-transparent !border-none !h-16 !pl-6 !pr-2 hover:!bg-slate-100/50 dark:hover:!bg-white/5 !transition-colors !rounded-l-3xl",
+                                                    buttonClassName: "!bg-transparent !border-none !h-12 sm:!h-14 !pl-6 !pr-2 hover:!bg-slate-100/50 dark:hover:!bg-white/5 !transition-colors !rounded-l-3xl",
                                                 }}
-                                                className={`w-full bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-3xl flex items-center transition-all overflow-hidden ${errors[f.key] ? '!border-red-500 ring-2 ring-red-500/50 animate-shake' : ''}`}
+                                                className={`w-full bg-slate-50 dark:bg-white/5 border border-slate-300 dark:border-white/15 rounded-2xl flex items-center transition-all overflow-hidden ${errors[f.key] ? '!border-red-500 ring-2 ring-red-500/50 animate-shake' : ''}`}
                                             />
                                         ) : (
                                             <input
@@ -1222,56 +1248,82 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                                         return updated;
                                                     });
                                                 }}
-                                                className={`w-full h-16 bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 px-10 rounded-3xl outline-none font-black text-black dark:text-white placeholder:text-slate-700 dark:placeholder:text-slate-300 text-sm uppercase tracking-widest ${errors[f.key] ? '!border-red-500 ring-2 ring-red-500/50 animate-shake' : ''}`}
+                                                className={`w-full h-12 sm:h-14 bg-slate-50 dark:bg-white/5 border border-slate-300 dark:border-white/15 px-10 rounded-2xl outline-none font-black text-black dark:text-white placeholder:text-slate-700 dark:placeholder:text-slate-300 text-sm uppercase tracking-widest ${errors[f.key] ? '!border-red-500 ring-2 ring-red-500/50 animate-shake' : ''}`}
                                                 placeholder={f.placeholder}
                                             />
                                         )}
+                                    </div>
+                                ))}
+                                {Array.from({ length: Math.max(0, (Number(formData.passengerCount?.adults) || 1) + (Number(formData.passengerCount?.children) || 0) - 1) }).map((_, idx) => (
+                                    <div key={`extra-passenger-${idx}`}>
+                                        <label className={`text-[10px] font-black uppercase tracking-[0.3em] mb-4 flex items-center gap-3 transition-colors ${errors[`additionalPassenger_${idx}`] ? 'text-red-500' : 'text-slate-500 dark:text-slate-400'}`}>
+                                            <User size={14} className={errors[`additionalPassenger_${idx}`] ? 'text-red-500' : 'text-[#FACC15]'} strokeWidth={3} /> Passenger {idx + 2} Name
+                                        </label>
+                                        <input
+                                            type="text"
+                                            value={formData.additionalPassengers?.[idx] || ''}
+                                            onChange={e => {
+                                                const val = e.target.value;
+                                                setFormData(prev => {
+                                                    const newPass = [...(prev.additionalPassengers || [])];
+                                                    newPass[idx] = val;
+                                                    return { ...prev, additionalPassengers: newPass };
+                                                });
+                                            }}
+                                            className={`w-full h-12 sm:h-14 bg-slate-50 dark:bg-white/5 border border-slate-300 dark:border-white/15 px-10 rounded-2xl outline-none font-black text-black dark:text-white placeholder:text-slate-700 dark:placeholder:text-slate-300 text-sm uppercase tracking-widest ${errors[`additionalPassenger_${idx}`] ? '!border-red-500 ring-2 ring-red-500/50 animate-shake' : ''}`}
+                                            placeholder={`Passenger ${idx + 2} Full Name`}
+                                        />
                                     </div>
                                 ))}
                             </div>
 
                             <div className="pt-12 border-t border-slate-200 dark:border-white/10 relative">
                                 <div className="space-y-4">
-                                    <label className={`text-xs font-black uppercase tracking-widest pl-4 ${errors.date || errors.time ? 'text-red-500' : 'text-slate-500'}`}>
-                                        {formData.hasNameBoard ? 'Arrival Date & Time' : 'Pickup Date & Time'}
-                                    </label>
-                                    <div className="relative">
-                                        <button 
-                                            type="button"
-                                            onClick={() => setIsMainPickerOpen2(!isMainPickerOpen2)} 
-                                            className={`w-full h-16 bg-slate-50 dark:bg-white/5 border px-14 rounded-3xl font-black text-xl uppercase tracking-widest outline-none focus:border-[#FACC15] transition-all flex items-center justify-between text-left ${errors.date || errors.time ? 'border-red-500 animate-shake' : 'border-slate-200 dark:border-white/10'}`}
-                                        >
-                                            <span className="text-black dark:text-white">
-                                                {formatDisplayDateTime(formData.date || formData.flightArrivalDate || new Date().toISOString().split('T')[0], formData.time || formData.flightArrivalTime || `12:00 PM ${detectLocalTimezone()}`)}
-                                            </span>
-                                            <ChevronDown size={20} className={`opacity-50 transition-transform ${isMainPickerOpen2 ? 'rotate-180' : ''}`} />
-                                        </button>
-                                        <div className="absolute left-6 top-1/2 -translate-y-1/2 text-[#FACC15]">
-                                            <Calendar size={20} strokeWidth={3} />
+                                    <div className="grid grid-cols-2 gap-3">
+                                        <div className="space-y-2">
+                                            <label className={`text-[9px] sm:text-[10px] font-black uppercase tracking-widest pl-3 flex items-center gap-2 ${errors.date ? 'text-red-500' : 'text-slate-500'}`}>
+                                                <Calendar size={12} strokeWidth={3} className={errors.date ? 'text-red-500' : 'text-[#FACC15]'} /> Pickup Date
+                                            </label>
+                                            <input
+                                                type="date"
+                                                value={formData.date || formData.flightArrivalDate || ''}
+                                                onChange={(e) => {
+                                                    const d = e.target.value;
+                                                    setFormData(prev => ({ ...prev, date: d, flightArrivalDate: d }));
+                                                    if (errors.date) setErrors(prev => ({ ...prev, date: false }));
+                                                }}
+                                                className={`w-full h-11 sm:h-12 bg-slate-50 dark:bg-white/5 border px-4 rounded-2xl font-black text-xs sm:text-sm outline-none focus:border-[#FACC15] transition-all cursor-pointer ${errors.date ? 'border-red-500 ring-2 ring-red-500/20' : 'border-slate-300 dark:border-white/15'}`}
+                                                style={{ colorScheme: 'light' }}
+                                                aria-label="Pickup date"
+                                            />
+                                        </div>
+                                        <div className="space-y-2">
+                                            <label className={`text-[9px] sm:text-[10px] font-black uppercase tracking-widest pl-3 flex items-center gap-2 ${errors.time ? 'text-red-500' : 'text-slate-500'}`}>
+                                                <Clock size={12} strokeWidth={3} className={errors.time ? 'text-red-500' : 'text-[#FACC15]'} /> Pickup Time
+                                            </label>
+                                            <input
+                                                type="time"
+                                                value={(() => { const parsed = parseStoredTime(formData.time || formData.flightArrivalTime); return parsed.time24h || ''; })()}
+                                                onChange={(e) => {
+                                                    const newTime24 = e.target.value;
+                                                    if (!newTime24) return;
+                                                    const [hStr, mStr] = newTime24.split(':');
+                                                    let h = parseInt(hStr, 10);
+                                                    const m = parseInt(mStr, 10);
+                                                    const ampm = h >= 12 ? 'PM' : 'AM';
+                                                    const h12 = h % 12 === 0 ? 12 : h % 12;
+                                                    const tz = detectLocalTimezone() || 'SLST';
+                                                    const formatted = `${h12.toString().padStart(2,'0')}:${m.toString().padStart(2,'0')} ${ampm} ${tz}`;
+                                                    setFormData(prev => ({ ...prev, time: formatted, flightArrivalTime: formatted }));
+                                                    if (errors.time) setErrors(prev => ({ ...prev, time: false }));
+                                                }}
+                                                step={1800}
+                                                className={`w-full h-11 sm:h-12 bg-slate-50 dark:bg-white/5 border px-4 rounded-2xl font-black text-xs sm:text-sm outline-none focus:border-[#FACC15] transition-all cursor-pointer ${errors.time ? 'border-red-500 ring-2 ring-red-500/20' : 'border-slate-300 dark:border-white/15'}`}
+                                                style={{ colorScheme: 'light' }}
+                                                aria-label="Pickup time"
+                                            />
                                         </div>
                                     </div>
-                                    <AnimatePresence>
-                                        {isMainPickerOpen2 && (
-                                            <>
-                                                <div className="fixed inset-0 z-[190]" onClick={() => setIsMainPickerOpen2(false)} />
-                                                <motion.div initial={{ opacity: 0, y: 10, scale: 0.95 }} animate={{ opacity: 1, y: 0, scale: 1 }} exit={{ opacity: 0, y: 10, scale: 0.95 }} className="absolute top-full left-0 right-0 mt-3 z-[200] shadow-2xl origin-top">
-                                                    <CustomDateTimePicker 
-                                                        date={formData.date || formData.flightArrivalDate} 
-                                                        time={formData.time || formData.flightArrivalTime} 
-                                                        onChange={(d, t) => { 
-                                                            setFormData(prev => ({ ...prev, date: d, flightArrivalDate: d, time: t, flightArrivalTime: t })); 
-                                                            if (errors.date || errors.time) {
-                                                                setErrors(prev => ({ ...prev, date: false, time: false }));
-                                                            }
-                                                        }} 
-                                                    />
-                                                    <div className="bg-white rounded-b-[2.5rem] border-x-4 border-b-4 border-[#FACC15] p-4 flex justify-center max-w-[320px] mx-auto">
-                                                        <button type="button" onClick={() => setIsMainPickerOpen2(false)} className="px-10 py-3 bg-[#FACC15] text-black font-black text-xs uppercase tracking-[0.2em] rounded-full hover:bg-white transition-all shadow-lg active:scale-95">Done</button>
-                                                    </div>
-                                                </motion.div>
-                                            </>
-                                        )}
-                                    </AnimatePresence>
                                 </div>
                             </div>
 

@@ -809,7 +809,7 @@ const BookingWidgetContent = ({ defaultTab = 'pickup', onTabChange }) => {
     const isAirportService = ['pickup', 'drop'].includes(activeTab);
     const pricingCategory = isAirportService ? 'airport-transfer' : 'ride-now';
 
-    const isStep2Disabled = !vehicle || !passengerCount.adults || passengerCount.adults < 1 || passengerCount.luggage < 1 || passengerCount.handLuggage < 1 || !isPassengerVerified;
+    const isStep2Disabled = !vehicle || !passengerCount.adults || passengerCount.adults < 1 || passengerCount.luggage < 1 || passengerCount.handLuggage < 1;
     const isCheckoutDisabled = !distance || isStep2Disabled;
 
     return (
@@ -1168,34 +1168,24 @@ const BookingWidgetContent = ({ defaultTab = 'pickup', onTabChange }) => {
                                         </div>
                                         <div className="space-y-4 mb-6" id="booking-widget-passengers">
                                             <label className="text-xs font-black text-slate-900 dark:text-white uppercase tracking-widest pl-1 leading-none block mb-4 flex items-center gap-2">
-                                                Passenger and Luggage <span className="text-[9px] bg-red-600 text-white px-2 py-0.5 rounded-full lowercase tracking-tight shadow-sm">required</span>
+                                                Passenger and Luggage
                                             </label>
-                                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-4">
+                                            <div className="grid grid-cols-2 gap-2">
                                                 {[{ id: 'adults', label: 'Adults' }, { id: 'children', label: 'Children' }, { id: 'luggage', label: 'Luggage' }, { id: 'handLuggage', label: 'Hand Luggage' }].map(c => {
                                                     const isFieldUnselected = (c.id === 'luggage' && !(passengerCount.luggage > 0)) || (c.id === 'adults' && !(passengerCount.adults > 0)) || (c.id === 'handLuggage' && !(passengerCount.handLuggage > 0));
                                                     return (
-                                                        <div key={c.id} className={`bg-white dark:bg-zinc-800 border shadow-sm p-4 rounded-2xl flex items-center justify-between transition-all h-16 sm:h-18 ${isFieldUnselected ? 'border-red-500 ring-2 ring-red-500/10' : 'border-slate-200 dark:border-white/10'}`}>
-                                                            <span className={`text-[11px] font-black uppercase tracking-widest w-24 flex-shrink-0 leading-tight pr-2 ${isFieldUnselected ? 'text-red-500 dark:text-red-400 animate-pulse' : 'text-slate-800 dark:text-slate-100'}`}>{c.label}</span>
-                                                            <div className="flex items-center gap-3 shrink-0 bg-slate-50 dark:bg-zinc-900 rounded-xl p-1 border border-slate-100 dark:border-white/5">
-                                                                <button onClick={() => setPassengerCount(p => ({ ...p, [c.id]: Math.max(0, (Number(p[c.id]) || 0) - 1) }))} className="w-8 h-8 rounded-lg bg-white dark:bg-zinc-800 border border-slate-200 dark:border-white/10 shadow-sm flex items-center justify-center hover:bg-slate-50 transition-all text-slate-600 dark:text-white active:scale-95" aria-label={`Decrease ${c.label}`}><Minus size={14} strokeWidth={2.5} /></button>
-                                                                <span className={`font-bold text-base min-w-[20px] text-center ${isFieldUnselected ? 'text-red-500 dark:text-red-400' : 'text-slate-800 dark:text-white'}`} aria-live="polite">{passengerCount[c.id] || 0}</span>
-                                                                <button onClick={() => setPassengerCount(p => ({ ...p, [c.id]: (Number(p[c.id]) || 0) + 1 }))} className="w-8 h-8 rounded-lg bg-emerald-500 dark:bg-emerald-600 border border-transparent flex items-center justify-center transition-all text-white shadow-sm active:scale-95" aria-label={`Increase ${c.label}`}><Plus size={14} strokeWidth={2.5} /></button>
+                                                        <div key={c.id} className={`bg-white dark:bg-zinc-800 border shadow-sm p-2 rounded-xl flex flex-col gap-1 transition-all ${isFieldUnselected ? 'border-red-500 ring-1 ring-red-500/20' : 'border-slate-300 dark:border-white/15'}`}>
+                                                            <span className={`text-[9px] font-black uppercase tracking-widest ${isFieldUnselected ? 'text-red-500 dark:text-red-400' : 'text-slate-500 dark:text-slate-400'}`}>{c.label}</span>
+                                                            <div className="flex items-center justify-between gap-1">
+                                                                <button onClick={() => setPassengerCount(p => ({ ...p, [c.id]: Math.max(0, (Number(p[c.id]) || 0) - 1) }))} className="w-7 h-7 rounded-lg bg-slate-100 dark:bg-zinc-900 border border-slate-200 dark:border-white/5 flex items-center justify-center text-slate-600 dark:text-white active:scale-95"><Minus size={12} /></button>
+                                                                <span className="font-bold text-sm" aria-live="polite">{passengerCount[c.id] || 0}</span>
+                                                                <button onClick={() => setPassengerCount(p => ({ ...p, [c.id]: (Number(p[c.id]) || 0) + 1 }))} className="w-7 h-7 rounded-lg bg-emerald-500 border border-transparent flex items-center justify-center text-white shadow-sm active:scale-95"><Plus size={12} /></button>
                                                             </div>
                                                         </div>
                                                     );
                                                 })}
                                             </div>
-                                            <label className="flex items-center gap-3 mt-4 p-3 bg-emerald-50/50 dark:bg-emerald-900/10 border border-emerald-100 dark:border-emerald-900/30 rounded-xl cursor-pointer">
-                                                <input 
-                                                    type="checkbox" 
-                                                    className="w-4 h-4 text-emerald-600 rounded focus:ring-emerald-500 cursor-pointer"
-                                                    checked={isPassengerVerified}
-                                                    onChange={(e) => setIsPassengerVerified(e.target.checked)}
-                                                />
-                                                <span className="text-[10px] font-black uppercase tracking-widest text-emerald-900 dark:text-emerald-300">
-                                                    I confirm these details are accurate
-                                                </span>
-                                            </label>
+
                                         </div>
                                         <div className="mb-6 mt-6">
                                             <div className="flex items-center justify-between mb-4 px-1">
@@ -1278,24 +1268,19 @@ const BookingWidgetContent = ({ defaultTab = 'pickup', onTabChange }) => {
                                                         return;
                                                     }
                                                     if (!passengerCount.adults || passengerCount.adults < 1 || passengerCount.luggage < 1 || passengerCount.handLuggage < 1) {
-                                                        alert("Please enter passenger and luggage count to proceed");
+                                                        alert("Please enter all required passenger and luggage details to proceed (✓ minimum 1 adult, 1 luggage, 1 hand luggage)");
                                                         const passengerContainer = document.getElementById('booking-widget-passengers');
                                                         if (passengerContainer) passengerContainer.scrollIntoView({ behavior: 'smooth', block: 'center' });
                                                         return;
                                                     }
-                                                    if (!isPassengerVerified) {
-                                                        alert("Please confirm that your passenger and luggage details are accurate.");
-                                                        const passengerContainer = document.getElementById('booking-widget-passengers');
-                                                        if (passengerContainer) passengerContainer.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                                                        return;
-                                                    }
+
                                                     setStep(3);
                                                 }}
                                                 disabled={isStep2Disabled}
-                                                className={`flex-1 flex items-center justify-center gap-3 font-black text-xs uppercase tracking-widest py-4 rounded-2xl transition-all lg:hidden ${isStep2Disabled ? 'bg-slate-100 dark:bg-zinc-800 text-slate-400 dark:text-slate-500 cursor-not-allowed border border-slate-200 dark:border-zinc-700' : 'active:scale-[0.98] bg-gradient-to-r from-yellow-400 to-orange-500 hover:from-yellow-500 hover:to-orange-600 text-white hover:-translate-y-0.5'}`} 
-                                                aria-label="Continue to review"
+                                                className={`flex-1 flex items-center justify-center gap-3 font-black text-xs uppercase tracking-widest py-4 rounded-2xl transition-all lg:hidden ${isStep2Disabled ? 'bg-slate-100 dark:bg-zinc-800 text-slate-400 dark:text-slate-500 cursor-not-allowed border border-slate-200 dark:border-zinc-700' : 'active:scale-[0.98] bg-[#0a0a0a] hover:bg-black text-white dark:bg-[#FACC15] dark:text-black dark:hover:bg-yellow-400 shadow-lg hover:-translate-y-0.5'}`} 
+                                                aria-label="Go to booking"
                                             >
-                                                Continue to Review <ArrowRight size={16} strokeWidth={3}/>
+                                                GO TO BOOKING <ArrowRight size={16} strokeWidth={3}/>
                                             </button>
                                         </div>
                                     </motion.div>
