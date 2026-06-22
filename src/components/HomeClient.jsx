@@ -379,7 +379,6 @@ export default function HomeClient({ defaultTab = 'pickup' }) {
                     <MobileAppSection />
                 </>
             )}
-            )}
         </div >
     )
 }

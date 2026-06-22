@@ -1010,13 +1010,32 @@ export default function AdminDashboard() {
                             <RevenueStats bookings={bookings} />
 
                             {/* Stats are now exclusively handled by RevenueStats to ensure verified data */}
-
                             <div className="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
-                                <div className="px-6 md:px-8 py-5 border-b border-slate-100 flex items-center justify-between">
-                                    <h3 className="text-lg md:text-xl font-bold text-slate-800">Recent Bookings</h3>
-                                    <button onClick={() => setCurrentView('bookings')} className="text-sm text-emerald-600 hover:text-emerald-700 font-medium">
-                                        View All →
-                                    </button>
+                                <div className="px-6 md:px-8 py-5 border-b border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                                    <div className="flex items-center gap-4">
+                                        <h3 className="text-lg md:text-xl font-bold text-slate-800">Recent Bookings</h3>
+                                        <span className="text-xs text-slate-400">({bookings.slice(0, 5).length} shown)</span>
+                                    </div>
+                                    <div className="flex items-center gap-3 w-full sm:w-auto">
+                                        <div className="relative w-full sm:w-60">
+                                            <input
+                                                type="text"
+                                                placeholder="Search booking customer..."
+                                                value={bookingSearch}
+                                                onChange={(e) => {
+                                                    setBookingSearch(e.target.value);
+                                                    setCurrentView('bookings');
+                                                }}
+                                                className="w-full pl-9 pr-4 py-2 text-xs border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-600/20 shadow-sm text-emerald-950 font-semibold placeholder:text-slate-400"
+                                            />
+                                            <div className="absolute left-3 top-3 text-gray-400">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                                            </div>
+                                        </div>
+                                        <button onClick={() => setCurrentView('bookings')} className="text-sm text-emerald-600 hover:text-emerald-700 font-medium whitespace-nowrap">
+                                            View All →
+                                        </button>
+                                    </div>
                                 </div>
                                 <div className="overflow-x-auto">
                                     <table className="w-full">
@@ -1038,7 +1057,17 @@ export default function AdminDashboard() {
                                                 </tr>
                                             ) : (
                                                 bookings.slice(0, 5).map((booking) => (
-                                                    <tr key={booking._id} className="border-b last:border-0 hover:bg-slate-50 transition-colors">
+                                                    <tr 
+                                                        key={booking._id} 
+                                                        onClick={() => {
+                                                            setCurrentView('bookings');
+                                                            setSelectedBooking(booking);
+                                                            setSelectedStatus(booking.status || 'pending');
+                                                            setSelectedPaymentStatus(booking.paymentStatus || 'pending');
+                                                            setSelectedDriver(booking.driver?._id || booking.driver || '');
+                                                        }}
+                                                        className="border-b last:border-0 hover:bg-slate-50 transition-colors cursor-pointer"
+                                                    >
                                                         <td className="py-4 font-medium text-emerald-900">#{booking._id.slice(-6)}</td>
                                                         <td className="py-4">
                                                             <div className="font-medium">{booking.customerName || 'Guest'}</div>

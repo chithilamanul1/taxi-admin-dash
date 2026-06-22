@@ -16,6 +16,9 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/com
 import { ACTIVE_BOOKINGS } from '@/lib/mock-taxi-db';
 
 export default function AdminDashboard() {
+    const [searchQuery, setSearchQuery] = React.useState("");
+    const [selectedBooking, setSelectedBooking] = React.useState<any | null>(null);
+
     const stats = [
         { label: "Total Rides Today", value: "8", icon: <Clock className="text-blue-400" />, trend: "+12%" },
         { label: "Daily Revenue", value: "LKR 145,000", icon: <TrendingUp className="text-green-400" />, trend: "+8.5%" },
@@ -31,6 +34,17 @@ export default function AdminDashboard() {
             default: return 'bg-gray-500/20 text-gray-400 border-gray-500/20';
         }
     };
+
+    const filteredBookings = ACTIVE_BOOKINGS.filter(booking => {
+        if (!searchQuery.trim()) return true;
+        const searchLower = searchQuery.toLowerCase();
+        return (
+            booking.customerName.toLowerCase().includes(searchLower) ||
+            booking.id.toLowerCase().includes(searchLower) ||
+            booking.pickupLocation.toLowerCase().includes(searchLower) ||
+            booking.dropLocation.toLowerCase().includes(searchLower)
+        );
+    });
 
     return (
         <div className="min-h-screen bg-slate-50 text-emerald-900 pt-24 pb-12 px-8">
@@ -84,8 +98,10 @@ export default function AdminDashboard() {
                             <div className="relative group">
                                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 group-focus-within:text-emerald-600 transition-colors" size={18} />
                                 <input
-                                    placeholder="Search ref, customer, or location..."
-                                    className="bg-white border border-slate-200 rounded-xl py-2.5 pl-10 pr-4 text-sm focus:outline-none focus:border-emerald-600 transition-all w-64 shadow-sm"
+                                    placeholder="Search customer name, ref..."
+                                    value={searchQuery}
+                                    onChange={(e) => setSearchQuery(e.target.value)}
+                                    className="bg-white border border-slate-200 rounded-xl py-2.5 pl-10 pr-4 text-sm focus:outline-none focus:border-emerald-600 transition-all w-64 shadow-sm text-emerald-950 font-semibold placeholder:text-slate-400"
                                 />
                             </div>
                             <button className="p-2.5 bg-white border border-slate-200 rounded-xl text-slate-500 hover:text-emerald-900 transition-colors shadow-sm">
@@ -108,44 +124,59 @@ export default function AdminDashboard() {
                                     </tr>
                                 </thead>
                                 <tbody className="divide-y divide-white/5">
-                                    {ACTIVE_BOOKINGS.map((booking) => (
-                                        <tr key={booking.id} className="hover:bg-slate-50/50 transition-colors group border-b border-slate-100">
-                                            <td className="px-8 py-6">
-                                                <span className="font-mono text-xs text-emerald-600 bg-emerald-600/10 px-2 py-1 rounded border border-emerald-600/10">#{booking.id.toUpperCase()}</span>
-                                            </td>
-                                            <td className="px-8 py-6">
-                                                <p className="font-bold text-emerald-900">{booking.customerName}</p>
-                                                <p className="text-xs text-gray-500">Regular Client</p>
-                                            </td>
-                                            <td className="px-8 py-6">
-                                                <div className="space-y-1">
-                                                    <p className="text-sm font-medium flex items-center gap-2">
-                                                        <div className="w-2 h-2 rounded-full bg-blue-400" /> {booking.pickupLocation}
-                                                    </p>
-                                                    <p className="text-sm font-medium flex items-center gap-2">
-                                                        <div className="w-2 h-2 rounded-full bg-red-400" /> {booking.dropLocation}
-                                                    </p>
-                                                </div>
-                                            </td>
-                                            <td className="px-8 py-6 text-sm">
-                                                <p className="font-bold text-emerald-900">{booking.date}</p>
-                                                <p className="text-gray-500">{booking.time}</p>
-                                            </td>
-                                            <td className="px-8 py-6 text-sm text-slate-700 font-medium">
-                                                {booking.vehicleType}
-                                            </td>
-                                            <td className="px-8 py-6">
-                                                <span className={`px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-tighter border ${getStatusColor(booking.status)}`}>
-                                                    {booking.status}
-                                                </span>
-                                            </td>
-                                            <td className="px-8 py-6 text-center">
-                                                <button className="p-2 hover:bg-slate-100 rounded-lg transition-colors text-slate-400 hover:text-emerald-900">
-                                                    <MoreVertical size={18} />
-                                                </button>
+                                    {filteredBookings.length === 0 ? (
+                                        <tr>
+                                            <td colSpan={7} className="px-8 py-10 text-center text-gray-400 font-bold">
+                                                No bookings found matching "{searchQuery}"
                                             </td>
                                         </tr>
-                                    ))}
+                                    ) : (
+                                        filteredBookings.map((booking) => (
+                                            <tr 
+                                                key={booking.id} 
+                                                onClick={() => setSelectedBooking(booking)}
+                                                className="hover:bg-slate-50/50 transition-colors group border-b border-slate-100 cursor-pointer"
+                                            >
+                                                <td className="px-8 py-6">
+                                                    <span className="font-mono text-xs text-emerald-600 bg-emerald-600/10 px-2 py-1 rounded border border-emerald-600/10">#{booking.id.toUpperCase()}</span>
+                                                </td>
+                                                <td className="px-8 py-6">
+                                                    <p className="font-bold text-emerald-900">{booking.customerName}</p>
+                                                    <p className="text-xs text-gray-500">Regular Client</p>
+                                                </td>
+                                                <td className="px-8 py-6">
+                                                    <div className="space-y-1">
+                                                        <p className="text-sm font-medium flex items-center gap-2">
+                                                            <span className="w-2 h-2 rounded-full bg-blue-400 inline-block" /> {booking.pickupLocation}
+                                                        </p>
+                                                        <p className="text-sm font-medium flex items-center gap-2">
+                                                            <span className="w-2 h-2 rounded-full bg-red-400 inline-block" /> {booking.dropLocation}
+                                                        </p>
+                                                    </div>
+                                                </td>
+                                                <td className="px-8 py-6 text-sm">
+                                                    <p className="font-bold text-emerald-900">{booking.date}</p>
+                                                    <p className="text-gray-500">{booking.time}</p>
+                                                </td>
+                                                <td className="px-8 py-6 text-sm text-slate-700 font-medium">
+                                                    {booking.vehicleType}
+                                                </td>
+                                                <td className="px-8 py-6">
+                                                    <span className={`px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-tighter border ${getStatusColor(booking.status)}`}>
+                                                        {booking.status}
+                                                    </span>
+                                                </td>
+                                                <td className="px-8 py-6 text-center" onClick={(e) => e.stopPropagation()}>
+                                                    <button 
+                                                        onClick={() => setSelectedBooking(booking)}
+                                                        className="p-2 hover:bg-slate-100 rounded-lg transition-colors text-slate-400 hover:text-emerald-900"
+                                                    >
+                                                        <MoreVertical size={18} />
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        ))
+                                    )}
                                 </tbody>
                             </table>
                         </div>
@@ -153,12 +184,103 @@ export default function AdminDashboard() {
                         <div className="p-8 bg-slate-50 border-t border-slate-100 flex items-center gap-3">
                             <AlertCircle size={18} className="text-emerald-600" />
                             <p className="text-sm text-gray-500 font-medium">
-                                Showing {ACTIVE_BOOKINGS.length} active bookings for terminal tracking. Auto-refreshing every 30 seconds.
+                                Showing {filteredBookings.length} of {ACTIVE_BOOKINGS.length} active bookings. Auto-refreshing every 30 seconds.
                             </p>
                         </div>
                     </CardContent>
                 </Card>
             </div>
+
+            {/* Booking Details Modal */}
+            {selectedBooking && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 animate-fade-in">
+                    <div className="bg-white rounded-3xl shadow-2xl w-full max-w-lg overflow-hidden border border-slate-100 animate-scale-up">
+                        <div className="bg-emerald-900 text-white p-6 relative">
+                            <h3 className="text-xl font-bold">Booking Details</h3>
+                            <p className="text-emerald-300 text-xs mt-1">Reference: #{selectedBooking.id.toUpperCase()}</p>
+                            <button 
+                                onClick={() => setSelectedBooking(null)}
+                                className="absolute top-6 right-6 text-white/80 hover:text-white transition-colors"
+                            >
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                            </button>
+                        </div>
+                        <div className="p-8 space-y-6">
+                            <div className="grid grid-cols-2 gap-4">
+                                <div>
+                                    <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest block">Customer Name</span>
+                                    <span className="font-bold text-emerald-900 text-base">{selectedBooking.customerName}</span>
+                                </div>
+                                <div>
+                                    <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest block">Status</span>
+                                    <div className="mt-1">
+                                        <span className={`inline-block px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-tighter border ${getStatusColor(selectedBooking.status)}`}>
+                                            {selectedBooking.status}
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <hr className="border-slate-100" />
+
+                            <div className="space-y-3">
+                                <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest block">Route Details</span>
+                                <div className="space-y-2">
+                                    <div className="flex items-start gap-2.5">
+                                        <div className="w-2.5 h-2.5 rounded-full bg-blue-500 mt-1.5 shrink-0" />
+                                        <div>
+                                            <span className="text-[9px] font-black text-slate-400 uppercase block">Pickup Location</span>
+                                            <span className="text-sm font-medium text-emerald-900">{selectedBooking.pickupLocation}</span>
+                                        </div>
+                                    </div>
+                                    <div className="flex items-start gap-2.5">
+                                        <div className="w-2.5 h-2.5 rounded-full bg-red-500 mt-1.5 shrink-0" />
+                                        <div>
+                                            <span className="text-[9px] font-black text-slate-400 uppercase block">Dropoff Location</span>
+                                            <span className="text-sm font-medium text-emerald-900">{selectedBooking.dropLocation}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <hr className="border-slate-100" />
+
+                            <div className="grid grid-cols-2 gap-4">
+                                <div>
+                                    <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest block">Date & Time</span>
+                                    <span className="text-sm font-bold text-emerald-900">{selectedBooking.date} at {selectedBooking.time}</span>
+                                </div>
+                                <div>
+                                    <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest block">Vehicle Selected</span>
+                                    <span className="text-sm font-bold text-emerald-900">{selectedBooking.vehicleType}</span>
+                                </div>
+                            </div>
+
+                            <hr className="border-slate-100" />
+
+                            <div className="flex justify-between items-center bg-slate-50 p-4 rounded-2xl border border-slate-100">
+                                <div>
+                                    <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest block">Est. Fare</span>
+                                    <span className="text-xs text-slate-500 font-medium">LKR Currency</span>
+                                </div>
+                                <span className="text-xl font-black text-emerald-900">LKR {selectedBooking.price?.toLocaleString()}</span>
+                            </div>
+
+                            <div className="flex justify-end gap-3 pt-2">
+                                <button 
+                                    onClick={() => setSelectedBooking(null)}
+                                    className="px-6 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl text-sm transition-colors"
+                                >
+                                    Close
+                                </button>
+                                <button className="px-6 py-2.5 bg-emerald-600 text-black font-bold rounded-xl text-sm hover:bg-emerald-500 transition-colors shadow-md shadow-emerald-600/10">
+                                    Assign Driver
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 }
