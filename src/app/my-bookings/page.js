@@ -1,11 +1,17 @@
 'use client';
 import { useState, useEffect } from 'react';
-import { useSession } from 'next-auth/react';
+import { useSession, signIn } from 'next-auth/react';
 import Link from 'next/link';
 import { Calendar, Clock, MapPin, Car, ArrowRight, Loader2, User, Package } from 'lucide-react';
 
 export default function MyBookingsPage() {
-    const { data: session } = useSession();
+    const { data: session, status } = useSession();
+
+    useEffect(() => {
+        if (status === 'unauthenticated') {
+            signIn('google', { callbackUrl: '/my-bookings' });
+        }
+    }, [status]);
     const [bookings, setBookings] = useState([]);
     const [loading, setLoading] = useState(true);
     const [activeTab, setActiveTab] = useState('upcoming');

@@ -4,9 +4,11 @@ import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { Home, Compass, Map, Briefcase } from 'lucide-react';
 import { usePathname } from 'next/navigation';
+import { useSession, signIn } from 'next-auth/react';
 
 const MobileBottomNav = () => {
     const pathname = usePathname();
+    const { status } = useSession();
 
     if (pathname?.startsWith('/admin') || pathname?.startsWith('/driver')) return null;
 
@@ -49,6 +51,12 @@ const MobileBottomNav = () => {
                         <Link 
                             key={i}
                             href={item.href}
+                            onClick={(e) => {
+                                if (item.name === 'Trips' && status === 'unauthenticated') {
+                                    e.preventDefault();
+                                    signIn('google', { callbackUrl: '/my-bookings' });
+                                }
+                            }}
                             className={`flex flex-col items-center justify-center w-1/5 py-1 transition-colors ${
                                 pathname === item.href ? 'text-black' : 'text-slate-600'
                             }`}

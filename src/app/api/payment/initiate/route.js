@@ -21,6 +21,27 @@ export async function POST(req) {
 
             console.log(`[Payment Retry] Re-initiating for Booking: ${existingBooking._id}`);
 
+            // Update booking payment split if requested dynamically by user on checkout view
+            if (data.paymentType === 'partial') {
+                existingBooking.paymentType = 'partial';
+                existingBooking.paidAmount = existingBooking.totalPrice * 0.5;
+                existingBooking.balanceAmount = existingBooking.totalPrice * 0.5;
+                if (existingBooking.displayPrice) {
+                    existingBooking.displayPaidAmount = existingBooking.displayPrice * 0.5;
+                    existingBooking.displayBalanceAmount = existingBooking.displayPrice * 0.5;
+                }
+                await existingBooking.save();
+            } else if (data.paymentType === 'full') {
+                existingBooking.paymentType = 'full';
+                existingBooking.paidAmount = existingBooking.totalPrice;
+                existingBooking.balanceAmount = 0;
+                if (existingBooking.displayPrice) {
+                    existingBooking.displayPaidAmount = existingBooking.displayPrice;
+                    existingBooking.displayBalanceAmount = 0;
+                }
+                await existingBooking.save();
+            }
+
             const gateway = getGatewayForCurrency(existingBooking.currency);
             const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://taxi-admin-dash.vercel.app/';
 

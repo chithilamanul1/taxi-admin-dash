@@ -15,6 +15,7 @@ export default function CheckoutPage() {
     const [loading, setLoading] = useState(true);
     const [paymentProcessing, setPaymentProcessing] = useState(false);
     const [error, setError] = useState(false);
+    const [selectedPaymentType, setSelectedPaymentType] = useState('full');
 
     const getCurrencySymbol = (curr) => {
         switch (curr) {
@@ -40,6 +41,7 @@ export default function CheckoutPage() {
                     const data = await res.json();
                     if (data.success) {
                         setProduct(data.data);
+                        setSelectedPaymentType(data.data.allowedPaymentMode === 'partial' ? 'partial' : 'full');
                     } else {
                         setError(true);
                     }
@@ -116,15 +118,27 @@ export default function CheckoutPage() {
                         {product.customerName && <p className="text-slate-500 text-sm font-medium mb-6">Billed to: {product.customerName}</p>}
 
                         <div className="bg-slate-50 w-full rounded-2xl p-6 flex flex-col items-center mb-8 border border-slate-100">
-                            <span className="text-slate-400 text-xs font-bold uppercase tracking-widest mb-1">Total Amount Due</span>
+                            <span className="text-slate-400 text-xs font-bold uppercase tracking-widest mb-1">
+                                {selectedPaymentType === 'partial' ? 'Deposit Amount Due (50%)' : 'Total Amount Due'}
+                            </span>
                             <span className="text-5xl font-black text-emerald-900">
                                 {getCurrencySymbol(product.currency)}
-                                {Number(product.price).toLocaleString(undefined, { minimumFractionDigits: product.currency === 'LKR' ? 0 : 2, maximumFractionDigits: 2 })}
+                                {(selectedPaymentType === 'partial' ? Number(product.price) * 0.5 : Number(product.price)).toLocaleString(undefined, { minimumFractionDigits: product.currency === 'LKR' ? 0 : 2, maximumFractionDigits: 2 })}
                             </span>
-                            {product.allowedPaymentMode === 'partial' && (
-                                <span className="mt-2 text-xs font-bold text-emerald-600 bg-emerald-50 px-3 py-1 rounded-full border border-emerald-100 uppercase tracking-widest">
-                                    50% Deposit Requested
-                                </span>
+                            
+                            {product.allowedPaymentMode === 'both' && (
+                                <div className="flex bg-slate-200/60 p-1.5 rounded-xl border border-slate-300/40 mt-4 w-40 justify-center">
+                                    {['full', 'partial'].map(t => (
+                                        <button
+                                            key={t}
+                                            type="button"
+                                            onClick={() => setSelectedPaymentType(t)}
+                                            className={`flex-1 py-1.5 rounded-lg text-[9px] font-black uppercase tracking-widest transition-all ${selectedPaymentType === t ? 'bg-emerald-600 text-white shadow-md' : 'text-slate-500 hover:text-slate-800'}`}
+                                        >
+                                            {t === 'full' ? '100%' : '50%'}
+                                        </button>
+                                    ))}
+                                </div>
                             )}
                         </div>
 
@@ -136,7 +150,7 @@ export default function CheckoutPage() {
                                     const res = await fetch('/api/payment/initiate', {
                                         method: 'POST',
                                         headers: { 'Content-Type': 'application/json' },
-                                        body: JSON.stringify({ retry: true, bookingId: product._id }),
+                                        body: JSON.stringify({ retry: true, bookingId: product._id, paymentType: selectedPaymentType }),
                                     });
                                     const data = await res.json();
                                     if (data.success && data.paymentUrl) {
@@ -153,7 +167,7 @@ export default function CheckoutPage() {
                             className="w-full py-5 bg-emerald-900 hover:bg-emerald-800 text-white font-black text-xl rounded-2xl flex items-center justify-center gap-3 transition-all disabled:opacity-70 shadow-xl shadow-emerald-900/20"
                         >
                             {paymentProcessing ? <Loader2 className="animate-spin" size={24} /> : <CreditCard size={24} />}
-                            {paymentProcessing ? 'Processing Securely...' : `Pay ${getCurrencySymbol(product.currency)}${product.allowedPaymentMode === 'partial' ? (Number(product.price) * 0.5).toLocaleString() : Number(product.price).toLocaleString()} Now`}
+                            {paymentProcessing ? 'Processing Securely...' : `Pay ${getCurrencySymbol(product.currency)}${(selectedPaymentType === 'partial' ? Number(product.price) * 0.5 : Number(product.price)).toLocaleString()} Now`}
                         </button>
                     </div>
 

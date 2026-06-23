@@ -29,7 +29,7 @@ export async function GET(req, { params }) {
                         price: booking.totalPrice,
                         currency: booking.currency || 'LKR',
                         img: '/logo.png',
-                        allowedPaymentMode: booking.paymentType === 'partial' ? 'partial' : 'full',
+                        allowedPaymentMode: 'both',
                         isBookingInvoice: true,
                         customerName: booking.customerName,
                         customerEmail: booking.customerEmail,

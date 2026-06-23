@@ -25,8 +25,13 @@ const bookingSchema = new mongoose.Schema({
         tourId: String,
         tourTitle: String,
         duration: String,
-        inclusions: [String]
+        inclusions: [String],
+        kmLimit: Number,
+        hours: Number
     },
+    taxiTourKm: { type: Number },
+    taxiTourHours: { type: Number },
+    roundTripPackageId: { type: String },
     tripType: { type: String, enum: ['one-way', 'round-trip'], default: 'one-way' },
     passengerCount: {
         adults: { type: Number, default: 1 },

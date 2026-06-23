@@ -86,6 +86,7 @@ const BookingWidgetContent = ({ defaultTab = 'pickup', onTabChange }) => {
     })
 
     const [distance, setDistance] = useState(null)
+    const [duration, setDuration] = useState(null)
     const [vehicle, setVehicle] = useState('mini-car')
     const [waitingHours, setWaitingHours] = useState(0)
     const [couponCode, setCouponCode] = useState('')
@@ -423,7 +424,14 @@ const BookingWidgetContent = ({ defaultTab = 'pickup', onTabChange }) => {
     // Distance updated via TripMap callback now
     const handleRouteCalculated = (data) => {
         setDistance(data.distanceKm);
-        // We could also set duration if needed
+        if (data.durationMin) {
+            const hrs = Math.floor(data.durationMin / 60);
+            const mins = Math.round(data.durationMin % 60);
+            const durationStr = hrs > 0 ? `${hrs} hr ${mins} min` : `${mins} min`;
+            setDuration(durationStr);
+        } else {
+            setDuration(null);
+        }
     }
 
     // Fetch Marketing Offers, Destinations, Global Settings, Surge Rules, and Coupons on mount in parallel
@@ -783,6 +791,7 @@ const BookingWidgetContent = ({ defaultTab = 'pickup', onTabChange }) => {
             waitingHours: totalWaitingHours,
             hasNameBoard: null, // Force selection in modal
             distance,
+            duration,
             vehicle,
             couponCode: verifiedCoupons.length > 0 ? verifiedCoupons[0].code : '',
             verifiedCoupons,
@@ -803,6 +812,7 @@ const BookingWidgetContent = ({ defaultTab = 'pickup', onTabChange }) => {
         setPickup(dropoff); setPickupSearch(dropoffSearch);
         setDropoff(t); setDropoffSearch(ts);
         setDistance(null); // Force re-calculation trigger
+        setDuration(null);
     }
 
     // Determine Pricing Category

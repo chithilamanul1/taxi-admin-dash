@@ -107,7 +107,7 @@ export const generateBookingPDF = (booking) => {
     }
 
     if (booking.tripType === 'round-trip' || booking.type === 'tour' || booking.roundTripPackageId) {
-        const packageDetails = booking.tourDetails?.duration ? `${booking.tourDetails.duration} (${booking.distanceKm || 0} KM Limit)` : (booking.roundTripPackageId || 'Custom Package');
+        const packageDetails = booking.tourDetails?.duration ? `${booking.tourDetails.duration} (${booking.tourDetails.kmLimit || booking.taxiTourKm || booking.distanceKm || 0} KM Limit)` : (booking.roundTripPackageId || 'Custom Package');
         journeyBody.push(['Round Trip Package', packageDetails]);
     }
 
