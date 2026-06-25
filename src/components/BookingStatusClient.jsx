@@ -13,16 +13,16 @@ export default function BookingStatusClient({ booking }) {
         <div className="min-h-screen bg-slate-50 pt-24 pb-20 px-4 font-sans select-none">
             <div className="max-w-4xl mx-auto bg-white rounded-3xl shadow-xl overflow-hidden border border-slate-100">
                 {/* Header Section */}
-                <div className="bg-slate-900 px-6 pt-8 pb-14 md:pt-12 md:pb-24 text-center relative overflow-hidden">
+                <div className="bg-slate-900 px-4 pt-6 pb-10 md:pt-12 md:pb-24 text-center relative overflow-hidden">
                     <div className="absolute inset-0 bg-[#FACC15]/5 pattern-grid-lg opacity-40"></div>
                     <div className="relative z-10">
-                        <div className="w-16 h-16 md:w-20 md:h-20 bg-white/5 text-[#FACC15] border border-white/10 rounded-full flex items-center justify-center mx-auto mb-4 md:mb-6 backdrop-blur-sm">
-                            <CheckCircle className="w-8 h-8 md:w-10 md:h-10" strokeWidth={2.5} />
+                        <div className="w-12 h-12 md:w-20 md:h-20 bg-white/5 text-[#FACC15] border border-white/10 rounded-full flex items-center justify-center mx-auto mb-3 md:mb-6 backdrop-blur-sm">
+                            <CheckCircle className="w-6 h-6 md:w-10 md:h-10" strokeWidth={2.5} />
                         </div>
-                        <h1 className="text-3xl md:text-5xl font-black uppercase tracking-tight text-white mb-2 md:mb-3 leading-none">
+                        <h1 className="text-2xl md:text-5xl font-black uppercase tracking-tight text-white mb-1.5 md:mb-3 leading-none">
                             BOOKING <span className="text-[#FACC15]">ACTIVE</span>
                         </h1>
-                        <div className="flex flex-col md:flex-row items-center justify-center gap-1.5 md:gap-4 text-[#FACC15]/80 font-bold uppercase text-[9px] md:text-[10px] tracking-widest px-4">
+                        <div className="flex flex-col md:flex-row items-center justify-center gap-1.5 md:gap-4 text-[#FACC15]/80 font-bold uppercase text-[8px] md:text-[10px] tracking-widest px-4">
                              <span>ESTABLISHED BY ADMIN</span>
                              <div className="hidden md:block w-1.5 h-1.5 rounded-full bg-[#FACC15]/40"></div>
                              <span className="break-all max-w-[250px] sm:max-w-none">REF: {booking._id.toUpperCase()}</span>
@@ -30,32 +30,32 @@ export default function BookingStatusClient({ booking }) {
                     </div>
                 </div>
 
-                <div className="p-4 sm:p-8 md:p-14 space-y-10 md:space-y-16">
+                <div className="p-3 sm:p-8 md:p-14 space-y-6 md:space-y-16">
                     {/* Status Banner */}
                     {!booking.driver ? (
-                        <div className="bg-amber-50 border border-amber-200 rounded-2xl p-6 md:p-8 flex flex-col md:flex-row gap-5 md:gap-8 items-center -mt-12 md:-mt-24 shadow-lg relative z-20">
-                            <div className="w-14 h-14 md:w-16 md:h-16 bg-amber-100 rounded-full flex items-center justify-center shrink-0">
-                                <div className="w-4 h-4 md:w-5 md:h-5 bg-amber-500 rounded-full animate-ping"></div>
+                        <div className="bg-amber-50 border border-amber-200 rounded-2xl p-4 md:p-8 flex flex-row gap-3 md:gap-8 items-center -mt-8 md:-mt-24 shadow-lg relative z-20">
+                            <div className="w-10 h-10 md:w-16 md:h-16 bg-amber-100 rounded-full flex items-center justify-center shrink-0">
+                                <div className="w-3 h-3 md:w-5 md:h-5 bg-amber-500 rounded-full animate-ping"></div>
                             </div>
-                            <div className="text-center md:text-left">
-                                <h3 className="text-xl md:text-2xl font-black uppercase tracking-tight text-amber-900 mb-1.5">Sourcing Premium Chauffeur</h3>
-                                <p className="text-amber-700/80 font-bold uppercase text-[9px] md:text-xs tracking-widest leading-relaxed max-w-xl">System is broadcasting your request to our elite fleet. You will receive a secure WhatsApp link upon assignment.</p>
+                            <div className="text-left">
+                                <h3 className="text-sm md:text-2xl font-black uppercase tracking-tight text-amber-900 mb-1">Sourcing Premium Chauffeur</h3>
+                                <p className="text-amber-700/80 font-bold uppercase text-[8px] md:text-xs tracking-widest leading-relaxed max-w-xl">System is broadcasting your request to our elite fleet. You will receive a secure WhatsApp link upon assignment.</p>
                             </div>
                         </div>
                     ) : (
-                        <div className="bg-emerald-50 border border-emerald-200 rounded-2xl p-6 md:p-8 flex flex-col md:flex-row gap-5 md:gap-8 items-center -mt-12 md:-mt-24 shadow-lg relative z-20">
-                            <div className="w-14 h-14 md:w-16 md:h-16 bg-emerald-100 rounded-full flex items-center justify-center shrink-0">
-                                <Car className="w-6 h-6 md:w-8 md:h-8 text-emerald-600" strokeWidth={2} />
+                        <div className="bg-emerald-50 border border-emerald-200 rounded-2xl p-4 md:p-8 flex flex-row gap-3 md:gap-8 items-center -mt-8 md:-mt-24 shadow-lg relative z-20">
+                            <div className="w-10 h-10 md:w-16 md:h-16 bg-emerald-100 rounded-full flex items-center justify-center shrink-0">
+                                <Car className="w-5 h-5 md:w-8 md:h-8 text-emerald-600" strokeWidth={2} />
                             </div>
-                            <div className="text-center md:text-left">
-                                <h3 className="text-xl md:text-2xl font-black uppercase tracking-tight text-emerald-900 mb-1.5">Chauffeur Assigned</h3>
-                                <p className="text-emerald-700/80 font-bold uppercase text-[9px] md:text-xs tracking-widest leading-relaxed max-w-xl">Your journey is ready for pickup. Driver {booking.driver.name} is standing by for your arrival.</p>
+                            <div className="text-left">
+                                <h3 className="text-sm md:text-2xl font-black uppercase tracking-tight text-emerald-900 mb-1">Chauffeur Assigned</h3>
+                                <p className="text-emerald-700/80 font-bold uppercase text-[8px] md:text-xs tracking-widest leading-relaxed max-w-xl">Your journey is ready for pickup. Driver {booking.driver.name} is standing by for your arrival.</p>
                             </div>
                         </div>
                     )}
 
                     {/* Trip Status Timeline */}
-                    <div className="px-6 py-12 bg-white rounded-2xl border border-slate-100 shadow-sm relative">
+                    <div className="px-4 py-8 md:px-6 md:py-12 bg-white rounded-2xl border border-slate-100 shadow-sm relative">
                         <div className="absolute top-0 left-8 px-4 bg-white text-slate-800 text-[10px] font-bold uppercase tracking-[.3em] -translate-y-1/2">Booking Progress</div>
                         <div className="flex justify-between relative">
                             {/* Connecting Lines */}
