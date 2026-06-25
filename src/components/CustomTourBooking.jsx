@@ -241,6 +241,66 @@ const CustomTourBooking = () => {
     }
   }, [session]);
 
+  // Automatically re-evaluate and clean up applied coupons if the locations change
+  useEffect(() => {
+    if (!locations || locations.length === 0) return;
+    const start = (locations[0] || '').toLowerCase().trim();
+    const dest = (locations[locations.length - 1] || '').toLowerCase().trim();
+
+    setAppliedOffers(prev => {
+      return prev.filter(coupon => {
+        if (coupon.type !== 'coupon') return true;
+
+        // Custom tour bookings only support round-trips/all coupons
+        if (coupon.applicableFor && coupon.applicableFor !== 'all') {
+          if (coupon.applicableFor !== 'round-trips') return false;
+        }
+
+        if (coupon.applicableLocations && coupon.applicableLocations.length > 0) {
+          const isRealMatch = (address, keyword) => {
+            if (!address || !keyword) return false;
+            const addr = address.toLowerCase().trim();
+            const kw = keyword.toLowerCase().trim();
+            
+            const streetPattern1 = kw + ' road';
+            const streetPattern2 = kw + ' face';
+            const streetPattern3 = kw + ' street';
+            const streetPattern4 = kw + ' lane';
+            const streetPattern5 = kw + ' hotel';
+
+            if (addr.includes(streetPattern1) || addr.includes(streetPattern2) || addr.includes(streetPattern3) || addr.includes(streetPattern4) || addr.includes(streetPattern5)) {
+                const cleanedAddr = addr
+                    .split(streetPattern1).join('')
+                    .split(streetPattern2).join('')
+                    .split(streetPattern3).join('')
+                    .split(streetPattern4).join('')
+                    .split(streetPattern5).join('');
+                    
+                const regex = new RegExp(`\\b${kw}\\b`, 'i');
+                return regex.test(cleanedAddr);
+            }
+            
+            const regex = new RegExp(`\\b${kw}\\b`, 'i');
+            return regex.test(addr);
+          };
+
+          const isMatch = coupon.applicableLocations.some(loc => {
+            const l = loc.toLowerCase().trim();
+            if (l.includes('->')) {
+              const [fromPart, toPart] = l.split('->').map(s => s.trim());
+              return isRealMatch(start, fromPart) && isRealMatch(dest, toPart);
+            }
+            return isRealMatch(start, l) || isRealMatch(dest, l);
+          });
+
+          if (!isMatch) return false;
+        }
+
+        return true;
+      });
+    });
+  }, [locations]);
+
   // Window Event Listener for syncCustomTourBooking
   useEffect(() => {
     const handleSync = (e) => {
@@ -969,7 +1029,15 @@ const CustomTourBooking = () => {
                                       const data = await res.json();
                                       if (data.valid) {
                                           const known = data.coupon;
-                                          const couponOffer = { _id: 'coupon-' + known.code, name: known.code, discountPercentage: known.discountType === 'percentage' ? known.value : 0, discountAmount: known.discountType === 'flat' ? known.value : 0, type: 'coupon' };
+                                          const couponOffer = {
+                                              _id: 'coupon-' + known.code,
+                                              name: known.code,
+                                              discountPercentage: known.discountType === 'percentage' ? known.value : 0,
+                                              discountAmount: known.discountType === 'flat' ? known.value : 0,
+                                              type: 'coupon',
+                                              applicableFor: known.applicableFor,
+                                              applicableLocations: known.applicableLocations
+                                          };
                                           setAppliedOffers(prev => {
                                               if (!prev.find(o => o.name === couponOffer.name)) {
                                                   return [...prev.filter(o => o.type !== 'coupon'), couponOffer];

@@ -353,6 +353,93 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
         }
     }, [formData.pickup, formData.dropoff]);
 
+    // Automatically re-evaluate and clean up applied coupons if the user changes location or trip category inside the modal
+    useEffect(() => {
+        const dest = (formData.dropoff || '').toLowerCase().trim();
+        const start = (formData.pickup || '').toLowerCase().trim();
+        const isTour = pricingCategory === 'tours' || formData.tripType === 'tour';
+        const isIntercity = pricingCategory === 'ride-now';
+        const isAirportTransfer = pricingCategory === 'airport-transfer';
+
+        const isAirport = (name) => {
+            if (!name) return false;
+            const n = name.toLowerCase();
+            return (n.includes('bandaranaike') || n.includes('cmb') || n.includes('airport'));
+        };
+
+        const isAirportRide = isAirport(start) || isAirport(dest);
+
+        setVerifiedCoupons(prev => {
+            const filtered = prev.filter(coupon => {
+                // Check applicableFor compatibility
+                if (coupon.applicableFor && coupon.applicableFor !== 'all') {
+                    if (coupon.applicableFor === 'round-trips' && !isTour) return false;
+                    if ((coupon.applicableFor === 'airport-transfer' || coupon.applicableFor === 'transfers') && !isAirportTransfer) return false;
+                    if (coupon.applicableFor === 'ride-now' && !isIntercity) return false;
+                }
+
+                // Check location compatibility
+                if (isAirportTransfer && !isAirportRide) {
+                    if (coupon.applicableFor === 'airport-transfer' || coupon.applicableFor === 'transfers') {
+                        return false;
+                    }
+                }
+
+                if (coupon.applicableLocations && coupon.applicableLocations.length > 0) {
+                    const isRealMatch = (address, keyword) => {
+                        if (!address || !keyword) return false;
+                        const addr = address.toLowerCase().trim();
+                        const kw = keyword.toLowerCase().trim();
+                        
+                        const streetPattern1 = kw + ' road';
+                        const streetPattern2 = kw + ' face';
+                        const streetPattern3 = kw + ' street';
+                        const streetPattern4 = kw + ' lane';
+                        const streetPattern5 = kw + ' hotel';
+
+                        if (addr.includes(streetPattern1) || addr.includes(streetPattern2) || addr.includes(streetPattern3) || addr.includes(streetPattern4) || addr.includes(streetPattern5)) {
+                            const cleanedAddr = addr
+                                .split(streetPattern1).join('')
+                                .split(streetPattern2).join('')
+                                .split(streetPattern3).join('')
+                                .split(streetPattern4).join('')
+                                .split(streetPattern5).join('');
+                                
+                            const regex = new RegExp(`\\b${kw}\\b`, 'i');
+                            return regex.test(cleanedAddr);
+                        }
+                        
+                        const regex = new RegExp(`\\b${kw}\\b`, 'i');
+                        return regex.test(addr);
+                    };
+
+                    const isMatch = coupon.applicableLocations.some(loc => {
+                        const l = loc.toLowerCase().trim();
+                        if (l.includes('->')) {
+                            const [fromPart, toPart] = l.split('->').map(s => s.trim());
+                            return isRealMatch(start, fromPart) && isRealMatch(dest, toPart);
+                        }
+                        return isRealMatch(start, l) || isRealMatch(dest, l);
+                    });
+
+                    if (!isMatch) return false;
+                }
+
+                return true;
+            });
+
+            // Sync couponCode input with updated coupons if it changed
+            if (filtered.length !== prev.length) {
+                setFormData(prevForm => ({
+                    ...prevForm,
+                    couponCode: filtered.length > 0 ? filtered[0].code : ''
+                }));
+            }
+
+            return filtered;
+        });
+    }, [formData.pickup, formData.dropoff, pricingCategory, formData.tripType]);
+
     const handleApplyCoupon = async (codeToApply = couponInput, contextPickup = formData.pickup, contextDropoff = formData.dropoff) => {
         const input = (codeToApply || '').trim();
         if (!input || !contextPickup) return false;

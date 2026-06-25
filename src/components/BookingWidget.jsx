@@ -716,6 +716,85 @@ const BookingWidgetContent = ({ defaultTab = 'pickup', onTabChange }) => {
         });
     }, [dropoff, dropoffSearch, pickup, pickupSearch, availableCoupons, activeOffers, distance, pricingSettings]);
 
+    // Automatically re-evaluate and clean up applied coupons if the user changes location or tab
+    useEffect(() => {
+        const dest = (dropoff?.name || dropoffSearch || '').toLowerCase().trim();
+        const start = (pickup?.name || pickupSearch || '').toLowerCase().trim();
+        const isTour = activeTab === 'tours';
+        const isIntercity = activeTab === 'ride';
+        const isAirportTransfer = ['pickup', 'drop'].includes(activeTab);
+
+        const isAirport = (name) => {
+            if (!name) return false;
+            const n = name.toLowerCase();
+            return (n.includes('bandaranaike') || n.includes('cmb') || n.includes('airport'));
+        };
+
+        const isAirportRide = isAirport(start) || isAirport(dest);
+
+        setAppliedOffers(prev => {
+            return prev.filter(offer => {
+                if (offer.type !== 'coupon') return true;
+
+                // Check applicableFor compatibility with activeTab
+                if (offer.applicableFor && offer.applicableFor !== 'all') {
+                    if (offer.applicableFor === 'round-trips' && !isTour) return false;
+                    if ((offer.applicableFor === 'airport-transfer' || offer.applicableFor === 'transfers') && !isAirportTransfer) return false;
+                    if (offer.applicableFor === 'ride-now' && !isIntercity) return false;
+                }
+
+                // Check location compatibility
+                if (isAirportTransfer && !isAirportRide) {
+                    if (offer.applicableFor === 'airport-transfer' || offer.applicableFor === 'transfers') {
+                        return false;
+                    }
+                }
+
+                if (offer.applicableLocations && offer.applicableLocations.length > 0) {
+                    const isRealMatch = (address, keyword) => {
+                        if (!address || !keyword) return false;
+                        const addr = address.toLowerCase().trim();
+                        const kw = keyword.toLowerCase().trim();
+                        
+                        const streetPattern1 = kw + ' road';
+                        const streetPattern2 = kw + ' face';
+                        const streetPattern3 = kw + ' street';
+                        const streetPattern4 = kw + ' lane';
+                        const streetPattern5 = kw + ' hotel';
+
+                        if (addr.includes(streetPattern1) || addr.includes(streetPattern2) || addr.includes(streetPattern3) || addr.includes(streetPattern4) || addr.includes(streetPattern5)) {
+                            const cleanedAddr = addr
+                                .split(streetPattern1).join('')
+                                .split(streetPattern2).join('')
+                                .split(streetPattern3).join('')
+                                .split(streetPattern4).join('')
+                                .split(streetPattern5).join('');
+                                
+                            const regex = new RegExp(`\\b${kw}\\b`, 'i');
+                            return regex.test(cleanedAddr);
+                        }
+                        
+                        const regex = new RegExp(`\\b${kw}\\b`, 'i');
+                        return regex.test(addr);
+                    };
+
+                    const isMatch = offer.applicableLocations.some(loc => {
+                        const l = loc.toLowerCase().trim();
+                        if (l.includes('->')) {
+                            const [fromPart, toPart] = l.split('->').map(s => s.trim());
+                            return isRealMatch(start, fromPart) && isRealMatch(dest, toPart);
+                        }
+                        return isRealMatch(start, l) || isRealMatch(dest, l);
+                    });
+
+                    if (!isMatch) return false;
+                }
+
+                return true;
+            });
+        });
+    }, [pickup, dropoff, pickupSearch, dropoffSearch, activeTab]);
+
 
     // Calculate total waiting hours including waypoints securely with integers
     const totalWaitingHours = parseInt(waitingHours || 0, 10) + waypoints.reduce((sum, wp) => sum + parseInt(wp.waitingTime || 0, 10), 0);
@@ -1370,7 +1449,15 @@ const BookingWidgetContent = ({ defaultTab = 'pickup', onTabChange }) => {
                                                             const data = await res.json();
                                                             if (data.valid) {
                                                                 const known = data.coupon;
-                                                                const couponOffer = { _id: 'coupon-' + known.code, name: known.code, discountPercentage: known.discountType === 'percentage' ? known.value : 0, discountAmount: known.discountType === 'flat' ? known.value : 0, type: 'coupon' };
+                                                                const couponOffer = {
+                                                                    _id: 'coupon-' + known.code,
+                                                                    name: known.code,
+                                                                    discountPercentage: known.discountType === 'percentage' ? known.value : 0,
+                                                                    discountAmount: known.discountType === 'flat' ? known.value : 0,
+                                                                    type: 'coupon',
+                                                                    applicableFor: known.applicableFor,
+                                                                    applicableLocations: known.applicableLocations
+                                                                };
                                                                 setAppliedOffers(prev => [...prev.filter(o => o.type !== 'coupon'), couponOffer]);
                                                                 setCouponCode('');
                                                                 setIsCouponOpen(false);
@@ -1405,7 +1492,15 @@ const BookingWidgetContent = ({ defaultTab = 'pickup', onTabChange }) => {
                                                                 if (isApplied) { 
                                                                     setAppliedOffers(prev => prev.filter(o => o.name !== c.code)); 
                                                                 } else { 
-                                                                    const couponOffer = { _id: 'coupon-' + c.code, name: c.code, discountPercentage: c.discountType === 'percentage' ? c.value : 0, discountAmount: c.discountType === 'flat' ? c.value : 0, type: 'coupon' }; 
+                                                                    const couponOffer = {
+                                                                        _id: 'coupon-' + c.code,
+                                                                        name: c.code,
+                                                                        discountPercentage: c.discountType === 'percentage' ? c.value : 0,
+                                                                        discountAmount: c.discountType === 'flat' ? c.value : 0,
+                                                                        type: 'coupon',
+                                                                        applicableFor: c.applicableFor,
+                                                                        applicableLocations: c.applicableLocations
+                                                                    }; 
                                                                     setAppliedOffers(prev => [...prev.filter(o => o.type !== 'coupon'), couponOffer]); 
                                                                 } 
                                                             }} 
