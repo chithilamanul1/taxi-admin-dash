@@ -814,6 +814,10 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                     setErrors(prev => ({ ...prev, ...newErrors }));
                     if (newErrors.hasNameBoard) {
                         alert("✓ Please select either 'Name Board' or 'No Board' before proceeding.");
+                        const element = document.getElementById("greeting-service-section");
+                        if (element) {
+                            element.scrollIntoView({ behavior: "smooth", block: "center" });
+                        }
                     } else {
                         alert("✓ Please fill in your Flight Number and Arrival Date & Time.");
                     }
@@ -979,7 +983,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                 </div>
 
                                 {isAirportService && initialData.isAirportPickup && formData.tripType !== 'tour' && (
-                                    <div className="space-y-8">
+                                    <div id="greeting-service-section" className="space-y-8">
                                         <label className={`text-[10px] font-black uppercase tracking-widest mb-4 flex items-center gap-3 ${errors.hasNameBoard ? 'text-red-500 animate-pulse' : 'text-slate-500'}`}>
                                             <Signpost size={14} className={errors.hasNameBoard ? 'text-red-500' : 'text-[#FACC15]'} strokeWidth={3} /> Airport Greeting Service {errors.hasNameBoard && <span className="text-red-500 lowercase">*required</span>}
                                         </label>
