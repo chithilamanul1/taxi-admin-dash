@@ -23,7 +23,7 @@ export async function POST(req) {
         const incomingTripType = tripType || ''; // Extract from raw request
 
         if (coupon.applicableFor && coupon.applicableFor !== 'all') {
-            if (coupon.applicableFor === 'round-trips' && incomingTripType !== 'tour') {
+            if (coupon.applicableFor === 'round-trips' && incomingTripType !== 'tour' && incomingTripType !== 'tours') {
                 return NextResponse.json({ valid: false, message: 'This coupon is only valid for Round Trips.' });
             }
             if (coupon.applicableFor === 'airport-transfer' && !['pickup', 'drop'].includes(incomingTripType) && incomingTripType !== '') {
@@ -32,7 +32,7 @@ export async function POST(req) {
             if (coupon.applicableFor === 'ride-now' && incomingTripType !== 'ride') {
                 return NextResponse.json({ valid: false, message: 'This coupon is only valid for Intercity Rides (Ride Now).' });
             }
-            if (coupon.applicableFor === 'transfers' && incomingTripType === 'tour') {
+            if (coupon.applicableFor === 'transfers' && (incomingTripType === 'tour' || incomingTripType === 'tours')) {
                 return NextResponse.json({ valid: false, message: 'This coupon is only valid for Airport Transfers.' });
             }
         }
@@ -41,7 +41,7 @@ export async function POST(req) {
         const pickupText = (typeof pickup === 'object' ? pickup?.name : pickup || '').toLowerCase();
         const dropoffText = (typeof dropoff === 'object' ? dropoff?.name : dropoff || '').toLowerCase();
 
-        if (incomingTripType !== 'tour' && incomingTripType !== 'ride' && coupon.applicableFor !== 'round-trips' && coupon.applicableFor !== 'ride-now') {
+        if (incomingTripType !== 'tour' && incomingTripType !== 'tours' && incomingTripType !== 'ride' && coupon.applicableFor !== 'round-trips' && coupon.applicableFor !== 'ride-now') {
             const isAirport = (name) => {
                 if (!name) return false;
                 const n = name.toLowerCase();

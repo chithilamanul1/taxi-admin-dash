@@ -17,7 +17,7 @@ export const generateBookingPDF = (booking) => {
 
     // -- Helper: Add Image Logo --
     try {
-        doc.addImage(logoBase64, 'PNG', 15, 15, 55, 12);
+        doc.addImage(logoBase64, 'PNG', 15, 9, 92, 20);
     } catch (e) {
         // Fallback if image fails to load
         doc.setFontSize(22);

@@ -293,6 +293,13 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
 
                     // Find best applicable coupon
                     const applicable = coupons.filter(c => {
+                        // Check compatibility with pricingCategory
+                        if (c.applicableFor && c.applicableFor !== 'all') {
+                            if (c.applicableFor === 'round-trips' && pricingCategory !== 'tours' && formData.tripType !== 'tour') return false;
+                            if ((c.applicableFor === 'airport-transfer' || c.applicableFor === 'transfers') && pricingCategory !== 'airport-transfer') return false;
+                            if (c.applicableFor === 'ride-now' && pricingCategory !== 'ride-now') return false;
+                        }
+
                         if (!c.applicableLocations || c.applicableLocations.length === 0) return true;
 
                         const isRealMatch = (address, keyword) => {
@@ -355,7 +362,12 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
             const res = await fetch('/api/coupons/validate', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ code: input, pickup: contextPickup, dropoff: contextDropoff })
+                body: JSON.stringify({ 
+                    code: input, 
+                    pickup: contextPickup, 
+                    dropoff: contextDropoff,
+                    tripType: pricingCategory === 'airport-transfer' ? 'pickup' : (pricingCategory === 'ride-now' ? 'ride' : 'tour')
+                })
             });
             const data = await res.json();
             if (data.valid) {
@@ -1567,7 +1579,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                 <button
                                     onClick={handleNext}
                                     disabled={loading}
-                                    className="flex-[2] sm:flex-none flex items-center justify-center gap-1 sm:gap-3 px-3 sm:px-12 py-3 sm:py-5 bg-gradient-to-br from-yellow-400 via-orange-500 to-orange-600 hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 text-white rounded-[2rem] text-[9px] sm:text-xs font-black uppercase tracking-[0.2em] transition-all group"
+                                    className="flex-[2] sm:flex-none flex items-center justify-center gap-1 sm:gap-3 px-3 sm:px-12 py-3 sm:py-5 bg-[#FACC15] hover:bg-yellow-500 text-black hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 rounded-[2rem] text-[9px] sm:text-xs font-black uppercase tracking-[0.2em] transition-all group"
                                 >
                                     {step === 1 ? 'Next Step' : step === 2 ? 'Checkout' : loading ? 'Wait...' : 'Confirm'}
                                     <ArrowRight size={14} strokeWidth={3} className="group-hover:translate-x-1 transition-transform" />

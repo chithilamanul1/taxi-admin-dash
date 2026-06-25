@@ -493,12 +493,22 @@ const BookingWidgetContent = ({ defaultTab = 'pickup', onTabChange }) => {
         };
 
         const isAirportRide = isAirport(pickupText) || isAirport(dropoffText);
+        const isTour = activeTab === 'tours';
+        const isIntercity = activeTab === 'ride';
+        const isAirportTransfer = ['pickup', 'drop'].includes(activeTab);
 
-        if (!isAirportRide) {
+        if (isAirportTransfer && !isAirportRide) {
             return []; // Coupons are only applicable for airport drop and pickup
         }
 
         return availableCoupons.filter(coupon => {
+            // Check applicableFor compatibility with activeTab
+            if (coupon.applicableFor && coupon.applicableFor !== 'all') {
+                if (coupon.applicableFor === 'round-trips' && !isTour) return false;
+                if ((coupon.applicableFor === 'airport-transfer' || coupon.applicableFor === 'transfers') && !isAirportTransfer) return false;
+                if (coupon.applicableFor === 'ride-now' && !isIntercity) return false;
+            }
+
             // If coupon has no location restrictions, consider it global
             if (!coupon.applicableLocations || coupon.applicableLocations.length === 0) {
                 return true;
@@ -541,7 +551,7 @@ const BookingWidgetContent = ({ defaultTab = 'pickup', onTabChange }) => {
                 return isRealMatch(pickupText, l) || isRealMatch(dropoffText, l);
             });
         });
-    }, [availableCoupons, pickup, pickupSearch, dropoff, dropoffSearch]);
+    }, [availableCoupons, pickup, pickupSearch, dropoff, dropoffSearch, activeTab]);
 
     // Auto-Select Vehicle based on Passengers (ONLY if not manually selected)
     useEffect(() => {
@@ -588,6 +598,13 @@ const BookingWidgetContent = ({ defaultTab = 'pickup', onTabChange }) => {
             if (isAirportRide) {
                 // PRIORITY 1: Precise Database Coupons
                 availableCoupons.forEach(coupon => {
+                    // Check applicableFor compatibility with activeTab
+                    if (coupon.applicableFor && coupon.applicableFor !== 'all') {
+                        if (coupon.applicableFor === 'round-trips' && activeTab !== 'tours') return;
+                        if ((coupon.applicableFor === 'airport-transfer' || coupon.applicableFor === 'transfers') && !['pickup', 'drop'].includes(activeTab)) return;
+                        if (coupon.applicableFor === 'ride-now' && activeTab !== 'ride') return;
+                    }
+
                     if (coupon.applicableLocations && coupon.applicableLocations.length > 0) {
                         let matchedLoc = '';
                         const isMatch = coupon.applicableLocations.some(loc => {
@@ -1098,7 +1115,7 @@ const BookingWidgetContent = ({ defaultTab = 'pickup', onTabChange }) => {
                                                         setStep(2);
                                                     }
                                                 }}
-                                                className="flex-1 flex items-center justify-center gap-3 font-black text-xs uppercase tracking-widest py-4 rounded-2xl transition-all active:scale-[0.98] bg-gradient-to-r from-yellow-400 to-orange-500 hover:from-yellow-500 hover:to-orange-600 text-white hover:-translate-y-0.5"
+                                                className="flex-1 flex items-center justify-center gap-3 font-black text-xs uppercase tracking-widest py-4 rounded-2xl transition-all active:scale-[0.98] bg-[#FACC15] hover:bg-yellow-500 text-black hover:-translate-y-0.5"
                                                 aria-label="Continue to Booking"
                                             >
                                                 Continue to Booking <ArrowRight size={16} strokeWidth={3}/>
@@ -1112,70 +1129,6 @@ const BookingWidgetContent = ({ defaultTab = 'pickup', onTabChange }) => {
 
                                 {step === 2 && (
                                     <motion.div key="step2" initial={{opacity:0,x:16}} animate={{opacity:1,x:0}} exit={{opacity:0,x:16}} transition={{duration:0.2}}>
-                                        <div className="space-y-4 mb-6">
-                                            <button onClick={() => setIsCouponOpen(!isCouponOpen)} className={`flex items-center gap-3 text-xs font-bold min-h-[3.5rem] transition-all px-6 py-3 rounded-2xl w-full justify-center uppercase tracking-widest border shadow-sm hover:shadow-md ${isCouponOpen ? 'bg-amber-50 dark:bg-amber-500/20 text-amber-900 dark:text-amber-400 border-amber-200 dark:border-amber-500/30' : 'bg-white dark:bg-zinc-800 text-slate-600 dark:text-slate-300 border-slate-200 dark:border-white/10 hover:bg-slate-50'}`}>
-                                                <Tag size={16} className={`${isCouponOpen ? 'text-amber-600 dark:text-amber-400' : 'text-slate-400'} shrink-0`} fill="currentColor" />
-                                                {isCouponOpen ? 'Close Offers' : 'Coupon Code?'}
-                                            </button>
-                                            {appliedOffers.length > 0 && (
-                                                <div className="flex flex-wrap gap-2 animate-fade-in">
-                                                    {appliedOffers.map((offer, i) => (
-                                                        <div key={i} className="flex items-center gap-2 bg-[#FACC15] dark:bg-yellow-500/20 text-black dark:text-yellow-400 px-4 py-2 rounded-xl border border-yellow-400 dark:border-yellow-500/30 shadow-md">
-                                                            <Tag size={14} className="text-black/70 dark:text-yellow-500" />
-                                                            <span className="text-xs font-black uppercase tracking-widest">{offer.name}</span>
-                                                            <span className="text-xs font-bold opacity-80">(-{offer.discountPercentage > 0 ? `${offer.discountPercentage}%` : `Rs ${offer.discountAmount}`})</span>
-                                                            <button onClick={() => setAppliedOffers(prev => prev.filter(o => o.name !== offer.name))} className="ml-1.5 p-1 hover:bg-black/10 dark:hover:bg-yellow-500/30 rounded-md transition-colors"><X size={14} /></button>
-                                                        </div>
-                                                    ))}
-                                                </div>
-                                            )}
-                                            {isCouponOpen && (
-                                                <div className="relative h-14 animate-slide-up">
-                                                    <Tag className="absolute left-6 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
-                                                    <input type="text" placeholder="ENTER COUPON CODE" value={couponCode} onChange={(e) => setCouponCode(e.target.value.toUpperCase())} className="w-full h-full pl-14 pr-24 rounded-2xl bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 text-sm font-bold outline-none uppercase text-emerald-950 dark:text-white placeholder:text-slate-500 tracking-widest focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 shadow-inner" aria-label="Coupon code" />
-                                                    <button onClick={async () => {
-                                                        if (!couponCode) return;
-                                                        const dest = (dropoff?.name || dropoffSearch || '').toLowerCase().trim();
-                                                        const start = (pickup?.name || pickupSearch || '').toLowerCase().trim();
-                                                        try {
-                                                            const res = await fetch('/api/coupons/validate', {
-                                                                method: 'POST',
-                                                                headers: { 'Content-Type': 'application/json' },
-                                                                body: JSON.stringify({ code: couponCode, pickup: start, dropoff: dest, tripType: activeTab })
-                                                            });
-                                                            const data = await res.json();
-                                                            if (data.valid) {
-                                                                const known = data.coupon;
-                                                                const couponOffer = { _id: 'coupon-' + known.code, name: known.code, discountPercentage: known.discountType === 'percentage' ? known.value : 0, discountAmount: known.discountType === 'flat' ? known.value : 0, type: 'coupon' };
-                                                                setAppliedOffers(prev => [...prev.filter(o => o.type !== 'coupon'), couponOffer]);
-                                                                setCouponCode('');
-                                                                setIsCouponOpen(false);
-                                                            } else {
-                                                                alert(data.message || "Invalid or expired coupon code.");
-                                                            }
-                                                        } catch (e) {
-                                                            alert("Validation failed.");
-                                                        }
-                                                    }} aria-label="Apply Coupon" className="absolute right-2 top-2 bottom-2 bg-[#FACC15] text-black px-6 rounded-xl text-[10px] font-black uppercase hover:bg-yellow-400 transition-all shadow-lg shadow-yellow-500/10">Apply</button>
-                                                </div>
-                                            )}
-                                            {filteredCoupons.length > 0 && isCouponOpen && (
-                                                <div className="space-y-4 animate-fade-in mt-4">
-                                                    <div className="flex items-center gap-3 px-1"><div className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse"></div><span className="text-[10px] font-black text-emerald-900/40 dark:text-white/40 uppercase tracking-[0.3em]">Exclusive Offers</span></div>
-                                                    <div className="flex overflow-x-auto pb-4 gap-4 hide-scrollbar snap-x touch-pan-x">
-                                                        {filteredCoupons.map((c) => (
-                                                            <button key={c._id} onClick={() => { const isApplied = appliedOffers.some(o => o.name === c.code); if (isApplied) { setAppliedOffers(prev => prev.filter(o => o.name !== c.code)); } else { const couponOffer = { _id: 'coupon-' + c.code, name: c.code, discountPercentage: c.discountType === 'percentage' ? c.value : 0, discountAmount: c.discountType === 'flat' ? c.value : 0, type: 'coupon' }; setAppliedOffers(prev => [...prev.filter(o => o.type !== 'coupon'), couponOffer]); } }} className={`snap-start min-w-[280px] sm:min-w-[320px] group relative flex items-center justify-between gap-4 p-5 rounded-[2rem] border transition-all text-left flex-shrink-0 shadow-lg hover:shadow-xl hover:-translate-y-1 ${appliedOffers.some(o => o.name === c.code) ? 'border-[#FACC15] bg-[#FACC15]/5 dark:bg-[#FACC15]/10' : 'border-slate-100 dark:border-white/5 bg-white dark:bg-zinc-800'}`}>
-                                                                <div className="flex items-center gap-5 min-w-0">
-                                                                    <div className="w-14 h-14 rounded-2xl bg-slate-50 dark:bg-zinc-900 flex-shrink-0 flex items-center justify-center overflow-hidden border border-slate-100 dark:border-white/5">{c.imageUrl ? <img src={c.imageUrl} alt={c.code} className="w-full h-full object-cover" /> : <Tag size={24} className="text-[#FACC15]" />}</div>
-                                                                    <div className="flex-1 min-w-0"><div className="flex flex-col"><span className="text-2xl font-black text-slate-900 dark:text-white leading-tight tracking-tight">{c.value}{c.discountType === 'percentage' ? '%' : ''}<span className="text-[#FACC15] ml-1">OFF</span></span><div className="flex items-center gap-2 mt-2"><div className="px-3 py-1.5 rounded-xl bg-white dark:bg-zinc-900 border border-slate-100 dark:border-white/10 flex items-center gap-2 shadow-sm"><span className="text-[10px] font-black text-amber-800 dark:text-[#FACC15] uppercase tracking-widest">{c.code}</span><div className="h-3 w-px bg-slate-200 dark:bg-white/10"></div><span className="text-[9px] font-bold text-slate-400">{appliedOffers.some(o => o.name === c.code) ? 'Applied' : 'Apply'}</span></div></div></div></div>
-                                                                </div>
-                                                                {appliedOffers.some(o => o.name === c.code) ? <div className="flex-shrink-0 w-8 h-8 bg-[#FACC15] rounded-full flex items-center justify-center text-black shadow-lg animate-scale-in"><Check size={16} strokeWidth={4} /></div> : <div className="flex-shrink-0 w-8 h-8 rounded-full border border-slate-200 dark:border-white/10 flex items-center justify-center text-slate-300 group-hover:bg-[#FACC15] group-hover:text-black group-hover:border-[#FACC15] transition-all"><Plus size={16} strokeWidth={3} /></div>}
-                                                            </button>
-                                                        ))}
-                                                    </div>
-                                                </div>
-                                            )}
-                                        </div>
                                         <div className="space-y-4 mb-6" id="booking-widget-passengers">
                                             <label className="text-xs font-black text-slate-900 dark:text-white uppercase tracking-widest pl-1 leading-none block mb-4 flex items-center gap-2">
                                                 Passenger and Luggage
@@ -1361,6 +1314,137 @@ const BookingWidgetContent = ({ defaultTab = 'pickup', onTabChange }) => {
                                         </div>
                                     </div>
 
+                                    {/* Coupon Section inside Summary Panel */}
+                                    <div className="pt-4 border-t border-slate-200 dark:border-white/10 space-y-3">
+                                        <button 
+                                            type="button"
+                                            onClick={() => setIsCouponOpen(!isCouponOpen)} 
+                                            className={`flex items-center gap-3 text-xs font-bold min-h-[3rem] transition-all px-4 py-2.5 rounded-xl w-full justify-center uppercase tracking-widest border shadow-sm hover:shadow-md ${isCouponOpen ? 'bg-amber-50 dark:bg-amber-500/20 text-amber-900 dark:text-amber-400 border-amber-200 dark:border-amber-500/30' : 'bg-white dark:bg-zinc-800 text-slate-600 dark:text-slate-300 border-slate-200 dark:border-white/10 hover:bg-slate-50'}`}
+                                        >
+                                            <Tag size={14} className={`${isCouponOpen ? 'text-amber-600 dark:text-amber-400' : 'text-slate-400'} shrink-0`} fill="currentColor" />
+                                            {isCouponOpen ? 'Close Offers' : 'Coupon Code?'}
+                                        </button>
+                                        
+                                        {appliedOffers.length > 0 && (
+                                            <div className="flex flex-wrap gap-1.5 animate-fade-in">
+                                                {appliedOffers.map((offer, i) => (
+                                                    <div key={i} className="flex items-center gap-2 bg-[#FACC15] dark:bg-yellow-500/20 text-black dark:text-yellow-400 px-3 py-1.5 rounded-lg border border-yellow-400 dark:border-yellow-500/30 shadow-sm">
+                                                        <Tag size={12} className="text-black/70 dark:text-yellow-500" />
+                                                        <span className="text-[10px] font-black uppercase tracking-widest">{offer.name}</span>
+                                                        <span className="text-[10px] font-bold opacity-80">(-{offer.discountPercentage > 0 ? `${offer.discountPercentage}%` : `Rs ${offer.discountAmount}`})</span>
+                                                        <button 
+                                                            type="button"
+                                                            onClick={() => setAppliedOffers(prev => prev.filter(o => o.name !== offer.name))} 
+                                                            className="ml-1 p-0.5 hover:bg-black/10 dark:hover:bg-yellow-500/30 rounded transition-colors"
+                                                        >
+                                                            <X size={12} />
+                                                        </button>
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        )}
+
+                                        {isCouponOpen && (
+                                            <div className="relative h-11 animate-slide-up">
+                                                <Tag className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" size={14} />
+                                                <input 
+                                                    type="text" 
+                                                    placeholder="ENTER COUPON" 
+                                                    value={couponCode} 
+                                                    onChange={(e) => setCouponCode(e.target.value.toUpperCase())} 
+                                                    className="w-full h-full pl-10 pr-20 rounded-xl bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 text-xs font-bold outline-none uppercase text-emerald-950 dark:text-white placeholder:text-slate-500 tracking-widest focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 shadow-inner" 
+                                                    aria-label="Coupon code" 
+                                                />
+                                                <button 
+                                                    type="button"
+                                                    onClick={async () => {
+                                                        if (!couponCode) return;
+                                                        const dest = (dropoff?.name || dropoffSearch || '').toLowerCase().trim();
+                                                        const start = (pickup?.name || pickupSearch || '').toLowerCase().trim();
+                                                        try {
+                                                            const res = await fetch('/api/coupons/validate', {
+                                                                method: 'POST',
+                                                                headers: { 'Content-Type': 'application/json' },
+                                                                body: JSON.stringify({ code: couponCode, pickup: start, dropoff: dest, tripType: activeTab })
+                                                            });
+                                                            const data = await res.json();
+                                                            if (data.valid) {
+                                                                const known = data.coupon;
+                                                                const couponOffer = { _id: 'coupon-' + known.code, name: known.code, discountPercentage: known.discountType === 'percentage' ? known.value : 0, discountAmount: known.discountType === 'flat' ? known.value : 0, type: 'coupon' };
+                                                                setAppliedOffers(prev => [...prev.filter(o => o.type !== 'coupon'), couponOffer]);
+                                                                setCouponCode('');
+                                                                setIsCouponOpen(false);
+                                                            } else {
+                                                                alert(data.message || "Invalid or expired coupon code.");
+                                                            }
+                                                        } catch (e) {
+                                                            alert("Validation failed.");
+                                                        }
+                                                    }} 
+                                                    aria-label="Apply Coupon" 
+                                                    className="absolute right-1.5 top-1.5 bottom-1.5 bg-[#FACC15] text-black px-4 rounded-lg text-[9px] font-black uppercase hover:bg-yellow-400 transition-all shadow-md shadow-yellow-500/10"
+                                                >
+                                                    Apply
+                                                </button>
+                                            </div>
+                                        )}
+
+                                        {filteredCoupons.length > 0 && isCouponOpen && (
+                                            <div className="space-y-3 animate-fade-in mt-3">
+                                                <div className="flex items-center gap-2 px-1">
+                                                    <div className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse"></div>
+                                                    <span className="text-[9px] font-black text-slate-400 dark:text-white/40 uppercase tracking-[0.2em]">Exclusive Offers</span>
+                                                </div>
+                                                <div className="flex overflow-x-auto pb-2 gap-3 hide-scrollbar snap-x touch-pan-x">
+                                                    {filteredCoupons.map((c) => (
+                                                        <button 
+                                                            key={c._id} 
+                                                            type="button"
+                                                            onClick={() => { 
+                                                                const isApplied = appliedOffers.some(o => o.name === c.code); 
+                                                                if (isApplied) { 
+                                                                    setAppliedOffers(prev => prev.filter(o => o.name !== c.code)); 
+                                                                } else { 
+                                                                    const couponOffer = { _id: 'coupon-' + c.code, name: c.code, discountPercentage: c.discountType === 'percentage' ? c.value : 0, discountAmount: c.discountType === 'flat' ? c.value : 0, type: 'coupon' }; 
+                                                                    setAppliedOffers(prev => [...prev.filter(o => o.type !== 'coupon'), couponOffer]); 
+                                                                } 
+                                                            }} 
+                                                            className={`snap-start min-w-[220px] group relative flex items-center justify-between gap-3 p-3.5 rounded-2xl border transition-all text-left flex-shrink-0 shadow-md hover:shadow-lg ${appliedOffers.some(o => o.name === c.code) ? 'border-[#FACC15] bg-[#FACC15]/5 dark:bg-[#FACC15]/10' : 'border-slate-100 dark:border-white/5 bg-white dark:bg-zinc-800'}`}
+                                                        >
+                                                            <div className="flex items-center gap-3 min-w-0">
+                                                                <div className="w-10 h-10 rounded-xl bg-slate-50 dark:bg-zinc-900 flex-shrink-0 flex items-center justify-center overflow-hidden border border-slate-100 dark:border-white/5">
+                                                                    {c.imageUrl ? <img src={c.imageUrl} alt={c.code} className="w-full h-full object-cover" /> : <Tag size={16} className="text-[#FACC15]" />}
+                                                                </div>
+                                                                <div className="flex-1 min-w-0">
+                                                                    <div className="flex flex-col">
+                                                                        <span className="text-base font-black text-slate-900 dark:text-white leading-tight tracking-tight">
+                                                                            {c.value}{c.discountType === 'percentage' ? '%' : ''}
+                                                                            <span className="text-[#FACC15] ml-1">OFF</span>
+                                                                        </span>
+                                                                        <div className="flex items-center gap-1.5 mt-1">
+                                                                            <div className="px-2 py-0.5 rounded-lg bg-white dark:bg-zinc-900 border border-slate-100 dark:border-white/10 flex items-center gap-1.5 shadow-sm">
+                                                                                <span className="text-[8px] font-black text-amber-800 dark:text-[#FACC15] uppercase tracking-widest">{c.code}</span>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            {appliedOffers.some(o => o.name === c.code) ? (
+                                                                <div className="flex-shrink-0 w-6 h-6 bg-[#FACC15] rounded-full flex items-center justify-center text-black shadow animate-scale-in">
+                                                                    <Check size={12} strokeWidth={4} />
+                                                                </div>
+                                                            ) : (
+                                                                <div className="flex-shrink-0 w-6 h-6 rounded-full border border-slate-200 dark:border-white/10 flex items-center justify-center text-slate-300 group-hover:bg-[#FACC15] group-hover:text-black group-hover:border-[#FACC15] transition-all">
+                                                                    <Plus size={12} strokeWidth={3} />
+                                                                </div>
+                                                            )}
+                                                        </button>
+                                                    ))}
+                                                </div>
+                                            </div>
+                                        )}
+                                    </div>
+
                                     {/* Detailed Price Breakdown */}
                                     <div className="pt-6 border-t border-slate-200 dark:border-white/10 space-y-4">
                                         <div className="flex justify-between items-center text-[10px] font-black uppercase tracking-[0.15em]">
@@ -1458,7 +1542,7 @@ const BookingWidgetContent = ({ defaultTab = 'pickup', onTabChange }) => {
                                         className={`w-full min-h-16 sm:h-[72px] py-2 sm:py-0 rounded-2xl shadow-md transition-all group flex items-center justify-center border
                                         ${isCheckoutDisabled
                                             ? 'bg-slate-100 dark:bg-zinc-800 text-slate-400 dark:text-slate-500 border-slate-200 dark:border-zinc-700 cursor-not-allowed'
-                                            : 'bg-gradient-to-r from-yellow-400 to-orange-500 hover:from-yellow-500 hover:to-orange-600 text-white active:scale-[0.98] border-orange-500/20'}`}
+                                            : 'bg-[#FACC15] hover:bg-yellow-500 text-black active:scale-[0.98] border-yellow-500/20'}`}
                                     >
                                         {isLoadingPricing ? (
                                             <div className="w-8 h-8 border-4 border-white/30 border-t-white rounded-full animate-spin"></div>
@@ -1467,7 +1551,7 @@ const BookingWidgetContent = ({ defaultTab = 'pickup', onTabChange }) => {
                                                 <div className="flex-1 text-center text-base sm:text-lg font-black tracking-widest uppercase">
                                                     BOOK TRIP NOW
                                                 </div>
-                                                <div className={`w-10 h-10 sm:w-12 sm:h-12 shrink-0 rounded-full flex items-center justify-center group-hover:translate-x-1 transition-transform ${isCheckoutDisabled ? 'bg-white/20 text-white/50' : 'bg-white/20 text-white'}`}>
+                                                <div className={`w-10 h-10 sm:w-12 sm:h-12 shrink-0 rounded-full flex items-center justify-center group-hover:translate-x-1 transition-transform ${isCheckoutDisabled ? 'bg-black/5 text-black/40' : 'bg-black/10 text-black'}`}>
                                                     <ArrowRight size={18} className="sm:size-6" strokeWidth={2.5} />
                                                 </div>
                                             </div>
