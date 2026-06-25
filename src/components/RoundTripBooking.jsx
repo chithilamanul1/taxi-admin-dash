@@ -451,7 +451,7 @@ const RoundTripBooking = () => {
   const handleBooking = async () => {
     const errors = {};
     if (!formData.name) errors.name = true;
-    if (!formData.phone) errors.phone = true;
+    if (!formData.phone || formData.phone.length < 8) errors.phone = true;
     if (!formData.email) errors.email = true;
     if (!formData.date) errors.date = true;
     if (!formData.time) errors.time = true;
@@ -521,26 +521,6 @@ const RoundTripBooking = () => {
       });
       const data = await res.json();
       if (data.success) {
-        try {
-          const typeStr = tab === 'airport-round-tour' ? 'Airport Round Tour' : tab === 'normal-round-tour' ? 'Normal Round Tour' : 'Destination-Based Tour';
-          const paymentStr = formData.paymentMethod === 'cash' ? 'Cash to Driver' : 'Pay Online (Card)';
-          let message = `*New Booking Request*%0A` + 
-                        `*Type:* ${typeStr}%0A` + 
-                        `*Name:* ${formData.name}%0A` + 
-                        `*WhatsApp:* ${formData.phone}%0A` + 
-                        `*Vehicle:* ${selectedVehicle.name}%0A` +
-                        `*Hours:* ${formData.taxiTourHours} Hours%0A` + 
-                        `*KM Limit:* ${formData.taxiTourKm} KM%0A` + 
-                        `*Stops:* ${formData.placesList.filter(Boolean).join(', ') || 'None'}%0A` +
-                        `*Pickup/Dropoff:* ${locations[0] || 'Not provided'}%0A` + 
-                        `*Date/Time:* ${formData.date} at ${formData.time}%0A` + 
-                        `*Payment:* ${paymentStr}%0A` + 
-                        `*Price:* ${currentSymbol} ${totalPrice.toLocaleString()}`;
-          window.open(`https://wa.me/94712100500?text=${message}`, '_blank');
-        } catch (e) {
-          console.error("WhatsApp companion load blocked", e);
-        }
-
         // Redirect to checkout or success URL
         window.location.href = data.paymentUrl;
       } else { 

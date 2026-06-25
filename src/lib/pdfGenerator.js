@@ -17,7 +17,7 @@ export const generateBookingPDF = (booking) => {
 
     // -- Helper: Add Image Logo --
     try {
-        doc.addImage(logoBase64, 'PNG', 15, 9, 92, 20);
+        doc.addImage(logoBase64, 'PNG', 15, 9, 115, 25);
     } catch (e) {
         // Fallback if image fails to load
         doc.setFontSize(22);
@@ -208,7 +208,7 @@ export const generateBookingPDF = (booking) => {
     doc.setFont(undefined, 'bold');
 
     // Position Important Info relative to bottom to avoid overlap
-    const infoY = 238;
+    const infoY = Math.max(currentY + 12, 220);
     doc.text("Important Information:", 15, infoY);
 
     doc.setFont(undefined, 'normal');

@@ -591,7 +591,7 @@ const CustomTourBooking = () => {
   const handleBooking = async () => {
     const errors = {};
     if (!formData.name) errors.name = true;
-    if (!formData.phone) errors.phone = true;
+    if (!formData.phone || formData.phone.length < 8) errors.phone = true;
     if (!formData.email) errors.email = true;
     if (!formData.date) errors.date = true;
     if (!formData.time) errors.time = true;
@@ -661,25 +661,6 @@ const CustomTourBooking = () => {
       });
       const data = await res.json();
       if (data.success) {
-        // Open WhatsApp confirmation companion window
-        try {
-          const tourTypeStr = tab === 'airport' ? 'AirPort Round TOUR' : 'Round TOUR';
-          const message = `*New Tour Booking Request*%0A` + 
-                          `*Type:* ${tourTypeStr}%0A` + 
-                          `*Name:* ${formData.name}%0A` + 
-                          `*WhatsApp:* ${formData.phone}%0A` + 
-                          `*Vehicle:* ${selectedVehicle.name}%0A` + 
-                          `*Hours:* ${formData.taxiTourHours} Hours%0A` + 
-                          `*KM Limit:* ${formData.taxiTourKm} KM%0A` + 
-                          `*Route:* ${locations[0] || 'Airport'} ➔ ${formData.placesList.filter(Boolean).join(', ') || 'Custom Stops'} ➔ ${locations[0] || 'Airport'}%0A` + 
-                          `*Date/Time:* ${formData.date} at ${formData.time}%0A` + 
-                          `*Payment:* ${formData.paymentMethod === 'cash' ? 'Cash to Driver' : 'Pay Online (Card)'}%0A` + 
-                          `*Price:* ${currency} ${convertPrice(totalPrice).value.toLocaleString()}`;
-          window.open(`https://wa.me/94712100500?text=${message}`, '_blank');
-        } catch (e) {
-          console.error("WhatsApp companion load blocked", e);
-        }
-        
         // Redirect to gateway or success page
         window.location.href = data.paymentUrl;
       } else { 
@@ -753,7 +734,7 @@ const CustomTourBooking = () => {
       <div className="bg-white rounded-[2.5rem] p-12 text-center shadow-2xl border border-slate-100 max-w-2xl mx-auto py-16">
         <div className="w-24 h-24 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mx-auto mb-8 shadow-inner"><CheckCircle2 size={48} /></div>
         <h3 className="text-3xl font-black text-emerald-950 mb-4 uppercase tracking-tighter">Tour Confirmed!</h3>
-        <p className="text-slate-500 mb-10 max-w-md mx-auto text-sm font-medium">Your request has been successfully processed. We have prepared your WhatsApp confirmation details.</p>
+        <p className="text-slate-500 mb-10 max-w-md mx-auto text-sm font-medium">Your request has been successfully processed.</p>
         <button onClick={() => { setIsBooked(false); setStep(1); }} className="px-10 py-5 bg-gradient-to-r from-emerald-800 to-emerald-950 text-white rounded-full font-black text-[10px] uppercase tracking-widest shadow-xl hover:scale-105 transition-all">Create New Booking</button>
       </div>
     );

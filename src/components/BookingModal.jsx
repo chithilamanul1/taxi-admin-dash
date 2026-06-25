@@ -751,9 +751,9 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
         
         if (targetStep >= 2) {
             if (!formData.name) newErrors.name = true;
-            if (!formData.phone) newErrors.phone = true;
+            if (!formData.phone || formData.phone.length < 8) newErrors.phone = true;
             if (!formData.email) newErrors.email = true;
-            if (!formData.whatsapp && !formData.phone) newErrors.whatsapp = true;
+            if (!formData.whatsapp && (!formData.phone || formData.phone.length < 8)) newErrors.whatsapp = true;
 
             const numExtra = Math.max(0, (Number(formData.passengerCount?.adults) || 1) + (Number(formData.passengerCount?.children) || 0) - 1);
             for (let i = 0; i < numExtra; i++) {
