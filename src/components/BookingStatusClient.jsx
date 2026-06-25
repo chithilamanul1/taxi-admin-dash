@@ -59,8 +59,8 @@ export default function BookingStatusClient({ booking }) {
                         <div className="absolute top-0 left-8 px-4 bg-white text-slate-800 text-[10px] font-bold uppercase tracking-[.3em] -translate-y-1/2">Booking Progress</div>
                         <div className="flex justify-between relative">
                             {/* Connecting Lines */}
-                            <div className="absolute top-6 left-0 right-0 h-1 bg-slate-100 -z-0 rounded-full"></div>
-                            <div className={`absolute top-6 left-0 h-1 bg-emerald-500 rounded-full transition-all duration-1000 -z-0 ${
+                            <div className="absolute top-5 md:top-6 left-0 right-0 h-1 bg-slate-100 -z-0 rounded-full"></div>
+                            <div className={`absolute top-5 md:top-6 left-0 h-1 bg-emerald-500 rounded-full transition-all duration-1000 -z-0 ${
                                 booking.status === 'pending' ? 'w-0' : 
                                 booking.status === 'confirmed' || booking.status === 'assigned' ? 'w-1/3' : 
                                 booking.status === 'ongoing' ? 'w-2/3' : 'w-full'
@@ -79,14 +79,14 @@ export default function BookingStatusClient({ booking }) {
                                 const isPast = bookingIdx > currentIdx;
                                 
                                 return (
-                                    <div key={s.id} className="flex flex-col items-center gap-4 relative z-10 flex-1">
-                                        <div className={`w-12 h-12 rounded-full flex items-center justify-center transition-all border ${
+                                    <div key={s.id} className="flex flex-col items-center gap-2 md:gap-4 relative z-10 flex-1">
+                                        <div className={`w-10 h-10 md:w-12 md:h-12 rounded-full flex items-center justify-center transition-all border ${
                                             isActive ? 'bg-emerald-500 border-emerald-500 shadow-lg text-white scale-110' : 
                                             isPast ? 'bg-emerald-50 border-emerald-100 text-emerald-600' : 'bg-white text-slate-300 border-slate-100'
                                         }`}>
-                                            <s.icon size={20} strokeWidth={2.5} />
+                                            <s.icon size={18} className="md:w-5 md:h-5" strokeWidth={2.5} />
                                         </div>
-                                        <span className={`text-[10px] font-bold uppercase tracking-widest ${isActive ? 'text-slate-800' : 'text-slate-400'}`}>
+                                        <span className={`text-[8px] md:text-[10px] font-bold uppercase tracking-widest ${isActive ? 'text-slate-800' : 'text-slate-400'}`}>
                                             {s.label}
                                         </span>
                                     </div>
@@ -96,13 +96,13 @@ export default function BookingStatusClient({ booking }) {
                     </div>
 
                     {/* Action Hub - Grid Refresh */}
-                    <div className="grid md:grid-cols-2 gap-8">
-                        <div className="bg-slate-50 text-slate-800 p-8 rounded-2xl border border-slate-100 shadow-sm relative group">
-                           <h4 className="text-xl font-black uppercase tracking-tight mb-8 flex items-center gap-3 text-slate-800">
-                               <ShieldCheck className="text-[#FACC15]" size={24} strokeWidth={2.5} />
+                    <div className="grid md:grid-cols-2 gap-4 md:gap-8">
+                        <div className="bg-slate-50 text-slate-800 p-5 md:p-8 rounded-2xl border border-slate-100 shadow-sm relative group">
+                           <h4 className="text-base md:text-xl font-black uppercase tracking-tight mb-4 md:mb-8 flex items-center gap-2 md:gap-3 text-slate-800">
+                               <ShieldCheck className="text-[#FACC15] w-5 h-5 md:w-6 md:h-6" strokeWidth={2.5} />
                                SECURE HUB
                            </h4>
-                           <div className="grid grid-cols-2 gap-4">
+                           <div className="grid grid-cols-2 gap-3 md:gap-4">
                                <button 
                                    onClick={() => {
                                        if(navigator.share) {
@@ -112,10 +112,10 @@ export default function BookingStatusClient({ booking }) {
                                            alert('Secure tracking link copied.');
                                        }
                                    }}
-                                   className="aspect-square flex flex-col items-center justify-center gap-3 bg-white border border-slate-200 rounded-xl hover:bg-slate-50 hover:border-[#FACC15] transition-all group/btn shadow-sm"
+                                   className="py-4 md:aspect-square flex flex-col items-center justify-center gap-2 md:gap-3 bg-white border border-slate-200 rounded-xl hover:bg-slate-50 hover:border-[#FACC15] transition-all group/btn shadow-sm"
                                >
-                                   <Zap size={28} className="text-[#FACC15]" />
-                                   <span className="text-[10px] font-bold uppercase tracking-widest text-slate-600 group-hover/btn:text-slate-900">Share</span>
+                                   <Zap size={24} className="md:w-7 md:h-7 text-[#FACC15]" />
+                                   <span className="text-[9px] md:text-[10px] font-bold uppercase tracking-widest text-slate-600 group-hover/btn:text-slate-900">Share</span>
                                </button>
                                <button 
                                    onClick={() => {
@@ -123,36 +123,36 @@ export default function BookingStatusClient({ booking }) {
                                            window.location.href = "tel:119";
                                        }
                                    }}
-                                   className="aspect-square flex flex-col items-center justify-center gap-3 bg-red-50 border border-red-100 rounded-xl hover:bg-red-500 hover:text-white hover:border-red-600 transition-all group/sos shadow-sm"
+                                   className="py-4 md:aspect-square flex flex-col items-center justify-center gap-2 md:gap-3 bg-red-50 border border-red-100 rounded-xl hover:bg-red-500 hover:text-white hover:border-red-600 transition-all group/sos shadow-sm"
                                >
-                                   <AlertCircle size={28} className="text-red-500 group-hover/sos:text-white" />
-                                   <span className="text-[10px] font-bold uppercase tracking-widest text-red-600 group-hover/sos:text-white">SOS</span>
+                                   <AlertCircle size={24} className="md:w-7 md:h-7 text-red-500 group-hover/sos:text-white" />
+                                   <span className="text-[9px] md:text-[10px] font-bold uppercase tracking-widest text-red-600 group-hover/sos:text-white">SOS</span>
                                </button>
                            </div>
                         </div>
 
-                        <div className="bg-yellow-50 text-yellow-900 p-8 rounded-2xl border border-yellow-100 shadow-sm">
-                           <h4 className="text-xl font-black uppercase tracking-tight mb-8 flex items-center gap-3 text-yellow-900">
-                               <MessageSquare className="text-yellow-600" size={24} strokeWidth={2.5} />
+                        <div className="bg-yellow-50 text-yellow-900 p-5 md:p-8 rounded-2xl border border-yellow-100 shadow-sm">
+                           <h4 className="text-base md:text-xl font-black uppercase tracking-tight mb-4 md:mb-8 flex items-center gap-2 md:gap-3 text-yellow-900">
+                               <MessageSquare className="text-yellow-600 w-5 h-5 md:w-6 md:h-6" strokeWidth={2.5} />
                                CONCIERGE
                            </h4>
-                           <div className="space-y-4">
+                           <div className="space-y-3 md:space-y-4">
                                 <button 
                                    onClick={() => window.dispatchEvent(new CustomEvent('open-live-chat'))}
-                                   className="flex items-center justify-between w-full bg-white text-slate-800 p-4 rounded-xl border border-slate-100 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all text-left"
+                                   className="flex items-center justify-between w-full bg-white text-slate-800 p-3 md:p-4 rounded-xl border border-slate-100 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all text-left"
                                 >
-                                   <div className="flex items-center gap-3">
-                                       <MessageSquare size={18} className="text-[#FACC15]" strokeWidth={2.5} />
-                                       <span className="text-[11px] font-bold uppercase tracking-widest">Live Chat</span>
+                                   <div className="flex items-center gap-2 md:gap-3">
+                                       <MessageSquare size={16} className="md:w-[18px] md:h-[18px] text-[#FACC15]" strokeWidth={2.5} />
+                                       <span className="text-[10px] md:text-[11px] font-bold uppercase tracking-widest">Live Chat</span>
                                    </div>
-                                   <ArrowRight size={18} className="text-slate-400" />
+                                   <ArrowRight size={16} className="text-slate-400" />
                                 </button>
-                               <a href="https://wa.me/94716885880" target="_blank" className="flex items-center justify-between bg-emerald-500 text-white p-4 rounded-xl border border-emerald-400 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all">
-                                   <div className="flex items-center gap-3">
-                                       <MessageSquare size={18} className="text-white" strokeWidth={2.5} />
-                                       <span className="text-[11px] font-bold uppercase tracking-widest">WhatsApp</span>
+                               <a href="https://wa.me/94716885880" target="_blank" className="flex items-center justify-between bg-emerald-500 text-white p-3 md:p-4 rounded-xl border border-emerald-400 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all">
+                                   <div className="flex items-center gap-2 md:gap-3">
+                                       <MessageSquare size={16} className="md:w-[18px] md:h-[18px] text-white" strokeWidth={2.5} />
+                                       <span className="text-[10px] md:text-[11px] font-bold uppercase tracking-widest">WhatsApp</span>
                                    </div>
-                                   <ArrowRight size={18} className="text-emerald-200" />
+                                   <ArrowRight size={16} className="text-emerald-200" />
                                </a>
                            </div>
                         </div>
