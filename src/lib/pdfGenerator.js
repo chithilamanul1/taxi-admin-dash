@@ -230,12 +230,12 @@ export const generateBookingPDF = (booking) => {
     doc.setTextColor(255, 255, 255);
     doc.setFontSize(9);
     doc.setFont(undefined, 'bold');
-    doc.text("Thank you for traveling with Airport Taxis!", 105, 288, { align: 'center' });
+    doc.text("Thank you for traveling with Airport Taxis!", 105, 284, { align: 'center' });
     doc.setFontSize(7);
     doc.setFont(undefined, 'normal');
-    doc.text("24/7 Hotline: +94 722 885 885 | 0719 885 885 | 0712 100 500 | info@srilankantaxi.lk", 105, 289, { align: 'center' });
-    doc.text("Support: support@airporttaxis.lk | support@srilankantaxi.lk | support@touris.lk | support@tourtaxi.lk | support@airporttaxicab.lk", 105, 293, { align: 'center' });
-    doc.text("customer@airporttaxis.lk", 105, 297, { align: 'center' });
+    doc.text("24/7 Hotline: +94 722 885 885 | 0719 885 885 | 0712 100 500 | info@srilankantaxi.lk", 105, 288, { align: 'center' });
+    doc.text("Support: support@airporttaxis.lk | support@srilankantaxi.lk | support@touris.lk | support@tourtaxi.lk | support@airporttaxicab.lk", 105, 292, { align: 'center' });
+    doc.text("customer@airporttaxis.lk", 105, 296, { align: 'center' });
 
     // Save
     const fileName = `${isCash ? 'Receipt' : 'Invoice'}_${booking._id.slice(-8).toUpperCase()}.pdf`;
