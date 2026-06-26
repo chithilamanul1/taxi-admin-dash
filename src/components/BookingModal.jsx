@@ -133,30 +133,42 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
         { code: 'INR', symbol: '₹', name: 'Indian Rupee', flag: 'https://flagcdn.com/w40/in.png' },
     ];
 
-    // Auto-swap vehicle if capacity exceeded
+    const prevPassengerCountRef = useRef(formData.passengerCount);
+
+    // Auto-swap vehicle if capacity exceeded or passenger count changed
     useEffect(() => {
         if (!formData.vehicle || !pricing || pricing.length === 0) return;
         
-        const currentVehicle = pricing.find(p => p.vehicleType === formData.vehicle);
-        if (!currentVehicle) return;
-
         const adults = Number(formData.passengerCount?.adults) || 1;
         const children = Number(formData.passengerCount?.children) || 0;
         const luggage = Number(formData.passengerCount?.luggage) || 0;
         const handLuggage = Number(formData.passengerCount?.handLuggage) || 0;
         const totalPax = adults + children;
-
-        const vehiclePax = currentVehicle.capacity || 4;
-        const vehicleLargeBags = currentVehicle.luggage || 0;
-        const vehicleSmallBags = currentVehicle.handLuggage || 0;
-        
-        const spareSeats = Math.max(0, vehiclePax - totalPax);
-        const extraBagCapacity = spareSeats * 1.5;
-        const maxBagUnits = vehicleLargeBags + (vehicleSmallBags * 0.5) + extraBagCapacity;
         const requestedBagUnits = luggage + (handLuggage * 0.5);
 
-        if (totalPax > vehiclePax || requestedBagUnits > maxBagUnits) {
-            // Find a suitable vehicle
+        const currentVehicle = pricing.find(p => p.vehicleType === formData.vehicle);
+        let needsAdjustment = false;
+
+        if (currentVehicle) {
+            const vehiclePax = currentVehicle.capacity || 4;
+            const vehicleLargeBags = currentVehicle.luggage || 0;
+            const vehicleSmallBags = currentVehicle.handLuggage || 0;
+            
+            const spareSeats = Math.max(0, vehiclePax - totalPax);
+            const extraBagCapacity = spareSeats * 1.5;
+            const maxBagUnits = vehicleLargeBags + (vehicleSmallBags * 0.5) + extraBagCapacity;
+
+            if (totalPax > vehiclePax || requestedBagUnits > maxBagUnits) {
+                needsAdjustment = true;
+            }
+        }
+
+        const passengerCountStr = JSON.stringify(formData.passengerCount);
+        const prevPassengerCountStr = JSON.stringify(prevPassengerCountRef.current);
+        const passengerCountChanged = passengerCountStr !== prevPassengerCountStr;
+
+        if (needsAdjustment || passengerCountChanged) {
+            // Find all suitable vehicles
             const suitableVehicles = pricing.filter(v => {
                 const vPax = v.capacity || 4;
                 if (totalPax > vPax) return false;
@@ -173,6 +185,8 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                 }
             }
         }
+        
+        prevPassengerCountRef.current = formData.passengerCount;
     }, [formData.passengerCount, pricing, formData.vehicle]);
 
     // Fetch Settings and Destinations
