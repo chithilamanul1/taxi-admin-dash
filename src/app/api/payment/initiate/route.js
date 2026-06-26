@@ -12,6 +12,18 @@ export async function POST(req) {
         const data = await req.json();
         const { bookingId, retry } = data;
 
+        let baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://taxi-admin-dash.vercel.app';
+        if (baseUrl.endsWith('/')) baseUrl = baseUrl.slice(0, -1);
+
+        const origin = req.headers.get('origin') || req.headers.get('referer');
+        if (origin) {
+            try {
+                baseUrl = new URL(origin).origin;
+            } catch (e) {
+                // Ignore parsing errors
+            }
+        }
+
         // --- RETRY LOGIC for Existing Bookings ---
         if (retry && bookingId) {
             const existingBooking = await Booking.findById(bookingId);
@@ -43,7 +55,6 @@ export async function POST(req) {
             }
 
             const gateway = getGatewayForCurrency(existingBooking.currency);
-            const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://taxi-admin-dash.vercel.app/';
 
             if (gateway === 'sampath') {
                 const { initiatePayCorpTransaction } = require('@/lib/payment');
@@ -61,13 +72,13 @@ export async function POST(req) {
                 const chargeAmount = existingBooking.paidAmount > 0 ? existingBooking.paidAmount : existingBooking.totalPrice;
                 return NextResponse.json({
                     success: true,
-                    paymentUrl: `${baseUrl}/payment/mock?bookingId=${existingBooking._id}&amount=${chargeAmount}`,
+                    paymentUrl: `/payment/mock?bookingId=${existingBooking._id}&amount=${chargeAmount}`,
                     gateway
                 });
             } else if (gateway === 'payhere') {
                 return NextResponse.json({
                     success: true,
-                    paymentUrl: `${baseUrl}/payment/payhere?bookingId=${existingBooking._id}`,
+                    paymentUrl: `/payment/payhere?bookingId=${existingBooking._id}`,
                     gateway
                 });
             }
@@ -121,17 +132,7 @@ export async function POST(req) {
             console.error('[Notification Error]', notificationError);
         }
 
-        let baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://taxi-admin-dash.vercel.app';
-        if (baseUrl.endsWith('/')) baseUrl = baseUrl.slice(0, -1);
-
-        const origin = req.headers.get('origin') || req.headers.get('referer');
-        if (origin) {
-            try {
-                baseUrl = new URL(origin).origin;
-            } catch (e) {
-                // Ignore parsing errors
-            }
-        }
+        // baseUrl is already resolved at the top
 
         // 2. Handle CASH payments (No gateway init needed)
         if (data.paymentMethod === 'cash') {
