@@ -31,10 +31,14 @@ const tourSchema = new mongoose.Schema({
 
     // Pricing
     price: {
-        amount: { type: Number, required: true, default: 0 },
-        currency: { type: String, default: 'LKR' },
+        amount: { type: Number, required: false, default: 0 },
+        currency: { type: String, default: 'USD' },
         type: { type: String, enum: ['fixed', 'from', 'per-person'], default: 'from' }
     },
+    paxPricing: [{
+        pax: { type: Number, required: true },
+        amount: { type: Number, required: true }
+    }],
 
     // Details
     destinations: { type: [String], default: [] }, // Tags: Kandy, Yala...

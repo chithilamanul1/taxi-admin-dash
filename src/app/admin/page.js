@@ -2649,7 +2649,7 @@ export default function AdminDashboard() {
                                                 setTourForm({
                                                     title: '',
                                                     category: 'day-trip',
-                                                    price: '',
+                                                    paxPricing: [{ pax: 1, amount: '' }],
                                                     priceType: 'per person',
                                                     duration: '',
                                                     image: '',
@@ -2774,24 +2774,63 @@ export default function AdminDashboard() {
                                                         />
                                                     </div>
                                                 </div>
-                                                <div className="grid grid-cols-2 gap-4">
-                                                    <div>
-                                                        <label className="block text-sm font-medium text-gray-700 mb-1">Price (USD)</label>
-                                                        <input
-                                                            type="number"
-                                                            className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-emerald-600/20 outline-none"
-                                                            value={tourForm.priceAmount || tourForm.price?.amount || ''}
-                                                            onChange={e => setTourForm({ ...tourForm, priceAmount: e.target.value })}
-                                                        />
+                                                <div className="border border-slate-200 rounded-lg p-4 bg-slate-50">
+                                                    <div className="flex justify-between items-center mb-4">
+                                                        <label className="block text-sm font-bold text-emerald-900">Dynamic Passenger Pricing</label>
+                                                        <button 
+                                                            onClick={() => {
+                                                                const currentPricing = tourForm.paxPricing || [];
+                                                                const nextPax = currentPricing.length > 0 ? Math.max(...currentPricing.map(p => p.pax)) + 1 : 1;
+                                                                setTourForm({ ...tourForm, paxPricing: [...currentPricing, { pax: nextPax, amount: '' }] });
+                                                            }}
+                                                            className="text-xs bg-emerald-900 text-white px-3 py-1 rounded hover:bg-emerald-800"
+                                                        >
+                                                            + Add Pax Tier
+                                                        </button>
                                                     </div>
-                                                    <div>
-                                                        <label className="block text-sm font-medium text-gray-700 mb-1">Price Type</label>
-                                                        <input
-                                                            className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-emerald-600/20 outline-none"
-                                                            placeholder="per person / group"
-                                                            value={tourForm.priceType || ''}
-                                                            onChange={e => setTourForm({ ...tourForm, priceType: e.target.value })}
-                                                        />
+                                                    <div className="space-y-3">
+                                                        {(tourForm.paxPricing || []).map((tier, idx) => (
+                                                            <div key={idx} className="flex items-center gap-3 bg-white p-2 rounded border">
+                                                                <div className="flex-1">
+                                                                    <label className="block text-[10px] font-bold text-gray-400 uppercase mb-1">Passengers</label>
+                                                                    <input 
+                                                                        type="number" 
+                                                                        className="w-full px-2 py-1 border rounded focus:ring-1 focus:ring-emerald-600 outline-none text-sm"
+                                                                        value={tier.pax}
+                                                                        onChange={(e) => {
+                                                                            const newPricing = [...(tourForm.paxPricing || [])];
+                                                                            newPricing[idx] = { ...tier, pax: Number(e.target.value) };
+                                                                            setTourForm({ ...tourForm, paxPricing: newPricing });
+                                                                        }}
+                                                                    />
+                                                                </div>
+                                                                <div className="flex-1">
+                                                                    <label className="block text-[10px] font-bold text-gray-400 uppercase mb-1">Total Price (USD)</label>
+                                                                    <input 
+                                                                        type="number" 
+                                                                        className="w-full px-2 py-1 border rounded focus:ring-1 focus:ring-emerald-600 outline-none text-sm"
+                                                                        value={tier.amount}
+                                                                        onChange={(e) => {
+                                                                            const newPricing = [...(tourForm.paxPricing || [])];
+                                                                            newPricing[idx] = { ...tier, amount: Number(e.target.value) };
+                                                                            setTourForm({ ...tourForm, paxPricing: newPricing });
+                                                                        }}
+                                                                    />
+                                                                </div>
+                                                                <button 
+                                                                    onClick={() => {
+                                                                        const newPricing = (tourForm.paxPricing || []).filter((_, i) => i !== idx);
+                                                                        setTourForm({ ...tourForm, paxPricing: newPricing });
+                                                                    }}
+                                                                    className="mt-4 p-1 text-red-500 hover:bg-red-50 rounded"
+                                                                >
+                                                                    <X size={16} />
+                                                                </button>
+                                                            </div>
+                                                        ))}
+                                                        {(!tourForm.paxPricing || tourForm.paxPricing.length === 0) && (
+                                                            <p className="text-xs text-gray-500 italic text-center py-2">No dynamic pricing defined. Please add pax tiers.</p>
+                                                        )}
                                                     </div>
                                                 </div>
                                                 <div>
@@ -2825,7 +2864,10 @@ export default function AdminDashboard() {
                                                                         formData.append('folder', 'tours')
                                                                         const res = await fetch('/api/upload', { method: 'POST', body: formData })
                                                                         const data = await res.json()
-                                                                        if (data.url || data.secure_url) setTourForm({ ...tourForm, image: data.url })
+                                                                        if (data.url || data.secure_url) {
+                                                                            const url = data.secure_url || data.url;
+                                                                            setTourForm({ ...tourForm, image: url.startsWith('http') ? url : (url.startsWith('/') ? url : '/' + url) });
+                                                                        }
                                                                     }
                                                                 }}
                                                                 className="text-xs w-full"
@@ -2871,6 +2913,9 @@ export default function AdminDashboard() {
                                                         const tourSlug = tourForm.slug || tourForm.title?.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
 
                                                         // Format data according to the Tour schema
+                                                        const paxPricingData = tourForm.paxPricing || [];
+                                                        const lowestPaxTier = paxPricingData.length > 0 ? paxPricingData.reduce((min, p) => p.amount < min.amount ? p : min, paxPricingData[0]) : null;
+
                                                         const payload = {
                                                             ...tourForm,
                                                             slug: tourSlug,
@@ -2878,10 +2923,11 @@ export default function AdminDashboard() {
                                                                 days: Number(tourForm.days || 1),
                                                                 nights: Number(tourForm.nights || 0)
                                                             },
+                                                            paxPricing: paxPricingData,
                                                             price: {
-                                                                amount: Number(tourForm.priceAmount || tourForm.price || 0),
+                                                                amount: Number(lowestPaxTier ? lowestPaxTier.amount : (tourForm.priceAmount || tourForm.price?.amount || 0)),
                                                                 currency: tourForm.currency || 'USD',
-                                                                type: tourForm.priceType || 'from'
+                                                                type: 'from'
                                                             }
                                                         };
 

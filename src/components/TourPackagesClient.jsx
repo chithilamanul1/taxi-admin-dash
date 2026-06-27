@@ -102,7 +102,11 @@ export default function TourPackagesClient() {
                                         {/* Image Section */}
                                         <div className="relative h-80 overflow-hidden shrink-0">
                                             <img
-                                                src={tour.image || tour.heroImage || tour.images?.[0] || getFallbackImage(tour.title)}
+                                                src={(() => {
+                                                    const rawImg = tour.image || tour.heroImage || tour.images?.[0];
+                                                    if (!rawImg) return getFallbackImage(tour.title);
+                                                    return rawImg.startsWith('http') || rawImg.startsWith('/') ? rawImg : `/${rawImg}`;
+                                                })()}
                                                 alt={tour.title}
                                                 className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110 grayscale group-hover:grayscale-0"
                                                 onError={(e) => {

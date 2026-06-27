@@ -95,12 +95,30 @@ export default function TourPackageDetailsClient({ tour }) {
     const priceCurrency = typeof tour.price === 'object' ? tour.price.currency : (tour.currency || 'USD');
 
     // Dynamic price calculation
-    let adultsPrice = 0;
-    if (memberCount.adults > 0) {
-        adultsPrice = priceAmount + (priceAmount * 0.5 * (memberCount.adults - 1));
+    let totalPrice = 0;
+    const totalPax = memberCount.adults + memberCount.children;
+    
+    if (tour.paxPricing && tour.paxPricing.length > 0) {
+        const tiers = [...tour.paxPricing].sort((a, b) => a.pax - b.pax);
+        let matchedTier = tiers.find(t => t.pax === totalPax);
+        
+        if (!matchedTier) {
+            const lowerTiers = tiers.filter(t => t.pax <= totalPax);
+            if (lowerTiers.length > 0) {
+                matchedTier = lowerTiers[lowerTiers.length - 1];
+            } else {
+                matchedTier = tiers[0];
+            }
+        }
+        totalPrice = matchedTier.amount;
+    } else {
+        let adultsPrice = 0;
+        if (memberCount.adults > 0) {
+            adultsPrice = priceAmount + (priceAmount * 0.5 * (memberCount.adults - 1));
+        }
+        const childrenPrice = priceAmount * 0.5 * memberCount.children;
+        totalPrice = adultsPrice + childrenPrice;
     }
-    const childrenPrice = priceAmount * 0.5 * memberCount.children;
-    const totalPrice = adultsPrice + childrenPrice;
 
     // Clean array logic for inclusions & exclusions
     const rawInclusions = (tour.inclusions?.length > 0 ? tour.inclusions : null) ||
@@ -150,7 +168,11 @@ export default function TourPackageDetailsClient({ tour }) {
             <div className="relative h-[75vh] w-full overflow-hidden pt-20 bg-slate-900 border-b-[16px] border-black">
                 <div className="absolute inset-0">
                     <img
-                        src={tour.heroImage || tour.image || tour.images?.[0] || 'https://images.unsplash.com/photo-1544644181-1484b3fdfc63?q=80&w=1240&auto=format&fit=crop'}
+                        src={(() => {
+                            const rawImg = tour.heroImage || tour.image || tour.images?.[0];
+                            if (!rawImg) return 'https://images.unsplash.com/photo-1544644181-1484b3fdfc63?q=80&w=1240&auto=format&fit=crop';
+                            return rawImg.startsWith('http') || rawImg.startsWith('/') ? rawImg : `/${rawImg}`;
+                        })()}
                         alt={tour.title}
                         className="w-full h-full object-cover transition-opacity duration-700"
                     />
@@ -234,11 +256,14 @@ export default function TourPackageDetailsClient({ tour }) {
                                     </h2>
                                 </div>
                                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-                                    {tour.images.map((img, idx) => (
-                                        <div key={idx} className="aspect-[4/3] rounded-2xl overflow-hidden border-4 border-black group">
-                                            <img src={img} alt={`${tour.title} - Image ${idx + 1}`} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
-                                        </div>
-                                    ))}
+                                    {tour.images.map((img, idx) => {
+                                        const formattedImg = img.startsWith('http') || img.startsWith('/') ? img : `/${img}`;
+                                        return (
+                                            <div key={idx} className="aspect-[4/3] rounded-2xl overflow-hidden border-4 border-black group">
+                                                <img src={formattedImg} alt={`${tour.title} - Image ${idx + 1}`} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
+                                            </div>
+                                        )
+                                    })}
                                 </div>
                             </section>
                         )}

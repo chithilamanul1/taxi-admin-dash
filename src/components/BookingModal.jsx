@@ -178,8 +178,12 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
             });
             
             if (suitableVehicles.length > 0) {
-                // Sort by basePrice or totalPrice
-                suitableVehicles.sort((a, b) => (a.basePrice || a.totalPrice) - (b.basePrice || b.totalPrice));
+                // Sort by basePrice, perKmRate, or lowest tier to ensure cheapest vehicle is selected
+                suitableVehicles.sort((a, b) => {
+                    const priceA = a.basePrice || a.totalPrice || (a.tiers && a.tiers.length > 0 ? a.tiers[0].price : 0) || a.perKmRate || Number.MAX_SAFE_INTEGER;
+                    const priceB = b.basePrice || b.totalPrice || (b.tiers && b.tiers.length > 0 ? b.tiers[0].price : 0) || b.perKmRate || Number.MAX_SAFE_INTEGER;
+                    return priceA - priceB;
+                });
                 if (suitableVehicles[0].vehicleType !== formData.vehicle) {
                     setFormData(prev => ({ ...prev, vehicle: suitableVehicles[0].vehicleType }));
                 }
