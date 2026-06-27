@@ -381,16 +381,7 @@ export const calculateSurcharges = (params, vehicleData) => {
 };
 
 export const calculatePaymentFees = (subtotal, paymentMethod, currency = 'LKR', vehicleType = '', isRoundTrip = false) => {
-    if (paymentMethod === 'cash' || vehicleType === 'sampath-test') {
-        return 0; // No surcharge for Cash or Test Products
-    } else if (paymentMethod === 'card') {
-        if (currency === 'USD') {
-            return subtotal * 0.035; // +3.5% for USD Card
-        } else {
-            // LKR card surcharge: 3% when NOT a round‑trip
-            return isRoundTrip ? 0 : subtotal * 0.03;
-        }
-    }
+    // Surcharges for card payments have been removed per legal requirements
     return 0;
 };
 
