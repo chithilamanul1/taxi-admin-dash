@@ -114,7 +114,11 @@ export default function SafariClient() {
                                     {/* Image */}
                                     <div className="relative h-56 md:h-64 overflow-hidden shrink-0">
                                         <img
-                                            src={trip.heroImage || trip.images?.[0] || '/wilpattu-new.png'}
+                                            src={(() => {
+                                                const rawImg = trip.heroImage || trip.images?.[0];
+                                                if (!rawImg) return '/wilpattu-new.png';
+                                                return rawImg.startsWith('http') || rawImg.startsWith('/') ? rawImg : `/${rawImg}`;
+                                            })()}
                                             alt={trip.title}
                                             className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                                         />

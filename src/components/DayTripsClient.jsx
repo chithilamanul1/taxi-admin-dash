@@ -105,7 +105,11 @@ export default function DayTripsClient() {
                                 {/* Image Section */}
                                 <div className="relative h-80 overflow-hidden shrink-0">
                                     <img
-                                        src={trip.image || trip.heroImage || trip.images?.[0] || getFallbackImage(trip.title)}
+                                        src={(() => {
+                                            const rawImg = trip.image || trip.heroImage || trip.images?.[0];
+                                            if (!rawImg) return getFallbackImage(trip.title);
+                                            return rawImg.startsWith('http') || rawImg.startsWith('/') ? rawImg : `/${rawImg}`;
+                                        })()}
                                         alt={trip.title}
                                         className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110 grayscale group-hover:grayscale-0"
                                         onError={(e) => {

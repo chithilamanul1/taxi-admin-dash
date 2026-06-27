@@ -94,14 +94,33 @@ export default function TourDetailsClient({ tour }) {
     const priceAmount = typeof tour.price === 'object' ? tour.price.amount : tour.price;
     const priceCurrency = typeof tour.price === 'object' ? tour.price.currency : (tour.currency || 'USD');
 
-    // Dynamic price calculation
+    // Dynamic price calculation based on passenger count
+    const totalPax = memberCount.adults + memberCount.children;
     const basePrice = priceAmount || 0;
-    let adultsPrice = 0;
-    if (memberCount.adults > 0) {
-        adultsPrice = basePrice + (basePrice * 0.5 * (memberCount.adults - 1));
+    let totalPrice = basePrice;
+    
+    if (tour.paxPricing && Array.isArray(tour.paxPricing) && tour.paxPricing.length > 0) {
+        // Sort paxPricing ascending by pax count
+        const sortedPricing = [...tour.paxPricing].sort((a, b) => a.pax - b.pax);
+        
+        // Find the lowest tier that is greater than or equal to totalPax
+        const exactOrHigherTier = sortedPricing.find((tier: any) => tier.pax >= totalPax);
+        
+        if (exactOrHigherTier) {
+            totalPrice = exactOrHigherTier.amount;
+        } else {
+            // If totalPax is greater than the highest defined tier, use the highest tier
+            totalPrice = sortedPricing[sortedPricing.length - 1].amount;
+        }
+    } else {
+        // Fallback to legacy static pricing logic if paxPricing is not defined
+        let adultsPrice = 0;
+        if (memberCount.adults > 0) {
+            adultsPrice = basePrice + (basePrice * 0.5 * (memberCount.adults - 1));
+        }
+        const childrenPrice = basePrice * 0.5 * memberCount.children;
+        totalPrice = adultsPrice + childrenPrice;
     }
-    const childrenPrice = basePrice * 0.5 * memberCount.children;
-    const totalPrice = adultsPrice + childrenPrice;
 
     // Clean array logic for inclusions & exclusions (to avoid empty array rendering bugs and Next.js UI mismatch)
     const rawInclusions = (tour.inclusions?.length > 0 ? tour.inclusions : null) ||
@@ -144,7 +163,11 @@ export default function TourDetailsClient({ tour }) {
             <div className="relative h-[75vh] w-full overflow-hidden pt-20 bg-slate-900 border-b-[16px] border-black">
                 <div className="absolute inset-0">
                     <img
-                        src={tour.heroImage || tour.image || tour.images?.[0] || 'https://images.unsplash.com/photo-1544644181-1484b3fdfc63?q=80&w=1240&auto=format&fit=crop'}
+                        src={(() => {
+                            const rawImg = tour.heroImage || tour.image || tour.images?.[0];
+                            if (!rawImg) return 'https://images.unsplash.com/photo-1544644181-1484b3fdfc63?q=80&w=1240&auto=format&fit=crop';
+                            return rawImg.startsWith('http') || rawImg.startsWith('/') ? rawImg : `/${rawImg}`;
+                        })()}
                         alt={tour.title}
                         className="w-full h-full object-cover transition-transform duration-[10s] hover:scale-110"
                     />
@@ -226,11 +249,14 @@ export default function TourDetailsClient({ tour }) {
                                     </h2>
                                 </div>
                                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-                                    {tour.images.map((img, idx) => (
-                                        <div key={idx} className="aspect-[4/3] rounded-2xl overflow-hidden border-4 border-black group">
-                                            <img src={img} alt={`${tour.title} - Image ${idx + 1}`} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
-                                        </div>
-                                    ))}
+                                    {tour.images.map((img: string, idx: number) => {
+                                        const formattedImg = img.startsWith('http') || img.startsWith('/') ? img : `/${img}`;
+                                        return (
+                                            <div key={idx} className="aspect-[4/3] rounded-2xl overflow-hidden border-4 border-black group">
+                                                <img src={formattedImg} alt={`${tour.title} - Image ${idx + 1}`} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
+                                            </div>
+                                        )
+                                    })}
                                 </div>
                             </section>
                         )}
