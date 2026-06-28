@@ -1618,7 +1618,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                                 <div className="h-px flex-1 bg-slate-100 dark:bg-white/5"></div>
                                             </div>
                                             <div className="grid grid-cols-2 gap-2 sm:gap-4">
-                                            {['cash', 'card'].map(m => (
+                                            {['card', 'cash'].map(m => (
                                                 <button
                                                     key={m}
                                                     onClick={() => setFormData({ 
