@@ -1,6 +1,14 @@
 import BookingWidget from '@/components/BookingWidget'
 import Footer from '@/components/Footer'
 
+export const metadata = {
+    title: 'Airport Pick Up Sri Lanka: Reliable Airport Taxi & Cab Services | Book Affordable Airport Pick Up, 24/7 Budget & Luxury Transfers Islandwide',
+    description: 'Looking for a reliable airport taxi or airport cab? We offer seamless airport pickup Sri Lanka services alongside convenient airport drop-offs. Book your comfortable, hassle-free ride today for punctual arrivals and departures at the best rates!',
+    keywords: [
+        'Sri Lanka airport drop off and pickup services', 'Book airport cab Sri Lanka roundtrip', 'Affordable airport taxi Sri Lanka pickup and drop', 'Bandaranaike international airport cab drop off', 'Sri Lanka airport transfer cab and pickup taxi', 'Reliable airport taxi for drop off Sri Lanka', 'Colombo airport drop off cab booking', 'Best airport pickup Sri Lanka and departure taxi', 'Private airport taxi Sri Lanka drop off hotel', 'Pre-book airport cab Sri Lanka departure and arrival'
+    ]
+};
+
 export default function AirportPickupPage() {
     return (
         <main className="bg-slate-50 dark:bg-emerald-900 min-h-screen">
