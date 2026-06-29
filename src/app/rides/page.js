@@ -6,7 +6,7 @@ export const metadata = {
         'best taxi service in sri lanka', 'sri lanka tourist cab service', 'colombo airport transfer taxi', 'island wide cab service sri lanka', 'hire car with driver sri lanka', 'reliable taxi service near me', 'sri lanka travel taxi packages', 'private cab service colombo', 'affordable outstation cabs sri lanka', 'sri lanka holiday transport provider'
     ],
     alternates: {
-        canonical: 'https://airporttaxis.lk/intercity-rides'
+        canonical: 'https://airporttaxis.lk/rides'
     }
 };
 
