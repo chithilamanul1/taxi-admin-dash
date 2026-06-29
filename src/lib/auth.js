@@ -44,12 +44,6 @@ export const authOptions = {
                         return null
                     }
 
-                    // Strict Admin Check for Manual Login
-                    if (user.role !== 'admin' && !SUPER_ADMINS.includes(user.email)) {
-                        console.log(`[Auth] Unauthorized access attempt to admin panel: ${credentials.email}`);
-                        return null;
-                    }
-
                     // Super Admin Check
                     const isSuperAdmin = SUPER_ADMINS.includes(user.email);
 

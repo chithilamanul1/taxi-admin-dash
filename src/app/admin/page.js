@@ -3990,14 +3990,92 @@ export default function AdminDashboard() {
                                             </div>
                                         </div>
 
-                                        <div className="p-6 border-t bg-gray-50 flex flex-wrap justify-end gap-3 md:gap-4 rounded-b-2xl">
-                                            <button
-                                                onClick={() => setSelectedBooking(null)}
-                                                className="px-6 py-2.5 text-gray-600 hover:bg-gray-200 rounded-lg font-bold transition-colors min-w-[100px]"
-                                            >
-                                                Close
-                                            </button>
-                                            <button
+                                        <div className="p-6 border-t bg-gray-50 flex flex-wrap justify-between items-center gap-4 rounded-b-2xl">
+                                            <div className="flex gap-2">
+                                                <button
+                                                    onClick={async () => {
+                                                        try {
+                                                            alert('Resending invoice...');
+                                                            const res = await fetch(`/api/admin/bookings/${selectedBooking._id}/resend-invoice`, { method: 'POST' });
+                                                            const data = await res.json();
+                                                            if (data.success) alert('Invoice sent successfully!');
+                                                            else alert('Error: ' + data.error);
+                                                        } catch (err) {
+                                                            alert('Failed to resend invoice');
+                                                        }
+                                                    }}
+                                                    className="px-4 py-2.5 bg-blue-600 text-white rounded-lg font-bold hover:bg-blue-700 transition-colors shadow flex items-center gap-2 text-sm"
+                                                >
+                                                    <Mail size={16} /> Resend Invoice
+                                                </button>
+                                                <button
+                                                    onClick={async () => {
+                                                        try {
+                                                            const { default: jsPDF } = await import('jspdf');
+                                                            await import('jspdf-autotable');
+                                                            const doc = new jsPDF();
+                                                            doc.setFillColor(5, 150, 105);
+                                                            doc.rect(0, 0, 210, 40, 'F');
+                                                            doc.setTextColor(255, 255, 255);
+                                                            doc.setFontSize(24);
+                                                            doc.setFont('helvetica', 'bold');
+                                                            doc.text('AIRPORT TAXIS PVT (LTD)', 20, 25);
+                                                            doc.setFontSize(10);
+                                                            doc.setFont('helvetica', 'normal');
+                                                            doc.text("Sri Lanka's Premium 24/7 Transport Service", 20, 32);
+                                                            doc.setTextColor(0, 0, 0);
+                                                            doc.setFontSize(12);
+                                                            doc.setFont('helvetica', 'bold');
+                                                            doc.text('INVOICE / BOOKING CONFIRMATION', 20, 55);
+                                                            doc.setFont('helvetica', 'normal');
+                                                            doc.setFontSize(10);
+                                                            doc.text(`Date: ${new Date().toLocaleDateString()}`, 130, 55);
+                                                            doc.text(`Booking #: ${selectedBooking._id.slice(-6).toUpperCase()}`, 130, 60);
+                                                            doc.setFont('helvetica', 'bold');
+                                                            doc.text('CUSTOMER INFO:', 20, 75);
+                                                            doc.setFont('helvetica', 'normal');
+                                                            doc.text(selectedBooking.customerName || 'N/A', 20, 82);
+                                                            doc.text(selectedBooking.customerEmail || 'N/A', 20, 87);
+                                                            doc.text(selectedBooking.guestPhone || 'N/A', 20, 92);
+                                                            doc.setFont('helvetica', 'bold');
+                                                            doc.text('TRIP DETAILS:', 110, 75);
+                                                            doc.setFont('helvetica', 'normal');
+                                                            doc.text(`Pickup: ${selectedBooking.pickupLocation?.address?.substring(0, 40) || 'N/A'}`, 110, 82);
+                                                            doc.text(`Dropoff: ${selectedBooking.dropoffLocation?.address?.substring(0, 40) || 'N/A'}`, 110, 87);
+                                                            doc.text(`Date: ${selectedBooking.scheduledDate} ${selectedBooking.scheduledTime}`, 110, 92);
+                                                            doc.autoTable({
+                                                                startY: 110,
+                                                                head: [['Description', 'Vehicle', 'Distance', 'Price']],
+                                                                body: [
+                                                                    [selectedBooking.type === 'tour' ? 'Tour Package' : 'Airport Transfer / Taxi Ride', selectedBooking.vehicleType || 'N/A', selectedBooking.distanceKm ? `${selectedBooking.distanceKm} km` : '-', `LKR ${selectedBooking.totalPrice}`],
+                                                                ],
+                                                                headStyles: { fillColor: [5, 150, 105] },
+                                                                theme: 'striped'
+                                                            });
+                                                            const finalY = doc.lastAutoTable.finalY + 10;
+                                                            doc.setFont('helvetica', 'bold');
+                                                            doc.text('TOTAL AMOUNT:', 140, finalY + 10);
+                                                            doc.setFontSize(16);
+                                                            doc.setTextColor(5, 150, 105);
+                                                            doc.text(`LKR ${selectedBooking.totalPrice}`, 140, finalY + 20);
+                                                            doc.save(`Invoice_${selectedBooking._id}.pdf`);
+                                                        } catch(e) {
+                                                            alert('Error generating PDF: ' + e.message);
+                                                        }
+                                                    }}
+                                                    className="px-4 py-2.5 bg-gray-800 text-white rounded-lg font-bold hover:bg-gray-900 transition-colors shadow flex items-center gap-2 text-sm"
+                                                >
+                                                    <FileText size={16} /> Download PDF
+                                                </button>
+                                            </div>
+                                            <div className="flex gap-3 md:gap-4">
+                                                <button
+                                                    onClick={() => setSelectedBooking(null)}
+                                                    className="px-6 py-2.5 text-gray-600 hover:bg-gray-200 rounded-lg font-bold transition-colors min-w-[100px]"
+                                                >
+                                                    Close
+                                                </button>
+                                                <button
                                                 onClick={async () => {
                                                     setUpdatingStatus(true)
                                                     try {
