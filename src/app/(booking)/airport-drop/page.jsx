@@ -6,7 +6,13 @@ export const metadata = {
     description: 'Looking for a reliable Sri Lankan taxi? Book our premier Taxi Service for an Airport Drop Off, Airport Cab, or quick Shuttle. We offer transparent Price Lists for Round Tours, Day Trips, and custom Tour taxi options. Contact our booking team today for the ultimate tourist ride!',
     keywords: [
         'Colombo airport taxi service', 'Sri Lanka airport drop off price', 'Best airport cab Sri Lanka', 'Bandaranaike airport transfer rates', 'Private tour taxi Sri Lanka', 'Sri Lanka driver round tours', 'Negombo to airport shuttle', 'Affordable Sri Lankan taxi booking', 'Kandy to Colombo airport taxi', 'Galle to BIA airport cab'
-    ]
+    ],
+    openGraph: {
+        title: 'Airport Drop Off & Taxi Service Sri Lanka | Cab Booking',
+        description: 'Book our premier Taxi Service for an Airport Drop Off, Airport Cab, or quick Shuttle. Transparent Price Lists for Round Tours and Day Trips.',
+        url: 'https://airporttaxis.lk/airport-drop',
+        siteName: 'Airport Taxis Pvt (Ltd)',
+    }
 };
 
 export default function AirportDropPage() {
