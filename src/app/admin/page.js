@@ -4116,6 +4116,7 @@ export default function AdminDashboard() {
                                                 {updatingStatus ? <Loader2 size={16} className="animate-spin" /> : <Check size={16} />}
                                                 {updatingStatus ? 'Saving...' : 'Save Changes'}
                                             </button>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
