@@ -4012,7 +4012,7 @@ export default function AdminDashboard() {
                                                     onClick={async () => {
                                                         try {
                                                             const { default: jsPDF } = await import('jspdf');
-                                                            await import('jspdf-autotable');
+                                                            const { default: autoTable } = await import('jspdf-autotable');
                                                             const doc = new jsPDF();
                                                             doc.setFillColor(5, 150, 105);
                                                             doc.rect(0, 0, 210, 40, 'F');
@@ -4043,7 +4043,7 @@ export default function AdminDashboard() {
                                                             doc.text(`Pickup: ${selectedBooking.pickupLocation?.address?.substring(0, 40) || 'N/A'}`, 110, 82);
                                                             doc.text(`Dropoff: ${selectedBooking.dropoffLocation?.address?.substring(0, 40) || 'N/A'}`, 110, 87);
                                                             doc.text(`Date: ${selectedBooking.scheduledDate} ${selectedBooking.scheduledTime}`, 110, 92);
-                                                            doc.autoTable({
+                                                            autoTable(doc, {
                                                                 startY: 110,
                                                                 head: [['Description', 'Vehicle', 'Distance', 'Price']],
                                                                 body: [

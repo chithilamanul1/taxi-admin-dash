@@ -37,10 +37,12 @@ export async function GET(request) {
             }
         }
 
+        const isPersonal = searchParams.get('personal') === 'true';
+
         let query = {};
 
         // 1. Admin Access: sees all
-        if (isAdmin) {
+        if (isAdmin && !isPersonal) {
             // Admin sees all (no filter)
             console.log('[Bookings API] Admin access granted');
         }
@@ -51,13 +53,23 @@ export async function GET(request) {
         }
         // 3. Logged-in User: sees their own bookings
         else if (session?.user?.email) {
-            query.customerEmail = session.user.email;
+            // Match customer ID (if linked) OR case-insensitive email (for guest bookings created before login)
+            query.$or = [
+                { customerEmail: { $regex: new RegExp(`^${session.user.email}$`, 'i') } }
+            ];
+            if (session.user.id) {
+                query.$or.push({ customer: session.user.id });
+            }
             console.log('[Bookings API] User access granted for:', session.user.email);
         }
         // 4. Guest Access: sees specific IDs (from localStorage/share link)
         else if (ids) {
             const idList = ids.split(',').filter(id => id.match(/^[0-9a-fA-F]{24}$/));
-            query._id = { $in: idList };
+            if (idList.length > 0) {
+                query._id = { $in: idList };
+            } else {
+                return NextResponse.json([]); // return empty if invalid IDs
+            }
             console.log('[Bookings API] Guest access granted for IDs:', ids);
         }
         // 5. Unauthorized

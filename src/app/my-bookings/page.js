@@ -21,6 +21,8 @@ export default function MyBookingsPage() {
             setLoading(true);
             try {
                 let url = '/api/bookings';
+                const params = new URLSearchParams();
+                params.append('personal', 'true');
                 let guestIds = [];
 
                 // Get guest bookings from local storage
@@ -29,27 +31,11 @@ export default function MyBookingsPage() {
                 } catch (e) { console.error(e); }
 
                 // Construct query
-                const params = new URLSearchParams();
                 if (guestIds.length > 0 && !session) {
                     params.append('ids', guestIds.join(','));
                 }
-
-                // If user logged in, API handles it via session. 
-                // If guest, we pass IDs. 
-                // If logged in user ALSO has guest bookings... we might want to merge? 
-                // For now, let's just let logged in user see their account bookings.
-                // The API logic: if session exists, it returns user bookings.
-
-                // Wait, if I want to merge, I might need custom logic.
-                // Current API: if session, ignores ID param?
-                // Let's check API I just wrote...
-                // "else if (session) { query.customer = session.user.id }"
-                // So logged in user CANNOT fetch guest bookings via ID param currently.
-                // I'll stick to: Logged in = Account Bookings. Guest = Guest Bookings.
-
-                if (guestIds.length > 0 && !session) {
-                    url += `?${params.toString()}`;
-                }
+                
+                url += `?${params.toString()}`;
 
                 if (!session && guestIds.length === 0) {
                     setBookings([]);
