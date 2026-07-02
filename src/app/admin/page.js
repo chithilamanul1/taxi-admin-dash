@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect, useMemo, useRef } from 'react'
-import { Users, Car, MapPin, Map as MapIcon, DollarSign, Activity, Bell, X, Phone, Mail, Calendar, Clock, CreditCard, FileText, Loader2, Percent, CheckSquare, Square, Check, LifeBuoy, Compass, MessageCircle, Copy, Link as LinkIcon, ExternalLink, Plus, XCircle, Image as ImageIcon, Settings as SettingsIcon, Tag, Sparkles, ShieldCheck, Route } from 'lucide-react'
+import { Users, Car, MapPin, Map as MapIcon, DollarSign, Activity, Bell, X, Phone, Mail, Calendar, Clock, CreditCard, FileText, Loader2, Percent, CheckSquare, Square, Check, LifeBuoy, Compass, MessageCircle, Copy, Link as LinkIcon, ExternalLink, Plus, XCircle, Image as ImageIcon, Settings as SettingsIcon, Tag, Sparkles, ShieldCheck, Route, Zap, TrendingUp, Target, RefreshCw } from 'lucide-react'
 import { useSession, signIn, signOut } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
@@ -19,6 +19,7 @@ import VideoManager from '@/components/admin/VideoManager'
 import DriverManager from '@/components/admin/DriverManager'
 import TrafficSurgeManager from '@/components/admin/TrafficSurgeManager'
 import CouponManager from '@/components/admin/CouponManager'
+import SEOEngineDashboard from '@/components/admin/SEOEngineDashboard'
 
 const ALL_VEHICLE_TYPES = [
     { value: 'mini-car', label: 'Wagon R (Mini Car)' },
@@ -833,6 +834,10 @@ export default function AdminDashboard() {
                     <button onClick={() => { setCurrentView('blog'); setSidebarOpen(false); }} className={`flex items-center gap-3 p-3 w-full rounded-xl transition-all duration-200 ${currentView === 'blog' ? 'bg-white text-emerald-900 shadow-lg shadow-white/20 font-bold' : 'hover:bg-white/10 text-white/80 hover:text-white'}`}>
                         <FileText size={20} />
                         <span className={`${!sidebarOpen && 'md:hidden'}`}>Blog</span>
+                    </button>
+                    <button onClick={() => { setCurrentView('seo-engine'); setSidebarOpen(false); }} className={`flex items-center gap-3 p-3 w-full rounded-xl transition-all duration-200 ${currentView === 'seo-engine' ? 'bg-white text-emerald-900 shadow-lg shadow-white/20 font-bold' : 'hover:bg-white/10 text-white/80 hover:text-white'}`}>
+                        <Zap size={20} />
+                        <span className={`${!sidebarOpen && 'md:hidden'}`}>SEO Engine</span>
                     </button>
                     <button onClick={() => { setCurrentView('team'); setSidebarOpen(false); }} className={`flex items-center gap-3 p-3 w-full rounded-xl transition-all duration-200 ${currentView === 'team' ? 'bg-white text-emerald-900 shadow-lg shadow-white/20 font-bold' : 'hover:bg-white/10 text-white/80 hover:text-white'}`}>
                         <Users size={20} />
@@ -3318,6 +3323,10 @@ export default function AdminDashboard() {
                                 </div>
                             )}
                         </div>
+                    )}
+
+                    {currentView === 'seo-engine' && (
+                        <SEOEngineDashboard />
                     )}
 
                     {currentView === 'team' && (
