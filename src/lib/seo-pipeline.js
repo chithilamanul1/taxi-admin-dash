@@ -1,15 +1,64 @@
 /**
- * SEO Pipeline Library — 4-Phase Multi-Model Content Engine
- * 
- * Phase 1: SERP Research (SerpApi)     — Real Google Sri Lanka data
- * Phase 2: Content Strategy (DeepSeek R1) — Gap analysis + content brief
- * Phase 3: Content Writing (Claude 3.5 Sonnet) — 1400+ word article
- * Phase 4: CMS Publish (MongoDB + Next.js) — Instant publish
+ * SEO Pipeline Library - 4-Phase Multi-Model Content Engine
+ *
+ * Phase 1: SERP Research (SerpApi)          - Real Google Sri Lanka data
+ * Phase 2: Content Strategy (DeepSeek R1)   - Gap analysis + content brief
+ * Phase 3: Content Writing (Claude 3.5 Sonnet) - 1400+ word article
+ * Phase 4: CMS Publish (MongoDB + Next.js)  - Instant publish
  */
 
 import dbConnect from '@/lib/db';
 import BlogPost from '@/models/Post';
 import { revalidatePath } from 'next/cache';
+
+const DISCORD_WEBHOOK_URL = 'https://discord.com/api/webhooks/1515670076726972486/WCQYeLEJp0P4az1GlvY3I1nAu2IybUv09Rp2FFSFDrsM5cEqsgPWFhgEoMsCzZRxQOhr';
+
+// ─────────────────────────────────────────────
+// DISCORD NOTIFIER
+// ─────────────────────────────────────────────
+export async function notifyDiscord(payload) {
+    try {
+        await fetch(DISCORD_WEBHOOK_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        });
+    } catch (err) {
+        console.error('[Discord] Notification failed:', err.message);
+    }
+}
+
+// ─────────────────────────────────────────────
+// SEARCH ENGINE PINGER
+// ─────────────────────────────────────────────
+export async function pingSearchEngines(slug) {
+    const SITE_URL = 'https://airporttaxis.lk';
+    const sitemapUrl = encodeURIComponent(`${SITE_URL}/sitemap.xml`);
+    const postUrl = encodeURIComponent(`${SITE_URL}/blog/${slug}`);
+
+    const pings = [
+        // Ping Google with sitemap
+        `https://www.google.com/ping?sitemap=${sitemapUrl}`,
+        // Ping Bing with sitemap
+        `https://www.bing.com/ping?sitemap=${sitemapUrl}`,
+        // IndexNow - instant indexing protocol (Bing, Yandex, Seznam)
+        `https://api.indexnow.org/indexnow?url=${postUrl}&key=airporttaxis`
+    ];
+
+    const results = await Promise.allSettled(
+        pings.map(url => fetch(url, { method: 'GET' }).then(r => ({ url, status: r.status })))
+    );
+
+    results.forEach(r => {
+        if (r.status === 'fulfilled') {
+            console.log(`[Ping] ${r.value.url} -> ${r.value.status}`);
+        } else {
+            console.warn(`[Ping] Failed: ${r.reason}`);
+        }
+    });
+
+    return results;
+}
 
 // ─────────────────────────────────────────────
 // PHASE 1: SERP Research
@@ -18,7 +67,7 @@ async function phase1_serpResearch(keyword) {
     const SERPAPI_KEY = process.env.SERPAPI_KEY;
 
     if (!SERPAPI_KEY) {
-        console.warn('[SEO Pipeline Phase 1] No SERPAPI_KEY — skipping SERP research');
+        console.warn('[SEO Pipeline Phase 1] No SERPAPI_KEY - skipping SERP research');
         return { keyword, topResults: [], peopleAlsoAsk: [], relatedSearches: [], serpSkipped: true };
     }
 
@@ -62,19 +111,21 @@ async function phase2_contentStrategy(serpData) {
     const OPENROUTER_API_KEY = process.env.OPENROUTER_API_KEY;
     const { keyword, topResults, peopleAlsoAsk, relatedSearches } = serpData;
 
+    const competitorText = topResults.length > 0
+        ? topResults.map((r, i) => `${i + 1}. "${r.title}" - ${r.snippet}`).join('\n')
+        : '(No competitor data - analyze based on keyword intent)';
+
+    const paaText = peopleAlsoAsk.length > 0
+        ? peopleAlsoAsk.map(q => `- ${q.question}`).join('\n')
+        : '(Infer likely questions from keyword)';
+
     const prompt = `You are a senior SEO content strategist. Create a detailed content brief to rank #1 on Google Sri Lanka for: "${keyword}".
 
 COMPETITOR ANALYSIS:
-${topResults.length > 0
-        ? topResults.map((r, i) => `${i + 1}. "${r.title}" — ${r.snippet}`).join('\n')
-        : '(No competitor data — analyze based on keyword intent)'
-    }
+${competitorText}
 
 PEOPLE ALSO ASK:
-${peopleAlsoAsk.length > 0
-        ? peopleAlsoAsk.map(q => `- ${q.question}`).join('\n')
-        : '(Infer likely questions from keyword)'
-    }
+${paaText}
 
 RELATED SEARCHES: ${relatedSearches.length > 0 ? relatedSearches.join(', ') : 'N/A'}
 
@@ -85,8 +136,8 @@ Return ONLY raw JSON (no markdown fences):
   "wordCountTarget": 1400,
   "contentAngle": "The unique angle that beats competitors",
   "h1Title": "SEO H1 (55-60 chars, includes keyword)",
-  "metaTitle": "Under 60 chars — keyword + brand",
-  "metaDescription": "Under 160 chars — keyword + benefit + CTA",
+  "metaTitle": "Under 60 chars - keyword + brand",
+  "metaDescription": "Under 160 chars - keyword + benefit + CTA",
   "outline": [
     { "heading": "H2 heading", "purpose": "what this covers", "keyPoints": ["point 1", "point 2"] }
   ],
@@ -103,7 +154,7 @@ Return ONLY raw JSON (no markdown fences):
             'Authorization': `Bearer ${OPENROUTER_API_KEY}`,
             'Content-Type': 'application/json',
             'HTTP-Referer': 'https://airporttaxis.lk',
-            'X-Title': 'Airport Taxi Tours SEO Pipeline — Strategy'
+            'X-Title': 'Airport Taxi Tours SEO Pipeline - Strategy'
         },
         body: JSON.stringify({
             model: 'deepseek/deepseek-r1',
@@ -135,6 +186,9 @@ async function phase3_writeContent(brief) {
         `${i + 1}. ## ${s.heading}\n   Purpose: ${s.purpose}\n   Key Points: ${(s.keyPoints || []).join(', ')}`
     ).join('\n\n');
 
+    const faqText = (brief.faqQuestions || []).map((q, i) => `FAQ ${i + 1}: ${q}`).join('\n');
+    const linksText = (brief.internalLinkSuggestions || []).map(l => `- ${l}`).join('\n');
+
     const prompt = `You are an expert travel content writer for Airport Taxi Tours (airporttaxis.lk), Sri Lanka's #1 private driver and tour service.
 
 Write a comprehensive 1400+ word blog post in Markdown based on this brief:
@@ -148,13 +202,13 @@ OUTLINE:
 ${outlineText}
 
 FAQ QUESTIONS:
-${(brief.faqQuestions || []).map((q, i) => `FAQ ${i + 1}: ${q}`).join('\n')}
+${faqText}
 
 INTERNAL LINKS TO ADD:
-${(brief.internalLinkSuggestions || []).map(l => `- ${l}`).join('\n')}
+${linksText}
 
 RULES:
-1. Start with "## [first H2]" — do NOT include H1
+1. Start with "## [first H2]" - do NOT include H1
 2. Minimum 1400 words
 3. Weave in ALL LSI keywords naturally
 4. Include real Sri Lanka facts: place names, distances (km), journey times, price ranges (LKR)
@@ -164,7 +218,7 @@ RULES:
 8. Use bullet points, numbered lists, and **bold text** for scannable reading
 9. DO NOT mention competitor brands
 
-Return ONLY raw Markdown — no JSON wrapper, no code fences.`;
+Return ONLY raw Markdown - no JSON wrapper, no code fences.`;
 
     const res = await fetch('https://openrouter.ai/api/v1/chat/completions', {
         method: 'POST',
@@ -172,7 +226,7 @@ Return ONLY raw Markdown — no JSON wrapper, no code fences.`;
             'Authorization': `Bearer ${OPENROUTER_API_KEY}`,
             'Content-Type': 'application/json',
             'HTTP-Referer': 'https://airporttaxis.lk',
-            'X-Title': 'Airport Taxi Tours SEO Pipeline — Writer'
+            'X-Title': 'Airport Taxi Tours SEO Pipeline - Writer'
         },
         body: JSON.stringify({
             model: 'anthropic/claude-3.5-sonnet',
@@ -238,15 +292,15 @@ async function phase4_publish(brief, content) {
 
     revalidatePath('/blog');
     revalidatePath('/');
-    console.log(`[Phase 4] Published: "${post.title}" → /blog/${slug}`);
+    console.log(`[Phase 4] Published: "${post.title}" -> /blog/${slug}`);
     return post;
 }
 
 // ─────────────────────────────────────────────
-// MAIN PIPELINE RUNNER (exported for reuse)
+// MAIN PIPELINE RUNNER
 // ─────────────────────────────────────────────
 export async function runSEOPipeline(keyword) {
-    console.log(`\n🚀 [SEO Pipeline] Starting for: "${keyword}"`);
+    console.log(`\n[SEO Pipeline] Starting for: "${keyword}"`);
 
     await dbConnect();
 

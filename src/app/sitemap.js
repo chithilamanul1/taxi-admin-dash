@@ -1,4 +1,6 @@
 import { headers } from 'next/headers';
+import dbConnect from '@/lib/db';
+import BlogPost from '@/models/Post';
 
 export default async function sitemap() {
     const headersList = await headers();
@@ -8,13 +10,7 @@ export default async function sitemap() {
 
     const { routes } = require('../lib/routes');
 
-    const taxiRoutes = routes.map(r => ({
-        url: `${baseUrl}/taxi-routes/${r.slug}`,
-        lastModified: new Date(),
-        changeFrequency: 'weekly',
-        priority: 0.8
-    }));
-
+    // Static pages
     const staticRoutes = [
         '',
         '/about',
@@ -37,8 +33,35 @@ export default async function sitemap() {
         url: `${baseUrl}${route}`,
         lastModified: new Date(),
         changeFrequency: route === '' ? 'daily' : 'weekly',
-        priority: route === '' ? 1 : (route.includes('trips') || route.includes('packages') || route.includes('taxi-6') ? 0.9 : 0.7),
+        priority: route === '' ? 1 : (route === '/blog' ? 0.9 : (route.includes('trips') || route.includes('packages') || route.includes('taxi-6') ? 0.85 : 0.7)),
     }));
 
-    return [...staticRoutes, ...taxiRoutes];
+    // Taxi route pages
+    const taxiRoutes = routes.map(r => ({
+        url: `${baseUrl}/taxi-routes/${r.slug}`,
+        lastModified: new Date(),
+        changeFrequency: 'weekly',
+        priority: 0.8
+    }));
+
+    // Blog posts from MongoDB - auto-included after every AI publish
+    let blogRoutes = [];
+    try {
+        await dbConnect();
+        const posts = await BlogPost.find(
+            { isPublished: true },
+            'slug updatedAt createdAt'
+        ).sort({ createdAt: -1 }).lean();
+
+        blogRoutes = posts.map(post => ({
+            url: `${baseUrl}/blog/${post.slug}`,
+            lastModified: new Date(post.updatedAt || post.createdAt),
+            changeFrequency: 'monthly',
+            priority: 0.75
+        }));
+    } catch (err) {
+        console.error('[sitemap] Could not load blog posts:', err.message);
+    }
+
+    return [...staticRoutes, ...taxiRoutes, ...blogRoutes];
 }

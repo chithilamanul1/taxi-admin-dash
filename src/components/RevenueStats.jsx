@@ -223,7 +223,7 @@ const RevenueStats = ({ bookings = [] }) => {
                                 <th className="px-6 py-3">Category</th>
                                 <th className="px-6 py-3">Vehicle / Trip</th>
                                 <th className="px-6 py-3">Dist. (KM)</th>
-                                <th className="px-6 py-3">Revenue (Rs.)</th>
+                                <th className="px-6 py-3">Revenue</th>
                                 <th className="px-6 py-3">Fuel Cost (Est.)</th>
                                 <th className="px-6 py-3">Net Profit</th>
                             </tr>
@@ -241,6 +241,8 @@ const RevenueStats = ({ bookings = [] }) => {
                                     const isTour = b.type === 'tour';
                                     const isDayTrip = b.type === 'day-trip';
                                     const isPackage = isTour || isDayTrip;
+                                    // Tour packages are priced in USD; everything else in LKR
+                                    const currencySymbol = isTour ? '$' : 'Rs.';
 
                                     return (
                                         <tr key={idx} className="hover:bg-slate-50">
@@ -257,9 +259,9 @@ const RevenueStats = ({ bookings = [] }) => {
                                                 {isPackage && <div className="text-[10px] text-slate-400">Duration: {b.tourDetails?.duration}</div>}
                                             </td>
                                             <td className="px-6 py-3 font-mono">{dist} km</td>
-                                            <td className="px-6 py-3 font-bold text-emerald-600">Rs. {(b.totalPrice || 0).toLocaleString()}</td>
+                                            <td className="px-6 py-3 font-bold text-emerald-600">{currencySymbol} {(b.totalPrice || 0).toLocaleString()}</td>
                                             <td className="px-6 py-3 text-orange-600">Rs. {cost.toLocaleString(undefined, { maximumFractionDigits: 0 })}</td>
-                                            <td className="px-6 py-3 font-bold text-blue-600 bg-blue-50/50">Rs. {profit.toLocaleString(undefined, { maximumFractionDigits: 0 })}</td>
+                                            <td className="px-6 py-3 font-bold text-blue-600 bg-blue-50/50">{currencySymbol} {profit.toLocaleString(undefined, { maximumFractionDigits: 0 })}</td>
                                         </tr>
                                     );
                                 })}
