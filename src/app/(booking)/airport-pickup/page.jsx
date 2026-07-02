@@ -12,6 +12,16 @@ export const metadata = {
         description: 'Seamless airport pickup Sri Lanka services alongside convenient airport drop-offs. Book your comfortable, hassle-free ride today!',
         url: 'https://airporttaxis.lk/airport-pickup',
         siteName: 'Airport Taxis Pvt (Ltd)',
+        images: [
+            {
+                url: '/logo.png',
+                width: 1200,
+                height: 630,
+                alt: 'Airport Pickup Sri Lanka',
+            }
+        ],
+        locale: 'en_US',
+        type: 'website',
     }
 };
 

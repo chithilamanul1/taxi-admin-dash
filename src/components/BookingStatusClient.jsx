@@ -282,9 +282,21 @@ export default function BookingStatusClient({ booking }) {
 
                     {/* Financial Block */}
                     <div className="bg-slate-900 p-10 rounded-2xl flex flex-col md:flex-row justify-between items-center gap-8 shadow-xl">
-                        <div className="text-center md:text-left space-y-1">
-                            <p className="text-slate-400 font-bold text-[10px] uppercase tracking-widest">Total Price</p>
-                            <p className="text-[#FACC15] font-bold uppercase text-[9px] tracking-wider">{booking.paymentMethod === 'card' ? 'PAYMENT PROCESSED' : 'PAYMENT DUE UPON ARRIVAL'}</p>
+                        <div className="text-center md:text-left space-y-4">
+                            <div>
+                                <p className="text-slate-400 font-bold text-[10px] uppercase tracking-widest">Total Price</p>
+                                <p className="text-[#FACC15] font-bold uppercase text-[9px] tracking-wider">{booking.paymentMethod === 'card' ? 'PAYMENT PROCESSED' : 'PAYMENT DUE UPON ARRIVAL'}</p>
+                            </div>
+                            <button 
+                                onClick={async () => {
+                                    const { downloadInvoice } = await import('@/lib/pdf-generator');
+                                    await downloadInvoice(booking);
+                                }}
+                                className="inline-flex items-center gap-2 bg-white/10 hover:bg-white/20 text-white px-4 py-2 rounded-lg text-xs font-bold uppercase tracking-widest transition-colors border border-white/10"
+                            >
+                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                                Download Receipt
+                            </button>
                         </div>
                         <div className="flex items-baseline gap-3">
                             <span className="text-xl font-bold text-slate-500 tracking-wider">{booking.currency || 'LKR'}</span>
