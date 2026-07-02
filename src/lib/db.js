@@ -38,6 +38,8 @@ async function dbConnect() {
             const opts = {
                 bufferCommands: false,
                 dbName: 'taxiadmindash', // Explicitly target the correct database
+                serverSelectionTimeoutMS: 3000, // Fail fast if DB is down/slow
+                connectTimeoutMS: 3000
             };
 
             console.log(`Connecting to MongoDB... Target DB: ${opts.dbName}`);

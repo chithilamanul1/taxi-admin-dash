@@ -350,9 +350,23 @@ const BookingWidgetContent = ({ defaultTab = 'pickup', onTabChange }) => {
                 const category = categoryMap[activeTab] || 'airport-transfer';
 
                 setIsLoadingPricing(true);
-                const res = await fetch(`/api/pricing?category=${category}`);
+                const controller = new AbortController();
+                const timeoutId = setTimeout(() => controller.abort(), 4000); // 4s timeout fallback
+                
+                let res;
+                try {
+                    res = await fetch(`/api/pricing?category=${category}`, { signal: controller.signal });
+                } catch (err) {
+                    console.error('Pricing fetch error/timeout:', err.message);
+                    setIsLoadingPricing(false);
+                    return;
+                } finally {
+                    clearTimeout(timeoutId);
+                }
+
                 if (!res.ok) {
                     console.error('Pricing Fetch Failed', res.status);
+                    setIsLoadingPricing(false);
                     return;
                 }
                 const response = await res.json();
