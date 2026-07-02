@@ -52,12 +52,144 @@ const formatDisplayDateTime = (dateStr, timeStr) => {
     return `${month}/${day}/${year}, ${timePart} ${period}`;
 };
 
+const FALLBACK_PRICING = {
+    'mini-car': {
+        vehicleType: 'mini-car',
+        name: 'Wagon R / Mini Car',
+        image: '/vehicles/minicar.png',
+        capacity: 3, luggage: 2, handLuggage: 2,
+        basePrice: 3500, baseKm: 20, perKmRate: 100,
+        tiers: [
+            { min: 0, max: 20, type: 'flat', price: 3500 },
+            { min: 21, max: 40, type: 'flat', price: 4000 },
+            { min: 41, max: 130, type: 'per_km', rate: 100 },
+            { min: 131, max: 9999, type: 'per_km', rate: 102 }
+        ]
+    },
+    'sedan': {
+        vehicleType: 'sedan',
+        name: 'Sedan Car',
+        image: '/vehicles/sedancar.png',
+        capacity: 4, luggage: 3, handLuggage: 3,
+        basePrice: 4500, baseKm: 20, perKmRate: 130,
+        tiers: [
+            { min: 0, max: 20, type: 'flat', price: 4500 },
+            { min: 21, max: 40, type: 'flat', price: 6000 },
+            { min: 41, max: 50, type: 'per_km', rate: 150 },
+            { min: 51, max: 100, type: 'per_km', rate: 130 },
+            { min: 101, max: 140, type: 'per_km', rate: 130 },
+            { min: 141, max: 200, type: 'per_km', rate: 127 },
+            { min: 201, max: 9999, type: 'per_km', rate: 122 }
+        ]
+    },
+    'mini-van-every': {
+        vehicleType: 'mini-van-every',
+        name: 'Mini Van (Every)',
+        image: '/vehicles/susukievery.png',
+        capacity: 4, luggage: 4, handLuggage: 2,
+        basePrice: 4500, baseKm: 20, perKmRate: 150,
+        tiers: [
+            { min: 0, max: 20, type: 'flat', price: 4500 },
+            { min: 21, max: 40, type: 'flat', price: 6000 },
+            { min: 41, max: 50, type: 'per_km', rate: 150 },
+            { min: 51, max: 100, type: 'per_km', rate: 130 },
+            { min: 101, max: 140, type: 'per_km', rate: 129 },
+            { min: 141, max: 200, type: 'per_km', rate: 127 },
+            { min: 201, max: 9999, type: 'per_km', rate: 122 }
+        ]
+    },
+    'mini-van-05': {
+        vehicleType: 'mini-van-05',
+        name: 'Mini Van (5 Seater)',
+        image: '/vehicles/minivan5seat.png',
+        capacity: 5, luggage: 4, handLuggage: 2,
+        basePrice: 6000, baseKm: 20, perKmRate: 200,
+        tiers: [
+            { min: 0, max: 20, type: 'flat', price: 6000 },
+            { min: 21, max: 40, type: 'flat', price: 8500 },
+            { min: 41, max: 100, type: 'per_km', rate: 200 },
+            { min: 101, max: 140, type: 'per_km', rate: 176 },
+            { min: 141, max: 200, type: 'per_km', rate: 143 },
+            { min: 201, max: 9999, type: 'per_km', rate: 132 }
+        ]
+    },
+    'suv': {
+        vehicleType: 'suv',
+        name: 'SUV (Luxury)',
+        image: '/vehicles/suv.png',
+        capacity: 4, luggage: 4, handLuggage: 3,
+        basePrice: 8000, baseKm: 20, perKmRate: 160,
+        tiers: []
+    },
+    'vezel': {
+        vehicleType: 'vezel',
+        name: 'Honda Vezel',
+        image: '/vehicles/Hondavezel.png',
+        capacity: 4, luggage: 3, handLuggage: 2,
+        basePrice: 5500, baseKm: 20, perKmRate: 130,
+        tiers: [
+            { min: 0, max: 20, type: 'flat', price: 6500 },
+            { min: 21, max: 40, type: 'flat', price: 9500 },
+            { min: 41, max: 100, type: 'per_km', rate: 150 },
+            { min: 101, max: 140, type: 'per_km', rate: 145 },
+            { min: 141, max: 200, type: 'per_km', rate: 140 },
+            { min: 201, max: 9999, type: 'per_km', rate: 135 }
+        ]
+    },
+    'kdh-flatroof': {
+        vehicleType: 'kdh-flatroof',
+        name: 'KDH Flat Roof Van',
+        image: '/vehicles/van.png',
+        capacity: 9, luggage: 8, handLuggage: 5,
+        basePrice: 8000, baseKm: 40, perKmRate: 175,
+        tiers: [
+            { min: 0, max: 20, type: 'flat', price: 6000 },
+            { min: 21, max: 40, type: 'flat', price: 8500 },
+            { min: 41, max: 100, type: 'per_km', rate: 200 },
+            { min: 101, max: 140, type: 'per_km', rate: 180 },
+            { min: 141, max: 200, type: 'per_km', rate: 145 },
+            { min: 201, max: 9999, type: 'per_km', rate: 135 }
+        ]
+    },
+    'kdh-highroof': {
+        vehicleType: 'kdh-highroof',
+        name: 'KDH High Roof Van',
+        image: '/vehicles/toyota-highroof.png',
+        capacity: 9, luggage: 8, handLuggage: 5,
+        basePrice: 8500, baseKm: 40, perKmRate: 180,
+        tiers: [
+            { min: 0, max: 20, type: 'flat', price: 6000 },
+            { min: 21, max: 40, type: 'flat', price: 8500 },
+            { min: 41, max: 100, type: 'per_km', rate: 200 },
+            { min: 101, max: 140, type: 'per_km', rate: 180 },
+            { min: 141, max: 200, type: 'per_km', rate: 145 },
+            { min: 201, max: 9999, type: 'per_km', rate: 135 }
+        ]
+    },
+    'coster-coach': {
+        vehicleType: 'coster-coach',
+        name: 'Coster Bus / Coach Bus',
+        image: '/vehicles/costerbus.png',
+        capacity: 26, luggage: 20, handLuggage: 20,
+        basePrice: 15000, baseKm: 40, perKmRate: 250,
+        tiers: [
+            { min: 0, max: 20, type: 'flat', price: 7500 },
+            { min: 21, max: 40, type: 'flat', price: 12000 },
+            { min: 41, max: 100, type: 'per_km', rate: 220 },
+            { min: 101, max: 140, type: 'per_km', rate: 220 },
+            { min: 141, max: 200, type: 'per_km', rate: 175 },
+            { min: 201, max: 9999, type: 'per_km', rate: 155 }
+        ]
+    }
+};
+
 const BookingWidgetContent = ({ defaultTab = 'pickup', onTabChange }) => {
     const router = useRouter();
     const [activeOffers, setActiveOffers] = useState([]);
     const [appliedOffers, setAppliedOffers] = useState([]); // Support multiple coupons
     const [vehiclePricing, setVehiclePricing] = useState({});
     const [isLoadingPricing, setIsLoadingPricing] = useState(true);
+    const activePricing = (vehiclePricing && Object.keys(vehiclePricing).length > 0) ? vehiclePricing : FALLBACK_PRICING;
     const [activeTab, setActiveTab] = useState(defaultTab);
     const [tripType, setTripType] = useState('one-way');
     const [pickup, setPickup] = useState({ name: 'Bandaranaike International Airport (CMB)', lat: 7.1804, lng: 79.8837 })
@@ -308,13 +440,13 @@ const BookingWidgetContent = ({ defaultTab = 'pickup', onTabChange }) => {
 
     // Auto-swap vehicle if capacity exceeded
     useEffect(() => {
-        if (!vehiclePricing || Object.keys(vehiclePricing).length === 0) return;
+        if (!activePricing || Object.keys(activePricing).length === 0) return;
         
         const pax = passengerCount || { adults: 1, children: 0, luggage: 0, handLuggage: 0 };
         const totalPax = (pax.adults || 0) + (pax.children || 0);
         const totalBags = (pax.luggage || 0);
 
-        const currentVehicle = vehiclePricing[vehicle];
+        const currentVehicle = activePricing[vehicle];
         
         const checkSuitability = (v) => {
             if (!v) return false;
@@ -343,14 +475,14 @@ const BookingWidgetContent = ({ defaultTab = 'pickup', onTabChange }) => {
                 if (t.includes('bus') || t.includes('coach')) return 8;
                 return 10;
             };
-            const sorted = Object.values(vehiclePricing).sort((a, b) => getPriority(a.vehicleType) - getPriority(b.vehicleType));
+            const sorted = Object.values(activePricing).sort((a, b) => getPriority(a.vehicleType) - getPriority(b.vehicleType));
             
             const suitable = sorted.find(checkSuitability);
             if (suitable && suitable.vehicleType !== vehicle) {
                 setVehicle(suitable.vehicleType);
             }
         }
-    }, [passengerCount, vehiclePricing, vehicle]);
+    }, [passengerCount, activePricing, vehicle]);
 
     // Tab Logic - reset fields based on mode
     useEffect(() => {
@@ -557,14 +689,14 @@ const BookingWidgetContent = ({ defaultTab = 'pickup', onTabChange }) => {
     useEffect(() => {
         if (isManualVehicle) return;
 
-        const currentVehicleData = vehiclePricing[vehicle];
+        const currentVehicleData = activePricing[vehicle];
         if (!currentVehicleData) return;
 
         const totalPax = (passengerCount.adults || 0) + (passengerCount.children || 0);
         const totalLuggage = passengerCount.luggage || 0;
 
         // Find best fit (Cheapest that fits capacity)
-        const sortedVehicles = Object.values(vehiclePricing).sort((a, b) => (a.basePrice || 0) - (b.basePrice || 0));
+        const sortedVehicles = Object.values(activePricing).sort((a, b) => (a.basePrice || 0) - (b.basePrice || 0));
         const bestFit = sortedVehicles.find(v =>
             totalPax <= (v.capacity || 4) && totalLuggage <= (v.luggage || 0)
         );
@@ -572,7 +704,7 @@ const BookingWidgetContent = ({ defaultTab = 'pickup', onTabChange }) => {
         if (bestFit && bestFit.vehicleType !== vehicle) {
             setVehicle(bestFit.vehicleType);
         }
-    }, [passengerCount, vehiclePricing, vehicle, isManualVehicle]);
+    }, [passengerCount, activePricing, vehicle, isManualVehicle]);
 
 
 
@@ -808,7 +940,7 @@ const BookingWidgetContent = ({ defaultTab = 'pickup', onTabChange }) => {
         distance,
         vehicle,
         tripType,
-        vehiclePricing,
+        activePricing,
         totalWaitingHours,
         false, // hasNameBoard removed from landing page
         nameBoardPrice,
@@ -848,7 +980,7 @@ const BookingWidgetContent = ({ defaultTab = 'pickup', onTabChange }) => {
             return;
         }
 
-        const currentVehicleData = vehiclePricing[vehicle];
+        const currentVehicleData = activePricing[vehicle];
         if (currentVehicleData) {
             const totalPax = (passengerCount.adults || 0) + (passengerCount.children || 0);
             const totalLuggage = passengerCount.luggage || 0;
@@ -897,7 +1029,7 @@ const BookingWidgetContent = ({ defaultTab = 'pickup', onTabChange }) => {
             scheduledDate: scheduledDate || currentDate,
             scheduledTime: scheduledTime || currentTime,
             roundTripPackageId,
-            pricing: Object.values(vehiclePricing)
+            pricing: Object.values(activePricing)
         });
         setShowModal(true);
     };
@@ -1125,63 +1257,71 @@ const BookingWidgetContent = ({ defaultTab = 'pickup', onTabChange }) => {
                                                                 <Info size={10} strokeWidth={3} /> Fleet Specs
                                                             </button>
                                                         </div>
-                                                        <VehicleCarousel
-                                                            vehicles={Object.values(vehiclePricing).map(v => {
-                                                                const priceInfo = calculatePrice(
-                                                                    distance,
-                                                                    v.vehicleType,
-                                                                    tripType,
-                                                                    vehiclePricing,
-                                                                    totalWaitingHours,
-                                                                    false, // hasNameBoard removed from landing page
-                                                                    nameBoardPrice,
-                                                                    pickup?.name || pickupSearch,
-                                                                    dropoff?.name || dropoffSearch,
-                                                                    destinations,
-                                                                    scheduledTime || currentTime,
-                                                                    scheduledDate || currentDate,
-                                                                    surgeRules,
-                                                                    roundTripPackageId,
-                                                                    normalTours,
-                                                                    airportTours,
-                                                                    pricingSettings.destinationRoundTripPackages
-                                                                );
-                                                                // Calculate discount specifically for this vehicle's total
-                                                                const vehicleDiscount = appliedOffers.reduce((max, offer) => {
-                                                                    const val = (offer.discountAmount || (priceInfo.total * (offer.discountPercentage / 100)));
-                                                                    return Math.max(max, val);
-                                                                }, 0);
+                                                        {isLoadingPricing ? (
+                                                            <div className="flex gap-4 overflow-x-auto py-2 no-scrollbar">
+                                                                {[1, 2, 3].map(n => (
+                                                                    <div key={n} className="w-[72vw] sm:w-[260px] md:w-[230px] shrink-0 h-[280px] rounded-[2rem] bg-slate-100 dark:bg-zinc-800 animate-pulse border border-slate-200 dark:border-white/5" />
+                                                                ))}
+                                                            </div>
+                                                        ) : (
+                                                            <VehicleCarousel
+                                                                vehicles={Object.values(activePricing).map(v => {
+                                                                    const priceInfo = calculatePrice(
+                                                                        distance,
+                                                                        v.vehicleType,
+                                                                        tripType,
+                                                                        activePricing,
+                                                                        totalWaitingHours,
+                                                                        false, // hasNameBoard removed from landing page
+                                                                        nameBoardPrice,
+                                                                        pickup?.name || pickupSearch,
+                                                                        dropoff?.name || dropoffSearch,
+                                                                        destinations,
+                                                                        scheduledTime || currentTime,
+                                                                        scheduledDate || currentDate,
+                                                                        surgeRules,
+                                                                        roundTripPackageId,
+                                                                        normalTours,
+                                                                        airportTours,
+                                                                        pricingSettings.destinationRoundTripPackages
+                                                                    );
+                                                                    // Calculate discount specifically for this vehicle's total
+                                                                    const vehicleDiscount = appliedOffers.reduce((max, offer) => {
+                                                                        const val = (offer.discountAmount || (priceInfo.total * (offer.discountPercentage / 100)));
+                                                                        return Math.max(max, val);
+                                                                    }, 0);
 
-                                                                return {
-                                                                    ...v,
-                                                                    calculatedTotal: Math.max(0, priceInfo.total - vehicleDiscount),
-                                                                    originalTotal: priceInfo.total,
-                                                                    hasDiscount: vehicleDiscount > 0
-                                                                };
-                                                            })}
-                                                            selectedId={vehicle}
-                                                            onSelect={(vType) => {
-                                                                if (!scheduledDate || !scheduledTime) {
-                                                                    setStep1Errors(prev => ({ ...prev, dateTime: true }));
-                                                                    dateTimeRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                                                                    return;
-                                                                }
-                                                                setVehicle(vType);
-                                                                setIsManualVehicle(true);
-                                                                const syncTab = ['pickup', 'drop'].includes(activeTab) ? 'airport' : 'tour';
-                                                                const event = new CustomEvent('syncCustomTourBooking', {
-                                                                    detail: {
-                                                                        tab: syncTab,
-                                                                        vehicleId: vType
+                                                                    return {
+                                                                        ...v,
+                                                                        calculatedTotal: Math.max(0, priceInfo.total - vehicleDiscount),
+                                                                        originalTotal: priceInfo.total,
+                                                                        hasDiscount: vehicleDiscount > 0
+                                                                    };
+                                                                })}
+                                                                selectedId={vehicle}
+                                                                onSelect={(vType) => {
+                                                                    if (!scheduledDate || !scheduledTime) {
+                                                                        setStep1Errors(prev => ({ ...prev, dateTime: true }));
+                                                                        dateTimeRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                                                                        return;
                                                                     }
-                                                                });
-                                                                window.dispatchEvent(event);
-                                                            }}
-                                                            passengerCount={passengerCount}
-                                                            pickupLocation={pickup}
-                                                            dropoffLocation={dropoff}
-                                                            isCondensed={false}
-                                                        />
+                                                                    setVehicle(vType);
+                                                                    setIsManualVehicle(true);
+                                                                    const syncTab = ['pickup', 'drop'].includes(activeTab) ? 'airport' : 'tour';
+                                                                    const event = new CustomEvent('syncCustomTourBooking', {
+                                                                        detail: {
+                                                                            tab: syncTab,
+                                                                            vehicleId: vType
+                                                                        }
+                                                                    });
+                                                                    window.dispatchEvent(event);
+                                                                }}
+                                                                passengerCount={passengerCount}
+                                                                pickupLocation={pickup}
+                                                                dropoffLocation={dropoff}
+                                                                isCondensed={false}
+                                                            />
+                                                        )}
                                                     </div>
                                                 )}
                                             </div>
@@ -1240,12 +1380,12 @@ const BookingWidgetContent = ({ defaultTab = 'pickup', onTabChange }) => {
                                                 </button>
                                             </div>
                                             <VehicleCarousel
-                                                vehicles={Object.values(vehiclePricing).map(v => {
+                                                vehicles={Object.values(activePricing).map(v => {
                                                     const priceInfo = calculatePrice(
                                                         distance,
                                                         v.vehicleType,
                                                         tripType,
-                                                        vehiclePricing,
+                                                        activePricing,
                                                         totalWaitingHours,
                                                         false, // hasNameBoard removed from landing page
                                                         nameBoardPrice,
@@ -1384,12 +1524,12 @@ const BookingWidgetContent = ({ defaultTab = 'pickup', onTabChange }) => {
                                     <div className="flex justify-between items-center text-xs font-black uppercase tracking-widest">
                                         <span className="text-slate-900 dark:text-slate-100">Select Vehicle</span>
                                         <div className="flex items-center gap-3 text-black dark:text-emerald-400">
-                                            {vehiclePricing[vehicle]?.image && (
+                                            {activePricing[vehicle]?.image && (
                                                 <div className="w-12 h-9 p-0.5 overflow-hidden shrink-0">
-                                                    <img src={vehiclePricing[vehicle].image} alt="" className="w-full h-full object-contain scale-[1.5]" />
+                                                    <img src={activePricing[vehicle].image} alt="" className="w-full h-full object-contain scale-[1.5]" />
                                                 </div>
                                             )}
-                                            <span>{vehiclePricing[vehicle]?.name || 'Select Vehicle'}</span>
+                                            <span>{activePricing[vehicle]?.name || 'Select Vehicle'}</span>
                                         </div>
                                     </div>
 
@@ -1684,12 +1824,12 @@ const BookingWidgetContent = ({ defaultTab = 'pickup', onTabChange }) => {
                 onClose={() => setIsVehicleDrawerOpen(false)}
                 pickupLocation={pickup?.name || pickupSearch}
                 dropoffLocation={dropoff?.name || dropoffSearch}
-                vehicles={Object.values(vehiclePricing).map(v => {
+                vehicles={Object.values(activePricing).map(v => {
                     const priceInfo = calculatePrice(
                         distance,
                         v.vehicleType,
                         tripType,
-                        vehiclePricing,
+                        activePricing,
                         totalWaitingHours,
                         false, // hasNameBoard removed from landing page
                         nameBoardPrice,
