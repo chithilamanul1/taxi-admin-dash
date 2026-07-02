@@ -2677,7 +2677,7 @@ export default function AdminDashboard() {
                                                 <div key={tour._id} className="group relative bg-white border rounded-xl overflow-hidden hover:shadow-xl transition-all">
                                                     <div className="h-48 overflow-hidden relative">
                                                         <img
-                                                            src={tour.image || '/tours/placeholder.jpg'}
+                                                            src={tour.image || tour.heroImage || tour.images?.[0] || '/images/tours/placeholder.jpg'}
                                                             alt={tour.title}
                                                             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                                                             onError={(e) => e.target.src = 'https://placehold.co/600x400?text=No+Image'}
@@ -2778,7 +2778,8 @@ export default function AdminDashboard() {
                                                     <div className="flex justify-between items-center mb-4">
                                                         <label className="block text-sm font-bold text-emerald-900">Dynamic Passenger Pricing</label>
                                                         <button 
-                                                            onClick={() => {
+                                                            onClick={(e) => {
+                                                                e.preventDefault();
                                                                 const currentPricing = tourForm.paxPricing || [];
                                                                 const nextPax = currentPricing.length > 0 ? Math.max(...currentPricing.map(p => p.pax)) + 1 : 1;
                                                                 setTourForm({ ...tourForm, paxPricing: [...currentPricing, { pax: nextPax, amount: '' }] });
@@ -2788,7 +2789,55 @@ export default function AdminDashboard() {
                                                             + Add Pax Tier
                                                         </button>
                                                     </div>
-                                                    <div className="space-y-3">
+
+                                                    {/* Matrix Generator */}
+                                                    <div className="bg-emerald-50 border border-emerald-200 rounded-lg p-3 mb-4">
+                                                        <h4 className="text-[11px] font-bold text-emerald-900 uppercase mb-1">Pricing Matrix Generator</h4>
+                                                        <p className="text-[10px] text-emerald-700 mb-2">Automatically calculate tiers using a base price and an incremental add-on per person.</p>
+                                                        <div className="flex gap-2 items-end">
+                                                            <div className="flex-1">
+                                                                <label className="block text-[10px] font-bold text-emerald-900 mb-1">Base Price (1 Pax) $</label>
+                                                                <input 
+                                                                    type="number" 
+                                                                    placeholder="e.g. 100"
+                                                                    className="w-full px-2 py-1.5 border border-emerald-200 rounded outline-none text-sm focus:ring-1 focus:ring-emerald-500"
+                                                                    value={tourForm._basePrice || ''}
+                                                                    onChange={e => setTourForm({...tourForm, _basePrice: e.target.value})}
+                                                                />
+                                                            </div>
+                                                            <div className="flex-1">
+                                                                <label className="block text-[10px] font-bold text-emerald-900 mb-1">Incremental Add-on $</label>
+                                                                <input 
+                                                                    type="number" 
+                                                                    placeholder="e.g. 20"
+                                                                    className="w-full px-2 py-1.5 border border-emerald-200 rounded outline-none text-sm focus:ring-1 focus:ring-emerald-500"
+                                                                    value={tourForm._incPrice || ''}
+                                                                    onChange={e => setTourForm({...tourForm, _incPrice: e.target.value})}
+                                                                />
+                                                            </div>
+                                                            <button 
+                                                                onClick={(e) => {
+                                                                    e.preventDefault();
+                                                                    const base = Number(tourForm._basePrice) || 0;
+                                                                    const inc = Number(tourForm._incPrice) || 0;
+                                                                    if (base > 0) {
+                                                                        const newTiers = Array.from({ length: 7 }, (_, i) => ({
+                                                                            pax: i + 1,
+                                                                            amount: base + (i * inc)
+                                                                        }));
+                                                                        setTourForm({ ...tourForm, paxPricing: newTiers, _basePrice: '', _incPrice: '' });
+                                                                    } else {
+                                                                        alert("Please enter a base price.");
+                                                                    }
+                                                                }}
+                                                                className="bg-emerald-600 text-white px-3 py-1.5 rounded font-bold text-[11px] hover:bg-emerald-700 transition-colors h-[34px]"
+                                                            >
+                                                                Generate 1-7 Tiers
+                                                            </button>
+                                                        </div>
+                                                    </div>
+
+                                                    <div className="space-y-2">
                                                         {(tourForm.paxPricing || []).map((tier, idx) => (
                                                             <div key={idx} className="flex items-center gap-3 bg-white p-2 rounded border">
                                                                 <div className="flex-1">
@@ -2818,7 +2867,8 @@ export default function AdminDashboard() {
                                                                     />
                                                                 </div>
                                                                 <button 
-                                                                    onClick={() => {
+                                                                    onClick={(e) => {
+                                                                        e.preventDefault();
                                                                         const newPricing = (tourForm.paxPricing || []).filter((_, i) => i !== idx);
                                                                         setTourForm({ ...tourForm, paxPricing: newPricing });
                                                                     }}
@@ -2829,19 +2879,7 @@ export default function AdminDashboard() {
                                                             </div>
                                                         ))}
                                                         {(!tourForm.paxPricing || tourForm.paxPricing.length === 0) && (
-                                                            <div className="flex flex-col items-center py-4 border-2 border-dashed border-slate-200 rounded-lg bg-white mt-2">
-                                                                <p className="text-xs text-gray-500 italic text-center mb-3">No dynamic pricing defined.</p>
-                                                                <button 
-                                                                    onClick={(e) => {
-                                                                        e.preventDefault();
-                                                                        const defaultTiers = Array.from({ length: 7 }, (_, i) => ({ pax: i + 1, amount: '' }));
-                                                                        setTourForm({ ...tourForm, paxPricing: defaultTiers });
-                                                                    }}
-                                                                    className="text-sm bg-emerald-100 text-emerald-800 px-4 py-2 rounded-lg font-bold hover:bg-emerald-200 transition-colors"
-                                                                >
-                                                                    Auto-generate 1-7 Persons Pricing
-                                                                </button>
-                                                            </div>
+                                                            <p className="text-xs text-gray-400 italic text-center py-2">No tiers added. Use the generator above or add manually.</p>
                                                         )}
                                                     </div>
                                                 </div>

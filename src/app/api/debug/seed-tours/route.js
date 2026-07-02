@@ -21,7 +21,7 @@ export async function POST() {
                 destinations: ['Yala', 'Tissamaharama'],
                 inclusions: ['Safari Jeep (Private)', 'Entrance Tickets', 'Experienced Driver/Tracker', 'Water Bottles'],
                 exclusions: ['Tips', 'Personal Expenses'],
-                heroImage: '/tours/safari_yala.png',
+                heroImage: '/images/tours/safari_yala.png',
                 images: [],
                 itinerary: [
                     { day: 1, title: 'Game Drive', description: 'Morning or Afternoon game drive.', activities: ['Leopard Spotting', 'Bird Watching'] }
@@ -37,7 +37,7 @@ export async function POST() {
                 price: { amount: 120, currency: 'USD', type: 'from' },
                 destinations: ['Udawalawe'],
                 inclusions: ['Safari Jeep', 'Park Fees', 'Guide'],
-                heroImage: '/tours/safari_udawalawe.png',
+                heroImage: '/images/tours/safari_udawalawe.png',
                 itinerary: [
                     { day: 1, title: 'Elephant Encounter', description: '3-4 hour game drive.', activities: ['Elephant Watching', 'Visit Transit Home'] }
                 ]
@@ -52,7 +52,7 @@ export async function POST() {
                 price: { amount: 130, currency: 'USD', type: 'from' },
                 destinations: ['Minneriya', 'Habarana'],
                 inclusions: ['Jeep Hire', 'Tickets'],
-                heroImage: '/tours/safari_minneriya.png',
+                heroImage: '/images/tours/safari_minneriya.png',
                 itinerary: [
                     { day: 1, title: 'The Gathering', description: 'Afternoon safari is best for seeing elephants gathering at the tank.', activities: ['Elephant Gathering'] }
                 ]
@@ -67,7 +67,7 @@ export async function POST() {
                 price: { amount: 160, currency: 'USD', type: 'from' },
                 destinations: ['Wilpattu', 'Anuradhapura'],
                 inclusions: ['Private Jeep', 'Entrance Fees'],
-                heroImage: '/tours/safari_wilpattu.png',
+                heroImage: '/images/tours/safari_wilpattu.png',
                 itinerary: [
                     { day: 1, title: 'Jungle Expedition', description: 'Full day or half day tour.', activities: ['Leopard Tracking', 'Scenic Lakes'] }
                 ]
@@ -83,7 +83,7 @@ export async function POST() {
                 description: 'A perfect introductory tour to Sri Lanka covering the cultural triangle, hill country, and the capital.',
                 price: { amount: 300, currency: 'USD', type: 'from' },
                 destinations: ['Kandy', 'Sigiriya', 'Colombo', 'Dambulla'],
-                heroImage: '/tours/sigiriya.jpg',
+                heroImage: '/images/tours/sigiriya.jpg',
                 itinerary: [
                     { day: 1, title: 'Arrival & Transfer to Sigiriya', description: 'Pickup from Airport.', activities: ['Dambulla Cave Temple'] },
                     { day: 2, title: 'Sigiriya Rock Fortress', description: 'Climb the 8th wonder of the world.', activities: ['Sigiriya Climb', 'Village Tour'] },
