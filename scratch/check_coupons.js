@@ -10,7 +10,7 @@ const couponSchema = new mongoose.Schema({
 const Coupon = mongoose.models.Coupon || mongoose.model('Coupon', couponSchema);
 
 async function run() {
-    await mongoose.connect(mongoURI);
+    await mongoose.connect(mongoURI, { dbName: 'taxiadmindash' });
     const coupons = await Coupon.find({});
     console.log("Coupons:", JSON.stringify(coupons, null, 2));
     mongoose.disconnect();

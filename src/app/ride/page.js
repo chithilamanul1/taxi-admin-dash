@@ -1,5 +1,9 @@
+import dynamic from 'next/dynamic'
 import BookingWidget from '@/components/BookingWidget'
-import Footer from '@/components/Footer'
+
+const StatsSection = dynamic(() => import('@/components/StatsSection'), { ssr: false })
+const Features = dynamic(() => import('@/components/Features'), { ssr: false })
+const TransferOptionsSection = dynamic(() => import('@/components/TransferOptionsSection'), { ssr: false })
 
 export const metadata = {
     title: 'Best Sri Lankan Taxi Cab Service | Island Wide Service to All Tourism Areas & Airports. Secure Online Cab Booking Across Sri Lanka!',
@@ -28,7 +32,7 @@ export const metadata = {
 export default function RidePage() {
     return (
         <main className="bg-slate-50 dark:bg-emerald-900 min-h-screen">
-            <div className="pt-12 md:pt-32 pb-20 px-4">
+            <div className="pt-6 md:pt-10 pb-20 px-4">
                 <div className="text-center mb-12">
                     <h1 className="text-4xl md:text-5xl font-black text-emerald-900 dark:text-white mb-4">
                         Inter City <span className="text-emerald-600">Rides</span>
@@ -40,6 +44,9 @@ export default function RidePage() {
                 <BookingWidget defaultTab="ride" />
             </div>
             
+            <StatsSection />
+            <Features />
+            <TransferOptionsSection />
         </main>
     )
 }
