@@ -189,8 +189,8 @@ export default function Navbar() {
                     <div className="p-6 space-y-4">
                         <div className="grid grid-cols-1 gap-4">
                             {[
-                                { label: 'Airport Taxis', href: '/?tab=pickup#booking', icon: '✈️', id: 'm-drop' },
                                 { label: 'Home', href: '/', icon: '🏠', id: 'm-home' },
+                                { label: 'Airport Taxis', href: '/?tab=pickup#booking', icon: '✈️', id: 'm-drop' },
                                 { label: 'Intercity Rides', href: '/?tab=ride#booking', icon: '🚗', id: 'm-ride' },
                                 { label: 'Day Tours', href: '/day-trips', icon: '🌴', id: 'm-day' },
                                 { label: 'City Tours', href: '/tours', icon: '🏙️', id: 'm-city' },

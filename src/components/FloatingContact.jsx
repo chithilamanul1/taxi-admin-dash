@@ -12,7 +12,7 @@ export default function FloatingContact() {
     if (isExcludedPage) return null
 
     return (
-        <div id="floating-contact" className="fixed bottom-24 md:bottom-10 right-6 z-[9999] flex flex-col items-end gap-5">
+        <div id="floating-contact" className="fixed bottom-24 md:bottom-10 right-6 z-[9000] flex flex-col items-end gap-5">
             {isOpen && (
                 <div className="flex flex-col gap-4 animate-fade-in-up items-end">
                     {/* WhatsApp */}
@@ -58,7 +58,7 @@ export default function FloatingContact() {
 
             {/* Animated Prompt */}
             {!isOpen && (
-                <div className="absolute bottom-4 right-16 bg-[#FACC15] text-black text-[9px] font-black tracking-widest px-4 py-2 rounded-xl whitespace-nowrap animate-bounce z-[9999] flex items-center shadow-xl border border-slate-100 dark:border-white/10">
+                <div className="absolute bottom-4 right-16 bg-[#FACC15] text-black text-[9px] font-black tracking-widest px-4 py-2 rounded-xl whitespace-nowrap animate-bounce z-[9000] flex items-center shadow-xl border border-slate-100 dark:border-white/10">
                     NEED HELP?
                     <div className="absolute top-1/2 -translate-y-1/2 -right-1.5 w-3 h-3 bg-[#FACC15] rotate-45 border-r-2 border-t-2 border-slate-200 dark:border-white/10"></div>
                 </div>
@@ -67,7 +67,7 @@ export default function FloatingContact() {
             {/* Main Toggle */}
             <button
                 onClick={() => setIsOpen(!isOpen)}
-                className={`w-[64px] h-[64px] flex items-center justify-center rounded-2xl transition-all duration-500 hover:scale-105 active:scale-95 z-[9999] ${isOpen ? 'bg-red-500 text-white' : 'bg-white text-emerald-950 border border-slate-100 dark:border-zinc-800'}`}
+                className={`w-[64px] h-[64px] flex items-center justify-center rounded-2xl transition-all duration-500 hover:scale-105 active:scale-95 z-[9000] ${isOpen ? 'bg-red-500 text-white' : 'bg-white text-emerald-950 border border-slate-100 dark:border-zinc-800'}`}
                 aria-label={isOpen ? "Close contact menu" : "Open contact menu"}
             >
                 {isOpen ? <X size={32} strokeWidth={3} /> : (
