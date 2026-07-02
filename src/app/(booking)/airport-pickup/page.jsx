@@ -1,9 +1,7 @@
-import dynamic from 'next/dynamic'
 import BookingWidget from '@/components/BookingWidget'
-
-const StatsSection = dynamic(() => import('@/components/StatsSection'), { ssr: false })
-const Features = dynamic(() => import('@/components/Features'), { ssr: false })
-const TransferOptionsSection = dynamic(() => import('@/components/TransferOptionsSection'), { ssr: false })
+import StatsSection from '@/components/StatsSection'
+import Features from '@/components/Features'
+import TransferOptionsSection from '@/components/TransferOptionsSection'
 
 export const metadata = {
     title: 'Airport Pick Up Sri Lanka: Reliable Airport Taxi & Cab Services | Book Affordable Airport Pick Up, 24/7 Budget & Luxury Transfers Islandwide',
