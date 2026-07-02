@@ -195,7 +195,7 @@ const TourBookingModal = ({ isOpen, onClose, tourTitle, tourId, duration, price,
 
                         {price && (
                             <div className="bg-emerald-50 dark:bg-emerald-900/20 p-4 rounded-xl flex justify-between items-center">
-                                <span className="text-sm font-bold text-emerald-900 dark:text-emerald-100 uppercase tracking-wider">Per Person</span>
+                                <span className="text-sm font-bold text-emerald-900 dark:text-emerald-100 uppercase tracking-wider">Total Estimate</span>
                                 <span className="text-xl font-black text-emerald-900 dark:text-white">
                                     {currency} {price.toLocaleString()}
                                 </span>

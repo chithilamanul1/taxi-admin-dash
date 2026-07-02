@@ -2829,7 +2829,19 @@ export default function AdminDashboard() {
                                                             </div>
                                                         ))}
                                                         {(!tourForm.paxPricing || tourForm.paxPricing.length === 0) && (
-                                                            <p className="text-xs text-gray-500 italic text-center py-2">No dynamic pricing defined. Please add pax tiers.</p>
+                                                            <div className="flex flex-col items-center py-4 border-2 border-dashed border-slate-200 rounded-lg bg-white mt-2">
+                                                                <p className="text-xs text-gray-500 italic text-center mb-3">No dynamic pricing defined.</p>
+                                                                <button 
+                                                                    onClick={(e) => {
+                                                                        e.preventDefault();
+                                                                        const defaultTiers = Array.from({ length: 7 }, (_, i) => ({ pax: i + 1, amount: '' }));
+                                                                        setTourForm({ ...tourForm, paxPricing: defaultTiers });
+                                                                    }}
+                                                                    className="text-sm bg-emerald-100 text-emerald-800 px-4 py-2 rounded-lg font-bold hover:bg-emerald-200 transition-colors"
+                                                                >
+                                                                    Auto-generate 1-7 Persons Pricing
+                                                                </button>
+                                                            </div>
                                                         )}
                                                     </div>
                                                 </div>
