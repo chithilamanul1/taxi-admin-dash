@@ -528,7 +528,8 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
             const surcharges = calculateSurcharges({
                 hasNameBoard: formData.hasNameBoard,
                 nameBoardPrice: pricingSettings?.nameBoardPrice,
-                waitingHours: formData.waitingHours
+                waitingHours: formData.waitingHours,
+                waitingHourRate: pricingSettings?.waitingHourRate || 1000
             }, vehicleData);
 
             // Traffic Surge Calculation

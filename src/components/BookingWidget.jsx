@@ -24,7 +24,7 @@ import { calculateBasePrice, calculateSurcharges, calculateTrafficSurge, ROUND_T
 import { detectLocalTimezone } from '@/lib/timezone-util';
 
 // (Helper to calculate price)
-const calculatePrice = (distance, vehicleId, tripType, pricingMap, waitingHours, hasNameBoard, nameBoardPrice = 2000, pickupName = '', dropoffName = '', destinations = [], scheduledTime = null, scheduledDate = null, surgeRules = [], roundTripPackageId = null, roundTripPackages = [], airportRoundTripPackages = [], destinationRoundTripPackages = []) => {
+const calculatePrice = (distance, vehicleId, tripType, pricingMap, waitingHours, hasNameBoard, nameBoardPrice = 2000, waitingHourRate = 1000, pickupName = '', dropoffName = '', destinations = [], scheduledTime = null, scheduledDate = null, surgeRules = [], roundTripPackageId = null, roundTripPackages = [], airportRoundTripPackages = [], destinationRoundTripPackages = []) => {
     if (!pricingMap[vehicleId]) return { total: 0, surgeAmount: 0 };
     const vehicleData = pricingMap[vehicleId];
 
@@ -34,7 +34,7 @@ const calculatePrice = (distance, vehicleId, tripType, pricingMap, waitingHours,
         airportRoundTripPackages,
         destinationRoundTripPackages
     });
-    const surcharges = calculateSurcharges({ waitingHours, hasNameBoard, nameBoardPrice }, vehicleData);
+    const surcharges = calculateSurcharges({ waitingHours, hasNameBoard, nameBoardPrice, waitingHourRate }, vehicleData);
 
     const surgePercent = calculateTrafficSurge(scheduledTime, scheduledDate, surgeRules, distance);
     const surgeAmount = surgePercent > 0 ? basePrice * (surgePercent / 100) : 0;
@@ -958,6 +958,7 @@ const BookingWidgetContent = ({ defaultTab = 'pickup', onTabChange }) => {
         totalWaitingHours,
         false, // hasNameBoard removed from landing page
         nameBoardPrice,
+        pricingSettings.waitingHourRate || 1000,
         pickup?.name || pickupSearch,
         dropoff?.name || dropoffSearch,
         destinations,
@@ -1288,6 +1289,7 @@ const BookingWidgetContent = ({ defaultTab = 'pickup', onTabChange }) => {
                                                                         totalWaitingHours,
                                                                         false, // hasNameBoard removed from landing page
                                                                         nameBoardPrice,
+                                                                        pricingSettings.waitingHourRate || 1000,
                                                                         pickup?.name || pickupSearch,
                                                                         dropoff?.name || dropoffSearch,
                                                                         destinations,
@@ -1403,6 +1405,7 @@ const BookingWidgetContent = ({ defaultTab = 'pickup', onTabChange }) => {
                                                         totalWaitingHours,
                                                         false, // hasNameBoard removed from landing page
                                                         nameBoardPrice,
+                                                        pricingSettings.waitingHourRate || 1000,
                                                         pickup?.name || pickupSearch,
                                                         dropoff?.name || dropoffSearch,
                                                         destinations,
@@ -1847,6 +1850,7 @@ const BookingWidgetContent = ({ defaultTab = 'pickup', onTabChange }) => {
                         totalWaitingHours,
                         false, // hasNameBoard removed from landing page
                         nameBoardPrice,
+                        pricingSettings.waitingHourRate || 1000,
                         pickup.name,
                         dropoff.name,
                         destinations,

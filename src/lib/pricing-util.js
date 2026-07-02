@@ -360,7 +360,7 @@ export const calculateBasePrice = (distanceKm, vehicleData, tripType = 'one-way'
 
 export const calculateSurcharges = (params, vehicleData) => {
     let surcharges = 0;
-    const { waitingHours, hasNameBoard } = params;
+    const { waitingHours, hasNameBoard, waitingHourRate } = params;
 
     // Strict Operator Validation: enforce integers to prevent string concatenation or inverse division bugs
     const waitTime = parseInt(waitingHours || 0, 10);
@@ -369,7 +369,8 @@ export const calculateSurcharges = (params, vehicleData) => {
         if (vehicleData.waitingCharges && Array.isArray(vehicleData.waitingCharges) && vehicleData.waitingCharges.length >= waitTime) {
             surcharges += Number(vehicleData.waitingCharges[waitTime - 1]) || 0;
         } else {
-            surcharges += (waitTime * (Number(vehicleData.hourlyRate) || 500));
+            const hourlyRate = Number(waitingHourRate) || Number(vehicleData.hourlyRate) || 1000;
+            surcharges += (waitTime * hourlyRate);
         }
     }
 
