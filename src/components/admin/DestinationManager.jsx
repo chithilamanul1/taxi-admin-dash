@@ -178,9 +178,28 @@ export default function DestinationManager() {
                                 </div>
 
                                 <div className="p-5 space-y-4">
+                                    {/* Normal rates summary */}
                                     <div className="space-y-2">
                                         <div className="flex justify-between items-center text-[10px] font-bold text-slate-400 uppercase tracking-tighter">
-                                            <span>Configured Packages</span>
+                                            <span>Fixed Rates</span>
+                                        </div>
+                                        <div className="flex flex-wrap gap-1.5">
+                                            {(() => {
+                                                const pricing = dest.pricing instanceof Map ? Object.fromEntries(dest.pricing) : (dest.pricing || {});
+                                                const entries = Object.entries(pricing).filter(([, v]) => v > 0);
+                                                if (entries.length === 0) return <span className="text-[10px] text-slate-400 italic">No fixed rates set</span>;
+                                                return entries.slice(0, 4).map(([veh, price]) => (
+                                                    <span key={veh} className="px-2 py-0.5 bg-blue-50 border border-blue-100 text-blue-700 rounded text-[9px] font-black uppercase">
+                                                        {veh.replace('mini-van-', 'Van ').replace('mini-', '')} · Rs.{Number(price).toLocaleString()}
+                                                    </span>
+                                                ));
+                                            })()}
+                                        </div>
+                                    </div>
+                                    {/* Hourly packages */}
+                                    <div className="space-y-2">
+                                        <div className="flex justify-between items-center text-[10px] font-bold text-slate-400 uppercase tracking-tighter">
+                                            <span>Tour Packages</span>
                                         </div>
                                         <div className="flex flex-wrap gap-2">
                                             {[...new Set((dest.roundTripPackages || []).map(p => p.hours))].sort((a,b)=>a-b).map(hours => (
@@ -243,8 +262,45 @@ export default function DestinationManager() {
                                         </div>
                                     </div>
 
+                                    {/* ── NORMAL DESTINATION RATES (per-vehicle fixed price) ── */}
+                                    <div className="md:col-span-2 p-6 bg-blue-50 dark:bg-blue-900/10 rounded-[2.5rem] border border-blue-200 dark:border-blue-800/30 space-y-4">
+                                        <div>
+                                            <h4 className="text-sm font-black text-blue-900 dark:text-blue-300 uppercase tracking-wider flex items-center gap-2">
+                                                <DollarSign size={18} className="text-blue-500" /> Normal Destination Rates (Fixed Price per Vehicle)
+                                            </h4>
+                                            <p className="text-[10px] text-slate-500 font-medium mt-0.5">One-way fixed fare (Rs.) for Airport to this destination. Overrides auto km-based pricing.</p>
+                                        </div>
+                                        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
+                                            {VEHICLE_TYPES.map(vt => {
+                                                const VIcon = VEHICLE_ICONS[vt.slug]?.icon || Car;
+                                                const vColor = VEHICLE_ICONS[vt.slug]?.color || 'text-slate-500';
+                                                const vBg = VEHICLE_ICONS[vt.slug]?.bg || 'bg-slate-500/10';
+                                                return (
+                                                    <div key={vt.slug} className="bg-white dark:bg-white/5 border border-slate-200 dark:border-slate-700 rounded-2xl p-3 space-y-2">
+                                                        <div className="flex items-center gap-2">
+                                                            <div className={`w-7 h-7 ${vBg} rounded-lg flex items-center justify-center`}>
+                                                                <VIcon size={14} className={vColor} />
+                                                            </div>
+                                                            <span className="text-[10px] font-black text-slate-700 dark:text-slate-200 uppercase tracking-tight">{vt.label}</span>
+                                                        </div>
+                                                        <div className="flex items-center gap-1">
+                                                            <span className="text-[9px] font-bold text-emerald-600">Rs.</span>
+                                                            <input
+                                                                type="number"
+                                                                min="0"
+                                                                placeholder="0"
+                                                                value={(form.pricing || {})[vt.slug] || ''}
+                                                                onChange={e => updatePricing(vt.slug, e.target.value)}
+                                                                className="flex-1 bg-slate-50 dark:bg-zinc-800 border border-slate-200 dark:border-slate-600 rounded-lg px-2 py-1.5 text-sm font-bold text-emerald-700 dark:text-emerald-400 outline-none focus:ring-2 focus:ring-blue-500/20 w-full"
+                                                            />
+                                                        </div>
+                                                    </div>
+                                                );
+                                            })}
+                                        </div>
+                                    </div>
 
-
+                                    {/* ── DESTINATION ROUND TRIP / HOURLY PACKAGES ── */}
                                     <div className="md:col-span-2 p-6 bg-slate-50 dark:bg-white/5 rounded-[2.5rem] border border-slate-200 dark:border-white/5 space-y-6">
                                         <div className="flex items-center justify-between">
                                             <div>
