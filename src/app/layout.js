@@ -21,8 +21,8 @@ export async function generateMetadata() {
 
     return {
         title: {
-            default: 'Airport Taxis (Pvt) Ltd - SRI LANKA',
-            template: '%s | Airport Taxis (Pvt) Ltd - SRI LANKA'
+            default: 'Airport Taxis Sri Lanka | Airport Cabs & Transfers',
+            template: '%s | Airport Taxis Sri Lanka'
         },
         description: '🚕 Sri Lanka\'s most trusted 24/7 Airport Taxi & Tour service. Book Colombo Airport (CMB) transfers, luxury KDH vans, and curated Sri Lanka tour packages. Fixed rates, professional English-speaking drivers, and instant online booking.',
         keywords: [
@@ -46,7 +46,7 @@ export async function generateMetadata() {
             canonical: '/',
         },
         openGraph: {
-            title: 'Airport Taxis (Pvt) Ltd - SRI LANKA',
+            title: 'Airport Taxis Sri Lanka | Airport Cabs & Transfers',
             description: 'Instant Booking! Reliable 24/7 airport transfers from Colombo Airport (CMB). Professional drivers, comfortable vehicles (Mini Car, Sedan, KDH Van). Best rates guaranteed for all-island tours.',
             url: '/',
             siteName: 'Airport Taxis (Pvt) Ltd - SRI LANKA',
@@ -63,7 +63,7 @@ export async function generateMetadata() {
         },
         twitter: {
             card: 'summary_large_image',
-            title: '🚖 Airport Taxis Sri Lanka - Premium Airport Rides & Tours',
+            title: 'Airport Taxis Sri Lanka | Airport Cabs & Transfers',
             description: 'Trusted 24/7 airport transfers & tours. Professional drivers, instant confirmation, best rates guaranteed!',
             images: ['/og-image.jpg'],
         },

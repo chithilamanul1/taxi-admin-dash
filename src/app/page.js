@@ -1,7 +1,7 @@
 import HomeClient from '../components/HomeClient'
 
 export const metadata = {
-    title: '🚖 Airport Taxis Sri Lanka - #1 Trusted Airport Transfers & Multi-Day Tours',
+    title: 'Airport Taxis Sri Lanka | Airport Cabs & Transfers',
     description: 'Book your Airport Taxi in Sri Lanka with instant confirmation. 24/7 Colombo Airport (CMB) transfers, private chauffeurs, and luxury KDH vans. Fixed rates, no hidden fees. Trusted by 10,000+ happy travelers for airport pickups and all-island tours.',
     keywords: [
         'Sri Lanka Airport Taxi', 'Airport Transfer Sri Lanka', 'Colombo Airport Taxi', 'Taxi Service Sri Lanka',
