@@ -6,7 +6,7 @@
  * Phase 3: Content Writing (Gemini 2.0 Flash)   - 1400+ word article
  * Phase 4: CMS Publish (MongoDB + Next.js)       - Instant publish
  *
- * Models used: google/gemini-2.0-flash-exp:free (FREE tier, no credits needed)
+ * Models used: meta-llama/llama-3.3-70b-instruct:free (FREE tier, no credits needed)
  */
 
 import dbConnect from '@/lib/db';
@@ -16,7 +16,7 @@ import { revalidatePath } from 'next/cache';
 const DISCORD_WEBHOOK_URL = 'https://discord.com/api/webhooks/1515670076726972486/WCQYeLEJp0P4az1GlvY3I1nAu2IybUv09Rp2FFSFDrsM5cEqsgPWFhgEoMsCzZRxQOhr';
 
 // Free model - no credits needed on OpenRouter
-const FREE_MODEL = 'google/gemini-2.0-flash-exp:free';
+const FREE_MODEL = 'meta-llama/llama-3.3-70b-instruct:free';
 
 // ─────────────────────────────────────────────
 // OPENROUTER HELPER

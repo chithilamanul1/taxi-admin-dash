@@ -84,8 +84,8 @@ async function runScheduler() {
                 color: 0xF59E0B,
                 fields: [
                     { name: 'Phase 1', value: 'SerpApi - SERP Research', inline: true },
-                    { name: 'Phase 2', value: 'Gemini 2.0 Flash - Strategy', inline: true },
-                    { name: 'Phase 3', value: 'Gemini 2.0 Flash - Writing', inline: true }
+                    { name: 'Phase 2', value: 'Llama 3.3 70B - Strategy', inline: true },
+                    { name: 'Phase 3', value: 'Llama 3.3 70B - Writing', inline: true }
                 ],
                 footer: { text: 'Airport Taxis SEO Engine (Free Tier)' },
                 timestamp: new Date().toISOString()
