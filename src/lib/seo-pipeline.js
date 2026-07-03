@@ -182,13 +182,55 @@ Return ONLY a valid JSON object, no markdown fences, no explanation:
     const raw = await callOpenRouter(
         [{ role: 'user', content: prompt }],
         'Phase 2',
-        2000
+        2500
     );
 
-    // Extract JSON from response (handle any wrapping text)
-    const jsonMatch = raw.match(/\{[\s\S]*\}/);
-    if (!jsonMatch) throw new Error('[Phase 2] No JSON found in Gemini response');
-    const brief = JSON.parse(jsonMatch[0]);
+    // Robust JSON extractor — finds outermost { } block
+    function extractJSON(text) {
+        const start = text.indexOf('{');
+        if (start === -1) return null;
+        let depth = 0;
+        for (let i = start; i < text.length; i++) {
+            if (text[i] === '{') depth++;
+            else if (text[i] === '}') {
+                depth--;
+                if (depth === 0) return text.slice(start, i + 1);
+            }
+        }
+        // Truncated — try to close it
+        return text.slice(start) + '}'.repeat(depth);
+    }
+
+    const jsonStr = extractJSON(raw);
+    if (!jsonStr) throw new Error('[Phase 2] No JSON found in Gemini response');
+
+    let brief;
+    try {
+        brief = JSON.parse(jsonStr);
+    } catch (e) {
+        // Last resort: build a minimal brief from what we can parse
+        console.error('[Phase 2] JSON parse failed, using minimal brief. Raw:', raw.slice(0, 300));
+        brief = {
+            primaryKeyword: keyword,
+            targetIntent: 'informational',
+            wordCountTarget: 1400,
+            contentAngle: `Complete guide to ${keyword} in Sri Lanka`,
+            h1Title: `${keyword} in Sri Lanka: Complete Guide`,
+            metaTitle: `${keyword} | Airport Taxi Tours Sri Lanka`,
+            metaDescription: `Book reliable ${keyword} with Airport Taxi Tours. Fixed rates, 24/7 service, professional drivers across Sri Lanka.`,
+            outline: [
+                { heading: `Why Choose Airport Taxi Tours for ${keyword}`, purpose: 'Build trust', keyPoints: ['Fixed rates', 'Professional drivers', '24/7 service'] },
+                { heading: 'How to Book', purpose: 'Conversion', keyPoints: ['Online booking', 'Instant confirmation'] },
+                { heading: 'Routes and Pricing', purpose: 'Keyword coverage', keyPoints: ['Airport transfers', 'Tour packages'] }
+            ],
+            lsiKeywords: ['sri lanka taxi', 'airport transfer', 'colombo taxi', 'private driver'],
+            faqQuestions: [`How much does ${keyword} cost?`, `How do I book ${keyword}?`, 'Is the service available 24/7?'],
+            imageSearchQuery: 'sri lanka airport taxi',
+            internalLinkSuggestions: ['/booking', '/fleet', '/tour-packages'],
+            slug: keyword.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '')
+        };
+    }
+
     console.log(`[Phase 2] Brief: "${brief.h1Title}"`);
     return brief;
 }
