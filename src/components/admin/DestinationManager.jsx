@@ -23,6 +23,7 @@ export default function DestinationManager() {
     const [form, setForm] = useState({});
     const [selectedVehicle, setSelectedVehicle] = useState(VEHICLE_TYPES[0].slug);
     const [saving, setSaving] = useState(false);
+    const [activeModalTab, setActiveModalTab] = useState('transfers');
 
     const VEHICLE_ICONS = {
         "mini-car": { icon: Zap, color: "text-emerald-500", bg: "bg-emerald-500/10" },
@@ -195,6 +196,7 @@ export default function DestinationManager() {
                                                 ));
                                             })()}
                                         </div>
+                                    )}
                                     </div>
                                     {/* Hourly packages */}
                                     <div className="space-y-2">
@@ -230,78 +232,172 @@ export default function DestinationManager() {
                             animate={{ scale: 1, y: 0 }}
                             className="bg-white dark:bg-emerald-900 rounded-3xl md:rounded-[2.5rem] shadow-2xl w-full max-w-4xl max-h-[90vh] overflow-hidden flex flex-col"
                         >
-                            <div className="px-5 transition-all md:px-8 py-4 md:py-6 border-b border-slate-100 dark:border-white/10 flex justify-between items-center bg-slate-50 dark:bg-white/5">
-                                <div>
-                                    <h3 className="text-lg md:text-xl font-bold text-emerald-900 dark:text-white">{editing === 'NEW' ? 'New Destination' : 'Edit Rate Plan'}</h3>
-                                    <p className="text-[10px] md:text-xs text-slate-500">Configure override rates for this location</p>
+                            <div className="px-5 transition-all md:px-8 pt-4 md:pt-6 border-b border-slate-100 dark:border-white/10 flex flex-col gap-4 bg-slate-50 dark:bg-white/5">
+                                <div className="flex justify-between items-start">
+                                    <div>
+                                        <h3 className="text-lg md:text-xl font-bold text-emerald-900 dark:text-white">{editing === 'NEW' ? 'New Destination' : 'Edit Rate Plan'}</h3>
+                                        <p className="text-[10px] md:text-xs text-slate-500">Configure override rates for this location</p>
+                                    </div>
+                                    <button onClick={() => setEditing(null)} className="p-2 hover:bg-slate-200 dark:hover:bg-white/10 rounded-xl transition-colors"><X size={20} /></button>
                                 </div>
-                                <button onClick={() => setEditing(null)} className="p-2 hover:bg-slate-200 dark:hover:bg-white/10 rounded-xl transition-colors"><X size={20} /></button>
+                                <div className="flex gap-4">
+                                    <button
+                                        type="button"
+                                        onClick={() => setActiveModalTab('transfers')}
+                                        className={`pb-3 text-sm font-bold border-b-2 transition-colors ${activeModalTab === 'transfers' ? 'border-emerald-600 text-emerald-700 dark:text-emerald-400' : 'border-transparent text-slate-500 hover:text-slate-700 dark:hover:text-slate-300'}`}
+                                    >
+                                        Point-to-Point / Transfers
+                                    </button>
+                                    <button
+                                        type="button"
+                                        onClick={() => setActiveModalTab('tours')}
+                                        className={`pb-3 text-sm font-bold border-b-2 transition-colors ${activeModalTab === 'tours' ? 'border-emerald-600 text-emerald-700 dark:text-emerald-400' : 'border-transparent text-slate-500 hover:text-slate-700 dark:hover:text-slate-300'}`}
+                                    >
+                                        Round Tour Packages
+                                    </button>
+                                </div>
                             </div>
 
                             <form onSubmit={handleSave} className="flex-1 overflow-y-auto p-5 md:p-8 space-y-6 md:space-y-8">
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                                    <div className="space-y-6">
-                                        <div className="space-y-1">
-                                            <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest pl-1">Destination Location (Google Search)</label>
-                                            <LocationInput
-                                                placeholder="Search for a city or place..."
-                                                value={form.name}
-                                                onChange={(val) => setForm({ ...form, name: val, title: val ? `Airport to ${val}` : '' })}
-                                                onSelect={({ address }) => {
-                                                    setForm({ ...form, name: address, title: `Airport to ${address}` });
-                                                }}
-                                            />
-                                        </div>
-                                        <div className="space-y-1">
-                                            <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest pl-1">Full Display Title</label>
-                                            <input required type="text" className="w-full px-4 py-4 bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-slate-800 rounded-2xl text-base font-bold outline-none ring-offset-0 focus:ring-4 focus:ring-blue-500/10 transition-all" value={form.title} onChange={e => setForm({ ...form, title: e.target.value })} placeholder="e.g. Airport to Galle Port" />
-                                        </div>
-                                        <div className="space-y-1">
-                                            <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest pl-1">Sort Order</label>
-                                            <input type="number" className="w-full px-4 py-4 bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-slate-800 rounded-2xl text-base font-bold outline-none ring-offset-0 focus:ring-4 focus:ring-blue-500/10 transition-all" value={form.sortOrder || ''} onChange={e => setForm({ ...form, sortOrder: Number(e.target.value) })} placeholder="e.g. 1" />
+                                    <div className="md:col-span-2">
+                                        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                                            <div className="space-y-1">
+                                                <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest pl-1">Destination Location (Google Search)</label>
+                                                <LocationInput
+                                                    placeholder="Search for a city or place..."
+                                                    value={form.name}
+                                                    onChange={(val) => setForm({ ...form, name: val, title: val ? `Airport to ${val}` : '' })}
+                                                    onSelect={({ address }) => {
+                                                        setForm({ ...form, name: address, title: `Airport to ${address}` });
+                                                    }}
+                                                />
+                                            </div>
+                                            <div className="space-y-1">
+                                                <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest pl-1">Full Display Title</label>
+                                                <input required type="text" className="w-full px-4 py-3 bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-slate-800 rounded-2xl text-base font-bold outline-none ring-offset-0 focus:ring-4 focus:ring-blue-500/10 transition-all" value={form.title} onChange={e => setForm({ ...form, title: e.target.value })} placeholder="e.g. Airport to Galle Port" />
+                                            </div>
+                                            <div className="space-y-1">
+                                                <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest pl-1">Sort Order</label>
+                                                <input type="number" className="w-full px-4 py-3 bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-slate-800 rounded-2xl text-base font-bold outline-none ring-offset-0 focus:ring-4 focus:ring-blue-500/10 transition-all" value={form.sortOrder || ''} onChange={e => setForm({ ...form, sortOrder: Number(e.target.value) })} placeholder="e.g. 1" />
+                                            </div>
                                         </div>
                                     </div>
 
-                                    {/* ── NORMAL DESTINATION RATES (per-vehicle fixed price) ── */}
-                                    <div className="md:col-span-2 p-6 bg-blue-50 dark:bg-blue-900/10 rounded-[2.5rem] border border-blue-200 dark:border-blue-800/30 space-y-4">
-                                        <div>
-                                            <h4 className="text-sm font-black text-blue-900 dark:text-blue-300 uppercase tracking-wider flex items-center gap-2">
-                                                <DollarSign size={18} className="text-blue-500" /> Normal Destination Rates (Fixed Price per Vehicle)
-                                            </h4>
-                                            <p className="text-[10px] text-slate-500 font-medium mt-0.5">One-way fixed fare (Rs.) for Airport to this destination. Overrides auto km-based pricing.</p>
-                                        </div>
-                                        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
-                                            {VEHICLE_TYPES.map(vt => {
-                                                const VIcon = VEHICLE_ICONS[vt.slug]?.icon || Car;
-                                                const vColor = VEHICLE_ICONS[vt.slug]?.color || 'text-slate-500';
-                                                const vBg = VEHICLE_ICONS[vt.slug]?.bg || 'bg-slate-500/10';
-                                                return (
-                                                    <div key={vt.slug} className="bg-white dark:bg-white/5 border border-slate-200 dark:border-slate-700 rounded-2xl p-3 space-y-2">
-                                                        <div className="flex items-center gap-2">
-                                                            <div className={`w-7 h-7 ${vBg} rounded-lg flex items-center justify-center`}>
-                                                                <VIcon size={14} className={vColor} />
+                                    {activeModalTab === 'transfers' && (
+                                        <>
+                                            {/* ── NORMAL DESTINATION RATES (per-vehicle fixed price) ── */}
+                                            <div className="md:col-span-2 p-6 bg-blue-50 dark:bg-blue-900/10 rounded-[2.5rem] border border-blue-200 dark:border-blue-800/30 space-y-4">
+                                                <div>
+                                                    <h4 className="text-sm font-black text-blue-900 dark:text-blue-300 uppercase tracking-wider flex items-center gap-2">
+                                                        <DollarSign size={18} className="text-blue-500" /> Normal Destination Rates (Fixed Price per Vehicle)
+                                                    </h4>
+                                                    <p className="text-[10px] text-slate-500 font-medium mt-0.5">One-way fixed fare (Rs.) for Airport to this destination. Overrides auto km-based pricing.</p>
+                                                </div>
+                                                <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
+                                                    {VEHICLE_TYPES.map(vt => {
+                                                        const VIcon = VEHICLE_ICONS[vt.slug]?.icon || Car;
+                                                        const vColor = VEHICLE_ICONS[vt.slug]?.color || 'text-slate-500';
+                                                        const vBg = VEHICLE_ICONS[vt.slug]?.bg || 'bg-slate-500/10';
+                                                        return (
+                                                            <div key={vt.slug} className="bg-white dark:bg-white/5 border border-slate-200 dark:border-slate-700 rounded-2xl p-3 space-y-2">
+                                                                <div className="flex items-center gap-2">
+                                                                    <div className={`w-7 h-7 ${vBg} rounded-lg flex items-center justify-center`}>
+                                                                        <VIcon size={14} className={vColor} />
+                                                                    </div>
+                                                                    <span className="text-[10px] font-black text-slate-700 dark:text-slate-200 uppercase tracking-tight">{vt.label}</span>
+                                                                </div>
+                                                                <div className="flex items-center gap-1">
+                                                                    <span className="text-[9px] font-bold text-emerald-600">Rs.</span>
+                                                                    <input
+                                                                        type="number"
+                                                                        min="0"
+                                                                        placeholder="0"
+                                                                        value={(form.pricing || {})[vt.slug] || ''}
+                                                                        onChange={e => updatePricing(vt.slug, e.target.value)}
+                                                                        className="flex-1 bg-slate-50 dark:bg-zinc-800 border border-slate-200 dark:border-slate-600 rounded-lg px-2 py-1.5 text-sm font-bold text-emerald-700 dark:text-emerald-400 outline-none focus:ring-2 focus:ring-blue-500/20 w-full"
+                                                                    />
+                                                                </div>
                                                             </div>
-                                                            <span className="text-[10px] font-black text-slate-700 dark:text-slate-200 uppercase tracking-tight">{vt.label}</span>
-                                                        </div>
-                                                        <div className="flex items-center gap-1">
-                                                            <span className="text-[9px] font-bold text-emerald-600">Rs.</span>
-                                                            <input
-                                                                type="number"
-                                                                min="0"
-                                                                placeholder="0"
-                                                                value={(form.pricing || {})[vt.slug] || ''}
-                                                                onChange={e => updatePricing(vt.slug, e.target.value)}
-                                                                className="flex-1 bg-slate-50 dark:bg-zinc-800 border border-slate-200 dark:border-slate-600 rounded-lg px-2 py-1.5 text-sm font-bold text-emerald-700 dark:text-emerald-400 outline-none focus:ring-2 focus:ring-blue-500/20 w-full"
-                                                            />
-                                                        </div>
-                                                    </div>
-                                                );
-                                            })}
-                                        </div>
-                                    </div>
+                                                        );
+                                                    })}
+                                                </div>
+                                            </div>
+
+                                            {/* ── VEHICLE TIERS (Range-based Pricing) ── */}
+                                            <div className="md:col-span-2 p-6 bg-purple-50 dark:bg-purple-900/10 rounded-[2.5rem] border border-purple-200 dark:border-purple-800/30 space-y-6">
+                                                <div>
+                                                    <h4 className="text-sm font-black text-purple-900 dark:text-purple-300 uppercase tracking-wider flex items-center gap-2">
+                                                        <Mountain size={18} className="text-purple-500" /> Range-Based Pricing Tiers
+                                                    </h4>
+                                                    <p className="text-[10px] text-slate-500 font-medium mt-0.5">Configure distance-based tiered pricing for each vehicle. (e.g. 0-20km Flat, 20-50km Per-KM)</p>
+                                                </div>
+                                                
+                                                <div className="space-y-4">
+                                                    {VEHICLE_TYPES.map(vt => {
+                                                        const tiers = (form.vehicleTiers || {})[vt.slug] || [];
+                                                        return (
+                                                            <div key={vt.slug} className="bg-white dark:bg-zinc-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 space-y-3">
+                                                                <div className="flex items-center justify-between">
+                                                                    <span className="text-xs font-bold text-slate-700 dark:text-slate-200 uppercase">{vt.label}</span>
+                                                                    <button 
+                                                                        type="button" 
+                                                                        onClick={() => {
+                                                                            const newTiers = [...tiers, { minKm: 0, maxKm: 0, type: 'per-km', value: 0 }];
+                                                                            setForm({ ...form, vehicleTiers: { ...(form.vehicleTiers || {}), [vt.slug]: newTiers } });
+                                                                        }}
+                                                                        className="text-[10px] px-2 py-1 bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300 rounded font-bold hover:bg-purple-200 dark:hover:bg-purple-900/50 transition-colors"
+                                                                    >
+                                                                        + Add Tier
+                                                                    </button>
+                                                                </div>
+                                                                {tiers.length === 0 && <p className="text-[10px] text-slate-400 italic">No tiers configured.</p>}
+                                                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                                                    {tiers.map((tier, idx) => (
+                                                                        <div key={idx} className="flex flex-wrap items-center gap-2 bg-slate-50 dark:bg-white/5 p-2.5 rounded-xl border border-slate-100 dark:border-white/5">
+                                                                            <input type="number" placeholder="Min KM" className="w-16 px-2 py-1.5 text-xs rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-zinc-800 text-slate-700 dark:text-white outline-none" value={tier.minKm} onChange={e => {
+                                                                                const t = [...tiers]; t[idx].minKm = Number(e.target.value);
+                                                                                setForm({ ...form, vehicleTiers: { ...(form.vehicleTiers || {}), [vt.slug]: t } });
+                                                                            }} />
+                                                                            <span className="text-xs text-slate-400">-</span>
+                                                                            <input type="number" placeholder="Max KM" className="w-16 px-2 py-1.5 text-xs rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-zinc-800 text-slate-700 dark:text-white outline-none" value={tier.maxKm} onChange={e => {
+                                                                                const t = [...tiers]; t[idx].maxKm = Number(e.target.value);
+                                                                                setForm({ ...form, vehicleTiers: { ...(form.vehicleTiers || {}), [vt.slug]: t } });
+                                                                            }} />
+                                                                            
+                                                                            <select className="flex-1 px-2 py-1.5 text-xs rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-zinc-800 text-slate-700 dark:text-white outline-none" value={tier.type} onChange={e => {
+                                                                                const t = [...tiers]; t[idx].type = e.target.value;
+                                                                                setForm({ ...form, vehicleTiers: { ...(form.vehicleTiers || {}), [vt.slug]: t } });
+                                                                            }}>
+                                                                                <option value="flat">Flat Rate</option>
+                                                                                <option value="per-km">Per KM</option>
+                                                                            </select>
+                                                                            
+                                                                            <input type="number" placeholder="Value (Rs.)" className="w-24 px-2 py-1.5 text-xs rounded-lg border border-emerald-200 dark:border-emerald-800/30 bg-emerald-50/50 dark:bg-emerald-900/10 font-bold text-emerald-700 dark:text-emerald-400 outline-none" value={tier.value} onChange={e => {
+                                                                                const t = [...tiers]; t[idx].value = Number(e.target.value);
+                                                                                setForm({ ...form, vehicleTiers: { ...(form.vehicleTiers || {}), [vt.slug]: t } });
+                                                                            }} />
+                                                                            
+                                                                            <button type="button" onClick={() => {
+                                                                                const t = tiers.filter((_, i) => i !== idx);
+                                                                                setForm({ ...form, vehicleTiers: { ...(form.vehicleTiers || {}), [vt.slug]: t } });
+                                                                            }} className="p-1.5 text-red-500 hover:bg-red-50 dark:hover:bg-red-500/10 rounded-lg ml-auto transition-colors">
+                                                                                <Trash2 size={14} />
+                                                                            </button>
+                                                                        </div>
+                                                                    ))}
+                                                                </div>
+                                                            </div>
+                                                        );
+                                                    })}
+                                                </div>
+                                            </div>
+                                        </>
+                                    )}
 
                                     {/* ── DESTINATION ROUND TRIP / HOURLY PACKAGES ── */}
-                                    <div className="md:col-span-2 p-6 bg-slate-50 dark:bg-white/5 rounded-[2.5rem] border border-slate-200 dark:border-white/5 space-y-6">
+                                    {activeModalTab === 'tours' && (
+                                        <div className="md:col-span-2 p-6 bg-slate-50 dark:bg-white/5 rounded-[2.5rem] border border-slate-200 dark:border-white/5 space-y-6">
                                         <div className="flex items-center justify-between">
                                             <div>
                                                 <h4 className="text-sm font-black text-emerald-900 dark:text-white uppercase tracking-wider flex items-center gap-2">
