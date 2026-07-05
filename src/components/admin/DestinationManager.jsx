@@ -579,8 +579,8 @@ export default function DestinationManager() {
                                             ));
                                         })()}
                                     </div>
-                                </div>
                                 )}
+                            </div>
 
 
                                 <div className="flex gap-4 pt-4 border-t border-slate-100 dark:border-white/10">
