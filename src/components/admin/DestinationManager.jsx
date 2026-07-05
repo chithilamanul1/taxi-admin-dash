@@ -196,7 +196,6 @@ export default function DestinationManager() {
                                                 ));
                                             })()}
                                         </div>
-                                    )}
                                     </div>
                                     {/* Hourly packages */}
                                     <div className="space-y-2">
@@ -581,6 +580,8 @@ export default function DestinationManager() {
                                         })()}
                                     </div>
                                 </div>
+                                )}
+
 
                                 <div className="flex gap-4 pt-4 border-t border-slate-100 dark:border-white/10">
                                     <button type="button" onClick={() => setEditing(null)} className="flex-1 py-4 bg-slate-100 dark:bg-white/5 hover:bg-slate-200 dark:hover:bg-white/10 text-slate-600 dark:text-slate-300 rounded-2xl font-bold transition-all">Cancel</button>
