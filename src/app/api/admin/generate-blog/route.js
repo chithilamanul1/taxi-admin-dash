@@ -51,27 +51,47 @@ Your response MUST be a raw, valid JSON object (do not wrap it in markdown code 
   "imageSearchQuery": "A simple 2-3 word search query for Unsplash (e.g. 'sri lanka beach', 'kandy temple', 'colombo airport')"
 }`;
 
-        const aiRes = await fetch('https://openrouter.ai/api/v1/chat/completions', {
-            method: 'POST',
-            headers: {
-                'Authorization': `Bearer ${OPENROUTER_API_KEY}`,
-                'Content-Type': 'application/json',
-                'HTTP-Referer': 'https://airporttaxis.lk',
-                'X-Title': 'Airport Taxi Tours AI Writer'
-            },
-            body: JSON.stringify({
-                model: 'google/gemini-2.5-flash',
-                messages: [
-                    { role: 'system', content: systemPrompt },
-                    { role: 'user', content: `Topic / Target Keyword: ${topic}` }
-                ],
-                response_format: { type: 'json_object' },
-                max_tokens: 3500
-            })
-        });
+        let aiRes;
+        let errText = '';
+        const maxRetries = 3;
+        
+        for (let attempt = 1; attempt <= maxRetries; attempt++) {
+            aiRes = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${OPENROUTER_API_KEY}`,
+                    'Content-Type': 'application/json',
+                    'HTTP-Referer': 'https://airporttaxis.lk',
+                    'X-Title': 'Airport Taxi Tours AI Writer'
+                },
+                body: JSON.stringify({
+                    model: 'google/gemini-2.5-flash',
+                    messages: [
+                        { role: 'system', content: systemPrompt },
+                        { role: 'user', content: `Topic / Target Keyword: ${topic}` }
+                    ],
+                    response_format: { type: 'json_object' },
+                    max_tokens: 3500
+                })
+            });
 
-        if (!aiRes.ok) {
-            const errText = await aiRes.text();
+            if (aiRes.ok) break;
+
+            errText = await aiRes.text();
+            
+            if (aiRes.status === 429 && attempt < maxRetries) {
+                let delayMs = 5000;
+                try {
+                    const errObj = JSON.parse(errText);
+                    if (errObj.error?.metadata?.retry_after_seconds) {
+                        delayMs = (errObj.error.metadata.retry_after_seconds + 1) * 1000;
+                    }
+                } catch (e) {}
+                console.warn(`[AI Blog Generator] Rate limited (429). Retrying in ${delayMs / 1000}s (Attempt ${attempt}/${maxRetries})...`);
+                await new Promise(resolve => setTimeout(resolve, delayMs));
+                continue;
+            }
+
             throw new Error(`OpenRouter API error: ${aiRes.status} — ${errText}`);
         }
 

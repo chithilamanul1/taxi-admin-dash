@@ -38,39 +38,54 @@ export async function POST(req) {
             Only return the JSON object. Do not include any markdown formatting like \`\`\`json.
         `;
 
-        const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), 15000); // 15s timeout
+        let aiRes;
+        let errText = '';
+        const maxRetries = 3;
+        
+        for (let attempt = 1; attempt <= maxRetries; attempt++) {
+            aiRes = await fetch("https://openrouter.ai/api/v1/chat/completions", {
+                method: "POST",
+                headers: {
+                    "Authorization": `Bearer ${process.env.OPENROUTER_API_KEY}`,
+                    "Content-Type": "application/json",
+                    "HTTP-Referer": "https://airporttaxis.lk", // Required for OpenRouter rankings
+                    "X-Title": "Airport Taxi Tours AI Planner",
+                },
+                body: JSON.stringify({
+                    model: "google/gemini-2.5-flash", // Using gemini 2.5 flash via OpenRouter
+                    messages: [
+                        { role: "user", content: fullPrompt }
+                    ],
+                    response_format: { type: "json_object" },
+                    max_tokens: 3000,
+                })
+            });
 
-        const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
-            method: "POST",
-            headers: {
-                "Authorization": `Bearer ${process.env.OPENROUTER_API_KEY}`,
-                "HTTP-Referer": process.env.NEXTAUTH_URL || "http://localhost:3000",
-                "X-Title": "Airport Taxi Tours AI Planner",
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                model: "google/gemini-2.5-flash", // Using gemini 2.5 flash via OpenRouter
-                messages: [
-                    { role: "user", content: fullPrompt }
-                ],
-                max_tokens: 2500
-            }),
-            signal: controller.signal
-        });
+            if (aiRes.ok) break;
 
-        clearTimeout(timeoutId);
+            errText = await aiRes.text();
+            
+            if (aiRes.status === 429 && attempt < maxRetries) {
+                let delayMs = 5000;
+                try {
+                    const errObj = JSON.parse(errText);
+                    if (errObj.error?.metadata?.retry_after_seconds) {
+                        delayMs = (errObj.error.metadata.retry_after_seconds + 1) * 1000;
+                    }
+                } catch (e) {}
+                console.warn(`[AI Trip Planner] Rate limited (429). Retrying in ${delayMs / 1000}s (Attempt ${attempt}/${maxRetries})...`);
+                await new Promise(resolve => setTimeout(resolve, delayMs));
+                continue;
+            }
 
-        if (!response.ok) {
-            const errorData = await response.text();
-            console.error("OpenRouter Error:", errorData);
-            return NextResponse.json({
-                success: false,
-                message: "Failed to generate itinerary via OpenRouter."
-            }, { status: response.status });
+            console.error("OpenRouter Error:", aiRes.status, errText);
+            return NextResponse.json(
+                { success: false, message: "Failed to generate itinerary via OpenRouter." },
+                { status: 500 }
+            );
         }
 
-        const result = await response.json();
+        const result = await aiRes.json();
         const text = result.choices?.[0]?.message?.content || "";
 
         // Clean up the response text in case AI adds markdown
