@@ -21,31 +21,50 @@ const FREE_MODEL = 'meta-llama/llama-3.3-70b-instruct:free';
 // ─────────────────────────────────────────────
 // OPENROUTER HELPER
 // ─────────────────────────────────────────────
-async function callOpenRouter(messages, label, maxTokens = 3000) {
+async function callOpenRouter(messages, label, maxTokens = 3000, maxRetries = 3) {
     const OPENROUTER_API_KEY = process.env.OPENROUTER_API_KEY;
-    const res = await fetch('https://openrouter.ai/api/v1/chat/completions', {
-        method: 'POST',
-        headers: {
-            'Authorization': `Bearer ${OPENROUTER_API_KEY}`,
-            'Content-Type': 'application/json',
-            'HTTP-Referer': 'https://airporttaxis.lk',
-            'X-Title': 'Airport Taxis SEO Pipeline'
-        },
-        body: JSON.stringify({
-            model: FREE_MODEL,
-            messages,
-            max_tokens: maxTokens,
-            temperature: 0.7
-        })
-    });
+    
+    for (let attempt = 1; attempt <= maxRetries; attempt++) {
+        const res = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${OPENROUTER_API_KEY}`,
+                'Content-Type': 'application/json',
+                'HTTP-Referer': 'https://airporttaxis.lk',
+                'X-Title': 'Airport Taxis SEO Pipeline'
+            },
+            body: JSON.stringify({
+                model: FREE_MODEL,
+                messages,
+                max_tokens: maxTokens,
+                temperature: 0.7
+            })
+        });
 
-    if (!res.ok) {
-        const err = await res.text();
-        throw new Error(`[${label}] OpenRouter error ${res.status}: ${err}`);
+        if (res.ok) {
+            const data = await res.json();
+            return data.choices[0].message.content.trim();
+        }
+
+        const errText = await res.text();
+        
+        if (res.status === 429 && attempt < maxRetries) {
+            let delayMs = 10000; // default 10 seconds
+            try {
+                const errObj = JSON.parse(errText);
+                if (errObj.error?.metadata?.retry_after_seconds) {
+                    delayMs = (errObj.error.metadata.retry_after_seconds + 1) * 1000;
+                }
+            } catch (e) {
+                // Ignore parse errors, use default delay
+            }
+            console.warn(`[${label}] Rate limited (429). Retrying in ${delayMs / 1000}s (Attempt ${attempt}/${maxRetries})...`);
+            await new Promise(resolve => setTimeout(resolve, delayMs));
+            continue;
+        }
+
+        throw new Error(`[${label}] OpenRouter error ${res.status}: ${errText}`);
     }
-
-    const data = await res.json();
-    return data.choices[0].message.content.trim();
 }
 
 // ─────────────────────────────────────────────
