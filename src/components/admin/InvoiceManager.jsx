@@ -21,7 +21,9 @@ export default function InvoiceManager() {
         paymentType: 'full',
         scheduledDate: '',
         scheduledTime: '',
-        notes: ''
+        notes: '',
+        passengerCount: { adults: 1, luggage: 0 },
+        vehicleType: 'sedan'
     });
 
     const handleCreate = async (e) => {
@@ -98,6 +100,8 @@ export default function InvoiceManager() {
         if (formData.pickupAddress) doc.text(`From: ${formData.pickupAddress}`, 110, 82);
         if (formData.dropoffAddress) doc.text(`To: ${formData.dropoffAddress}`, 110, 87);
         if (formData.scheduledDate) doc.text(`Date: ${formData.scheduledDate} ${formData.scheduledTime}`, 110, 92);
+        doc.text(`Passengers: ${formData.passengerCount.adults} | Luggage: ${formData.passengerCount.luggage}`, 110, 97);
+        doc.text(`Vehicle: ${formData.vehicleType.toUpperCase()}`, 110, 102);
 
         // Table
         doc.autoTable({
@@ -216,12 +220,52 @@ export default function InvoiceManager() {
                                 <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={16} />
                                 <input
                                     type="text"
-                                    className="w-full pl-10 pr-4 py-3 bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-slate-800 rounded-xl text-sm outline-none"
+                                    className="w-full pl-10 pr-4 py-3 bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-slate-800 rounded-none text-sm outline-none"
                                     placeholder="Enter dropoff location"
                                     value={formData.dropoffAddress}
                                     onChange={e => setFormData({ ...formData, dropoffAddress: e.target.value })}
                                 />
                             </div>
+                        </div>
+
+                        <div className="grid grid-cols-2 gap-4">
+                            <div className="space-y-1">
+                                <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest pl-1">Passengers</label>
+                                <input
+                                    type="number"
+                                    className="w-full px-4 py-3 bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-slate-800 rounded-none text-sm outline-none"
+                                    placeholder="1"
+                                    value={formData.passengerCount?.adults || 1}
+                                    onChange={e => setFormData({ ...formData, passengerCount: { ...formData.passengerCount, adults: parseInt(e.target.value) || 1 } })}
+                                />
+                            </div>
+                            <div className="space-y-1">
+                                <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest pl-1">Luggage</label>
+                                <input
+                                    type="number"
+                                    className="w-full px-4 py-3 bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-slate-800 rounded-none text-sm outline-none"
+                                    placeholder="0"
+                                    value={formData.passengerCount?.luggage || 0}
+                                    onChange={e => setFormData({ ...formData, passengerCount: { ...formData.passengerCount, luggage: parseInt(e.target.value) || 0 } })}
+                                />
+                            </div>
+                        </div>
+
+                        <div className="space-y-1">
+                            <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest pl-1">Vehicle Type</label>
+                            <select
+                                className="w-full px-4 py-3 bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-slate-800 rounded-none text-sm outline-none bg-white"
+                                value={formData.vehicleType}
+                                onChange={e => setFormData({ ...formData, vehicleType: e.target.value })}
+                            >
+                                <option value="mini-car">Mini Car (e.g., Wagon R)</option>
+                                <option value="sedan">Sedan (e.g., Axio, Prius)</option>
+                                <option value="mini-van-every">Mini Van (Every)</option>
+                                <option value="mini-van-kdh">Mini Van (KDH)</option>
+                                <option value="suv">SUV</option>
+                                <option value="mini-bus">Mini Bus</option>
+                                <option value="bus">Bus</option>
+                            </select>
                         </div>
                     </div>
 

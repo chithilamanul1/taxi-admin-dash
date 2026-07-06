@@ -352,6 +352,7 @@ export default function AdminDashboard() {
         arrivalDate: '',
         arrivalTime: '',
         vehicleType: 'sedan',
+        passengerCount: { adults: 1, luggage: 0 },
         distanceKm: 0,
         totalPrice: '',
         paymentStatus: 'pending',
@@ -3657,17 +3658,39 @@ export default function AdminDashboard() {
                                                 />
                                             </div>
                                             <div>
+                                                <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Passengers</label>
+                                                <input
+                                                    type="number"
+                                                    className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-emerald-600/20 outline-none text-sm"
+                                                    value={manualBookingForm.passengerCount?.adults || 1}
+                                                    onChange={e => setManualBookingForm({ ...manualBookingForm, passengerCount: { ...manualBookingForm.passengerCount, adults: parseInt(e.target.value) || 1 } })}
+                                                    placeholder="1"
+                                                />
+                                            </div>
+                                            <div>
+                                                <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Luggage</label>
+                                                <input
+                                                    type="number"
+                                                    className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-emerald-600/20 outline-none text-sm"
+                                                    value={manualBookingForm.passengerCount?.luggage || 0}
+                                                    onChange={e => setManualBookingForm({ ...manualBookingForm, passengerCount: { ...manualBookingForm.passengerCount, luggage: parseInt(e.target.value) || 0 } })}
+                                                    placeholder="0"
+                                                />
+                                            </div>
+                                            <div>
                                                 <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Vehicle Type</label>
                                                 <select
                                                     className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-emerald-600/20 outline-none text-sm bg-white"
                                                     value={manualBookingForm.vehicleType}
                                                     onChange={e => setManualBookingForm({ ...manualBookingForm, vehicleType: e.target.value })}
                                                 >
-                                                    <option value="sedan">Sedan (Car)</option>
-                                                    <option value="van">Van</option>
-                                                    <option value="mini-van">Mini Van</option>
+                                                    <option value="mini-car">Mini Car (e.g., Wagon R)</option>
+                                                    <option value="sedan">Sedan (e.g., Axio, Prius)</option>
+                                                    <option value="mini-van-every">Mini Van (Every)</option>
+                                                    <option value="mini-van-kdh">Mini Van (KDH)</option>
                                                     <option value="suv">SUV</option>
-                                                    <option value="luxury">Luxury</option>
+                                                    <option value="mini-bus">Mini Bus</option>
+                                                    <option value="bus">Bus</option>
                                                 </select>
                                             </div>
                                             <div>
