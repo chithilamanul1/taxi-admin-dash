@@ -225,16 +225,42 @@ export const calculateBasePrice = (distanceKm, vehicleData, tripType = 'one-way'
         console.log(`[Pricing Override] Wagon R route to/from Sigiriya/Ella: LKR ${distancePrice} (Rs. 200/km)`);
     }
 
-    const pickupOverride = findMatchingDestination(pickup, dynamicDestinations);
-    const dropoffOverride = findMatchingDestination(dropoff, dynamicDestinations);
+    // 1. Try to find an EXACT point-to-point match
+    let matchedOverride = null;
+    let exactMatchFound = false;
 
-    // Prefer the one that actually has pricing defined (usually the destination/dropoff)
-    const matchedOverride = hasPricingData(dropoffOverride) ? dropoffOverride : (hasPricingData(pickupOverride) ? pickupOverride : null);
+    if (pickupNorm && dropoffNorm) {
+        const exactMatch = dynamicDestinations.find(d => {
+            if (!d.pickupLocation) return false;
+            const dPick = normalizeName(d.pickupLocation);
+            const dDrop = normalizeName(d.name);
+            return (pickupNorm.includes(dPick) && dropoffNorm.includes(dDrop)) || 
+                   (dropoffNorm.includes(dPick) && pickupNorm.includes(dDrop));
+        });
+
+        if (exactMatch && hasPricingData(exactMatch)) {
+            matchedOverride = exactMatch;
+            exactMatchFound = true;
+        }
+    }
+
+    // 2. Fallback for legacy "Destination" (Generic single location overrides)
+    if (!exactMatchFound) {
+        const pickupOverride = findMatchingDestination(pickup, dynamicDestinations);
+        const dropoffOverride = findMatchingDestination(dropoff, dynamicDestinations);
+        const genericMatch = hasPricingData(dropoffOverride) ? dropoffOverride : (hasPricingData(pickupOverride) ? pickupOverride : null);
+        
+        // PREVENT LEAKAGE: Only apply generic single-location overrides to Airport Transfers
+        // (Previously this was leaking into Intercity rides because of an inverted condition)
+        if (genericMatch && isAirportTransfer) {
+            matchedOverride = genericMatch;
+        }
+    }
 
     const vehicleType = vehicleData.vehicleType;
     const vehicleSlug = vehicleData.vehicleSlug || vehicleType;
 
-    if (matchedOverride && !overrideApplied && !isAirportTransfer) {
+    if (matchedOverride && !overrideApplied) {
         console.log(`[Pricing] Found Override for: ${matchedOverride.name || matchedOverride.title}`);
 
         // 1. Check for Fixed Pricing (Precedence)

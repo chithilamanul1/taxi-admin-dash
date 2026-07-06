@@ -143,6 +143,7 @@ export default function DestinationManager() {
                                     id: `loc-${Date.now()}`,
                                     title: '',
                                     name: '',
+                                    pickupLocation: '',
                                     pricing: {},
                                     vehicleRateOverrides: {},
                                     vehicleTiers: {},
@@ -260,21 +261,32 @@ export default function DestinationManager() {
                             <form onSubmit={handleSave} className="flex-1 overflow-y-auto p-5 md:p-8 space-y-6 md:space-y-8">
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                                     <div className="md:col-span-2">
-                                        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                                            <div className="space-y-1">
+                                                <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest pl-1">Pickup Location (Google Search)</label>
+                                                <LocationInput
+                                                    placeholder="Leave blank for Global..."
+                                                    value={form.pickupLocation || ''}
+                                                    onChange={(val) => setForm({ ...form, pickupLocation: val, title: (val && form.name) ? `${val} to ${form.name}` : (form.name ? `Airport to ${form.name}` : '') })}
+                                                    onSelect={({ address }) => {
+                                                        setForm({ ...form, pickupLocation: address, title: (address && form.name) ? `${address} to ${form.name}` : (form.name ? `Airport to ${form.name}` : '') });
+                                                    }}
+                                                />
+                                            </div>
                                             <div className="space-y-1">
                                                 <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest pl-1">Destination Location (Google Search)</label>
                                                 <LocationInput
                                                     placeholder="Search for a city or place..."
                                                     value={form.name}
-                                                    onChange={(val) => setForm({ ...form, name: val, title: val ? `Airport to ${val}` : '' })}
+                                                    onChange={(val) => setForm({ ...form, name: val, title: (val && form.pickupLocation) ? `${form.pickupLocation} to ${val}` : (val ? `Airport to ${val}` : '') })}
                                                     onSelect={({ address }) => {
-                                                        setForm({ ...form, name: address, title: `Airport to ${address}` });
+                                                        setForm({ ...form, name: address, title: (address && form.pickupLocation) ? `${form.pickupLocation} to ${address}` : (address ? `Airport to ${address}` : '') });
                                                     }}
                                                 />
                                             </div>
                                             <div className="space-y-1">
                                                 <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest pl-1">Full Display Title</label>
-                                                <input required type="text" className="w-full px-4 py-3 bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-slate-800 rounded-2xl text-base font-bold outline-none ring-offset-0 focus:ring-4 focus:ring-blue-500/10 transition-all" value={form.title} onChange={e => setForm({ ...form, title: e.target.value })} placeholder="e.g. Airport to Galle Port" />
+                                                <input required type="text" className="w-full px-4 py-3 bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-slate-800 rounded-2xl text-base font-bold outline-none ring-offset-0 focus:ring-4 focus:ring-blue-500/10 transition-all" value={form.title} onChange={e => setForm({ ...form, title: e.target.value })} placeholder="e.g. Sigiriya to Kandy" />
                                             </div>
                                             <div className="space-y-1">
                                                 <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest pl-1">Sort Order</label>

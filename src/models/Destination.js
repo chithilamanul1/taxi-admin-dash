@@ -4,6 +4,7 @@ const destinationSchema = new mongoose.Schema({
     id: { type: String, unique: true, required: true },
     title: { type: String, required: true },
     name: { type: String, required: true },
+    pickupLocation: { type: String },
     slug: { type: String, unique: true },
     price: { type: Number, default: 0 },
     badge: { type: String },
