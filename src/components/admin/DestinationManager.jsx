@@ -8,11 +8,14 @@ import LocationInput from '@/components/LocationInput';
 const VEHICLE_TYPES = [
     { slug: "mini-car", label: "Mini Car" },
     { slug: "sedan", label: "Sedan" },
-    { slug: "mini-van-every", label: "Mini Van (Every)" },
-    { slug: "mini-van-05", label: "Mini Van (KDH)" },
+    { slug: "vezel", label: "Honda Vezel" },
     { slug: "suv", label: "SUV" },
-    { slug: "mini-bus", label: "Mini Bus" },
-    { slug: "bus", label: "Bus" }
+    { slug: "mini-van-every", label: "Mini Van (Every)" },
+    { slug: "mini-van-05", label: "Mini Van 4 Seat" },
+    { slug: "normal-kdh", label: "Van KDH" },
+    { slug: "kdh-van", label: "Mini Bus" },
+    { slug: "mini-bus", label: "Coaster Bus" },
+    { slug: "coach-bus", label: "Coach Bus" }
 ];
 
 export default function DestinationManager() {
@@ -28,12 +31,14 @@ export default function DestinationManager() {
     const VEHICLE_ICONS = {
         "mini-car": { icon: Zap, color: "text-emerald-500", bg: "bg-emerald-500/10" },
         "sedan": { icon: Car, color: "text-blue-500", bg: "bg-blue-500/10" },
+        "vezel": { icon: Car, color: "text-blue-500", bg: "bg-blue-500/10" },
+        "suv": { icon: Mountain, color: "text-red-500", bg: "bg-red-500/10" },
         "mini-van-every": { icon: Shield, color: "text-emerald-500", bg: "bg-emerald-500/10" },
         "mini-van-05": { icon: ChevronRight, color: "text-purple-500", bg: "bg-purple-500/10" },
-        "suv": { icon: Mountain, color: "text-red-500", bg: "bg-red-500/10" },
+        "normal-kdh": { icon: Shield, color: "text-emerald-500", bg: "bg-emerald-500/10" },
+        "kdh-van": { icon: Shield, color: "text-emerald-500", bg: "bg-emerald-500/10" },
         "mini-bus": { icon: HelpCircle, color: "text-slate-500", bg: "bg-slate-500/10" },
-        "bus": { icon: HelpCircle, color: "text-slate-500", bg: "bg-slate-500/10" },
-        "tuk-tuk": { icon: Zap, color: "text-emerald-500", bg: "bg-emerald-500/10" }
+        "coach-bus": { icon: HelpCircle, color: "text-slate-500", bg: "bg-slate-500/10" }
     };
 
     useEffect(() => {

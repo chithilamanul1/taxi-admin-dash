@@ -1343,7 +1343,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                     { label: 'WhatsApp Number', key: 'whatsapp', type: 'tel', placeholder: 'For driver chat', icon: MessageSquare },
                                     ...(formData.hasNameBoard ? [] : [])
                                 ].map(f => (
-                                    <div key={f.key}>
+                                    <div key={f.key} id={`field-${f.key}`}>
                                         <label className={`text-[10px] font-black uppercase tracking-[0.3em] mb-4 flex items-center gap-3 transition-colors ${errors[f.key] ? 'text-red-500' : 'text-slate-500 dark:text-slate-400'}`}>
                                             <f.icon size={14} className={errors[f.key] ? 'text-red-500' : 'text-[#FACC15]'} strokeWidth={3} /> {f.label}
                                         </label>

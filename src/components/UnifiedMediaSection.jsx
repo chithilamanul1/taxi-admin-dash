@@ -142,9 +142,9 @@ const UnifiedMediaSection = () => {
                         {videosToDisplay.map((vid, idx) => (
                             <div 
                                 key={vid._id || idx} 
-                                className={`shrink-0 snap-center rounded-2xl md:rounded-[2.5rem] overflow-hidden ${videosToDisplay.length === 1 ? 'w-full max-w-4xl mx-auto' : 'w-[85vw] md:w-[60vw] lg:w-[50vw]'}`}
+                                className={`shrink-0 snap-center rounded-2xl md:rounded-[2.5rem] overflow-hidden ${videosToDisplay.length === 1 ? 'w-full max-w-4xl mx-auto' : (vid.platform === 'tiktok' ? 'w-[75vw] sm:w-[45vw] md:w-[35vw] lg:w-[25vw]' : 'w-[85vw] md:w-[60vw] lg:w-[50vw]')}`}
                             >
-                                <div className="relative w-full aspect-video bg-black flex items-center justify-center group">
+                                <div className={`relative w-full ${vid.platform === 'tiktok' ? 'aspect-[9/16] max-h-[80vh]' : 'aspect-video'} bg-black flex items-center justify-center group`}>
                                     {getEmbedUrl(vid.url, vid.platform) ? (
                                         <iframe 
                                             src={getEmbedUrl(vid.url, vid.platform)} 

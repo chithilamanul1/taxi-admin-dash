@@ -7,6 +7,7 @@ import { PhoneInput } from 'react-international-phone';
 import 'react-international-phone/style.css';
 import { Tag, X, MapPin, Clock, Navigation, ChevronRight, ChevronLeft, Plane, Car, Minus, Plus, Send, CheckCircle2, User, Mail, Phone, Loader2, AlertCircle, Info, Sparkles, CreditCard, ChevronDown, Briefcase } from 'lucide-react';
 import { calculateBasePrice, calculateTrafficSurge, TAXI_TOUR_PACKAGES } from '@/lib/pricing-util';
+import { parseStoredTime, detectLocalTimezone } from '@/lib/timezone-util';
 const SmartOfferNudge = dynamic(() => import('./SmartOfferNudge'), { ssr: false });
 import { loadGoogleMapsScript } from '@/lib/google-maps';
 import TripMap from './TripMap';
@@ -153,15 +154,16 @@ const CustomTourBooking = () => {
           setSelectedVehicle(mapped[0]);
         } else {
           const defaults = [
-            { id: 'mini-car', name: 'MINI CAR', baseRate: 5000, perKm: 100, image: '/vehicles/minicar.png', capacity: 2, suitcases: 4 },
-            { id: 'sedan', name: 'SEDAN', baseRate: 6500, perKm: 130, image: '/vehicles/sedancar.png', capacity: 4, suitcases: 3 },
-            { id: 'vezel', name: 'HONDA VEZEL', baseRate: 8000, perKm: 135, image: '/vehicles/Hondavezel.png', capacity: 4, suitcases: 3 },
-            { id: 'mini-van-every', name: 'MINI VAN (EVERY)', baseRate: 7000, perKm: 110, image: '/vehicles/susukievery.png', capacity: 4, suitcases: 4 },
-            { id: 'mini-van-05', name: 'MINI VAN (5 SEATER)', baseRate: 7500, perKm: 130, image: '/vehicles/minivan5seat.png', capacity: 5, suitcases: 5 },
-            { id: 'suv', name: 'SUV (LUXURY)', baseRate: 9000, perKm: 160, image: '/vehicles/suv.png', capacity: 4, suitcases: 4 },
-            { id: 'kdh-van', name: 'VAN', baseRate: 10000, perKm: 180, image: '/vehicles/toyota-highroof.png', capacity: 9, suitcases: 8 },
-            { id: 'mini-bus', name: 'KDH HIGH ROOF', baseRate: 15000, perKm: 250, image: '/vehicles/toyota-highroof.png', capacity: 20, suitcases: 15 },
-            { id: 'coach-bus', name: 'LUXURY COACH', baseRate: 25000, perKm: 450, image: '/vehicles/coach-bus.png', capacity: 45, suitcases: 50 }
+            { id: 'mini-car', name: 'MINI CAR', baseRate: 3500, perKm: 100, image: '/vehicles/minicar.png', capacity: 2, suitcases: 4 },
+            { id: 'sedan', name: 'SEDAN', baseRate: 4500, perKm: 130, image: '/vehicles/sedancar.png', capacity: 3, suitcases: 3 },
+            { id: 'vezel', name: 'HONDA VEZEL', baseRate: 5500, perKm: 130, image: '/vehicles/Hondavezel.png', capacity: 3, suitcases: 3 },
+            { id: 'suv', name: 'SUV', baseRate: 8000, perKm: 160, image: '/vehicles/suv.png', capacity: 3, suitcases: 3 },
+            { id: 'mini-van-every', name: 'MINI VAN EVERY', baseRate: 4500, perKm: 150, image: '/vehicles/susukievery.png', capacity: 3, suitcases: 3 },
+            { id: 'mini-van-05', name: 'MINI VAN 4 SEAT', baseRate: 6000, perKm: 200, image: '/vehicles/minivan5seat.png', capacity: 4, suitcases: 4 },
+            { id: 'normal-kdh', name: 'VAN KDH', baseRate: 8000, perKm: 175, image: '/vehicles/van.png', capacity: 6, suitcases: 7 },
+            { id: 'kdh-van', name: 'MINI BUS', baseRate: 8500, perKm: 180, image: '/vehicles/toyota-highroof.png', capacity: 8, suitcases: 8 },
+            { id: 'mini-bus', name: 'COASTER BUS', baseRate: 15000, perKm: 250, image: '/vehicles/costerbus.png', capacity: 25, suitcases: 20 },
+            { id: 'coach-bus', name: 'COACH BUS', baseRate: 18000, perKm: 300, image: '/vehicles/coach-bus.png', capacity: 40, suitcases: 40 }
           ];
           setVehicles(defaults);
           setSelectedVehicle(defaults[0]);
@@ -170,15 +172,16 @@ const CustomTourBooking = () => {
       .catch(err => {
         console.error("Error fetching vehicles:", err);
         const defaults = [
-          { id: 'mini-car', name: 'MINI CAR', baseRate: 5000, perKm: 100, image: '/vehicles/minicar.png', capacity: 2, suitcases: 4 },
-          { id: 'sedan', name: 'SEDAN', baseRate: 6500, perKm: 130, image: '/vehicles/sedancar.png', capacity: 4, suitcases: 3 },
-          { id: 'vezel', name: 'HONDA VEZEL', baseRate: 8000, perKm: 135, image: '/vehicles/Hondavezel.png', capacity: 4, suitcases: 3 },
-          { id: 'mini-van-every', name: 'MINI VAN (EVERY)', baseRate: 7000, perKm: 110, image: '/vehicles/susukievery.png', capacity: 4, suitcases: 4 },
-          { id: 'mini-van-05', name: 'MINI VAN (5 SEATER)', baseRate: 7500, perKm: 130, image: '/vehicles/minivan5seat.png', capacity: 5, suitcases: 5 },
-          { id: 'suv', name: 'SUV (LUXURY)', baseRate: 9000, perKm: 160, image: '/vehicles/suv.png', capacity: 4, suitcases: 4 },
-          { id: 'kdh-van', name: 'VAN', baseRate: 10000, perKm: 180, image: '/vehicles/toyota-highroof.png', capacity: 9, suitcases: 8 },
-          { id: 'mini-bus', name: 'KDH HIGH ROOF', baseRate: 15000, perKm: 250, image: '/vehicles/toyota-highroof.png', capacity: 20, suitcases: 15 },
-          { id: 'coach-bus', name: 'LUXURY COACH', baseRate: 25000, perKm: 450, image: '/vehicles/coach-bus.png', capacity: 45, suitcases: 50 }
+            { id: 'mini-car', name: 'MINI CAR', baseRate: 3500, perKm: 100, image: '/vehicles/minicar.png', capacity: 2, suitcases: 4 },
+            { id: 'sedan', name: 'SEDAN', baseRate: 4500, perKm: 130, image: '/vehicles/sedancar.png', capacity: 3, suitcases: 3 },
+            { id: 'vezel', name: 'HONDA VEZEL', baseRate: 5500, perKm: 130, image: '/vehicles/Hondavezel.png', capacity: 3, suitcases: 3 },
+            { id: 'suv', name: 'SUV', baseRate: 8000, perKm: 160, image: '/vehicles/suv.png', capacity: 3, suitcases: 3 },
+            { id: 'mini-van-every', name: 'MINI VAN EVERY', baseRate: 4500, perKm: 150, image: '/vehicles/susukievery.png', capacity: 3, suitcases: 3 },
+            { id: 'mini-van-05', name: 'MINI VAN 4 SEAT', baseRate: 6000, perKm: 200, image: '/vehicles/minivan5seat.png', capacity: 4, suitcases: 4 },
+            { id: 'normal-kdh', name: 'VAN KDH', baseRate: 8000, perKm: 175, image: '/vehicles/van.png', capacity: 6, suitcases: 7 },
+            { id: 'kdh-van', name: 'MINI BUS', baseRate: 8500, perKm: 180, image: '/vehicles/toyota-highroof.png', capacity: 8, suitcases: 8 },
+            { id: 'mini-bus', name: 'COASTER BUS', baseRate: 15000, perKm: 250, image: '/vehicles/costerbus.png', capacity: 25, suitcases: 20 },
+            { id: 'coach-bus', name: 'COACH BUS', baseRate: 18000, perKm: 300, image: '/vehicles/coach-bus.png', capacity: 40, suitcases: 40 }
         ];
         setVehicles(defaults);
         setSelectedVehicle(defaults[0]);
@@ -510,7 +513,9 @@ const CustomTourBooking = () => {
       const kms = [];
       match.forEach(p => {
         (p.tiers || []).forEach(t => {
-          if (t.km && !kms.includes(t.km)) kms.push(t.km);
+          if (t.km && !kms.includes(t.km)) {
+            kms.push(t.km);
+          }
         });
       });
       kms.sort((a, b) => a - b);
@@ -1282,9 +1287,20 @@ const CustomTourBooking = () => {
                   <label className="text-[8px] uppercase font-black text-slate-400 tracking-widest px-2">Pickup Date</label>
                   <input name="date" type="date" value={formData.date} onChange={e => setFormData({ ...formData, date: e.target.value, ...setFormErrors({...formErrors, date: false}) })} className={`w-full bg-white dark:bg-zinc-800 border ${formErrors.date ? 'border-red-500 ring-2 ring-red-500/20' : 'border-slate-400 dark:border-white/10'} rounded-xl py-2 px-3 outline-none font-bold text-[11px] text-black dark:text-white transition-all`} />
                 </div>
-                <div className="space-y-0.5">
+                <div className="space-y-1.5">
                   <label className="text-[8px] uppercase font-black text-slate-400 tracking-widest px-2">Pickup Time</label>
-                  <input name="time" type="time" value={formData.time} onChange={e => setFormData({ ...formData, time: e.target.value, ...setFormErrors({...formErrors, time: false}) })} className={`w-full bg-white dark:bg-zinc-800 border ${formErrors.time ? 'border-red-500 ring-2 ring-red-500/20' : 'border-slate-400 dark:border-white/10'} rounded-xl py-2 px-3 outline-none font-bold text-[11px] text-black dark:text-white transition-all`} />
+                  <input name="time" type="time" value={(() => { const parsed = parseStoredTime(formData.time); return parsed.time24h || ''; })()} onChange={e => {
+                      const newTime24 = e.target.value;
+                      if (!newTime24) { setFormData({...formData, time: ''}); return; }
+                      const [hStr, mStr] = newTime24.split(':');
+                      let h = parseInt(hStr, 10); const m = parseInt(mStr, 10);
+                      const ampm = h >= 12 ? 'PM' : 'AM';
+                      const h12 = h % 12 === 0 ? 12 : h % 12;
+                      const tz = detectLocalTimezone() || 'SLST';
+                      const formattedTime = `${h12.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')} ${ampm} ${tz}`;
+                      setFormData({ ...formData, time: formattedTime });
+                      setFormErrors({...formErrors, time: false});
+                  }} className={`w-full bg-white dark:bg-zinc-800 border ${formErrors.time ? 'border-red-500 ring-2 ring-red-500/20' : 'border-slate-400 dark:border-white/10'} rounded-xl py-2 px-3 outline-none font-bold text-[11px] text-black dark:text-white transition-all`} />
                 </div>
                 <div className="space-y-0.5">
                   <label className="text-[8px] uppercase font-black text-slate-400 tracking-widest px-2">Full Name</label>
@@ -1294,7 +1310,7 @@ const CustomTourBooking = () => {
                   <label className="text-[8px] uppercase font-black text-slate-400 tracking-widest px-2">Email Address</label>
                   <input name="email" type="email" placeholder="john@example.com" value={formData.email} onChange={e => setFormData({ ...formData, email: e.target.value, ...setFormErrors({...formErrors, email: false}) })} className={`w-full bg-white dark:bg-zinc-800 border ${formErrors.email ? 'border-red-500 ring-2 ring-red-500/20' : 'border-slate-400 dark:border-white/10'} rounded-xl py-2 px-3 outline-none font-bold text-[11px] text-black dark:text-white transition-all`} />
                 </div>
-                <div className="space-y-0.5">
+                <div className="space-y-0.5" id="field-phone">
                   <label className="text-[8px] uppercase font-black text-slate-400 tracking-widest px-2">WhatsApp / Phone</label>
                   <PhoneInput
                     defaultCountry="lk"

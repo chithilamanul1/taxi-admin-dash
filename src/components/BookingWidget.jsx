@@ -53,134 +53,16 @@ const formatDisplayDateTime = (dateStr, timeStr) => {
 };
 
 const FALLBACK_PRICING = {
-    'mini-car': {
-        vehicleType: 'mini-car',
-        name: 'Wagon R / Mini Car',
-        image: '/vehicles/minicar.png',
-        capacity: 3, luggage: 2, handLuggage: 2,
-        basePrice: 3500, baseKm: 20, perKmRate: 100,
-        tiers: [
-            { min: 0, max: 20, type: 'flat', price: 3500 },
-            { min: 21, max: 40, type: 'flat', price: 4000 },
-            { min: 41, max: 130, type: 'per_km', rate: 100 },
-            { min: 131, max: 9999, type: 'per_km', rate: 102 }
-        ]
-    },
-    'sedan': {
-        vehicleType: 'sedan',
-        name: 'Sedan Car',
-        image: '/vehicles/sedancar.png',
-        capacity: 4, luggage: 3, handLuggage: 3,
-        basePrice: 4500, baseKm: 20, perKmRate: 130,
-        tiers: [
-            { min: 0, max: 20, type: 'flat', price: 4500 },
-            { min: 21, max: 40, type: 'flat', price: 6000 },
-            { min: 41, max: 50, type: 'per_km', rate: 150 },
-            { min: 51, max: 100, type: 'per_km', rate: 130 },
-            { min: 101, max: 140, type: 'per_km', rate: 130 },
-            { min: 141, max: 200, type: 'per_km', rate: 127 },
-            { min: 201, max: 9999, type: 'per_km', rate: 122 }
-        ]
-    },
-    'mini-van-every': {
-        vehicleType: 'mini-van-every',
-        name: 'Mini Van (Every)',
-        image: '/vehicles/susukievery.png',
-        capacity: 4, luggage: 4, handLuggage: 2,
-        basePrice: 4500, baseKm: 20, perKmRate: 150,
-        tiers: [
-            { min: 0, max: 20, type: 'flat', price: 4500 },
-            { min: 21, max: 40, type: 'flat', price: 6000 },
-            { min: 41, max: 50, type: 'per_km', rate: 150 },
-            { min: 51, max: 100, type: 'per_km', rate: 130 },
-            { min: 101, max: 140, type: 'per_km', rate: 129 },
-            { min: 141, max: 200, type: 'per_km', rate: 127 },
-            { min: 201, max: 9999, type: 'per_km', rate: 122 }
-        ]
-    },
-    'mini-van-05': {
-        vehicleType: 'mini-van-05',
-        name: 'Mini Van (5 Seater)',
-        image: '/vehicles/minivan5seat.png',
-        capacity: 5, luggage: 4, handLuggage: 2,
-        basePrice: 6000, baseKm: 20, perKmRate: 200,
-        tiers: [
-            { min: 0, max: 20, type: 'flat', price: 6000 },
-            { min: 21, max: 40, type: 'flat', price: 8500 },
-            { min: 41, max: 100, type: 'per_km', rate: 200 },
-            { min: 101, max: 140, type: 'per_km', rate: 176 },
-            { min: 141, max: 200, type: 'per_km', rate: 143 },
-            { min: 201, max: 9999, type: 'per_km', rate: 132 }
-        ]
-    },
-    'suv': {
-        vehicleType: 'suv',
-        name: 'SUV (Luxury)',
-        image: '/vehicles/suv.png',
-        capacity: 4, luggage: 4, handLuggage: 3,
-        basePrice: 8000, baseKm: 20, perKmRate: 160,
-        tiers: []
-    },
-    'vezel': {
-        vehicleType: 'vezel',
-        name: 'Honda Vezel',
-        image: '/vehicles/Hondavezel.png',
-        capacity: 4, luggage: 3, handLuggage: 2,
-        basePrice: 5500, baseKm: 20, perKmRate: 130,
-        tiers: [
-            { min: 0, max: 20, type: 'flat', price: 6500 },
-            { min: 21, max: 40, type: 'flat', price: 9500 },
-            { min: 41, max: 100, type: 'per_km', rate: 150 },
-            { min: 101, max: 140, type: 'per_km', rate: 145 },
-            { min: 141, max: 200, type: 'per_km', rate: 140 },
-            { min: 201, max: 9999, type: 'per_km', rate: 135 }
-        ]
-    },
-    'kdh-flatroof': {
-        vehicleType: 'kdh-flatroof',
-        name: 'KDH Flat Roof Van',
-        image: '/vehicles/van.png',
-        capacity: 9, luggage: 8, handLuggage: 5,
-        basePrice: 8000, baseKm: 40, perKmRate: 175,
-        tiers: [
-            { min: 0, max: 20, type: 'flat', price: 6000 },
-            { min: 21, max: 40, type: 'flat', price: 8500 },
-            { min: 41, max: 100, type: 'per_km', rate: 200 },
-            { min: 101, max: 140, type: 'per_km', rate: 180 },
-            { min: 141, max: 200, type: 'per_km', rate: 145 },
-            { min: 201, max: 9999, type: 'per_km', rate: 135 }
-        ]
-    },
-    'kdh-highroof': {
-        vehicleType: 'kdh-highroof',
-        name: 'KDH High Roof Van',
-        image: '/vehicles/toyota-highroof.png',
-        capacity: 9, luggage: 8, handLuggage: 5,
-        basePrice: 8500, baseKm: 40, perKmRate: 180,
-        tiers: [
-            { min: 0, max: 20, type: 'flat', price: 6000 },
-            { min: 21, max: 40, type: 'flat', price: 8500 },
-            { min: 41, max: 100, type: 'per_km', rate: 200 },
-            { min: 101, max: 140, type: 'per_km', rate: 180 },
-            { min: 141, max: 200, type: 'per_km', rate: 145 },
-            { min: 201, max: 9999, type: 'per_km', rate: 135 }
-        ]
-    },
-    'coster-coach': {
-        vehicleType: 'coster-coach',
-        name: 'Coster Bus / Coach Bus',
-        image: '/vehicles/costerbus.png',
-        capacity: 26, luggage: 20, handLuggage: 20,
-        basePrice: 15000, baseKm: 40, perKmRate: 250,
-        tiers: [
-            { min: 0, max: 20, type: 'flat', price: 7500 },
-            { min: 21, max: 40, type: 'flat', price: 12000 },
-            { min: 41, max: 100, type: 'per_km', rate: 220 },
-            { min: 101, max: 140, type: 'per_km', rate: 220 },
-            { min: 141, max: 200, type: 'per_km', rate: 175 },
-            { min: 201, max: 9999, type: 'per_km', rate: 155 }
-        ]
-    }
+    'mini-car': { vehicleType: 'mini-car', name: 'MINI CAR', image: '/vehicles/minicar.png', capacity: 2, luggage: 4, handLuggage: 2, basePrice: 3500, baseKm: 20, perKmRate: 100, tiers: [{ min: 0, max: 20, type: 'flat', price: 3500 }, { min: 21, max: 40, type: 'flat', price: 4000 }, { min: 41, max: 130, type: 'per_km', rate: 100 }, { min: 131, max: 9999, type: 'per_km', rate: 102 }] },
+    'sedan': { vehicleType: 'sedan', name: 'SEDAN', image: '/vehicles/sedancar.png', capacity: 3, luggage: 3, handLuggage: 3, basePrice: 4500, baseKm: 20, perKmRate: 130, tiers: [{ min: 0, max: 20, type: 'flat', price: 4500 }, { min: 21, max: 40, type: 'flat', price: 6000 }, { min: 41, max: 50, type: 'per_km', rate: 150 }, { min: 51, max: 100, type: 'per_km', rate: 130 }, { min: 101, max: 140, type: 'per_km', rate: 130 }, { min: 141, max: 200, type: 'per_km', rate: 127 }, { min: 201, max: 9999, type: 'per_km', rate: 122 }] },
+    'vezel': { vehicleType: 'vezel', name: 'HONDA VEZEL', image: '/vehicles/Hondavezel.png', capacity: 3, luggage: 3, handLuggage: 3, basePrice: 5500, baseKm: 20, perKmRate: 130, tiers: [{ min: 0, max: 20, type: 'flat', price: 6500 }, { min: 21, max: 40, type: 'flat', price: 9500 }, { min: 41, max: 100, type: 'per_km', rate: 150 }, { min: 101, max: 140, type: 'per_km', rate: 145 }, { min: 141, max: 200, type: 'per_km', rate: 140 }, { min: 201, max: 9999, type: 'per_km', rate: 135 }] },
+    'suv': { vehicleType: 'suv', name: 'SUV', image: '/vehicles/suv.png', capacity: 3, luggage: 3, handLuggage: 3, basePrice: 8000, baseKm: 20, perKmRate: 160, tiers: [] },
+    'mini-van-every': { vehicleType: 'mini-van-every', name: 'MINI VAN EVERY', image: '/vehicles/susukievery.png', capacity: 3, luggage: 3, handLuggage: 3, basePrice: 4500, baseKm: 20, perKmRate: 150, tiers: [{ min: 0, max: 20, type: 'flat', price: 4500 }, { min: 21, max: 40, type: 'flat', price: 6000 }, { min: 41, max: 50, type: 'per_km', rate: 150 }, { min: 51, max: 100, type: 'per_km', rate: 130 }, { min: 101, max: 140, type: 'per_km', rate: 129 }, { min: 141, max: 200, type: 'per_km', rate: 127 }, { min: 201, max: 9999, type: 'per_km', rate: 122 }] },
+    'mini-van-05': { vehicleType: 'mini-van-05', name: 'MINI VAN 4 SEAT', image: '/vehicles/minivan5seat.png', capacity: 4, luggage: 4, handLuggage: 4, basePrice: 6000, baseKm: 20, perKmRate: 200, tiers: [{ min: 0, max: 20, type: 'flat', price: 6000 }, { min: 21, max: 40, type: 'flat', price: 8500 }, { min: 41, max: 100, type: 'per_km', rate: 200 }, { min: 101, max: 140, type: 'per_km', rate: 176 }, { min: 141, max: 200, type: 'per_km', rate: 143 }, { min: 201, max: 9999, type: 'per_km', rate: 132 }] },
+    'normal-kdh': { vehicleType: 'normal-kdh', name: 'VAN KDH', image: '/vehicles/van.png', capacity: 6, luggage: 7, handLuggage: 7, basePrice: 8000, baseKm: 40, perKmRate: 175, tiers: [{ min: 0, max: 20, type: 'flat', price: 6000 }, { min: 21, max: 40, type: 'flat', price: 8500 }, { min: 41, max: 100, type: 'per_km', rate: 200 }, { min: 101, max: 140, type: 'per_km', rate: 180 }, { min: 141, max: 200, type: 'per_km', rate: 145 }, { min: 201, max: 9999, type: 'per_km', rate: 135 }] },
+    'kdh-van': { vehicleType: 'kdh-van', name: 'MINI BUS', image: '/vehicles/toyota-highroof.png', capacity: 8, luggage: 8, handLuggage: 6, basePrice: 8500, baseKm: 40, perKmRate: 180, tiers: [{ min: 0, max: 20, type: 'flat', price: 6000 }, { min: 21, max: 40, type: 'flat', price: 8500 }, { min: 41, max: 100, type: 'per_km', rate: 200 }, { min: 101, max: 140, type: 'per_km', rate: 180 }, { min: 141, max: 200, type: 'per_km', rate: 145 }, { min: 201, max: 9999, type: 'per_km', rate: 135 }] },
+    'mini-bus': { vehicleType: 'mini-bus', name: 'COASTER BUS', image: '/vehicles/costerbus.png', capacity: 25, luggage: 20, handLuggage: 15, basePrice: 15000, baseKm: 40, perKmRate: 250, tiers: [{ min: 0, max: 20, type: 'flat', price: 7500 }, { min: 21, max: 40, type: 'flat', price: 12000 }, { min: 41, max: 100, type: 'per_km', rate: 220 }, { min: 101, max: 140, type: 'per_km', rate: 220 }, { min: 141, max: 200, type: 'per_km', rate: 175 }, { min: 201, max: 9999, type: 'per_km', rate: 155 }] },
+    'coach-bus': { vehicleType: 'coach-bus', name: 'COACH BUS', image: '/vehicles/coach-bus.png', capacity: 40, luggage: 40, handLuggage: 20, basePrice: 18000, baseKm: 40, perKmRate: 300, tiers: [] }
 };
 
 const BookingWidgetContent = ({ defaultTab = 'pickup', onTabChange }) => {

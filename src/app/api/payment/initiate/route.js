@@ -92,6 +92,88 @@ export async function POST(req) {
 
         const gateway = getGatewayForCurrency(data.currency || 'USD');
 
+        // --- BACKEND PRICE VALIDATION FOR ROUND TOURS ---
+        if (data.type === 'tour' && data.tourDetails && data.tourDetails.hours && data.vehicleType) {
+            try {
+                let expectedBasePrice = 0;
+                const hours = Number(data.tourDetails.hours);
+                const kmLimit = Number(data.tourDetails.kmLimit);
+                const vType = data.vehicleType;
+                let pkgMatch = null;
+
+                if (data.tripType === 'airport-round-tour') {
+                    const AirportRoundTour = (await import('@/models/AirportRoundTour')).default;
+                    const HeavyFleetAirportTour = (await import('@/models/HeavyFleetAirportTour')).default;
+                    pkgMatch = await AirportRoundTour.findOne({ hours, vehicleType: vType }) || await HeavyFleetAirportTour.findOne({ hours, vehicleType: vType });
+                } else {
+                    // For normal and destination-based tours, base fallback is NormalRoundTour
+                    const NormalRoundTour = (await import('@/models/NormalRoundTour')).default;
+                    const HeavyFleetNormalTour = (await import('@/models/HeavyFleetNormalTour')).default;
+                    pkgMatch = await NormalRoundTour.findOne({ hours, vehicleType: vType }) || await HeavyFleetNormalTour.findOne({ hours, vehicleType: vType });
+                    
+                    // If it's destination-based, we'd ideally check Destination overrides. 
+                    // To prevent blocking valid overrides, we only enforce if the override is NOT lower than the base package.
+                    // Wait, actually the user wants us to prevent price manipulation. Let's fetch Destination if it's destination-based
+                    if (data.tripType === 'destination-based-tour' && data.pickupLocation?.address) {
+                        const Destination = (await import('@/models/Destination')).default;
+                        const destMatch = await Destination.findOne({ 
+                            $or: [
+                                { name: new RegExp(data.pickupLocation.address.split(',')[0].trim(), 'i') },
+                                { title: new RegExp(data.pickupLocation.address.split(',')[0].trim(), 'i') }
+                            ]
+                        });
+                        if (destMatch && destMatch.roundTripPackages && destMatch.roundTripPackages.length > 0) {
+                            const destPkg = destMatch.roundTripPackages.find(p => p.hours === hours && (p.vehicleType === vType || p.vehicleType === vType.replace('normal-', '')));
+                            if (destPkg) pkgMatch = destPkg;
+                        }
+                    }
+                }
+
+                if (pkgMatch && pkgMatch.tiers && pkgMatch.tiers.length > 0) {
+                    const tier = pkgMatch.tiers.find(t => t.km === kmLimit);
+                    if (tier && tier.price) expectedBasePrice = tier.price;
+                } else if (pkgMatch && pkgMatch.price) {
+                    expectedBasePrice = pkgMatch.price;
+                }
+                
+                if (expectedBasePrice > 0) {
+                    let expectedTotalLKR = expectedBasePrice;
+                    if (data.paymentMethod === 'card') {
+                       const { calculatePaymentFees } = require('@/lib/pricing-util');
+                       expectedTotalLKR += calculatePaymentFees(expectedBasePrice, 'card', 'LKR', vType, false);
+                    }
+                    
+                    if (data.couponCode) {
+                        const Coupon = (await import('@/models/Coupon')).default;
+                        const c = await Coupon.findOne({ code: data.couponCode, isActive: true });
+                        if (c) {
+                            expectedTotalLKR -= c.discountType === 'percentage' ? (expectedTotalLKR * (c.discountValue / 100)) : c.discountValue;
+                        }
+                    }
+                    expectedTotalLKR = Math.round(expectedTotalLKR);
+
+                    // Strictly enforce minimum valid price
+                    if (data.totalPrice < expectedTotalLKR - 50) {
+                        console.warn(`[Security] Price manipulation detected. Client: ${data.totalPrice}, Server: ${expectedTotalLKR}`);
+                        data.totalPrice = expectedTotalLKR;
+                        
+                        if (data.paymentType === 'partial') {
+                            data.paidAmount = expectedTotalLKR * 0.5;
+                            data.balanceAmount = expectedTotalLKR * 0.5;
+                        } else if (data.paymentMethod === 'cash') {
+                            data.paidAmount = 0;
+                            data.balanceAmount = expectedTotalLKR;
+                        } else {
+                            data.paidAmount = expectedTotalLKR;
+                            data.balanceAmount = 0;
+                        }
+                    }
+                }
+            } catch (err) {
+                console.error('[Payment Init] Validation error:', err);
+            }
+        }
+
         // 1. Create the booking record
         const bookingData = {
             ...data,

@@ -25,7 +25,9 @@ export async function POST(req) {
             customAmount,
             notes,
             scheduledDate,
-            scheduledTime
+            scheduledTime,
+            passengerCount,
+            vehicleType
         } = body;
 
         if (!customerName || !amount) {
@@ -66,6 +68,8 @@ export async function POST(req) {
             paymentMethod: 'card',
             scheduledDate,
             scheduledTime,
+            passengerCount,
+            vehicleType,
             notes: notes || 'Manual Payment Link Generated',
             isManual: true,
             type: 'transfer'

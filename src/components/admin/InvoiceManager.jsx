@@ -62,83 +62,117 @@ export default function InvoiceManager() {
         const doc = new jsPDF();
         const primaryColor = '#059669'; // Emerald 600
 
-        // Header
-        doc.setFillColor(5, 150, 105);
-        doc.rect(0, 0, 210, 40, 'F');
-        doc.setTextColor(255, 255, 255);
-        doc.setFontSize(24);
-        doc.setFont('helvetica', 'bold');
-        doc.text('AIRPORT TAXIS PVT (LTD)', 20, 25);
+        const generateAndSave = (logoImg = null) => {
+            // Header
+            doc.setFillColor(5, 150, 105);
+            doc.rect(0, 0, 210, 40, 'F');
+            
+            if (logoImg) {
+                doc.addImage(logoImg, 'PNG', 15, 10, 40, 20);
+                doc.setTextColor(255, 255, 255);
+                doc.setFontSize(22);
+                doc.setFont('helvetica', 'bold');
+                doc.text('Airport Taxis (pvt) ltd sri lanka', 60, 25);
+                doc.setFontSize(9);
+                doc.setFont('helvetica', 'normal');
+                doc.text('Sri Lanka\'s Premium 24/7 Transport Service', 60, 32);
+            } else {
+                doc.setTextColor(255, 255, 255);
+                doc.setFontSize(22);
+                doc.setFont('helvetica', 'bold');
+                doc.text('Airport Taxis (pvt) ltd sri lanka', 20, 25);
+                doc.setFontSize(9);
+                doc.setFont('helvetica', 'normal');
+                doc.text('Sri Lanka\'s Premium 24/7 Transport Service', 20, 32);
+            }
 
-        doc.setFontSize(10);
-        doc.setFont('helvetica', 'normal');
-        doc.text('Sri Lanka\'s Premium 24/7 Transport Service', 20, 32);
+            // Invoice Details
+            doc.setTextColor(0, 0, 0);
+            doc.setFontSize(12);
+            doc.setFont('helvetica', 'bold');
+            doc.text('INVOICE', 20, 55);
 
-        // Invoice Details
-        doc.setTextColor(0, 0, 0);
-        doc.setFontSize(12);
-        doc.setFont('helvetica', 'bold');
-        doc.text('INVOICE', 20, 55);
+            doc.setFont('helvetica', 'normal');
+            doc.setFontSize(10);
+            doc.text(`Date: ${new Date().toLocaleDateString()}`, 150, 55);
+            doc.text(`Invoice #: AT-${Math.floor(1000 + Math.random() * 9000)}`, 150, 60);
 
-        doc.setFont('helvetica', 'normal');
-        doc.setFontSize(10);
-        doc.text(`Date: ${new Date().toLocaleDateString()}`, 150, 55);
-        doc.text(`Invoice #: AT-${Math.floor(1000 + Math.random() * 9000)}`, 150, 60);
+            // Customer Info
+            doc.setFont('helvetica', 'bold');
+            doc.text('BILL TO:', 20, 75);
+            doc.setFont('helvetica', 'normal');
+            doc.text(formData.customerName, 20, 82);
+            if (formData.customerEmail) doc.text(formData.customerEmail, 20, 87);
+            if (formData.customerPhone) doc.text(formData.customerPhone, 20, 92);
 
-        // Customer Info
-        doc.setFont('helvetica', 'bold');
-        doc.text('BILL TO:', 20, 75);
-        doc.setFont('helvetica', 'normal');
-        doc.text(formData.customerName, 20, 82);
-        if (formData.customerEmail) doc.text(formData.customerEmail, 20, 87);
-        if (formData.customerPhone) doc.text(formData.customerPhone, 20, 92);
+            // Trip Info
+            doc.setFont('helvetica', 'bold');
+            doc.text('TRIP DETAILS:', 110, 75);
+            doc.setFont('helvetica', 'normal');
+            if (formData.pickupAddress) doc.text(`From: ${formData.pickupAddress}`, 110, 82);
+            if (formData.dropoffAddress) doc.text(`To: ${formData.dropoffAddress}`, 110, 87);
+            if (formData.scheduledDate) doc.text(`Date: ${formData.scheduledDate} ${formData.scheduledTime}`, 110, 92);
+            
+            // Passenger & Vehicle display logic
+            const pCount = formData.passengerCount?.adults || 1;
+            const lCount = formData.passengerCount?.luggage || 0;
+            const vType = formData.vehicleType || 'sedan';
+            const vehicleLabels = {
+                'mini-car': 'MINI CAR', 'sedan': 'SEDAN', 'vezel': 'HONDA VEZEL', 'suv': 'SUV',
+                'mini-van-every': 'MINI VAN EVERY', 'mini-van-05': 'MINI VAN 4 SEAT', 'normal-kdh': 'VAN KDH',
+                'kdh-van': 'MINI BUS', 'mini-bus': 'COASTER BUS', 'coach-bus': 'COACH BUS'
+            };
+            const vDisplay = vehicleLabels[vType] || vType.toUpperCase();
 
-        // Trip Info
-        doc.setFont('helvetica', 'bold');
-        doc.text('TRIP DETAILS:', 110, 75);
-        doc.setFont('helvetica', 'normal');
-        if (formData.pickupAddress) doc.text(`From: ${formData.pickupAddress}`, 110, 82);
-        if (formData.dropoffAddress) doc.text(`To: ${formData.dropoffAddress}`, 110, 87);
-        if (formData.scheduledDate) doc.text(`Date: ${formData.scheduledDate} ${formData.scheduledTime}`, 110, 92);
-        doc.text(`Passengers: ${formData.passengerCount.adults} | Luggage: ${formData.passengerCount.luggage}`, 110, 97);
-        doc.text(`Vehicle: ${formData.vehicleType.toUpperCase()}`, 110, 102);
+            doc.text(`Passengers: ${pCount} | Luggage: ${lCount}`, 110, 97);
+            doc.text(`Vehicle: ${vDisplay}`, 110, 102);
 
-        // Table
-        doc.autoTable({
-            startY: 110,
-            head: [['Description', 'Quantity', 'Price', 'Total']],
-            body: [
-                ['Airport Transfer / Private Tour Service', '1', `${formData.currency} ${formData.amount}`, `${formData.currency} ${formData.amount}`],
-            ],
-            headStyles: { fillColor: [5, 150, 105] },
-            theme: 'striped'
-        });
+            // Table
+            doc.autoTable({
+                startY: 110,
+                head: [['Description', 'Quantity', 'Price', 'Total']],
+                body: [
+                    ['Airport Transfer / Private Tour Service', '1', `${formData.currency} ${formData.amount}`, `${formData.currency} ${formData.amount}`],
+                ],
+                headStyles: { fillColor: [5, 150, 105] },
+                theme: 'striped'
+            });
 
-        // Summary
-        const finalY = doc.lastAutoTable.finalY + 10;
-        doc.setFont('helvetica', 'bold');
-        doc.text('TOTAL AMOUNT:', 140, finalY + 10);
-        doc.setFontSize(16);
-        doc.setTextColor(5, 150, 105);
-        doc.text(`${formData.currency} ${formData.amount}`, 140, finalY + 20);
+            // Summary
+            const finalY = doc.lastAutoTable.finalY + 10;
+            doc.setFont('helvetica', 'bold');
+            doc.text('TOTAL AMOUNT:', 140, finalY + 10);
+            doc.setFontSize(16);
+            doc.setTextColor(5, 150, 105);
+            doc.text(`${formData.currency} ${formData.amount}`, 140, finalY + 20);
 
-        // Payment Link
-        doc.setFontSize(8);
-        doc.setTextColor(100, 100, 100);
-        doc.text('PAYMENT LINK:', 20, finalY + 40);
-        doc.setTextColor(5, 150, 105);
-        doc.text(result.paymentLink, 20, finalY + 45);
+            // Payment Link
+            doc.setFontSize(8);
+            doc.setTextColor(100, 100, 100);
+            doc.text('PAYMENT LINK:', 20, finalY + 40);
+            doc.setTextColor(5, 150, 105);
+            doc.text(result.paymentLink, 20, finalY + 45);
 
-        doc.setFontSize(8);
-        doc.setTextColor(150, 150, 150);
-        doc.text('Thank you for choosing Airport Taxis Sri Lanka.', 105, 276, null, null, 'center');
-        doc.text('Web: srilankantaxi.lk | Tel: +94 71 688 5880', 105, 281, null, null, 'center');
-        
-        doc.setFontSize(7);
-        doc.text('Support: support@airporttaxis.lk | support@srilankantaxi.lk | support@touris.lk | support@tourtaxi.lk', 105, 286, null, null, 'center');
-        doc.text('support@airporttaxicab.lk | customer@airporttaxis.lk', 105, 290, null, null, 'center');
+            doc.setFontSize(8);
+            doc.setTextColor(150, 150, 150);
+            doc.text('Thank you for choosing Airport Taxis Sri Lanka.', 105, 276, null, null, 'center');
+            doc.text('Web: srilankantaxi.lk | Tel: +94 71 688 5880', 105, 281, null, null, 'center');
+            
+            doc.setFontSize(7);
+            doc.text('Support: support@airporttaxis.lk | support@srilankantaxi.lk | support@touris.lk | support@tourtaxi.lk', 105, 286, null, null, 'center');
+            doc.text('support@airporttaxicab.lk | customer@airporttaxis.lk', 105, 290, null, null, 'center');
 
-        doc.save(`Invoice_${formData.customerName.replace(/\s+/g, '_')}.pdf`);
+            doc.save(`Invoice_${formData.customerName.replace(/\s+/g, '_')}.pdf`);
+        };
+
+        try {
+            const img = new window.Image();
+            img.src = '/invoice_logo.png';
+            img.onload = () => generateAndSave(img);
+            img.onerror = () => generateAndSave(null);
+        } catch (e) {
+            generateAndSave(null);
+        }
     };
 
     return (
@@ -258,13 +292,16 @@ export default function InvoiceManager() {
                                 value={formData.vehicleType}
                                 onChange={e => setFormData({ ...formData, vehicleType: e.target.value })}
                             >
-                                <option value="mini-car">Mini Car (e.g., Wagon R)</option>
-                                <option value="sedan">Sedan (e.g., Axio, Prius)</option>
-                                <option value="mini-van-every">Mini Van (Every)</option>
-                                <option value="mini-van-kdh">Mini Van (KDH)</option>
+                                <option value="mini-car">MINI CAR</option>
+                                <option value="sedan">SEDAN</option>
+                                <option value="vezel">HONDA VEZEL</option>
                                 <option value="suv">SUV</option>
-                                <option value="mini-bus">Mini Bus</option>
-                                <option value="bus">Bus</option>
+                                <option value="mini-van-every">MINI VAN EVERY</option>
+                                <option value="mini-van-05">MINI VAN 4 SEAT</option>
+                                <option value="normal-kdh">VAN KDH</option>
+                                <option value="kdh-van">MINI BUS</option>
+                                <option value="mini-bus">COASTER BUS</option>
+                                <option value="coach-bus">COACH BUS</option>
                             </select>
                         </div>
                     </div>

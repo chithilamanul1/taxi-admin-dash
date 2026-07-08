@@ -269,17 +269,6 @@ const VehicleCarousel = ({ vehicles, selectedId, onSelect, passengerCount, picku
                                                 {(Number(convertPrice(Number(vehicle.calculatedTotal) || 0).value) || 0).toLocaleString()}
                                             </span>
                                         </div>
-                                        <div className="flex items-center gap-2 mt-2 text-[10px] font-black text-slate-400 uppercase tracking-widest">
-                                            {['USD', 'EUR', 'LKR'].filter(c => c !== currency).slice(0, 1).map((c) => {
-                                                const rate = rates[c] || 1;
-                                                const symbol = c === 'USD' ? '$' : c === 'EUR' ? '€' : 'Rs';
-                                                return (
-                                                    <span key={c} className="text-slate-500 font-bold">
-                                                        {symbol} {(vehicle.calculatedTotal * rate).toLocaleString(undefined, { minimumFractionDigits: c === 'LKR' ? 0 : 2, maximumFractionDigits: c === 'LKR' ? 0 : 2 })}
-                                                    </span>
-                                                );
-                                            })}
-                                        </div>
                                     </div>
                                 )}
 
@@ -306,10 +295,10 @@ const VehicleCarousel = ({ vehicles, selectedId, onSelect, passengerCount, picku
                                         { icon: ShoppingBag, label: 'MAX HAND', value: vehicle.handLuggage || 2 },
                                         { icon: Wind, label: 'AC', value: 'ON' }
                                     ].map((item, i) => (
-                                        <div key={i} className={`flex flex-col items-center justify-center p-2 sm:p-2.5 rounded-[14px] border ${isSelected ? 'bg-[#FACC15] border-[#FACC15] text-black shadow-md' : 'bg-zinc-900 border-black text-[#FACC15] dark:bg-black dark:border-white/10 dark:text-[#FACC15]'}`}>
+                                        <div key={i} className={`flex flex-col items-center justify-center p-1.5 sm:p-2.5 rounded-xl sm:rounded-[14px] border ${isSelected ? 'bg-[#FACC15] border-[#FACC15] text-black shadow-md' : 'bg-zinc-900 border-black text-[#FACC15] dark:bg-black dark:border-white/10 dark:text-[#FACC15]'}`}>
                                             <item.icon size={14} className="mb-1" strokeWidth={isSelected ? 3 : 2.5} />
-                                            <span className={`text-xs sm:text-[13px] font-black leading-none mb-0.5 ${isSelected ? 'text-black' : 'text-white'}`}>{item.value}</span>
-                                            <span className={`text-[8px] sm:text-[9px] font-black uppercase tracking-widest leading-none opacity-90 ${isSelected ? 'text-black/80' : 'text-zinc-400'}`}>{item.label}</span>
+                                            <span className={`text-[11px] sm:text-[13px] font-black leading-none mb-0.5 ${isSelected ? 'text-black' : 'text-white'}`}>{item.value}</span>
+                                            <span className={`text-[7px] sm:text-[9px] text-center font-black uppercase tracking-tight sm:tracking-widest leading-none opacity-90 ${isSelected ? 'text-black/80' : 'text-zinc-400'}`}>{item.label}</span>
                                         </div>
                                     ))}
                                 </div>

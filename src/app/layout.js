@@ -21,8 +21,12 @@ export async function generateMetadata() {
 
     return {
         title: {
-            default: 'Airport Taxis Sri Lanka | Airport Cabs & Transfers',
-            template: '%s | Airport Taxis Sri Lanka'
+            default: 'Airport Taxis (Pvt) Ltd Sri Lanka | Airport Cabs & Transfers',
+            template: '%s | Airport Taxis (Pvt) Ltd Sri Lanka'
+        },
+        applicationName: 'Airport Taxis (Pvt) Ltd Sri Lanka',
+        appleWebApp: {
+            title: 'Airport Taxis (Pvt) Ltd Sri Lanka',
         },
         description: '🚕 Sri Lanka\'s most trusted 24/7 Airport Taxi & Tour service. Book Colombo Airport (CMB) transfers, luxury KDH vans, and curated Sri Lanka tour packages. Fixed rates, professional English-speaking drivers, and instant online booking.',
         keywords: [
@@ -46,10 +50,10 @@ export async function generateMetadata() {
             canonical: '/',
         },
         openGraph: {
-            title: 'Airport Taxis Sri Lanka | Airport Cabs & Transfers',
+            title: 'Airport Taxis (Pvt) Ltd Sri Lanka | Airport Cabs & Transfers',
             description: 'Instant Booking! Reliable 24/7 airport transfers from Colombo Airport (CMB). Professional drivers, comfortable vehicles (Mini Car, Sedan, KDH Van). Best rates guaranteed for all-island tours.',
             url: '/',
-            siteName: 'Airport Taxis (Pvt) Ltd - SRI LANKA',
+            siteName: 'Airport Taxis (Pvt) Ltd Sri Lanka',
             images: [
                 {
                     url: '/og-image.jpg',
@@ -63,7 +67,7 @@ export async function generateMetadata() {
         },
         twitter: {
             card: 'summary_large_image',
-            title: 'Airport Taxis Sri Lanka | Airport Cabs & Transfers',
+            title: 'Airport Taxis (Pvt) Ltd Sri Lanka | Airport Cabs & Transfers',
             description: 'Trusted 24/7 airport transfers & tours. Professional drivers, instant confirmation, best rates guaranteed!',
             images: ['/og-image.jpg'],
         },
@@ -76,9 +80,13 @@ export async function generateMetadata() {
         },
         icons: {
             icon: [
-                { url: '/favicon.ico' },
+                { url: '/favicon.png', sizes: '32x32', type: 'image/png' },
+                { url: '/icon.png', sizes: '192x192', type: 'image/png' },
+                { url: '/logo_app.png', sizes: '512x512', type: 'image/png' },
             ],
-            apple: '/logo.png',
+            apple: [
+                { url: '/logo_app.png', sizes: '512x512', type: 'image/png' }
+            ]
         },
     }
 }
@@ -91,13 +99,13 @@ const getJsonLd = (baseUrl) => ({
             '@type': 'WebSite',
             '@id': `${baseUrl}/#website`,
             url: `${baseUrl}/`,
-            name: 'AIRPORT TAXIS (PVT) LTD SRILANKA',
+            name: 'Airport Taxis (Pvt) Ltd Sri Lanka',
             alternateName: 'Airport Taxis',
         },
         {
             '@type': 'LocalBusiness',
             '@id': `${baseUrl}/#localbusiness`,
-            name: 'AIRPORT TAXIS (PVT) LTD SRILANKA',
+            name: 'Airport Taxis (Pvt) Ltd Sri Lanka',
             image: `${baseUrl}/og-image.jpg`,
             url: `${baseUrl}`,
             telephone: '+94716885880',
@@ -128,7 +136,7 @@ const getJsonLd = (baseUrl) => ({
         },
         {
             '@type': 'TaxiService',
-            name: 'AIRPORT TAXIS (PVT) LTD SRILANKA',
+            name: 'Airport Taxis (Pvt) Ltd Sri Lanka',
             description: 'Premium airport transfer and private tour service in Sri Lanka across Colombo, Kandy, Galle and more.',
             url: `${baseUrl}`,
             provider: { '@id': `${baseUrl}/#localbusiness` },
@@ -166,7 +174,7 @@ const getJsonLd = (baseUrl) => ({
         {
             '@type': 'Organization',
             '@id': `${baseUrl}/#organization`,
-            name: 'AIRPORT TAXIS (PVT) LTD SRILANKA',
+            name: 'Airport Taxis (Pvt) Ltd Sri Lanka',
             url: `${baseUrl}`,
             logo: {
                 '@type': 'ImageObject',

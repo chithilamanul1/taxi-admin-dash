@@ -5,16 +5,16 @@ import { isAdmin } from '@/lib/admin-check';
 
 // Only vehicle metadata — NO tiers/rates. Order matches display order.
 const VEHICLE_METADATA = {
-    'mini-car': { name: 'Mini Car', image: '/vehicles/minicar.png', capacity: 2, luggage: 4, handLuggage: 2, sortOrder: 1 },
-    'sedan': { name: 'Sedan', image: '/vehicles/sedancar.png', capacity: 3, luggage: 3, handLuggage: 3, sortOrder: 2 },
-    'mini-van-every': { name: 'Mini Van (Every)', image: '/vehicles/susukievery.png', capacity: 3, luggage: 3, handLuggage: 3, sortOrder: 3 },
-    'mini-van-05': { name: 'Mini Van (4 Seat)', image: '/vehicles/minivan5seat.png', capacity: 4, luggage: 4, handLuggage: 4, sortOrder: 4 },
-    'suv': { name: 'SUV', image: '/vehicles/suv.png', capacity: 3, luggage: 3, handLuggage: 3, sortOrder: 5 },
-    'vezel': { name: 'Honda Vezel', image: '/vehicles/Hondavezel.png', capacity: 3, luggage: 3, handLuggage: 3, sortOrder: 6 },
-    'normal-kdh': { name: 'Van (KDH Flat Roof)', image: '/vehicles/van.png', capacity: 6, luggage: 7, handLuggage: 7, sortOrder: 7 },
-    'kdh-van': { name: 'Mini Bus (KDH High Roof)', image: '/vehicles/toyota-highroof.png', capacity: 8, luggage: 8, handLuggage: 6, sortOrder: 8 },
-    'mini-bus': { name: 'Coaster Bus', image: '/vehicles/costerbus.png', capacity: 25, luggage: 20, handLuggage: 15, sortOrder: 9 },
-    'coach-bus': { name: 'Coach Bus', image: '/vehicles/coach-bus.png', capacity: 40, luggage: 40, handLuggage: 20, sortOrder: 10 },
+    'mini-car': { name: 'MINI CAR', image: '/vehicles/minicar.png', capacity: 2, luggage: 4, handLuggage: 2, sortOrder: 1 },
+    'sedan': { name: 'SEDAN', image: '/vehicles/sedancar.png', capacity: 3, luggage: 3, handLuggage: 3, sortOrder: 2 },
+    'vezel': { name: 'HONDA VEZEL', image: '/vehicles/Hondavezel.png', capacity: 3, luggage: 3, handLuggage: 3, sortOrder: 3 },
+    'suv': { name: 'SUV', image: '/vehicles/suv.png', capacity: 3, luggage: 3, handLuggage: 3, sortOrder: 4 },
+    'mini-van-every': { name: 'MINI VAN EVERY', image: '/vehicles/susukievery.png', capacity: 3, luggage: 3, handLuggage: 3, sortOrder: 5 },
+    'mini-van-05': { name: 'MINI VAN 4 SEAT', image: '/vehicles/minivan5seat.png', capacity: 4, luggage: 4, handLuggage: 4, sortOrder: 6 },
+    'normal-kdh': { name: 'VAN KDH', image: '/vehicles/van.png', capacity: 6, luggage: 7, handLuggage: 7, sortOrder: 7 },
+    'kdh-van': { name: 'MINI BUS', image: '/vehicles/toyota-highroof.png', capacity: 8, luggage: 8, handLuggage: 6, sortOrder: 8 },
+    'mini-bus': { name: 'COASTER BUS', image: '/vehicles/costerbus.png', capacity: 25, luggage: 20, handLuggage: 15, sortOrder: 9 },
+    'coach-bus': { name: 'COACH BUS', image: '/vehicles/coach-bus.png', capacity: 40, luggage: 40, handLuggage: 20, sortOrder: 10 },
 };
 
 export async function POST(req) {
