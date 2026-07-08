@@ -183,7 +183,7 @@ export async function POST(req) {
         let createdCount = 0;
 
         // For each category, sync all vehicle defaults
-        const categories = ['airport-transfer', 'ride-now'];
+        const categories = ['airport-transfer', 'ride-now', 'tours'];
 
         for (const category of categories) {
             for (const [vehicleType, defaults] of Object.entries(VEHICLE_DEFAULTS)) {
