@@ -14,6 +14,8 @@ const VEHICLE_DEFAULTS = {
     'coach-bus': { name: 'Coach Bus', image: '/vehicles/coach-bus.png', capacity: 40, luggage: 40, handLuggage: 20, features: ['Air Conditioning', 'Bluetooth', 'USB Charging'], sortOrder: 10, tiers: [{ min: 0, max: 20, type: 'flat', price: 30000 }, { min: 20, max: 40, type: 'flat', price: 45000 }, { min: 40, max: 100, type: 'per_km', rate: 850 }, { min: 100, max: 200, type: 'per_km', rate: 750 }, { min: 200, max: 9999, type: 'per_km', rate: 650 }] }
 };
 
+export const dynamic = 'force-dynamic';
+
 export async function GET(req) {
     try {
         await dbConnect();
