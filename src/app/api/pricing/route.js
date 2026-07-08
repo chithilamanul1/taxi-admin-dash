@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 import dbConnect from '../../../lib/db';
 import Pricing from '../../../models/Pricing';
 
-export const revalidate = 3600; // Cache for 1 hour
+export const revalidate = 0; // Disable cache so admin changes show immediately
 
 export async function GET(req) {
     try {
