@@ -131,8 +131,9 @@ export const calculateBasePrice = (distanceKm, vehicleData, tripType = 'one-way'
     }
 
     if (tripType === 'destination-based-tour') {
-        const pickupOverride = findMatchingDestination(pickup, dynamicDestinations);
-        const dropoffOverride = findMatchingDestination(dropoff, dynamicDestinations);
+        const genericDestinations = dynamicDestinations.filter(d => !d.pickupLocation || d.pickupLocation.trim() === '');
+        const pickupOverride = findMatchingDestination(pickup, genericDestinations);
+        const dropoffOverride = findMatchingDestination(dropoff, genericDestinations);
         const destMatch = hasPricingData(dropoffOverride) ? dropoffOverride : (hasPricingData(pickupOverride) ? pickupOverride : null);
 
         // 1. Destination-Specific Package Tier pricing
@@ -246,12 +247,13 @@ export const calculateBasePrice = (distanceKm, vehicleData, tripType = 'one-way'
 
     // 2. Fallback for legacy "Destination" (Generic single location overrides)
     if (!exactMatchFound) {
-        const pickupOverride = findMatchingDestination(pickup, dynamicDestinations);
-        const dropoffOverride = findMatchingDestination(dropoff, dynamicDestinations);
+        // Filter out point-to-point routes (those with a specific pickup location) before finding generic matches
+        const genericDestinations = dynamicDestinations.filter(d => !d.pickupLocation || d.pickupLocation.trim() === '');
+        const pickupOverride = findMatchingDestination(pickup, genericDestinations);
+        const dropoffOverride = findMatchingDestination(dropoff, genericDestinations);
         const genericMatch = hasPricingData(dropoffOverride) ? dropoffOverride : (hasPricingData(pickupOverride) ? pickupOverride : null);
         
         // PREVENT LEAKAGE: Only apply generic single-location overrides to Airport Transfers
-        // (Previously this was leaking into Intercity rides because of an inverted condition)
         if (genericMatch && isAirportTransfer) {
             matchedOverride = genericMatch;
         }

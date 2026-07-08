@@ -263,6 +263,21 @@ export default function Navbar() {
                                     Sign in with Google
                                 </button>
                             )}
+                            
+                            <div className="grid grid-cols-2 md:grid-cols-3 gap-2 py-2">
+                                {SUPPORTED_CURRENCIES.map(c => (
+                                    <button
+                                        key={c.code}
+                                        onClick={() => {
+                                            changeCurrency(c.code);
+                                            setIsMobileMenuOpen(false);
+                                        }}
+                                        className={`w-full text-center px-2 py-3 rounded-xl transition-all text-[10px] font-black uppercase tracking-widest border ${currency === c.code ? 'bg-emerald-600 text-white border-emerald-600' : 'bg-slate-50 text-emerald-950 border-slate-100 hover:bg-emerald-50'}`}
+                                    >
+                                        {c.code} ({c.symbol})
+                                    </button>
+                                ))}
+                            </div>
 
                             <a
                                 href="tel:+94716885880"
