@@ -262,7 +262,7 @@ export const calculateBasePrice = (distanceKm, vehicleData, tripType = 'one-way'
     const vehicleType = vehicleData.vehicleType;
     const vehicleSlug = vehicleData.vehicleSlug || vehicleType;
 
-    if (matchedOverride && !overrideApplied) {
+    if (matchedOverride) {
         console.log(`[Pricing] Found Override for: ${matchedOverride.name || matchedOverride.title}`);
 
         // 1. Check for Fixed Pricing (Precedence)

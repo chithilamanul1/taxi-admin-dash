@@ -471,7 +471,7 @@ const BookingWidgetContent = ({ defaultTab = 'pickup', onTabChange }) => {
             try {
                 const [marketingRes, destinationsRes, settingsRes, airportToursRes, normalToursRes, surgeRes, couponsRes] = await Promise.all([
                     fetch('/api/admin/marketing').then(r => r.json()).catch(err => { console.error("Error fetching offers:", err); return null; }),
-                    fetch('/api/admin/destinations').then(r => r.json()).catch(err => { console.error("Error fetching destinations:", err); return null; }),
+                    fetch('/api/admin/destinations', { cache: 'no-store' }).then(r => r.json()).catch(err => { console.error("Error fetching destinations:", err); return null; }),
                     fetch('/api/admin/pricing-settings', { cache: 'no-store' }).then(r => r.json()).catch(err => { console.error("Failed to fetch pricing settings", err); return null; }),
                     fetch('/api/admin/airport-tours', { cache: 'no-store' }).then(r => r.json()).catch(err => { console.error("Error", err); return null; }),
                     fetch('/api/admin/normal-tours', { cache: 'no-store' }).then(r => r.json()).catch(err => { console.error("Error", err); return null; }),
