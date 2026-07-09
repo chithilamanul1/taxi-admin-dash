@@ -11,6 +11,7 @@ import { parseStoredTime, detectLocalTimezone } from '../lib/timezone-util';
 import { useCurrency } from '../context/CurrencyContext';
 import TripMap from './TripMap';
 import { loadGoogleMapsScript } from '@/lib/google-maps';
+import { getGlobalVehiclePriority } from './BookingWidget';
 
 const VehicleCarousel = dynamic(() => import('./VehicleCarousel'), { ssr: false });
 
@@ -73,8 +74,11 @@ const RoundTripBooking = () => {
               handLuggage: v.handLuggage || 2
             };
           });
+          mapped.sort((a,b) => getGlobalVehiclePriority(a.vehicleType || a.id) - getGlobalVehiclePriority(b.vehicleType || b.id));
           setVehicles(mapped);
-          setSelectedVehicle(mapped[0]);
+          if (!selectedVehicle && mapped.length > 0) {
+            setSelectedVehicle(mapped[0]);
+          }
         } else {
           const defaults = [
             { id: 'mini-car', vehicleType: 'mini-car', name: 'MINI CAR', baseRate: 3500, perKm: 100, image: '/vehicles/minicar.png', capacity: 2, suitcases: 4, luggage: 4, handLuggage: 2 },

@@ -65,6 +65,21 @@ const FALLBACK_PRICING = {
     'coach-bus': { vehicleType: 'coach-bus', name: 'COACH BUS', image: '/vehicles/coach-bus.png', capacity: 40, luggage: 40, handLuggage: 20, basePrice: 18000, baseKm: 40, perKmRate: 300, tiers: [] }
 };
 
+export const getGlobalVehiclePriority = (type) => {
+    const t = type?.toLowerCase() || '';
+    if (t === 'mini-car') return 1;
+    if (t === 'sedan') return 2;
+    if (t === 'vezel') return 3;
+    if (t === 'suv') return 4;
+    if (t === 'mini-van-every') return 5;
+    if (t === 'mini-van-05') return 6;
+    if (t === 'normal-kdh') return 7;
+    if (t === 'kdh-van') return 8; // MINI BUS
+    if (t === 'mini-bus') return 9; // COASTER BUS
+    if (t === 'coach-bus') return 10;
+    return 99;
+};
+
 const BookingWidgetContent = ({ defaultTab = 'pickup', onTabChange }) => {
     const router = useRouter();
     const [activeOffers, setActiveOffers] = useState([]);
@@ -358,20 +373,7 @@ const BookingWidgetContent = ({ defaultTab = 'pickup', onTabChange }) => {
         };
 
         if (!checkSuitability(currentVehicle)) {
-            const getPriority = (type) => {
-                const t = type?.toLowerCase() || '';
-                if (t.includes('mini-car') || t.includes('wagon')) return 1;
-                if (t.includes('sedan')) return 2;
-                if (t.includes('vezel') || t.includes('vessel')) return 3;
-                if (t.includes('suv')) return 4;
-                if (t.includes('mini-van-05')) return 5;
-                if (t.includes('mini-van')) return 5.5;
-                if (t.includes('kdh-van') || t.includes('flatroof') || t.includes('kdh')) return 6;
-                if (t.includes('highroof')) return 7;
-                if (t.includes('bus') || t.includes('coach')) return 8;
-                return 10;
-            };
-            const sorted = Object.values(activePricing).sort((a, b) => getPriority(a.vehicleType) - getPriority(b.vehicleType));
+            const sorted = Object.values(activePricing).sort((a, b) => getGlobalVehiclePriority(a.vehicleType) - getGlobalVehiclePriority(b.vehicleType));
             
             const suitable = sorted.find(checkSuitability);
             if (suitable && suitable.vehicleType !== vehicle) {
@@ -592,7 +594,8 @@ const BookingWidgetContent = ({ defaultTab = 'pickup', onTabChange }) => {
         const totalLuggage = passengerCount.luggage || 0;
 
         // Find best fit (Cheapest that fits capacity)
-        const sortedVehicles = Object.values(activePricing).sort((a, b) => (a.basePrice || 0) - (b.basePrice || 0));
+        // Order them by the exact priority defined by the user
+        const sortedVehicles = Object.values(activePricing).sort((a, b) => getGlobalVehiclePriority(a.vehicleType) - getGlobalVehiclePriority(b.vehicleType));
         const bestFit = sortedVehicles.find(v =>
             totalPax <= (v.capacity || 4) && totalLuggage <= (v.luggage || 0)
         );
@@ -926,7 +929,7 @@ const BookingWidgetContent = ({ defaultTab = 'pickup', onTabChange }) => {
             scheduledDate: scheduledDate || currentDate,
             scheduledTime: scheduledTime || currentTime,
             roundTripPackageId,
-            pricing: Object.values(activePricing)
+            pricing: Object.values(activePricing).sort((a, b) => getGlobalVehiclePriority(a.vehicleType) - getGlobalVehiclePriority(b.vehicleType))
         });
         setShowModal(true);
     };
@@ -1162,7 +1165,7 @@ const BookingWidgetContent = ({ defaultTab = 'pickup', onTabChange }) => {
                                                             </div>
                                                         ) : (
                                                             <VehicleCarousel
-                                                                vehicles={Object.values(activePricing).map(v => {
+                                                                vehicles={Object.values(activePricing).sort((a, b) => getGlobalVehiclePriority(a.vehicleType) - getGlobalVehiclePriority(b.vehicleType)).map(v => {
                                                                     const priceInfo = calculatePrice(
                                                                         distance,
                                                                         v.vehicleType,
@@ -1278,7 +1281,7 @@ const BookingWidgetContent = ({ defaultTab = 'pickup', onTabChange }) => {
                                                 </button>
                                             </div>
                                             <VehicleCarousel
-                                                vehicles={Object.values(activePricing).map(v => {
+                                                vehicles={Object.values(activePricing).sort((a, b) => getGlobalVehiclePriority(a.vehicleType) - getGlobalVehiclePriority(b.vehicleType)).map(v => {
                                                     const priceInfo = calculatePrice(
                                                         distance,
                                                         v.vehicleType,
@@ -1723,7 +1726,7 @@ const BookingWidgetContent = ({ defaultTab = 'pickup', onTabChange }) => {
                 onClose={() => setIsVehicleDrawerOpen(false)}
                 pickupLocation={pickup?.name || pickupSearch}
                 dropoffLocation={dropoff?.name || dropoffSearch}
-                vehicles={Object.values(activePricing).map(v => {
+                vehicles={Object.values(activePricing).sort((a, b) => getGlobalVehiclePriority(a.vehicleType) - getGlobalVehiclePriority(b.vehicleType)).map(v => {
                     const priceInfo = calculatePrice(
                         distance,
                         v.vehicleType,

@@ -16,6 +16,7 @@ const AdminDashboard = () => {
     // State for Editing Vehicle
     const [editingVehicle, setEditingVehicle] = useState(null);
     const [editForm, setEditForm] = useState({});
+    const [pricingCategoryFilter, setPricingCategoryFilter] = useState('airport-transfer');
 
     // State for Booking Assignment
     const [bookingToAssign, setBookingToAssign] = useState(null);
@@ -56,7 +57,7 @@ const AdminDashboard = () => {
 
     const handleSavePricing = async () => {
         try {
-            const res = await fetch(`/api/pricing/${editingVehicle.vehicleType}?category=${editForm.category}`, {
+            const res = await fetch(`/api/pricing`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(editForm)
@@ -387,10 +388,25 @@ const AdminDashboard = () => {
                         <div className="bg-white dark:bg-emerald-900 rounded-none shadow-sm p-8 border border-white/5">
                             <h2 className="text-2xl font-bold text-emerald-900 dark:text-white mb-6">Pricing Configuration</h2>
                             <p className="text-gray-500 dark:text-slate-400 mb-6">Manage vehicle rates and tiers dynamically across different service categories.</p>
+                            
+                            <div className="flex gap-4 mb-6">
+                                <button
+                                    onClick={() => setPricingCategoryFilter('airport-transfer')}
+                                    className={`px-4 py-2 font-bold text-sm rounded ${pricingCategoryFilter === 'airport-transfer' ? 'bg-emerald-600 text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300'}`}
+                                >
+                                    Airport Transfer Rates
+                                </button>
+                                <button
+                                    onClick={() => setPricingCategoryFilter('ride-now')}
+                                    className={`px-4 py-2 font-bold text-sm rounded ${pricingCategoryFilter === 'ride-now' ? 'bg-emerald-600 text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300'}`}
+                                >
+                                    Ride Now Rates
+                                </button>
+                            </div>
 
                             {isLoading ? <p>Loading...</p> : (
                                 <div className="grid gap-6">
-                                    {vehiclePricing.map((v) => (
+                                    {vehiclePricing.filter(v => (v.category || 'legacy') === pricingCategoryFilter).map((v) => (
                                         <div key={v._id} className="border dark:border-white/5 p-4 rounded-none hover:border-emerald-600 transition-colors">
                                             <div className="flex justify-between items-start mb-4">
                                                 <div className="flex items-center gap-4">

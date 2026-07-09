@@ -13,6 +13,7 @@ import { loadGoogleMapsScript } from '@/lib/google-maps';
 import TripMap from './TripMap';
 import { useSession } from 'next-auth/react';
 import { useCurrency } from '@/context/CurrencyContext';
+import { getGlobalVehiclePriority } from './BookingWidget';
 
 const getVehicleTransform = (imagePath, isSelected, isHovered = false, h_target = 0.58, b_target = 0.12) => {
     const baseFilename = (imagePath || '').split('/').pop().split('?')[0].toLowerCase().replace(/\.(png|jpg|webp)$/, '');
@@ -116,7 +117,7 @@ const CustomTourBooking = () => {
          return pax <= vPax && lug <= vLug;
       });
       if (suitable.length > 0) {
-        suitable.sort((a,b) => (a.baseRate || a.totalPrice) - (b.baseRate || b.totalPrice));
+        suitable.sort((a,b) => getGlobalVehiclePriority(a.vehicleType || a.id) - getGlobalVehiclePriority(b.vehicleType || b.id));
         if (suitable[0].id !== selectedVehicle.id) {
           setSelectedVehicle(suitable[0]);
         }
@@ -150,8 +151,9 @@ const CustomTourBooking = () => {
               suitcases: v.luggage || 4
             };
           });
+          mapped.sort((a,b) => getGlobalVehiclePriority(a.vehicleType || a.id) - getGlobalVehiclePriority(b.vehicleType || b.id));
           setVehicles(mapped);
-          setSelectedVehicle(mapped[0]);
+          if (mapped.length > 0) setSelectedVehicle(mapped[0]);
         } else {
           const defaults = [
             { id: 'mini-car', name: 'MINI CAR', baseRate: 3500, perKm: 100, image: '/vehicles/minicar.png', capacity: 2, suitcases: 4 },

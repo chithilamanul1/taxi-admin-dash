@@ -1269,7 +1269,6 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                         <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
                                             <div>
                                                 <h4 className="text-3xl font-black text-black dark:text-white uppercase tracking-tighter mb-1">{displayVehicleName(selectedVehicle?.name)}</h4>
-                                                <p className="text-[9px] font-black text-slate-400 uppercase tracking-[0.4em]">Premium Elite Tier</p>
                                             </div>
                                             <div className="text-right">
                                                 <div className="flex items-baseline justify-end gap-1.5">
