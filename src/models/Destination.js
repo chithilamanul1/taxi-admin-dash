@@ -21,12 +21,7 @@ const destinationSchema = new mongoose.Schema({
     // Map of vehicleType -> Array of tiers
     vehicleTiers: {
         type: Map,
-        of: [{
-            minKm: { type: Number },
-            maxKm: { type: Number },
-            type: { type: String, enum: ['flat', 'per-km'], default: 'per-km' },
-            value: { type: Number }
-        }]
+        of: mongoose.Schema.Types.Mixed
     },
     roundTripPackages: [{
         id: String,
@@ -37,6 +32,7 @@ const destinationSchema = new mongoose.Schema({
             price: Number
         }]
     }],
+    applicableRideType: { type: String, enum: ['all', 'airport-only', 'non-airport-only'], default: 'all' },
     isActive: { type: Boolean, default: true },
     sortOrder: { type: Number, default: 99 }
 }, {
