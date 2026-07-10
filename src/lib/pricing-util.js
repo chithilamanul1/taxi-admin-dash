@@ -332,26 +332,7 @@ export const calculateBasePrice = (distanceKm, vehicleData, tripType = 'one-way'
             }
         }
 
-        // 1. Check for Legacy Fixed Pricing (Precedence)
-        if (!overrideApplied) {
-            let vPricing = {};
-            if (matchedOverride.pricing) {
-                if (typeof matchedOverride.pricing.get === 'function') {
-                    vPricing = Object.fromEntries(matchedOverride.pricing);
-                } else {
-                    vPricing = matchedOverride.pricing;
-                }
-            }
-
-            const fixedPrice = vPricing[vehicleSlug] || vPricing[vehicleType] || 0;
-            if (fixedPrice > 0) {
-                distancePrice = Number(fixedPrice);
-                overrideApplied = true;
-                console.log(`[Pricing] Applied Fixed Price: LKR ${distancePrice}`);
-            }
-        }
-
-        // 2. Check for Tiered Rates
+        // 1. Check for Tiered Rates (Takes precedence over legacy fixed pricing)
         if (!overrideApplied) {
             let vTiersMap = {};
             if (matchedOverride.vehicleTiers) {
@@ -384,6 +365,25 @@ export const calculateBasePrice = (distanceKm, vehicleData, tripType = 'one-way'
                     overrideApplied = true;
                 }
             }
+
+        // 2. Check for Legacy Fixed Pricing (Fallback)
+        if (!overrideApplied) {
+            let vPricing = {};
+            if (matchedOverride.pricing) {
+                if (typeof matchedOverride.pricing.get === 'function') {
+                    vPricing = Object.fromEntries(matchedOverride.pricing);
+                } else {
+                    vPricing = matchedOverride.pricing;
+                }
+            }
+
+            const fixedPrice = vPricing[vehicleSlug] || vPricing[vehicleType] || 0;
+            if (fixedPrice > 0) {
+                distancePrice = Number(fixedPrice);
+                overrideApplied = true;
+                console.log(`[Pricing] Applied Fixed Price: LKR ${distancePrice}`);
+            }
+        }
 
             // 3. Fallback to Per-KM Overrides
             if (!overrideApplied) {
