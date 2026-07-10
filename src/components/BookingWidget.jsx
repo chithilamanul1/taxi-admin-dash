@@ -24,11 +24,11 @@ import { calculateBasePrice, calculateSurcharges, calculateTrafficSurge, ROUND_T
 import { detectLocalTimezone } from '@/lib/timezone-util';
 
 // (Helper to calculate price)
-const calculatePrice = (distance, vehicleId, tripType, pricingMap, waitingHours, hasNameBoard, nameBoardPrice = 2000, waitingHourRate = 1000, pickupName = '', dropoffName = '', destinations = [], scheduledTime = null, scheduledDate = null, surgeRules = [], roundTripPackageId = null, roundTripPackages = [], airportRoundTripPackages = [], destinationRoundTripPackages = []) => {
+const calculatePrice = (distance, vehicleId, tripType, pricingMap, waitingHours, hasNameBoard, nameBoardPrice = 2000, waitingHourRate = 1000, pickupObj = {}, dropoffObj = {}, destinations = [], scheduledTime = null, scheduledDate = null, surgeRules = [], roundTripPackageId = null, roundTripPackages = [], airportRoundTripPackages = [], destinationRoundTripPackages = []) => {
     if (!pricingMap[vehicleId]) return { total: 0, surgeAmount: 0 };
     const vehicleData = pricingMap[vehicleId];
 
-    const basePrice = calculateBasePrice(distance, vehicleData, tripType, pickupName, dropoffName, destinations, { 
+    const basePrice = calculateBasePrice(distance, vehicleData, tripType, pickupObj, dropoffObj, destinations, { 
         roundTripPackageId, 
         roundTripPackages,
         airportRoundTripPackages,
@@ -844,8 +844,8 @@ const BookingWidgetContent = ({ defaultTab = 'pickup', onTabChange }) => {
         false, // hasNameBoard removed from landing page
         nameBoardPrice,
         pricingSettings.waitingHourRate || 1000,
-        pickup?.name || pickupSearch,
-        dropoff?.name || dropoffSearch,
+        pickup || {name: pickupSearch},
+        dropoff || {name: dropoffSearch},
         destinations,
         scheduledTime || currentTime,
         scheduledDate || currentDate,
@@ -1736,8 +1736,8 @@ const BookingWidgetContent = ({ defaultTab = 'pickup', onTabChange }) => {
                         false, // hasNameBoard removed from landing page
                         nameBoardPrice,
                         pricingSettings.waitingHourRate || 1000,
-                        pickup.name,
-                        dropoff.name,
+                        pickup || {name: pickupSearch},
+                        dropoff || {name: dropoffSearch},
                         destinations,
                         scheduledTime || currentTime,
                         scheduledDate || currentDate,

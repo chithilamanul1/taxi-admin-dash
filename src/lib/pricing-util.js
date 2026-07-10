@@ -77,7 +77,23 @@ export const findMatchingDestination = (address, destinationsList) => {
     })[0];
 };
 
-export const calculateBasePrice = (distanceKm, vehicleData, tripType = 'one-way', pickup = '', dropoff = '', dynamicDestinations = [], options = {}) => {
+// Haversine distance in KM
+export const calculateDistance = (lat1, lon1, lat2, lon2) => {
+    if (!lat1 || !lon1 || !lat2 || !lon2) return null;
+    const R = 6371; // km
+    const dLat = (lat2 - lat1) * Math.PI / 180;
+    const dLon = (lon2 - lon1) * Math.PI / 180;
+    const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+              Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+              Math.sin(dLon/2) * Math.sin(dLon/2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+    return R * c;
+};
+
+export const calculateBasePrice = (distanceKm, vehicleData, tripType = 'one-way', pickupObj = {}, dropoffObj = {}, dynamicDestinations = [], options = {}) => {
+    const pickup = pickupObj?.name || '';
+    const dropoff = dropoffObj?.name || '';
+
     const distKm = Math.ceil(Number(distanceKm) || 0);
     const { roundTripPackageId, roundTripPackages: normalPackages, airportRoundTripPackages, destinationRoundTripPackages } = options;
     const activeNormalPackages = normalPackages || ROUND_TRIP_PACKAGES;
@@ -226,11 +242,40 @@ export const calculateBasePrice = (distanceKm, vehicleData, tripType = 'one-way'
         console.log(`[Pricing Override] Wagon R route to/from Sigiriya/Ella: LKR ${distancePrice} (Rs. 200/km)`);
     }
 
-    // 1. Try to find an EXACT point-to-point match
+    // 1. Try to find an EXACT point-to-point match using Coordinate Routing Engine or fallback string matching
     let matchedOverride = null;
     let exactMatchFound = false;
 
-    if (pickupNorm && dropoffNorm) {
+    // A. V2 Coordinate Matching (Radius: 5 KM)
+    if (pickupObj?.lat && pickupObj?.lng && dropoffObj?.lat && dropoffObj?.lng) {
+        const exactCoordMatch = dynamicDestinations.find(d => {
+            if (!d.pickup_location?.latitude || !d.destination_location?.latitude) return false;
+            
+            // Check direct route
+            const distPickup = calculateDistance(pickupObj.lat, pickupObj.lng, d.pickup_location.latitude, d.pickup_location.longitude);
+            const distDropoff = calculateDistance(dropoffObj.lat, dropoffObj.lng, d.destination_location.latitude, d.destination_location.longitude);
+            
+            // Check reverse route
+            const distReversePickup = calculateDistance(pickupObj.lat, pickupObj.lng, d.destination_location.latitude, d.destination_location.longitude);
+            const distReverseDropoff = calculateDistance(dropoffObj.lat, dropoffObj.lng, d.pickup_location.latitude, d.pickup_location.longitude);
+            
+            const RADIUS_KM = 5;
+            
+            const isDirectMatch = (distPickup !== null && distPickup <= RADIUS_KM) && (distDropoff !== null && distDropoff <= RADIUS_KM);
+            const isReverseMatch = (distReversePickup !== null && distReversePickup <= RADIUS_KM) && (distReverseDropoff !== null && distReverseDropoff <= RADIUS_KM);
+            
+            return isDirectMatch || isReverseMatch;
+        });
+
+        if (exactCoordMatch) {
+            matchedOverride = exactCoordMatch;
+            exactMatchFound = true;
+            console.log(`[Pricing] Found V2 Coordinate Match: ${exactCoordMatch.name || exactCoordMatch.title}`);
+        }
+    }
+
+    // B. Legacy String Matching fallback
+    if (!exactMatchFound && pickupNorm && dropoffNorm) {
         const exactMatch = dynamicDestinations.find(d => {
             if (!d.pickupLocation) return false;
             const dPick = normalizeName(d.pickupLocation);
@@ -253,9 +298,16 @@ export const calculateBasePrice = (distanceKm, vehicleData, tripType = 'one-way'
         const dropoffOverride = findMatchingDestination(dropoff, genericDestinations);
         const genericMatch = hasPricingData(dropoffOverride) ? dropoffOverride : (hasPricingData(pickupOverride) ? pickupOverride : null);
         
-        // PREVENT LEAKAGE: Only apply generic single-location overrides to Airport Transfers
-        if (genericMatch && isAirportTransfer) {
-            matchedOverride = genericMatch;
+        if (genericMatch) {
+            const rideType = genericMatch.applicableRideType || 'all';
+            
+            if (rideType === 'all') {
+                matchedOverride = genericMatch;
+            } else if (rideType === 'airport-only' && isAirportTransfer) {
+                matchedOverride = genericMatch;
+            } else if (rideType === 'non-airport-only' && !isAirportTransfer) {
+                matchedOverride = genericMatch;
+            }
         }
     }
 
@@ -265,21 +317,38 @@ export const calculateBasePrice = (distanceKm, vehicleData, tripType = 'one-way'
     if (matchedOverride) {
         console.log(`[Pricing] Found Override for: ${matchedOverride.name || matchedOverride.title}`);
 
-        // 1. Check for Fixed Pricing (Precedence)
-        let vPricing = {};
-        if (matchedOverride.pricing) {
-            if (typeof matchedOverride.pricing.get === 'function') {
-                vPricing = Object.fromEntries(matchedOverride.pricing);
-            } else {
-                vPricing = matchedOverride.pricing;
+        // 0. Check for V2 Base Prices explicitly
+        if (matchedOverride.base_prices_per_vehicle && Array.isArray(matchedOverride.base_prices_per_vehicle)) {
+            const v2PriceData = matchedOverride.base_prices_per_vehicle.find(bp => bp.vehicle_category === vehicleSlug || bp.vehicle_category === vehicleType);
+            if (v2PriceData && v2PriceData.base_fare_flat > 0) {
+                let fare = Number(v2PriceData.base_fare_flat);
+                const extraKm = Math.max(0, distKm - Number(v2PriceData.included_km || 0));
+                if (extraKm > 0 && Number(v2PriceData.per_extra_km || 0) > 0) {
+                    fare += (extraKm * Number(v2PriceData.per_extra_km));
+                }
+                distancePrice = fare;
+                overrideApplied = true;
+                console.log(`[Pricing] Applied V2 Coordinate Base Rate: LKR ${distancePrice}`);
             }
         }
 
-        const fixedPrice = vPricing[vehicleSlug] || vPricing[vehicleType] || 0;
-        if (fixedPrice > 0) {
-            distancePrice = Number(fixedPrice);
-            overrideApplied = true;
-            console.log(`[Pricing] Applied Fixed Price: LKR ${distancePrice}`);
+        // 1. Check for Legacy Fixed Pricing (Precedence)
+        if (!overrideApplied) {
+            let vPricing = {};
+            if (matchedOverride.pricing) {
+                if (typeof matchedOverride.pricing.get === 'function') {
+                    vPricing = Object.fromEntries(matchedOverride.pricing);
+                } else {
+                    vPricing = matchedOverride.pricing;
+                }
+            }
+
+            const fixedPrice = vPricing[vehicleSlug] || vPricing[vehicleType] || 0;
+            if (fixedPrice > 0) {
+                distancePrice = Number(fixedPrice);
+                overrideApplied = true;
+                console.log(`[Pricing] Applied Fixed Price: LKR ${distancePrice}`);
+            }
         }
 
         // 2. Check for Tiered Rates

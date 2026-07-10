@@ -50,6 +50,13 @@ export async function POST(req) {
         if (safeBody.name) {
             safeBody.slug = slugify(safeBody.name);
         }
+        
+        // Auto-generate route_id if missing for coordinate-based routing
+        if (!safeBody.route_id) {
+            const prefix = safeBody.pickup_location?.name ? slugify(safeBody.pickup_location.name).substring(0, 10) : 'global';
+            const suffix = safeBody.destination_location?.name ? slugify(safeBody.destination_location.name).substring(0, 10) : 'dest';
+            safeBody.route_id = `route_${prefix}_${suffix}_${Date.now().toString().slice(-6)}`;
+        }
 
         const dest = await Destination.create(safeBody);
         return NextResponse.json({ success: true, data: dest });
@@ -73,6 +80,13 @@ export async function PUT(req) {
         // Manual slug update if name changed
         if (updateData.name) {
             updateData.slug = slugify(updateData.name);
+        }
+
+        // Auto-generate route_id if missing for coordinate-based routing
+        if (!updateData.route_id) {
+            const prefix = updateData.pickup_location?.name ? slugify(updateData.pickup_location.name).substring(0, 10) : 'global';
+            const suffix = updateData.destination_location?.name ? slugify(updateData.destination_location.name).substring(0, 10) : 'dest';
+            updateData.route_id = `route_${prefix}_${suffix}_${Date.now().toString().slice(-6)}`;
         }
 
         const dest = await Destination.findByIdAndUpdate(_id, updateData, { new: true });

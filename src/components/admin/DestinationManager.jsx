@@ -273,8 +273,13 @@ export default function DestinationManager() {
                                                     placeholder="Leave blank for Global..."
                                                     value={form.pickupLocation || ''}
                                                     onChange={(val) => setForm({ ...form, pickupLocation: val, title: (val && form.name) ? `${val} to ${form.name}` : (form.name ? `Airport to ${form.name}` : '') })}
-                                                    onSelect={({ address }) => {
-                                                        setForm({ ...form, pickupLocation: address, title: (address && form.name) ? `${address} to ${form.name}` : (form.name ? `Airport to ${form.name}` : '') });
+                                                    onSelect={({ address, lat, lng }) => {
+                                                        setForm({ 
+                                                            ...form, 
+                                                            pickupLocation: address, 
+                                                            title: (address && form.name) ? `${address} to ${form.name}` : (form.name ? `Airport to ${form.name}` : ''),
+                                                            pickup_location: { name: address, latitude: lat, longitude: lng }
+                                                        });
                                                     }}
                                                 />
                                             </div>
@@ -284,8 +289,13 @@ export default function DestinationManager() {
                                                     placeholder="Search for a city or place..."
                                                     value={form.name}
                                                     onChange={(val) => setForm({ ...form, name: val, title: (val && form.pickupLocation) ? `${form.pickupLocation} to ${val}` : (val ? `Airport to ${val}` : '') })}
-                                                    onSelect={({ address }) => {
-                                                        setForm({ ...form, name: address, title: (address && form.pickupLocation) ? `${form.pickupLocation} to ${address}` : (address ? `Airport to ${address}` : '') });
+                                                    onSelect={({ address, lat, lng }) => {
+                                                        setForm({ 
+                                                            ...form, 
+                                                            name: address, 
+                                                            title: (address && form.pickupLocation) ? `${form.pickupLocation} to ${address}` : (address ? `Airport to ${address}` : ''),
+                                                            destination_location: { name: address, latitude: lat, longitude: lng }
+                                                        });
                                                     }}
                                                 />
                                             </div>
@@ -312,37 +322,65 @@ export default function DestinationManager() {
 
                                     {activeModalTab === 'transfers' && (
                                         <>
-                                            {/* ── NORMAL DESTINATION RATES (per-vehicle fixed price) ── */}
+                                            {/* ── BASE PRICES (V2 Coordinate-based Routing Engine) ── */}
                                             <div className="md:col-span-2 p-6 bg-blue-50 dark:bg-blue-900/10 rounded-[2.5rem] border border-blue-200 dark:border-blue-800/30 space-y-4">
                                                 <div>
                                                     <h4 className="text-sm font-black text-blue-900 dark:text-blue-300 uppercase tracking-wider flex items-center gap-2">
-                                                        <DollarSign size={18} className="text-blue-500" /> Normal Destination Rates (Fixed Price per Vehicle)
+                                                        <DollarSign size={18} className="text-blue-500" /> Base Prices (Coordinate Routing)
                                                     </h4>
-                                                    <p className="text-[10px] text-slate-500 font-medium mt-0.5">One-way fixed fare (Rs.) for Airport to this destination. Overrides auto km-based pricing.</p>
+                                                    <p className="text-[10px] text-slate-500 font-medium mt-0.5">Defines structured point-to-point pricing for exact coordinate matching.</p>
                                                 </div>
-                                                <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
+                                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                                     {VEHICLE_TYPES.map(vt => {
                                                         const VIcon = VEHICLE_ICONS[vt.slug]?.icon || Car;
                                                         const vColor = VEHICLE_ICONS[vt.slug]?.color || 'text-slate-500';
                                                         const vBg = VEHICLE_ICONS[vt.slug]?.bg || 'bg-slate-500/10';
+                                                        
+                                                        const currentBasePrices = form.base_prices_per_vehicle || [];
+                                                        const vehicleBaseData = currentBasePrices.find(bp => bp.vehicle_category === vt.slug) || {
+                                                            vehicle_category: vt.slug,
+                                                            base_fare_flat: (form.pricing || {})[vt.slug] || 0,
+                                                            included_km: 0,
+                                                            per_extra_km: 0
+                                                        };
+
+                                                        const updateBaseData = (field, value) => {
+                                                            const newBasePrices = [...currentBasePrices];
+                                                            const existingIndex = newBasePrices.findIndex(bp => bp.vehicle_category === vt.slug);
+                                                            if (existingIndex >= 0) {
+                                                                newBasePrices[existingIndex] = { ...newBasePrices[existingIndex], [field]: Number(value) };
+                                                            } else {
+                                                                newBasePrices.push({ ...vehicleBaseData, [field]: Number(value) });
+                                                            }
+                                                            
+                                                            // Keep legacy pricing in sync for backward compatibility
+                                                            const newPricing = { ...(form.pricing || {}) };
+                                                            if (field === 'base_fare_flat') newPricing[vt.slug] = Number(value);
+                                                            
+                                                            setForm({ ...form, base_prices_per_vehicle: newBasePrices, pricing: newPricing });
+                                                        };
+
                                                         return (
-                                                            <div key={vt.slug} className="bg-white dark:bg-white/5 border border-slate-200 dark:border-slate-700 rounded-2xl p-3 space-y-2">
-                                                                <div className="flex items-center gap-2">
-                                                                    <div className={`w-7 h-7 ${vBg} rounded-lg flex items-center justify-center`}>
-                                                                        <VIcon size={14} className={vColor} />
+                                                            <div key={vt.slug} className="bg-white dark:bg-white/5 border border-slate-200 dark:border-slate-700 rounded-2xl p-4 space-y-3">
+                                                                <div className="flex items-center gap-2 mb-2">
+                                                                    <div className={`w-8 h-8 ${vBg} rounded-lg flex items-center justify-center`}>
+                                                                        <VIcon size={16} className={vColor} />
                                                                     </div>
-                                                                    <span className="text-[10px] font-black text-slate-700 dark:text-slate-200 uppercase tracking-tight">{vt.label}</span>
+                                                                    <span className="text-xs font-black text-slate-700 dark:text-slate-200 uppercase tracking-tight">{vt.label}</span>
                                                                 </div>
-                                                                <div className="flex items-center gap-1">
-                                                                    <span className="text-[9px] font-bold text-emerald-600">Rs.</span>
-                                                                    <input
-                                                                        type="number"
-                                                                        min="0"
-                                                                        placeholder="0"
-                                                                        value={(form.pricing || {})[vt.slug] || ''}
-                                                                        onChange={e => updatePricing(vt.slug, e.target.value)}
-                                                                        className="flex-1 bg-slate-50 dark:bg-zinc-800 border border-slate-200 dark:border-slate-600 rounded-lg px-2 py-1.5 text-sm font-bold text-emerald-700 dark:text-emerald-400 outline-none focus:ring-2 focus:ring-blue-500/20 w-full"
-                                                                    />
+                                                                <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
+                                                                    <div className="space-y-1">
+                                                                        <label className="text-[9px] font-bold text-slate-400 uppercase">Flat Fare</label>
+                                                                        <input type="number" min="0" placeholder="0" value={vehicleBaseData.base_fare_flat || ''} onChange={e => updateBaseData('base_fare_flat', e.target.value)} className="w-full bg-slate-50 dark:bg-zinc-800 border border-slate-200 dark:border-slate-600 rounded-lg px-2 py-1.5 text-xs font-bold text-emerald-700 dark:text-emerald-400 outline-none" />
+                                                                    </div>
+                                                                    <div className="space-y-1">
+                                                                        <label className="text-[9px] font-bold text-slate-400 uppercase">Inc. KM</label>
+                                                                        <input type="number" min="0" placeholder="0" value={vehicleBaseData.included_km || ''} onChange={e => updateBaseData('included_km', e.target.value)} className="w-full bg-slate-50 dark:bg-zinc-800 border border-slate-200 dark:border-slate-600 rounded-lg px-2 py-1.5 text-xs font-bold text-slate-700 dark:text-slate-300 outline-none" />
+                                                                    </div>
+                                                                    <div className="space-y-1">
+                                                                        <label className="text-[9px] font-bold text-slate-400 uppercase">Per Ex. KM</label>
+                                                                        <input type="number" min="0" placeholder="0" value={vehicleBaseData.per_extra_km || ''} onChange={e => updateBaseData('per_extra_km', e.target.value)} className="w-full bg-slate-50 dark:bg-zinc-800 border border-slate-200 dark:border-slate-600 rounded-lg px-2 py-1.5 text-xs font-bold text-slate-700 dark:text-slate-300 outline-none" />
+                                                                    </div>
                                                                 </div>
                                                             </div>
                                                         );

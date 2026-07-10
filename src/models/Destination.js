@@ -34,7 +34,26 @@ const destinationSchema = new mongoose.Schema({
     }],
     applicableRideType: { type: String, enum: ['all', 'airport-only', 'non-airport-only'], default: 'all' },
     isActive: { type: Boolean, default: true },
-    sortOrder: { type: Number, default: 99 }
+    sortOrder: { type: Number, default: 99 },
+    
+    // --- V2 Routing & Coordinate-based Pricing Engine ---
+    route_id: { type: String, sparse: true, unique: true },
+    pickup_location: {
+        name: String,
+        latitude: Number,
+        longitude: Number
+    },
+    destination_location: {
+        name: String,
+        latitude: Number,
+        longitude: Number
+    },
+    base_prices_per_vehicle: [{
+        vehicle_category: String,
+        base_fare_flat: Number,
+        included_km: Number,
+        per_extra_km: Number
+    }]
 }, {
     timestamps: true
 });
