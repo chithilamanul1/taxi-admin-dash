@@ -326,9 +326,9 @@ export default function DestinationManager() {
                                             <div className="md:col-span-2 p-6 bg-blue-50 dark:bg-blue-900/10 rounded-[2.5rem] border border-blue-200 dark:border-blue-800/30 space-y-4">
                                                 <div>
                                                     <h4 className="text-sm font-black text-blue-900 dark:text-blue-300 uppercase tracking-wider flex items-center gap-2">
-                                                        <DollarSign size={18} className="text-blue-500" /> Base Prices (Coordinate Routing)
+                                                        <DollarSign size={18} className="text-blue-500" /> Fixed Route Prices (Exact Locations)
                                                     </h4>
-                                                    <p className="text-[10px] text-slate-500 font-medium mt-0.5">Defines structured point-to-point pricing for exact coordinate matching.</p>
+                                                    <p className="text-[10px] text-slate-500 font-medium mt-0.5">Set standard flat rates when the customer picks up and drops off exactly at this route.</p>
                                                 </div>
                                                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                                     {VEHICLE_TYPES.map(vt => {
@@ -392,9 +392,9 @@ export default function DestinationManager() {
                                             <div className="md:col-span-2 p-6 bg-purple-50 dark:bg-purple-900/10 rounded-[2.5rem] border border-purple-200 dark:border-purple-800/30 space-y-6">
                                                 <div>
                                                     <h4 className="text-sm font-black text-purple-900 dark:text-purple-300 uppercase tracking-wider flex items-center gap-2">
-                                                        <Mountain size={18} className="text-purple-500" /> Range-Based Pricing Tiers
+                                                        <Mountain size={18} className="text-purple-500" /> Distance Pricing Rules (KM Ranges)
                                                     </h4>
-                                                    <p className="text-[10px] text-slate-500 font-medium mt-0.5">Configure distance-based tiered pricing for each vehicle. (e.g. 0-20km Flat, 20-50km Per-KM)</p>
+                                                    <p className="text-[10px] text-slate-500 font-medium mt-0.5">Configure distance-based pricing rules. Useful for regions (e.g. 0-20km = Rs. 7000, 20-40km = Rs. 9000).</p>
                                                 </div>
                                                 
                                                 <div className="space-y-4">
