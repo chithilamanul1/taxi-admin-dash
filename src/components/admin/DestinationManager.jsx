@@ -369,7 +369,7 @@ export default function DestinationManager() {
                                                                     <button 
                                                                         type="button" 
                                                                         onClick={() => {
-                                                                            const newTiers = [...tiers, { minKm: 0, maxKm: 0, type: 'per-km', value: 0 }];
+                                                                            const newTiers = [...tiers, { minKm: 0, maxKm: 0, type: 'flat', value: 0 }];
                                                                             setForm({ ...form, vehicleTiers: { ...(form.vehicleTiers || {}), [vt.slug]: newTiers } });
                                                                         }}
                                                                         className="text-[10px] px-2 py-1 bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300 rounded font-bold hover:bg-purple-200 dark:hover:bg-purple-900/50 transition-colors"
