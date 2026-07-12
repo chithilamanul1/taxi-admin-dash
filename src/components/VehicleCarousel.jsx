@@ -283,13 +283,12 @@ const VehicleCarousel = ({ vehicles, selectedId, onSelect, passengerCount, picku
                                         </div>
                                           
                                         {/* Multi-currency sub-display */}
-                                        <div className="flex flex-wrap gap-2 justify-center mt-2">
+                                        <div className="flex flex-wrap gap-3 justify-center mt-0.5">
                                             {convertToAllCurrencies(Number(vehicle.calculatedTotal) || 0)
-                                                .filter(c => ['USD', 'EUR', 'GBP'].includes(c.code) && c.code !== (convertPrice(Number(vehicle.calculatedTotal)).code || 'LKR'))
-                                                .slice(0, 2)
+                                                .filter(c => ['USD', 'EUR', 'GBP', 'LKR'].includes(c.code) && c.code !== (convertPrice(Number(vehicle.calculatedTotal)).code || 'LKR'))
                                                 .map(c => (
-                                                    <span key={c.code} className="text-[9px] font-bold text-slate-500 dark:text-slate-400 bg-slate-100 dark:bg-white/5 px-2 py-0.5 rounded-md border border-slate-200 dark:border-white/5">
-                                                        {c.symbol}{c.value.toLocaleString()}
+                                                    <span key={c.code} className="text-[10px] font-bold text-slate-500 dark:text-slate-400">
+                                                        {c.symbol} {c.value.toLocaleString()}
                                                     </span>
                                             ))}
                                         </div>
