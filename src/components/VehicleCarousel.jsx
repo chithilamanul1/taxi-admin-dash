@@ -67,7 +67,19 @@ const VehicleCarousel = ({ vehicles, selectedId, onSelect, passengerCount, picku
     const [dismissedWarnings, setDismissedWarnings] = useState([]);
     const [hoveredId, setHoveredId] = useState(null);
     const [condensedHovered, setCondensedHovered] = useState(false);
-    const { convertPrice, rates, currency } = useCurrency();
+    const { convertPrice, rates, currency, SUPPORTED_CURRENCIES } = useCurrency();
+
+    const convertToAllCurrencies = (amountLKR) => {
+        return SUPPORTED_CURRENCIES.map(c => {
+            if (c.code === 'LKR') return { ...c, value: Math.round(amountLKR) };
+            let rate = rates?.[c.code];
+            if (!rate) {
+                const staticRates = { 'USD': 0.0032, 'EUR': 0.003, 'GBP': 0.0026, 'INR': 0.27 };
+                rate = staticRates[c.code] || 1;
+            }
+            return { ...c, value: Number((amountLKR * rate).toFixed(2)) };
+        });
+    };
 
     useEffect(() => {
         if (selectedId && cardRefs.current[selectedId]) {
@@ -268,6 +280,18 @@ const VehicleCarousel = ({ vehicles, selectedId, onSelect, passengerCount, picku
                                             <span className="text-4xl sm:text-5xl font-black text-black dark:text-white tracking-tighter leading-none">
                                                 {(Number(convertPrice(Number(vehicle.calculatedTotal) || 0).value) || 0).toLocaleString()}
                                             </span>
+                                        </div>
+                                          
+                                        {/* Multi-currency sub-display */}
+                                        <div className="flex flex-wrap gap-2 justify-center mt-2">
+                                            {convertToAllCurrencies(Number(vehicle.calculatedTotal) || 0)
+                                                .filter(c => ['USD', 'EUR', 'GBP'].includes(c.code) && c.code !== (convertPrice(Number(vehicle.calculatedTotal)).code || 'LKR'))
+                                                .slice(0, 2)
+                                                .map(c => (
+                                                    <span key={c.code} className="text-[9px] font-bold text-slate-500 dark:text-slate-400 bg-slate-100 dark:bg-white/5 px-2 py-0.5 rounded-md border border-slate-200 dark:border-white/5">
+                                                        {c.symbol}{c.value.toLocaleString()}
+                                                    </span>
+                                            ))}
                                         </div>
                                     </div>
                                 )}

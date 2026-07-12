@@ -89,7 +89,29 @@ export async function PUT(req) {
             updateData.route_id = `route_${prefix}_${suffix}_${Date.now().toString().slice(-6)}`;
         }
 
-        const dest = await Destination.findByIdAndUpdate(_id, updateData, { new: true });
+        // Construct a deep merge $set to prevent nested Maps from being wiped out
+        const $set = { ...updateData };
+        delete $set.pricing;
+        delete $set.vehicleRateOverrides;
+        delete $set.vehicleTiers;
+
+        if (updateData.pricing && typeof updateData.pricing === 'object') {
+            for (const [key, val] of Object.entries(updateData.pricing)) {
+                $set[`pricing.${key}`] = val;
+            }
+        }
+        if (updateData.vehicleRateOverrides && typeof updateData.vehicleRateOverrides === 'object') {
+            for (const [key, val] of Object.entries(updateData.vehicleRateOverrides)) {
+                $set[`vehicleRateOverrides.${key}`] = val;
+            }
+        }
+        if (updateData.vehicleTiers && typeof updateData.vehicleTiers === 'object') {
+            for (const [key, val] of Object.entries(updateData.vehicleTiers)) {
+                $set[`vehicleTiers.${key}`] = val;
+            }
+        }
+
+        const dest = await Destination.findByIdAndUpdate(_id, { $set }, { new: true });
         return NextResponse.json({ success: true, data: dest });
     } catch (error) {
         console.error('[API/Destinations] PUT Error:', error);

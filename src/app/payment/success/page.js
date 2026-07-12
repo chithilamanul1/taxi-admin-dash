@@ -83,7 +83,7 @@ function PaymentSuccessContent() {
                             </div>
                             <div>
                                 <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Total Fare</p>
-                                <p className="text-sm font-semibold text-emerald-600">{booking.currency || 'Rs'} {booking.totalPrice?.toLocaleString() || booking.displayBalanceAmount?.toLocaleString() || '--'}</p>
+                                <p className="text-sm font-semibold text-emerald-600">{booking.currency || 'Rs'} {booking.displayPrice?.toLocaleString() || booking.totalPrice?.toLocaleString() || '--'}</p>
                             </div>
                         </div>
                     </div>
@@ -127,7 +127,7 @@ function PaymentSuccessContent() {
                                 {booking.currency === 'GBP' ? '£' :
                                     booking.currency === 'USD' ? '$' :
                                         booking.currency === 'EUR' ? '€' :
-                                            booking.currency === 'INR' ? '₹' : 'Rs'} {booking.displayBalanceAmount.toLocaleString()}
+                                        booking.currency === 'INR' ? '₹' : 'Rs'} {(booking.displayBalanceAmount ?? booking.balanceAmount ?? 0).toLocaleString()}
                             </p>
                         </div>
                     </div>

@@ -102,12 +102,14 @@ export default function DestinationManager() {
         setForm({ ...dest, pricing: pricingMap, vehicleRateOverrides: vehicleRatesMap, vehicleTiers: vehicleTiersMap, roundTripPackages: packagesList });
     };
 
+    const parseNum = (val) => val === '' ? '' : Number(String(val).replace(/,/g, ''));
+
     const updatePricing = (vehicle, value) => {
         setForm({
             ...form,
             pricing: {
                 ...(form.pricing || {}),
-                [vehicle]: Number(value)
+                [vehicle]: parseNum(value)
             }
         });
     };
@@ -347,15 +349,16 @@ export default function DestinationManager() {
                                                         const updateBaseData = (field, value) => {
                                                             const newBasePrices = [...currentBasePrices];
                                                             const existingIndex = newBasePrices.findIndex(bp => bp.vehicle_category === vt.slug);
+                                                            const newPricing = { ...(form.pricing || {}) };
+                                                            const parsedValue = parseNum(value);
+                                                            
                                                             if (existingIndex >= 0) {
-                                                                newBasePrices[existingIndex] = { ...newBasePrices[existingIndex], [field]: Number(value) };
+                                                                newBasePrices[existingIndex] = { ...newBasePrices[existingIndex], [field]: parsedValue };
                                                             } else {
-                                                                newBasePrices.push({ ...vehicleBaseData, [field]: Number(value) });
+                                                                newBasePrices.push({ ...vehicleBaseData, [field]: parsedValue });
                                                             }
                                                             
-                                                            // Keep legacy pricing in sync for backward compatibility
-                                                            const newPricing = { ...(form.pricing || {}) };
-                                                            if (field === 'base_fare_flat') newPricing[vt.slug] = Number(value);
+                                                            if (field === 'base_fare_flat') newPricing[vt.slug] = parsedValue;
                                                             
                                                             setForm({ ...form, base_prices_per_vehicle: newBasePrices, pricing: newPricing });
                                                         };
@@ -438,7 +441,7 @@ export default function DestinationManager() {
                                                                             </select>
                                                                             
                                                                             <input type="number" placeholder="Value (Rs.)" className="w-24 px-2 py-1.5 text-xs rounded-lg border border-emerald-200 dark:border-emerald-800/30 bg-emerald-50/50 dark:bg-emerald-900/10 font-bold text-emerald-700 dark:text-emerald-400 outline-none" value={tier.value} onChange={e => {
-                                                                                const t = [...tiers]; t[idx].value = Number(e.target.value);
+                                                                                const t = [...tiers]; t[idx].value = parseNum(e.target.value);
                                                                                 setForm({ ...form, vehicleTiers: { ...(form.vehicleTiers || {}), [vt.slug]: t } });
                                                                             }} />
                                                                             
@@ -622,7 +625,7 @@ export default function DestinationManager() {
                                                                                                     const updated = (form.roundTripPackages || []).map(p => {
                                                                                                         if (p.id === pkg.id) {
                                                                                                             const tiers = [...p.tiers];
-                                                                                                            tiers[tIdx] = { ...tiers[tIdx], price: val === '' ? '' : Number(val) };
+                                                                                                            tiers[tIdx] = { ...tiers[tIdx], price: parseNum(val) };
                                                                                                             return { ...p, tiers };
                                                                                                         }
                                                                                                         return p;
