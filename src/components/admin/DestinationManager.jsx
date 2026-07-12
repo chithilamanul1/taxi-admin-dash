@@ -27,6 +27,7 @@ export default function DestinationManager() {
     const [selectedVehicle, setSelectedVehicle] = useState(VEHICLE_TYPES[0].slug);
     const [saving, setSaving] = useState(false);
     const [activeModalTab, setActiveModalTab] = useState('transfers');
+    const [globalPricing, setGlobalPricing] = useState([]);
 
     const VEHICLE_ICONS = {
         "mini-car": { icon: Zap, color: "text-emerald-500", bg: "bg-emerald-500/10" },
@@ -51,6 +52,10 @@ export default function DestinationManager() {
             const res = await fetch('/api/admin/destinations');
             const data = await res.json();
             if (data.success) setDestinations(data.data);
+
+            const pricingRes = await fetch('/api/pricing?category=airport-transfer');
+            const pricingData = await pricingRes.json();
+            if (pricingData.success) setGlobalPricing(pricingData.data);
         } catch (err) {
             console.error(err);
         } finally {
@@ -347,21 +352,51 @@ export default function DestinationManager() {
                                                         };
 
                                                         const updateBaseData = (field, value) => {
-                                                            const newBasePrices = [...currentBasePrices];
-                                                            const existingIndex = newBasePrices.findIndex(bp => bp.vehicle_category === vt.slug);
-                                                            const newPricing = { ...(form.pricing || {}) };
-                                                            const parsedValue = parseNum(value);
-                                                            
-                                                            if (existingIndex >= 0) {
-                                                                newBasePrices[existingIndex] = { ...newBasePrices[existingIndex], [field]: parsedValue };
-                                                            } else {
-                                                                newBasePrices.push({ ...vehicleBaseData, [field]: parsedValue });
-                                                            }
-                                                            
-                                                            if (field === 'base_fare_flat') newPricing[vt.slug] = parsedValue;
-                                                            
-                                                            setForm({ ...form, base_prices_per_vehicle: newBasePrices, pricing: newPricing });
-                                                        };
+                                                             const newBasePrices = [...currentBasePrices];
+                                                             const existingIndex = newBasePrices.findIndex(bp => bp.vehicle_category === vt.slug);
+                                                             const newPricing = { ...(form.pricing || {}) };
+                                                             const parsedValue = parseNum(value);
+                                                             
+                                                             // Retrieve standard defaults from global pricing database or fallback constants
+                                                             const globalVehicle = globalPricing?.find(gp => gp.vehicleType === vt.slug) || {};
+                                                             const VEHICLE_DEFAULTS = {
+                                                                 "mini-car": { included_km: 20, per_extra_km: 100 },
+                                                                 "sedan": { included_km: 20, per_extra_km: 130 },
+                                                                 "vezel": { included_km: 20, per_extra_km: 130 },
+                                                                 "suv": { included_km: 20, per_extra_km: 160 },
+                                                                 "mini-van-every": { included_km: 20, per_extra_km: 150 },
+                                                                 "mini-van-05": { included_km: 20, per_extra_km: 200 },
+                                                                 "normal-kdh": { included_km: 40, per_extra_km: 175 },
+                                                                 "kdh-van": { included_km: 40, per_extra_km: 180 },
+                                                                 "mini-bus": { included_km: 40, per_extra_km: 250 },
+                                                                 "coach-bus": { included_km: 40, per_extra_km: 300 }
+                                                             };
+                                                             const defaultInc = globalVehicle.baseKm !== undefined ? globalVehicle.baseKm : (VEHICLE_DEFAULTS[vt.slug]?.included_km || 20);
+                                                             const defaultPerKm = globalVehicle.perKmRate !== undefined ? globalVehicle.perKmRate : (VEHICLE_DEFAULTS[vt.slug]?.per_extra_km || 150);
+
+                                                             if (existingIndex >= 0) {
+                                                                 const currentItem = newBasePrices[existingIndex];
+                                                                 const updatedItem = { ...currentItem, [field]: parsedValue };
+                                                                 
+                                                                 // Auto-populate Inc. KM and Per Ex. KM when Flat Fare is entered and they are currently empty/0
+                                                                 if (field === 'base_fare_flat' && parsedValue > 0) {
+                                                                     if (!currentItem.included_km) updatedItem.included_km = defaultInc;
+                                                                     if (!currentItem.per_extra_km) updatedItem.per_extra_km = defaultPerKm;
+                                                                 }
+                                                                 newBasePrices[existingIndex] = updatedItem;
+                                                             } else {
+                                                                 const newItem = { ...vehicleBaseData, [field]: parsedValue };
+                                                                 if (field === 'base_fare_flat' && parsedValue > 0) {
+                                                                     if (!newItem.included_km) newItem.included_km = defaultInc;
+                                                                     if (!newItem.per_extra_km) newItem.per_extra_km = defaultPerKm;
+                                                                 }
+                                                                 newBasePrices.push(newItem);
+                                                             }
+                                                             
+                                                             if (field === 'base_fare_flat') newPricing[vt.slug] = parsedValue;
+                                                             
+                                                             setForm({ ...form, base_prices_per_vehicle: newBasePrices, pricing: newPricing });
+                                                         };
 
                                                         return (
                                                             <div key={vt.slug} className="bg-white dark:bg-white/5 border border-slate-200 dark:border-slate-700 rounded-2xl p-4 space-y-3">
