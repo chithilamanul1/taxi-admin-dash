@@ -1,17 +1,63 @@
 import nodemailer from 'nodemailer';
 
 const getTransporter = () => {
-    if (!process.env.GMAIL_USER || !process.env.GMAIL_APP_PASSWORD) {
-        console.warn('[Email] GMAIL_USER or GMAIL_APP_PASSWORD is missing');
-        return null;
-    }
-    return nodemailer.createTransport({
-        service: 'gmail',
-        auth: {
-            user: process.env.GMAIL_USER,
-            pass: process.env.GMAIL_APP_PASSWORD
+    return {
+        sendMail: async (mailOptions) => {
+            let error = null;
+
+            // 1. Try Resend if configured
+            if (process.env.RESEND_API_KEY) {
+                try {
+                    const { sendEmail: sendResendEmail } = await import('./email');
+                    console.log('[Email] Attempting to send via Resend to:', mailOptions.to);
+                    // Standardize from address for Resend to use verified domain
+                    const fromEmail = process.env.FROM_EMAIL || 'Airport Taxis <info@srilankantaxi.lk>';
+                    const res = await sendResendEmail({
+                        from: fromEmail,
+                        to: mailOptions.to,
+                        subject: mailOptions.subject,
+                        html: mailOptions.html,
+                        text: mailOptions.text || ''
+                    });
+                    if (res.success) {
+                        console.log('[Email] Sent successfully via Resend');
+                        return res.data;
+                    }
+                    throw new Error(res.error || 'Resend response unsuccessful');
+                } catch (resendError) {
+                    console.error('[Email] Resend failed, trying fallback:', resendError);
+                    error = resendError;
+                }
+            }
+
+            // 2. Fallback to Gmail SMTP if configured
+            if (process.env.GMAIL_USER && process.env.GMAIL_APP_PASSWORD) {
+                try {
+                    console.log('[Email] Attempting to send via Gmail SMTP to:', mailOptions.to);
+                    const transporter = nodemailer.createTransport({
+                        service: 'gmail',
+                        auth: {
+                            user: process.env.GMAIL_USER,
+                            pass: process.env.GMAIL_APP_PASSWORD
+                        }
+                    });
+                    const info = await transporter.sendMail(mailOptions);
+                    console.log('[Email] Sent successfully via Gmail SMTP');
+                    return info;
+                } catch (gmailError) {
+                    console.error('[Email] Gmail SMTP failed:', gmailError);
+                    error = gmailError;
+                }
+            }
+
+            // If both failed or neither is configured
+            if (error) {
+                throw error;
+            } else {
+                throw new Error('No email service credentials (Resend or Gmail) are configured.');
+            }
         }
-    });
+    };
 };
 
 const OWNER_EMAIL = process.env.OWNER_EMAIL || 'laxmangunasekara05@gmail.com';

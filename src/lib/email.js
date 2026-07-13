@@ -2,7 +2,7 @@ import { Resend } from 'resend';
 
 const FROM_EMAIL = process.env.FROM_EMAIL || 'Airport Taxis <info@srilankantaxi.lk>';
 
-export const sendEmail = async ({ to, subject, html, text }) => {
+export const sendEmail = async ({ from, to, subject, html, text }) => {
     try {
         const { Resend } = await import('resend');
         if (!process.env.RESEND_API_KEY) {
@@ -12,7 +12,7 @@ export const sendEmail = async ({ to, subject, html, text }) => {
         const resend = new Resend(process.env.RESEND_API_KEY);
 
         const data = await resend.emails.send({
-            from: FROM_EMAIL,
+            from: from || FROM_EMAIL,
             to: to,
             subject: subject,
             html: html,
