@@ -22,7 +22,7 @@ export default function BookingActions({ booking }) {
             const res = await fetch(`/api/bookings/${booking._id}/email`, { method: 'POST' });
             const data = await res.json();
             if (res.ok) {
-                alert('Receipt sent successfully!');
+                alert('Invoice sent successfully!');
             } else {
                 alert('Failed: ' + data.error);
             }
@@ -81,7 +81,7 @@ export default function BookingActions({ booking }) {
                     className="flex items-center justify-center gap-2 px-8 py-4 bg-white hover:bg-slate-50 text-slate-700 rounded-2xl border border-slate-200 text-[11px] font-black uppercase tracking-widest transition-all active:scale-95 disabled:opacity-50 shadow-sm"
                 >
                     {emailLoading ? <Loader2 size={16} className="animate-spin" /> : <Mail size={16} strokeWidth={2.5} className="text-slate-400" />}
-                    Email Receipt
+                    Email Invoice
                 </button>
                 <button
                     onClick={() => setTicketOpen(true)}

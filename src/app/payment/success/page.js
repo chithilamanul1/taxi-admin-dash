@@ -161,7 +161,7 @@ function PaymentSuccessContent() {
                             className="flex items-center justify-center gap-2 w-full bg-emerald-600 hover:bg-emerald-700 text-white py-4 rounded-2xl font-bold transition-all shadow-xl shadow-emerald-600/10"
                         >
                             <FileText size={18} />
-                            Download PDF Receipt
+                            Download PDF Invoice
                         </button>
                     )}
 

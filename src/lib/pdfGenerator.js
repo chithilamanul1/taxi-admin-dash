@@ -30,7 +30,7 @@ export const generateBookingPDF = (booking) => {
     doc.setFontSize(24);
     doc.setTextColor(...COLORS.black);
     doc.setFont(undefined, 'bold');
-    doc.text(isCash ? "CASH RECEIPT" : "INVOICE", 195, 20, { align: "right" });
+    doc.text("INVOICE", 195, 20, { align: "right" });
 
     doc.setFontSize(10);
     doc.setTextColor(...COLORS.slate);
@@ -214,7 +214,7 @@ export const generateBookingPDF = (booking) => {
     doc.setFont(undefined, 'normal');
     doc.setFontSize(8);
     const terms = [
-        "1. This is a legally valid computer-generated " + (isCash ? "receipt" : "invoice") + ".",
+        "1. This is a legally valid computer-generated invoice.",
         "2. Highway ticket is not included. It must be paid at the counter.",
         "3. Rates are inclusive of fuel and driver fees unless stated otherwise.",
         "4. Waiting charges: Rs. 500 per hour (First 30 minutes free for Airport pickups).",
@@ -238,6 +238,6 @@ export const generateBookingPDF = (booking) => {
     doc.text("customer@airporttaxis.lk", 105, 296, { align: 'center' });
 
     // Save
-    const fileName = `${isCash ? 'Receipt' : 'Invoice'}_${booking._id.slice(-8).toUpperCase()}.pdf`;
+    const fileName = `Invoice_${booking._id.slice(-8).toUpperCase()}.pdf`;
     doc.save(fileName);
 };
