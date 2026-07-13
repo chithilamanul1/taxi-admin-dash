@@ -5,7 +5,27 @@ const getTransporter = () => {
         sendMail: async (mailOptions) => {
             let error = null;
 
-            // 1. Try Resend if configured
+            // 1. Try Gmail SMTP if configured (Default)
+            if (process.env.GMAIL_USER && process.env.GMAIL_APP_PASSWORD) {
+                try {
+                    console.log('[Email] Attempting to send via Gmail SMTP to:', mailOptions.to);
+                    const transporter = nodemailer.createTransport({
+                        service: 'gmail',
+                        auth: {
+                            user: process.env.GMAIL_USER,
+                            pass: process.env.GMAIL_APP_PASSWORD
+                        }
+                    });
+                    const info = await transporter.sendMail(mailOptions);
+                    console.log('[Email] Sent successfully via Gmail SMTP');
+                    return info;
+                } catch (gmailError) {
+                    console.error('[Email] Gmail SMTP failed, trying Resend fallback:', gmailError);
+                    error = gmailError;
+                }
+            }
+
+            // 2. Fallback to Resend if configured
             if (process.env.RESEND_API_KEY) {
                 try {
                     const { sendEmail: sendResendEmail } = await import('./email');
@@ -25,28 +45,8 @@ const getTransporter = () => {
                     }
                     throw new Error(res.error || 'Resend response unsuccessful');
                 } catch (resendError) {
-                    console.error('[Email] Resend failed, trying fallback:', resendError);
+                    console.error('[Email] Resend failed:', resendError);
                     error = resendError;
-                }
-            }
-
-            // 2. Fallback to Gmail SMTP if configured
-            if (process.env.GMAIL_USER && process.env.GMAIL_APP_PASSWORD) {
-                try {
-                    console.log('[Email] Attempting to send via Gmail SMTP to:', mailOptions.to);
-                    const transporter = nodemailer.createTransport({
-                        service: 'gmail',
-                        auth: {
-                            user: process.env.GMAIL_USER,
-                            pass: process.env.GMAIL_APP_PASSWORD
-                        }
-                    });
-                    const info = await transporter.sendMail(mailOptions);
-                    console.log('[Email] Sent successfully via Gmail SMTP');
-                    return info;
-                } catch (gmailError) {
-                    console.error('[Email] Gmail SMTP failed:', gmailError);
-                    error = gmailError;
                 }
             }
 
