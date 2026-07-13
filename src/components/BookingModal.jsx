@@ -115,7 +115,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
         waitingHours: initialData.waitingHours || 0,
         notes: initialData.notes || '',
         duration: initialData.duration || '',
-        paymentMethod: 'cash',
+        paymentMethod: 'card',
         paymentType: 'full',
         billingName: '',
         billingAddress: '',
