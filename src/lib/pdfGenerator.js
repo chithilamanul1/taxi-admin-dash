@@ -30,7 +30,7 @@ export const generateBookingPDF = (booking) => {
     doc.setFontSize(24);
     doc.setTextColor(...COLORS.black);
     doc.setFont(undefined, 'bold');
-    doc.text(isCash ? "CASH RECEIPT" : "TAX INVOICE", 195, 20, { align: "right" });
+    doc.text(isCash ? "CASH RECEIPT" : "INVOICE", 195, 20, { align: "right" });
 
     doc.setFontSize(10);
     doc.setTextColor(...COLORS.slate);
