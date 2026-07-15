@@ -392,7 +392,20 @@ export const calculateBasePrice = (distanceKm, vehicleData, tripType = 'one-way'
                 }
             }
 
-            const vTiers = vTiersMap[vehicleSlug] || vTiersMap[vehicleType];
+            let vTiers = vTiersMap[vehicleSlug] || vTiersMap[vehicleType];
+
+            if (!vTiers && vTiersMap) {
+                const keys = Object.keys(vTiersMap);
+                const matchKey = keys.find(k => {
+                    const nk = k.toLowerCase().replace(/[-_]/g, '');
+                    const nSlug = vehicleSlug.toLowerCase().replace(/[-_]/g, '');
+                    const nType = vehicleType.toLowerCase().replace(/[-_]/g, '');
+                    return nk === nSlug || nk === nType;
+                });
+                if (matchKey) {
+                    vTiers = vTiersMap[matchKey];
+                }
+            }
 
             if (Array.isArray(vTiers) && vTiers.length > 0) {
                 // Find matching tier or use the last one if distance exceeds max
