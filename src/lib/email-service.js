@@ -5,15 +5,35 @@ const getTransporter = () => {
         sendMail: async (mailOptions) => {
             let error = null;
 
+            let gmailUser = process.env.GMAIL_USER;
+            let gmailPass = process.env.GMAIL_APP_PASSWORD;
+
+            if (!gmailUser || !gmailPass) {
+                try {
+                    const { default: dbConnect } = await import('./db.js');
+                    await dbConnect();
+                    const { default: Settings } = await import('../models/Settings.js');
+                    const userSetting = await Settings.findOne({ key: 'GMAIL_USER' });
+                    const passSetting = await Settings.findOne({ key: 'GMAIL_APP_PASSWORD' });
+                    if (userSetting && passSetting) {
+                        gmailUser = userSetting.value;
+                        gmailPass = passSetting.value;
+                        console.log('[Email] Loaded Gmail SMTP credentials from Database');
+                    }
+                } catch (dbError) {
+                    console.error('[Email] Failed to fetch email credentials from DB:', dbError);
+                }
+            }
+
             // 1. Try Gmail SMTP if configured (Default)
-            if (process.env.GMAIL_USER && process.env.GMAIL_APP_PASSWORD) {
+            if (gmailUser && gmailPass) {
                 try {
                     console.log('[Email] Attempting to send via Gmail SMTP to:', mailOptions.to);
                     const transporter = nodemailer.createTransport({
                         service: 'gmail',
                         auth: {
-                            user: process.env.GMAIL_USER,
-                            pass: process.env.GMAIL_APP_PASSWORD
+                            user: gmailUser,
+                            pass: gmailPass
                         }
                     });
                     const info = await transporter.sendMail(mailOptions);
@@ -28,7 +48,7 @@ const getTransporter = () => {
             // 2. Fallback to Resend if configured
             if (process.env.RESEND_API_KEY) {
                 try {
-                    const { sendEmail: sendResendEmail } = await import('./email');
+                    const { sendEmail: sendResendEmail } = await import('./email.js');
                     console.log('[Email] Attempting to send via Resend to:', mailOptions.to);
                     // Standardize from address for Resend to use verified domain
                     const fromEmail = process.env.FROM_EMAIL || 'Airport Taxis <info@srilankantaxi.lk>';

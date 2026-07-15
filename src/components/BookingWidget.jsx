@@ -28,8 +28,8 @@ const calculatePrice = (distance, vehicleId, tripType, pricingMap, waitingHours,
     if (!pricingMap[vehicleId]) return { total: 0, surgeAmount: 0 };
     const vehicleData = pricingMap[vehicleId];
 
-    const basePrice = calculateBasePrice(distance, vehicleData, tripType, pickupObj, dropoffObj, destinations, { 
-        roundTripPackageId, 
+    const basePrice = calculateBasePrice(distance, vehicleData, tripType, pickupObj, dropoffObj, destinations, {
+        roundTripPackageId,
         roundTripPackages,
         airportRoundTripPackages,
         destinationRoundTripPackages
@@ -141,7 +141,7 @@ const BookingWidgetContent = ({ defaultTab = 'pickup', onTabChange }) => {
             isFirstRender.current = false;
             return;
         }
-        
+
         const timer = setTimeout(() => {
             const element = document.getElementById('booking');
             if (element) {
@@ -249,7 +249,7 @@ const BookingWidgetContent = ({ defaultTab = 'pickup', onTabChange }) => {
                 setIsLoadingPricing(true);
                 const controller = new AbortController();
                 const timeoutId = setTimeout(() => controller.abort(), 4000); // 4s timeout fallback
-                
+
                 let res;
                 try {
                     res = await fetch(`/api/pricing?category=${category}`, { signal: controller.signal });
@@ -273,14 +273,14 @@ const BookingWidgetContent = ({ defaultTab = 'pickup', onTabChange }) => {
                 if (!Array.isArray(vehicles)) return;
 
                 const pricingMap = {};
-                vehicles.forEach(v => { 
+                vehicles.forEach(v => {
                     if (v.vehicleType?.toLowerCase() === 'sedan' || v.name?.toLowerCase().includes('sedan')) {
                         v.image = '/vehicles/sedancar.png';
                     }
                     if (v.vehicleType?.toLowerCase() === 'suv' || v.name?.toLowerCase().includes('suv')) {
                         v.image = '/vehicles/suv.png';
                     }
-                    pricingMap[v.vehicleType] = v; 
+                    pricingMap[v.vehicleType] = v;
                 });
                 setVehiclePricing(pricingMap);
 
@@ -331,7 +331,7 @@ const BookingWidgetContent = ({ defaultTab = 'pickup', onTabChange }) => {
                 name: destParam
             });
             setDropoffSearch(destParam);
-            
+
             if (tabParam === 'ride') {
                 setPickup({ name: '', lat: null, lng: null });
                 setPickupSearch('');
@@ -352,13 +352,13 @@ const BookingWidgetContent = ({ defaultTab = 'pickup', onTabChange }) => {
     // Auto-swap vehicle if capacity exceeded
     useEffect(() => {
         if (!activePricing || Object.keys(activePricing).length === 0) return;
-        
+
         const pax = passengerCount || { adults: 1, children: 0, luggage: 0, handLuggage: 0 };
         const totalPax = (pax.adults || 0) + (pax.children || 0);
         const totalBags = (pax.luggage || 0);
 
         const currentVehicle = activePricing[vehicle];
-        
+
         const checkSuitability = (v) => {
             if (!v) return false;
             const vehiclePax = v.capacity || 4;
@@ -374,7 +374,7 @@ const BookingWidgetContent = ({ defaultTab = 'pickup', onTabChange }) => {
 
         if (!checkSuitability(currentVehicle)) {
             const sorted = Object.values(activePricing).sort((a, b) => getGlobalVehiclePriority(a.vehicleType) - getGlobalVehiclePriority(b.vehicleType));
-            
+
             const suitable = sorted.find(checkSuitability);
             if (suitable && suitable.vehicleType !== vehicle) {
                 setVehicle(suitable.vehicleType);
@@ -548,7 +548,7 @@ const BookingWidgetContent = ({ defaultTab = 'pickup', onTabChange }) => {
                 if (!address || !keyword) return false;
                 const addr = address.toLowerCase().trim();
                 const kw = keyword.toLowerCase().trim();
-                
+
                 const streetPattern1 = kw + ' road';
                 const streetPattern2 = kw + ' face';
                 const streetPattern3 = kw + ' street';
@@ -562,11 +562,11 @@ const BookingWidgetContent = ({ defaultTab = 'pickup', onTabChange }) => {
                         .split(streetPattern3).join('')
                         .split(streetPattern4).join('')
                         .split(streetPattern5).join('');
-                        
+
                     const regex = new RegExp(`\\b${kw}\\b`, 'i');
                     return regex.test(cleanedAddr);
                 }
-                
+
                 const regex = new RegExp(`\\b${kw}\\b`, 'i');
                 return regex.test(addr);
             };
@@ -646,7 +646,7 @@ const BookingWidgetContent = ({ defaultTab = 'pickup', onTabChange }) => {
                                 if (!address || !keyword) return false;
                                 const addr = address.toLowerCase().trim();
                                 const kw = keyword.toLowerCase().trim();
-                                
+
                                 const streetPattern1 = kw + ' road';
                                 const streetPattern2 = kw + ' face';
                                 const streetPattern3 = kw + ' street';
@@ -660,11 +660,11 @@ const BookingWidgetContent = ({ defaultTab = 'pickup', onTabChange }) => {
                                         .split(streetPattern3).join('')
                                         .split(streetPattern4).join('')
                                         .split(streetPattern5).join('');
-                                        
+
                                     const regex = new RegExp(`\\b${kw}\\b`, 'i');
                                     return regex.test(cleanedAddr);
                                 }
-                                
+
                                 const regex = new RegExp(`\\b${kw}\\b`, 'i');
                                 return regex.test(addr);
                             };
@@ -786,7 +786,7 @@ const BookingWidgetContent = ({ defaultTab = 'pickup', onTabChange }) => {
                         if (!address || !keyword) return false;
                         const addr = address.toLowerCase().trim();
                         const kw = keyword.toLowerCase().trim();
-                        
+
                         const streetPattern1 = kw + ' road';
                         const streetPattern2 = kw + ' face';
                         const streetPattern3 = kw + ' street';
@@ -800,11 +800,11 @@ const BookingWidgetContent = ({ defaultTab = 'pickup', onTabChange }) => {
                                 .split(streetPattern3).join('')
                                 .split(streetPattern4).join('')
                                 .split(streetPattern5).join('');
-                                
+
                             const regex = new RegExp(`\\b${kw}\\b`, 'i');
                             return regex.test(cleanedAddr);
                         }
-                        
+
                         const regex = new RegExp(`\\b${kw}\\b`, 'i');
                         return regex.test(addr);
                     };
@@ -844,15 +844,15 @@ const BookingWidgetContent = ({ defaultTab = 'pickup', onTabChange }) => {
         false, // hasNameBoard removed from landing page
         nameBoardPrice,
         pricingSettings.waitingHourRate || 1000,
-        pickup || {name: pickupSearch},
-        dropoff || {name: dropoffSearch},
+        pickup || { name: pickupSearch },
+        dropoff || { name: dropoffSearch },
         destinations,
         scheduledTime || currentTime,
         scheduledDate || currentDate,
         surgeRules,
         roundTripPackageId,
         normalTours,
-                                                                    airportTours,
+        airportTours,
         pricingSettings.destinationRoundTripPackages
     );
 
@@ -984,21 +984,20 @@ const BookingWidgetContent = ({ defaultTab = 'pickup', onTabChange }) => {
 
             {/* Widget Main Content - Modern Flat Luxury Style */}
             <div
-            id={`panel-${activeTab}`}
-            role="tabpanel"
-            aria-labelledby={`tab-${activeTab}`}
-            className={`animate-slide-up relative z-10 w-full box-border ${
-                activeTab === 'tours' 
-                ? '' 
-                : 'bg-white dark:bg-zinc-900 rounded-[2rem] border border-slate-400 dark:border-white/10 p-4 sm:p-6 md:p-8 shadow-xl shadow-slate-200/50 dark:shadow-none'
-            }`}>
+                id={`panel-${activeTab}`}
+                role="tabpanel"
+                aria-labelledby={`tab-${activeTab}`}
+                className={`animate-slide-up relative z-10 w-full box-border ${activeTab === 'tours'
+                    ? ''
+                    : 'bg-white dark:bg-zinc-900 rounded-[2rem] border border-slate-400 dark:border-white/10 p-4 sm:p-6 md:p-8 shadow-xl shadow-slate-200/50 dark:shadow-none'
+                    }`}>
 
                 {activeTab === 'tours' ? <CustomTourBooking /> : (
                     <div className="grid lg:grid-cols-[1.5fr,380px] xl:grid-cols-[1fr,380px] gap-8 lg:gap-10 min-w-0">
                         <div className="flex-1 text-center lg:text-left min-w-0">
                             {/* Step indicator + currency row */}
                             <div className="flex items-center gap-2 mb-6">
-                                {[{n:1,label:'Route'},{n:2,label:'Details'},{n:3,label:'Review',mobileOnly:true}].map((s, i, arr) => (
+                                {[{ n: 1, label: 'Route' }, { n: 2, label: 'Details' }, { n: 3, label: 'Review', mobileOnly: true }].map((s, i, arr) => (
                                     <React.Fragment key={s.n}>
                                         <button
                                             onClick={() => s.n < step && setStep(s.n)}
@@ -1022,13 +1021,12 @@ const BookingWidgetContent = ({ defaultTab = 'pickup', onTabChange }) => {
                                                     </div>
                                                 )}
                                             </div>
-                                            <span className={`text-[10px] font-black uppercase tracking-widest transition-colors ${
-                                                step === s.n ? 'text-slate-900 dark:text-white' :
+                                            <span className={`text-[10px] font-black uppercase tracking-widest transition-colors ${step === s.n ? 'text-slate-900 dark:text-white' :
                                                 step > s.n ? 'text-slate-500' : 'text-slate-500 dark:text-slate-600'
-                                            } ${s.mobileOnly ? 'hidden sm:block lg:hidden' : 'hidden sm:block'}`}>{s.label}</span>
+                                                } ${s.mobileOnly ? 'hidden sm:block lg:hidden' : 'hidden sm:block'}`}>{s.label}</span>
                                         </button>
                                         {i < arr.length - 1 && (
-                                            <div className={`flex-1 h-px transition-all duration-500 ${step > s.n ? 'bg-black' : 'bg-slate-300 dark:bg-zinc-700'} ${arr[i+1].mobileOnly ? 'flex lg:hidden' : ''}`} />
+                                            <div className={`flex-1 h-px transition-all duration-500 ${step > s.n ? 'bg-black' : 'bg-slate-300 dark:bg-zinc-700'} ${arr[i + 1].mobileOnly ? 'flex lg:hidden' : ''}`} />
                                         )}
                                     </React.Fragment>
                                 ))}
@@ -1057,7 +1055,7 @@ const BookingWidgetContent = ({ defaultTab = 'pickup', onTabChange }) => {
                                                     <button
                                                         key={c.code}
                                                         onClick={() => { changeCurrency(c.code); setIsCurrencyOpen(false); }}
-                                                         className={`w-full text-left px-4 py-2.5 text-[10px] font-black flex items-center gap-3 hover:bg-amber-50 dark:hover:bg-amber-500/10 hover:text-[#FACC15] transition-colors ${currency === c.code ? 'text-black bg-[#FACC15] border-l-4 border-amber-600' : 'text-slate-700 dark:text-white border-b border-slate-100 last:border-0'}`}
+                                                        className={`w-full text-left px-4 py-2.5 text-[10px] font-black flex items-center gap-3 hover:bg-amber-50 dark:hover:bg-amber-500/10 hover:text-[#FACC15] transition-colors ${currency === c.code ? 'text-black bg-[#FACC15] border-l-4 border-amber-600' : 'text-slate-700 dark:text-white border-b border-slate-100 last:border-0'}`}
                                                     >
                                                         <div className="w-4 h-4 rounded-full overflow-hidden border border-slate-200"><img src={c.flag} alt={c.code} className="w-full h-full object-cover scale-150" /></div>
                                                         <span>{c.code}</span>
@@ -1073,7 +1071,7 @@ const BookingWidgetContent = ({ defaultTab = 'pickup', onTabChange }) => {
                             <AnimatePresence>
 
                                 {step === 1 && (
-                                    <motion.div key="step1" initial={{opacity:0,x:-16}} animate={{opacity:1,x:0}} exit={{opacity:0,x:-16}} transition={{duration:0.2}}>
+                                    <motion.div key="step1" initial={{ opacity: 0, x: -16 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -16 }} transition={{ duration: 0.2 }}>
                                         <div className="relative">
                                             <div className="absolute left-[16px] top-10 bottom-10 w-5 z-0 pointer-events-none overflow-visible">
                                                 <svg className="w-full h-full" viewBox="0 0 20 100" preserveAspectRatio="none">
@@ -1135,9 +1133,9 @@ const BookingWidgetContent = ({ defaultTab = 'pickup', onTabChange }) => {
                                                     )}
                                                 </div>
                                                 <div ref={dateTimeRef} className="relative mt-2">
-                                                    <CustomDateTimePicker 
-                                                        date={scheduledDate} 
-                                                        time={scheduledTime} 
+                                                    <CustomDateTimePicker
+                                                        date={scheduledDate}
+                                                        time={scheduledTime}
                                                         onChange={(d, t) => { setScheduledDate(d); setScheduledTime(t); setStep1Errors(prev => ({ ...prev, dateTime: false })); }}
                                                         className={`w-full h-14 bg-white dark:bg-zinc-800 border rounded-2xl px-6 text-sm font-bold text-slate-700 dark:text-white shadow-sm hover:shadow-md transition-all outline-none focus:ring-2 focus:ring-[#FACC15] ${step1Errors.dateTime ? 'border-red-500 ring-2 ring-red-500/20' : 'border-slate-400 dark:border-white/10'}`}
                                                     />
@@ -1175,8 +1173,8 @@ const BookingWidgetContent = ({ defaultTab = 'pickup', onTabChange }) => {
                                                                         false, // hasNameBoard removed from landing page
                                                                         nameBoardPrice,
                                                                         pricingSettings.waitingHourRate || 1000,
-                                                                        pickup?.name || pickupSearch,
-                                                                        dropoff?.name || dropoffSearch,
+                                                                        pickup || { name: pickupSearch },
+                                                                        dropoff || { name: dropoffSearch },
                                                                         destinations,
                                                                         scheduledTime || currentTime,
                                                                         scheduledDate || currentDate,
@@ -1238,17 +1236,17 @@ const BookingWidgetContent = ({ defaultTab = 'pickup', onTabChange }) => {
                                                 className="flex-1 flex items-center justify-center gap-3 font-black text-xs uppercase tracking-widest py-4 rounded-2xl transition-all active:scale-[0.98] bg-[#FACC15] hover:bg-yellow-500 text-black hover:-translate-y-0.5"
                                                 aria-label="Continue to Booking"
                                             >
-                                                Continue to Booking <ArrowRight size={16} strokeWidth={3}/>
+                                                Continue to Booking <ArrowRight size={16} strokeWidth={3} />
                                             </button>
                                             <button type="button" onClick={handleGetCurrentLocation} aria-label="Auto Detect My Location" className="shrink-0 w-12 h-12 flex items-center justify-center rounded-2xl bg-white dark:bg-zinc-800 border border-slate-200 dark:border-white/10 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all">
-                                                {isLocating ? <Loader2 size={16} className="animate-spin text-emerald-500"/> : <Zap size={16} className="text-emerald-500"/>}
+                                                {isLocating ? <Loader2 size={16} className="animate-spin text-emerald-500" /> : <Zap size={16} className="text-emerald-500" />}
                                             </button>
                                         </div>
                                     </motion.div>
                                 )}
 
                                 {step === 2 && (
-                                    <motion.div key="step2" initial={{opacity:0,x:16}} animate={{opacity:1,x:0}} exit={{opacity:0,x:16}} transition={{duration:0.2}}>
+                                    <motion.div key="step2" initial={{ opacity: 0, x: 16 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: 16 }} transition={{ duration: 0.2 }}>
                                         <div className="space-y-4 mb-6" id="booking-widget-passengers">
                                             <label className="text-xs font-black text-slate-900 dark:text-white uppercase tracking-widest pl-1 leading-none block mb-4 flex items-center gap-2">
                                                 Passenger and Luggage
@@ -1291,15 +1289,15 @@ const BookingWidgetContent = ({ defaultTab = 'pickup', onTabChange }) => {
                                                         false, // hasNameBoard removed from landing page
                                                         nameBoardPrice,
                                                         pricingSettings.waitingHourRate || 1000,
-                                                        pickup?.name || pickupSearch,
-                                                        dropoff?.name || dropoffSearch,
+                                                        pickup || { name: pickupSearch },
+                                                        dropoff || { name: dropoffSearch },
                                                         destinations,
                                                         scheduledTime || currentTime,
                                                         scheduledDate || currentDate,
                                                         surgeRules,
                                                         roundTripPackageId,
                                                         normalTours,
-                                                                    airportTours,
+                                                        airportTours,
                                                         pricingSettings.destinationRoundTripPackages
                                                     );
 
@@ -1342,9 +1340,9 @@ const BookingWidgetContent = ({ defaultTab = 'pickup', onTabChange }) => {
                                         </div>
                                         <div className="flex items-center gap-3">
                                             <button onClick={() => setStep(1)} className="flex items-center justify-center gap-2 bg-white dark:bg-zinc-800 border border-slate-200 dark:border-white/10 text-slate-700 dark:text-white font-black text-xs uppercase tracking-widest px-5 py-4 rounded-2xl shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all" aria-label="Back to step 1">
-                                                <ArrowRight size={14} strokeWidth={3} className="rotate-180"/> Back
+                                                <ArrowRight size={14} strokeWidth={3} className="rotate-180" /> Back
                                             </button>
-                                            <button 
+                                            <button
                                                 onClick={() => {
                                                     if (!scheduledDate || !scheduledTime) {
                                                         setStep1Errors(prev => ({ ...prev, dateTime: true }));
@@ -1361,19 +1359,19 @@ const BookingWidgetContent = ({ defaultTab = 'pickup', onTabChange }) => {
                                                     setStep(3);
                                                 }}
                                                 disabled={isStep2Disabled}
-                                                className={`flex-1 flex items-center justify-center gap-3 font-black text-xs uppercase tracking-widest py-4 rounded-2xl transition-all lg:hidden ${isStep2Disabled ? 'bg-slate-100 dark:bg-zinc-800 text-slate-400 dark:text-slate-500 cursor-not-allowed border border-slate-200 dark:border-zinc-700' : 'active:scale-[0.98] bg-[#0a0a0a] hover:bg-black text-white dark:bg-[#FACC15] dark:text-black dark:hover:bg-yellow-400 shadow-lg hover:-translate-y-0.5'}`} 
+                                                className={`flex-1 flex items-center justify-center gap-3 font-black text-xs uppercase tracking-widest py-4 rounded-2xl transition-all lg:hidden ${isStep2Disabled ? 'bg-slate-100 dark:bg-zinc-800 text-slate-400 dark:text-slate-500 cursor-not-allowed border border-slate-200 dark:border-zinc-700' : 'active:scale-[0.98] bg-[#0a0a0a] hover:bg-black text-white dark:bg-[#FACC15] dark:text-black dark:hover:bg-yellow-400 shadow-lg hover:-translate-y-0.5'}`}
                                                 aria-label="Go to booking"
                                             >
-                                                GO TO BOOKING <ArrowRight size={16} strokeWidth={3}/>
+                                                GO TO BOOKING <ArrowRight size={16} strokeWidth={3} />
                                             </button>
                                         </div>
                                     </motion.div>
                                 )}
 
                                 {step === 3 && (
-                                    <motion.div key="step3" initial={{opacity:0,x:16}} animate={{opacity:1,x:0}} exit={{opacity:0,x:16}} transition={{duration:0.2}} className="lg:hidden">
+                                    <motion.div key="step3" initial={{ opacity: 0, x: 16 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: 16 }} transition={{ duration: 0.2 }} className="lg:hidden">
                                         <button onClick={() => setStep(2)} className="mb-4 flex items-center gap-2 bg-white dark:bg-zinc-800 border border-slate-200 dark:border-white/10 text-slate-700 dark:text-white font-black text-xs uppercase tracking-widest px-5 py-3 rounded-2xl shadow-sm hover:shadow-md transition-all" aria-label="Back to step 2">
-                                            <ArrowRight size={14} strokeWidth={3} className="rotate-180"/> Back to Details
+                                            <ArrowRight size={14} strokeWidth={3} className="rotate-180" /> Back to Details
                                         </button>
                                     </motion.div>
                                 )}
@@ -1437,15 +1435,15 @@ const BookingWidgetContent = ({ defaultTab = 'pickup', onTabChange }) => {
 
                                     {/* Coupon Section inside Summary Panel */}
                                     <div className="pt-4 border-t border-slate-200 dark:border-white/10 space-y-3">
-                                        <button 
+                                        <button
                                             type="button"
-                                            onClick={() => setIsCouponOpen(!isCouponOpen)} 
+                                            onClick={() => setIsCouponOpen(!isCouponOpen)}
                                             className={`flex items-center gap-3 text-xs font-bold min-h-[3rem] transition-all px-4 py-2.5 rounded-xl w-full justify-center uppercase tracking-widest border shadow-sm hover:shadow-md ${isCouponOpen ? 'bg-amber-50 dark:bg-amber-500/20 text-amber-900 dark:text-amber-400 border-amber-200 dark:border-amber-500/30' : 'bg-white dark:bg-zinc-800 text-slate-600 dark:text-slate-300 border-slate-200 dark:border-white/10 hover:bg-slate-50'}`}
                                         >
                                             <Tag size={14} className={`${isCouponOpen ? 'text-amber-600 dark:text-amber-400' : 'text-slate-400'} shrink-0`} fill="currentColor" />
                                             {isCouponOpen ? 'Close Offers' : 'Coupon Code?'}
                                         </button>
-                                        
+
                                         {appliedOffers.length > 0 && (
                                             <div className="flex flex-wrap gap-1.5 animate-fade-in">
                                                 {appliedOffers.map((offer, i) => (
@@ -1453,9 +1451,9 @@ const BookingWidgetContent = ({ defaultTab = 'pickup', onTabChange }) => {
                                                         <Tag size={12} className="text-black/70 dark:text-yellow-500" />
                                                         <span className="text-[10px] font-black uppercase tracking-widest">{offer.name}</span>
                                                         <span className="text-[10px] font-bold opacity-80">(-{offer.discountPercentage > 0 ? `${offer.discountPercentage}%` : `Rs ${offer.discountAmount}`})</span>
-                                                        <button 
+                                                        <button
                                                             type="button"
-                                                            onClick={() => setAppliedOffers(prev => prev.filter(o => o.name !== offer.name))} 
+                                                            onClick={() => setAppliedOffers(prev => prev.filter(o => o.name !== offer.name))}
                                                             className="ml-1 p-0.5 hover:bg-black/10 dark:hover:bg-yellow-500/30 rounded transition-colors"
                                                         >
                                                             <X size={12} />
@@ -1468,15 +1466,15 @@ const BookingWidgetContent = ({ defaultTab = 'pickup', onTabChange }) => {
                                         {isCouponOpen && (
                                             <div className="relative h-11 animate-slide-up">
                                                 <Tag className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" size={14} />
-                                                <input 
-                                                    type="text" 
-                                                    placeholder="ENTER COUPON" 
-                                                    value={couponCode} 
-                                                    onChange={(e) => setCouponCode(e.target.value.toUpperCase())} 
-                                                    className="w-full h-full pl-10 pr-20 rounded-xl bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 text-xs font-bold outline-none uppercase text-emerald-950 dark:text-white placeholder:text-slate-500 tracking-widest focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 shadow-inner" 
-                                                    aria-label="Coupon code" 
+                                                <input
+                                                    type="text"
+                                                    placeholder="ENTER COUPON"
+                                                    value={couponCode}
+                                                    onChange={(e) => setCouponCode(e.target.value.toUpperCase())}
+                                                    className="w-full h-full pl-10 pr-20 rounded-xl bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 text-xs font-bold outline-none uppercase text-emerald-950 dark:text-white placeholder:text-slate-500 tracking-widest focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 shadow-inner"
+                                                    aria-label="Coupon code"
                                                 />
-                                                <button 
+                                                <button
                                                     type="button"
                                                     onClick={async () => {
                                                         if (!couponCode) return;
@@ -1509,8 +1507,8 @@ const BookingWidgetContent = ({ defaultTab = 'pickup', onTabChange }) => {
                                                         } catch (e) {
                                                             alert("Validation failed.");
                                                         }
-                                                    }} 
-                                                    aria-label="Apply Coupon" 
+                                                    }}
+                                                    aria-label="Apply Coupon"
                                                     className="absolute right-1.5 top-1.5 bottom-1.5 bg-[#FACC15] text-black px-4 rounded-lg text-[9px] font-black uppercase hover:bg-yellow-400 transition-all shadow-md shadow-yellow-500/10"
                                                 >
                                                     Apply
@@ -1526,14 +1524,14 @@ const BookingWidgetContent = ({ defaultTab = 'pickup', onTabChange }) => {
                                                 </div>
                                                 <div className="flex overflow-x-auto pb-2 gap-3 hide-scrollbar snap-x touch-pan-x">
                                                     {filteredCoupons.map((c) => (
-                                                        <button 
-                                                            key={c._id} 
+                                                        <button
+                                                            key={c._id}
                                                             type="button"
-                                                            onClick={() => { 
-                                                                const isApplied = appliedOffers.some(o => o.name === c.code); 
-                                                                if (isApplied) { 
-                                                                    setAppliedOffers(prev => prev.filter(o => o.name !== c.code)); 
-                                                                } else { 
+                                                            onClick={() => {
+                                                                const isApplied = appliedOffers.some(o => o.name === c.code);
+                                                                if (isApplied) {
+                                                                    setAppliedOffers(prev => prev.filter(o => o.name !== c.code));
+                                                                } else {
                                                                     const couponOffer = {
                                                                         _id: 'coupon-' + c.code,
                                                                         name: c.code,
@@ -1542,10 +1540,10 @@ const BookingWidgetContent = ({ defaultTab = 'pickup', onTabChange }) => {
                                                                         type: 'coupon',
                                                                         applicableFor: c.applicableFor,
                                                                         applicableLocations: c.applicableLocations
-                                                                    }; 
-                                                                    setAppliedOffers(prev => [...prev.filter(o => o.type !== 'coupon'), couponOffer]); 
-                                                                } 
-                                                            }} 
+                                                                    };
+                                                                    setAppliedOffers(prev => [...prev.filter(o => o.type !== 'coupon'), couponOffer]);
+                                                                }
+                                                            }}
                                                             className={`snap-start min-w-[220px] group relative flex items-center justify-between gap-3 p-3.5 rounded-2xl border transition-all text-left flex-shrink-0 shadow-md hover:shadow-lg ${appliedOffers.some(o => o.name === c.code) ? 'border-[#FACC15] bg-[#FACC15]/5 dark:bg-[#FACC15]/10' : 'border-slate-100 dark:border-white/5 bg-white dark:bg-zinc-800'}`}
                                                         >
                                                             <div className="flex items-center gap-3 min-w-0">
@@ -1662,7 +1660,7 @@ const BookingWidgetContent = ({ defaultTab = 'pickup', onTabChange }) => {
                                         )}
                                     </div>
                                 </div>
-                                
+
                                 <div className="mt-4 p-4 bg-amber-50 dark:bg-amber-500/10 border border-amber-200 dark:border-amber-500/20 rounded-2xl flex items-start gap-3">
                                     <div className="w-6 h-6 bg-amber-100 dark:bg-amber-500/20 rounded-full flex items-center justify-center text-amber-600 shrink-0 mt-0.5">
                                         <Info size={14} strokeWidth={2.5} />
@@ -1678,8 +1676,8 @@ const BookingWidgetContent = ({ defaultTab = 'pickup', onTabChange }) => {
                                         disabled={isCheckoutDisabled}
                                         className={`w-full min-h-16 sm:h-[72px] py-2 sm:py-0 rounded-2xl shadow-md transition-all group flex items-center justify-center border
                                         ${isCheckoutDisabled
-                                            ? 'bg-slate-100 dark:bg-zinc-800 text-slate-400 dark:text-slate-500 border-slate-200 dark:border-zinc-700 cursor-not-allowed'
-                                            : 'bg-[#FACC15] hover:bg-yellow-500 text-black active:scale-[0.98] border-yellow-500/20'}`}
+                                                ? 'bg-slate-100 dark:bg-zinc-800 text-slate-400 dark:text-slate-500 border-slate-200 dark:border-zinc-700 cursor-not-allowed'
+                                                : 'bg-[#FACC15] hover:bg-yellow-500 text-black active:scale-[0.98] border-yellow-500/20'}`}
                                     >
                                         {isLoadingPricing ? (
                                             <div className="w-8 h-8 border-4 border-white/30 border-t-white rounded-full animate-spin"></div>
@@ -1736,15 +1734,15 @@ const BookingWidgetContent = ({ defaultTab = 'pickup', onTabChange }) => {
                         false, // hasNameBoard removed from landing page
                         nameBoardPrice,
                         pricingSettings.waitingHourRate || 1000,
-                        pickup || {name: pickupSearch},
-                        dropoff || {name: dropoffSearch},
+                        pickup || { name: pickupSearch },
+                        dropoff || { name: dropoffSearch },
                         destinations,
                         scheduledTime || currentTime,
                         scheduledDate || currentDate,
                         surgeRules,
                         roundTripPackageId,
                         normalTours,
-                                                                    airportTours,
+                        airportTours,
                         pricingSettings.destinationRoundTripPackages
                     );
                     return {

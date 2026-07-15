@@ -26,6 +26,7 @@ export const hasPricingData = (d) => {
     if (d.vehicleTiers && (Object.keys(d.vehicleTiers).length > 0 || (typeof d.vehicleTiers.get === 'function' && d.vehicleTiers.size > 0))) return true;
     if (d.vehicleRateOverrides && (Object.keys(d.vehicleRateOverrides).length > 0 || (typeof d.vehicleRateOverrides.get === 'function' && d.vehicleRateOverrides.size > 0))) return true;
     if (d.perKmRateOverride > 0) return true;
+    if (d.base_prices_per_vehicle && d.base_prices_per_vehicle.length > 0) return true;
     return false;
 };
 
@@ -64,7 +65,7 @@ export const findMatchingDestination = (address, destinationsList) => {
 
         const nameRegex = name ? new RegExp(`\\b${name}\\b`, 'i') : null;
         const titleRegex = title ? new RegExp(`\\b${title}\\b`, 'i') : null;
-        
+
         return (nameRegex && nameRegex.test(addrLower)) || (titleRegex && titleRegex.test(addrLower));
     });
 
@@ -83,10 +84,10 @@ export const calculateDistance = (lat1, lon1, lat2, lon2) => {
     const R = 6371; // km
     const dLat = (lat2 - lat1) * Math.PI / 180;
     const dLon = (lon2 - lon1) * Math.PI / 180;
-    const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
-              Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
-              Math.sin(dLon/2) * Math.sin(dLon/2);
-    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+    const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+        Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+        Math.sin(dLon / 2) * Math.sin(dLon / 2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
     return R * c;
 };
 
@@ -102,8 +103,8 @@ export const calculateBasePrice = (distanceKm, vehicleData, tripType = 'one-way'
     // 1. Handle Package-based Round Trip Pricing
     if (tripType === 'airport-round-tour' && roundTripPackageId) {
         if (options.taxiTourHours) {
-            const pkg = activeAirportPackages.find(p => 
-                p.hours === Number(options.taxiTourHours) && 
+            const pkg = activeAirportPackages.find(p =>
+                p.hours === Number(options.taxiTourHours) &&
                 p.vehicleType === vehicleData.vehicleType
             );
             if (pkg) {
@@ -131,8 +132,8 @@ export const calculateBasePrice = (distanceKm, vehicleData, tripType = 'one-way'
     if (tripType === 'normal-round-tour' && roundTripPackageId) {
         if (options.taxiTourHours) {
             // Find specific matching package based on hours and km limit
-            const pkg = activeNormalPackages.find(p => 
-                p.hours === Number(options.taxiTourHours) && 
+            const pkg = activeNormalPackages.find(p =>
+                p.hours === Number(options.taxiTourHours) &&
                 p.vehicleType === vehicleData.vehicleType
             );
             if (pkg) {
@@ -154,8 +155,8 @@ export const calculateBasePrice = (distanceKm, vehicleData, tripType = 'one-way'
 
         // 1. Destination-Specific Package Tier pricing
         if (destMatch && destMatch.roundTripPackages && destMatch.roundTripPackages.length > 0 && options.taxiTourHours) {
-            const pkg = destMatch.roundTripPackages.find(p => 
-                p.hours === Number(options.taxiTourHours) && 
+            const pkg = destMatch.roundTripPackages.find(p =>
+                p.hours === Number(options.taxiTourHours) &&
                 (p.vehicleType === vehicleData.vehicleType || p.vehicleType === vehicleData.vehicleSlug)
             );
             if (pkg) {
@@ -170,8 +171,8 @@ export const calculateBasePrice = (distanceKm, vehicleData, tripType = 'one-way'
         // 2. Global Destination-Based Package Tier pricing (default fallback)
         const activeDestPackages = destinationRoundTripPackages || [];
         if (activeDestPackages.length > 0 && options.taxiTourHours) {
-            const pkg = activeDestPackages.find(p => 
-                p.hours === Number(options.taxiTourHours) && 
+            const pkg = activeDestPackages.find(p =>
+                p.hours === Number(options.taxiTourHours) &&
                 p.vehicleType === vehicleData.vehicleType
             );
             if (pkg) {
@@ -196,7 +197,7 @@ export const calculateBasePrice = (distanceKm, vehicleData, tripType = 'one-way'
                 return Number(fixedPrice);
             }
         }
-        
+
         // Strictly no dynamic per-km fallback
         return Number(vehicleData.basePrice) || 0;
     }
@@ -250,20 +251,20 @@ export const calculateBasePrice = (distanceKm, vehicleData, tripType = 'one-way'
     if (pickupObj?.lat && pickupObj?.lng && dropoffObj?.lat && dropoffObj?.lng) {
         const exactCoordMatch = dynamicDestinations.find(d => {
             if (!d.pickup_location?.latitude || !d.destination_location?.latitude) return false;
-            
+
             // Check direct route
             const distPickup = calculateDistance(pickupObj.lat, pickupObj.lng, d.pickup_location.latitude, d.pickup_location.longitude);
             const distDropoff = calculateDistance(dropoffObj.lat, dropoffObj.lng, d.destination_location.latitude, d.destination_location.longitude);
-            
+
             // Check reverse route
             const distReversePickup = calculateDistance(pickupObj.lat, pickupObj.lng, d.destination_location.latitude, d.destination_location.longitude);
             const distReverseDropoff = calculateDistance(dropoffObj.lat, dropoffObj.lng, d.pickup_location.latitude, d.pickup_location.longitude);
-            
+
             const RADIUS_KM = 5;
-            
+
             const isDirectMatch = (distPickup !== null && distPickup <= RADIUS_KM) && (distDropoff !== null && distDropoff <= RADIUS_KM);
             const isReverseMatch = (distReversePickup !== null && distReversePickup <= RADIUS_KM) && (distReverseDropoff !== null && distReverseDropoff <= RADIUS_KM);
-            
+
             return isDirectMatch || isReverseMatch;
         });
 
@@ -280,8 +281,8 @@ export const calculateBasePrice = (distanceKm, vehicleData, tripType = 'one-way'
             if (!d.pickupLocation) return false;
             const dPick = normalizeName(d.pickupLocation);
             const dDrop = normalizeName(d.name);
-            return (pickupNorm.includes(dPick) && dropoffNorm.includes(dDrop)) || 
-                   (dropoffNorm.includes(dPick) && pickupNorm.includes(dDrop));
+            return (pickupNorm.includes(dPick) && dropoffNorm.includes(dDrop)) ||
+                (dropoffNorm.includes(dPick) && pickupNorm.includes(dDrop));
         });
 
         if (exactMatch && hasPricingData(exactMatch)) {
@@ -297,10 +298,10 @@ export const calculateBasePrice = (distanceKm, vehicleData, tripType = 'one-way'
         const pickupOverride = findMatchingDestination(pickup, genericDestinations);
         const dropoffOverride = findMatchingDestination(dropoff, genericDestinations);
         const genericMatch = hasPricingData(dropoffOverride) ? dropoffOverride : (hasPricingData(pickupOverride) ? pickupOverride : null);
-        
+
         if (genericMatch) {
             const rideType = genericMatch.applicableRideType || 'all';
-            
+
             if (rideType === 'all') {
                 matchedOverride = genericMatch;
             } else if (rideType === 'airport-only' && isAirportTransfer) {
@@ -360,30 +361,30 @@ export const calculateBasePrice = (distanceKm, vehicleData, tripType = 'one-way'
                         console.log(`[Pricing] Applied Tiered FLAT Rate: LKR ${distancePrice}`);
                     } else {
                         distancePrice = (distKm * val);
-// Log removed for privacy
+                        // Log removed for privacy
                     }
                     overrideApplied = true;
                 }
             }
 
-        // 2. Check for Legacy Fixed Pricing (Fallback)
-        if (!overrideApplied) {
-            let vPricing = {};
-            if (matchedOverride.pricing) {
-                if (typeof matchedOverride.pricing.get === 'function') {
-                    vPricing = Object.fromEntries(matchedOverride.pricing);
-                } else {
-                    vPricing = matchedOverride.pricing;
+            // 2. Check for Legacy Fixed Pricing (Fallback)
+            if (!overrideApplied) {
+                let vPricing = {};
+                if (matchedOverride.pricing) {
+                    if (typeof matchedOverride.pricing.get === 'function') {
+                        vPricing = Object.fromEntries(matchedOverride.pricing);
+                    } else {
+                        vPricing = matchedOverride.pricing;
+                    }
+                }
+
+                const fixedPrice = vPricing[vehicleSlug] || vPricing[vehicleType] || 0;
+                if (fixedPrice > 0) {
+                    distancePrice = Number(fixedPrice);
+                    overrideApplied = true;
+                    console.log(`[Pricing] Applied Fixed Price: LKR ${distancePrice}`);
                 }
             }
-
-            const fixedPrice = vPricing[vehicleSlug] || vPricing[vehicleType] || 0;
-            if (fixedPrice > 0) {
-                distancePrice = Number(fixedPrice);
-                overrideApplied = true;
-                console.log(`[Pricing] Applied Fixed Price: LKR ${distancePrice}`);
-            }
-        }
 
             // 3. Fallback to Per-KM Overrides
             if (!overrideApplied) {
@@ -401,13 +402,13 @@ export const calculateBasePrice = (distanceKm, vehicleData, tripType = 'one-way'
                 if (vehicleSpecificRate > 0) {
                     distancePrice = (distKm * vehicleSpecificRate);
                     overrideApplied = true;
-// Log removed for privacy
+                    // Log removed for privacy
                 }
                 else if (matchedOverride.perKmRateOverride > 0) {
                     const perKmRate = Number(matchedOverride.perKmRateOverride);
                     distancePrice = (distKm * perKmRate);
                     overrideApplied = true;
-// Log removed for privacy
+                    // Log removed for privacy
                 }
             }
         }
@@ -424,7 +425,7 @@ export const calculateBasePrice = (distanceKm, vehicleData, tripType = 'one-way'
                 } else {
                     const rate = matchingTier.rate || matchingTier.price || 0;
                     distancePrice = (distKm * rate);
-// Log removed for privacy
+                    // Log removed for privacy
                 }
             }
         }
@@ -440,7 +441,7 @@ export const calculateBasePrice = (distanceKm, vehicleData, tripType = 'one-way'
                 console.log(`[Pricing] Applied Base Price: LKR ${distancePrice}`);
             } else {
                 distancePrice = basePrice + ((distKm - baseKm) * perKmRate);
-// Log removed for privacy
+                // Log removed for privacy
             }
         }
     }
@@ -497,7 +498,7 @@ export const calculateTrafficSurge = (scheduledTime, scheduledDate, surgeRules =
         const timePart = scheduledTime.split(' ')[0];
         const [hours, minutes] = timePart.split(':').map(Number);
         const tripMinutes = hours * 60 + minutes;
-        
+
         // Get day of week (0-6)
         const dateObj = scheduledDate ? new Date(scheduledDate) : new Date();
         const dayOfWeek = dateObj.getDay();
@@ -506,13 +507,13 @@ export const calculateTrafficSurge = (scheduledTime, scheduledDate, surgeRules =
 
         for (const rule of surgeRules) {
             if (!rule.isActive) continue;
-            
+
             // Check day of week
             if (rule.daysOfWeek && !rule.daysOfWeek.includes(dayOfWeek)) continue;
 
             const [startH, startM] = rule.startTime.split(':').map(Number);
             const [endH, endM] = rule.endTime.split(':').map(Number);
-            
+
             const startMinutes = startH * 60 + startM;
             const endMinutes = endH * 60 + endM;
 
