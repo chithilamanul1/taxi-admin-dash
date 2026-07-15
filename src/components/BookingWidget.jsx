@@ -24,7 +24,7 @@ import { calculateBasePrice, calculateSurcharges, calculateTrafficSurge, ROUND_T
 import { detectLocalTimezone } from '@/lib/timezone-util';
 
 // (Helper to calculate price)
-const calculatePrice = (distance, vehicleId, tripType, pricingMap, waitingHours, hasNameBoard, nameBoardPrice = 2000, waitingHourRate = 1000, pickupObj = {}, dropoffObj = {}, destinations = [], scheduledTime = null, scheduledDate = null, surgeRules = [], roundTripPackageId = null, roundTripPackages = [], airportRoundTripPackages = [], destinationRoundTripPackages = []) => {
+const calculatePrice = (distance, vehicleId, tripType, pricingMap, waitingHours, hasNameBoard, nameBoardPrice = 2000, waitingHourRate = 1000, pickupObj = {}, dropoffObj = {}, destinations = [], scheduledTime = null, scheduledDate = null, surgeRules = [], roundTripPackageId = null, roundTripPackages = [], airportRoundTripPackages = [], destinationRoundTripPackages = [], isAirportTransfer = false) => {
     if (!pricingMap[vehicleId]) return { total: 0, surgeAmount: 0 };
     const vehicleData = pricingMap[vehicleId];
 
@@ -32,7 +32,8 @@ const calculatePrice = (distance, vehicleId, tripType, pricingMap, waitingHours,
         roundTripPackageId,
         roundTripPackages,
         airportRoundTripPackages,
-        destinationRoundTripPackages
+        destinationRoundTripPackages,
+        isAirportTransfer
     });
     const surcharges = calculateSurcharges({ waitingHours, hasNameBoard, nameBoardPrice, waitingHourRate }, vehicleData);
 
@@ -853,7 +854,8 @@ const BookingWidgetContent = ({ defaultTab = 'pickup', onTabChange }) => {
         roundTripPackageId,
         normalTours,
         airportTours,
-        pricingSettings.destinationRoundTripPackages
+        pricingSettings.destinationRoundTripPackages,
+        ['pickup', 'drop'].includes(activeTab)
     );
 
     // Calculate total discount from all applied offers (MAX RULE: No Stacking)

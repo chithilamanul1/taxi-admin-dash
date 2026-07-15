@@ -169,14 +169,30 @@ const RoundTripBooking = () => {
     } else if (tab === 'normal-round-tour') {
       pkgs = normalTours || [];
     } else if (tab === 'destination-based-tour') {
-      const pickupOverride = findMatchingDestination(locations[0], destinationsList);
-      const dropoffOverride = findMatchingDestination(locations[locations.length - 1], destinationsList);
-      const destMatch = dropoffOverride || pickupOverride;
+      const pickupNorm = locations[0] ? locations[0].toLowerCase().trim() : '';
+      const dropoffNorm = locations[locations.length - 1] ? locations[locations.length - 1].toLowerCase().trim() : '';
+
+      let destMatch = null;
+      if (pickupNorm && dropoffNorm) {
+        destMatch = destinationsList.find(d => {
+          if (!d.pickupLocation) return false;
+          const dPick = d.pickupLocation.toLowerCase().trim();
+          const dDrop = d.name.toLowerCase().trim();
+          return (pickupNorm.includes(dPick) && dropoffNorm.includes(dDrop)) ||
+            (dropoffNorm.includes(dPick) && pickupNorm.includes(dDrop));
+        });
+      }
+
+      if (!destMatch) {
+        const pickupOverride = findMatchingDestination(locations[0], destinationsList);
+        const dropoffOverride = findMatchingDestination(locations[locations.length - 1], destinationsList);
+        destMatch = dropoffOverride || pickupOverride;
+      }
+
       if (destMatch && destMatch.roundTripPackages && destMatch.roundTripPackages.length > 0) {
         pkgs = destMatch.roundTripPackages;
       } else {
         pkgs = pricingSettings?.destinationRoundTripPackages || [];
-        if (pkgs.length === 0) pkgs = normalTours || [];
       }
     }
     if (selectedVehicle) {
@@ -198,16 +214,16 @@ const RoundTripBooking = () => {
   const getAvailableKmLimits = () => {
     const pkgs = getActivePackages();
     const match = pkgs.filter(p => p.hours === formData.taxiTourHours);
+    const match_kms = [];
     if (match.length > 0) {
-      const kms = [];
       match.forEach(p => {
         (p.tiers || []).forEach(t => {
-          if (t.km && !kms.includes(t.km)) {
-            kms.push(t.km);
+          if (t.km && !match_kms.includes(t.km)) {
+            match_kms.push(t.km);
           }
         });
       });
-      return kms.sort((a, b) => a - b);
+      return match_kms.sort((a, b) => a - b);
     }
     return [20, 30, 40, 50]; // Fallback
   };
@@ -292,9 +308,25 @@ const RoundTripBooking = () => {
     }
 
     if (tab === 'destination-based-tour') {
-      const pickupOverride = findMatchingDestination(locations[0], destinationsList);
-      const dropoffOverride = findMatchingDestination(locations[locations.length - 1], destinationsList);
-      const destMatch = dropoffOverride || pickupOverride;
+      const pickupNorm = locations[0] ? locations[0].toLowerCase().trim() : '';
+      const dropoffNorm = locations[locations.length - 1] ? locations[locations.length - 1].toLowerCase().trim() : '';
+
+      let destMatch = null;
+      if (pickupNorm && dropoffNorm) {
+        destMatch = destinationsList.find(d => {
+          if (!d.pickupLocation) return false;
+          const dPick = d.pickupLocation.toLowerCase().trim();
+          const dDrop = d.name.toLowerCase().trim();
+          return (pickupNorm.includes(dPick) && dropoffNorm.includes(dDrop)) ||
+            (dropoffNorm.includes(dPick) && pickupNorm.includes(dDrop));
+        });
+      }
+
+      if (!destMatch) {
+        const pickupOverride = findMatchingDestination(locations[0], destinationsList);
+        const dropoffOverride = findMatchingDestination(locations[locations.length - 1], destinationsList);
+        destMatch = dropoffOverride || pickupOverride;
+      }
 
       // 1. Matched destination roundTripPackages
       if (destMatch && destMatch.roundTripPackages && destMatch.roundTripPackages.length > 0) {
@@ -357,9 +389,26 @@ const RoundTripBooking = () => {
     } else if (tab === 'normal-round-tour') {
       pkgs = normalTours || [];
     } else if (tab === 'destination-based-tour') {
-      const pickupOverride = findMatchingDestination(locations[0], destinationsList);
-      const dropoffOverride = findMatchingDestination(locations[locations.length - 1], destinationsList);
-      const destMatch = dropoffOverride || pickupOverride;
+      const pickupNorm = locations[0] ? locations[0].toLowerCase().trim() : '';
+      const dropoffNorm = locations[locations.length - 1] ? locations[locations.length - 1].toLowerCase().trim() : '';
+
+      let destMatch = null;
+      if (pickupNorm && dropoffNorm) {
+        destMatch = destinationsList.find(d => {
+          if (!d.pickupLocation) return false;
+          const dPick = d.pickupLocation.toLowerCase().trim();
+          const dDrop = d.name.toLowerCase().trim();
+          return (pickupNorm.includes(dPick) && dropoffNorm.includes(dDrop)) ||
+            (dropoffNorm.includes(dPick) && pickupNorm.includes(dDrop));
+        });
+      }
+
+      if (!destMatch) {
+        const pickupOverride = findMatchingDestination(locations[0], destinationsList);
+        const dropoffOverride = findMatchingDestination(locations[locations.length - 1], destinationsList);
+        destMatch = dropoffOverride || pickupOverride;
+      }
+
       if (destMatch && destMatch.roundTripPackages && destMatch.roundTripPackages.length > 0) {
         pkgs = destMatch.roundTripPackages;
       } else {

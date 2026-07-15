@@ -522,7 +522,8 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                 airportRoundTripPackages: pricingSettings?.airportRoundTripPackages,
                 destinationRoundTripPackages: pricingSettings?.destinationRoundTripPackages,
                 taxiTourHours: formData.taxiTourHours,
-                taxiTourKm: formData.taxiTourKm
+                taxiTourKm: formData.taxiTourKm,
+                isAirportTransfer: isAirportPickup
             });
 
             const surcharges = calculateSurcharges({
