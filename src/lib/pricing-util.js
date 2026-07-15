@@ -268,6 +268,23 @@ export const calculateBasePrice = (distanceKm, vehicleData, tripType = 'one-way'
         }
     }
 
+    // B. Legacy String Matching fallback (Exact point-to-point)
+    if (!exactMatchFound && pickupNorm && dropoffNorm) {
+        const exactMatch = dynamicDestinations.find(d => {
+            if (!d.pickupLocation) return false;
+            const dPick = normalizeName(d.pickupLocation);
+            const dDrop = normalizeName(d.name);
+            return (pickupNorm.includes(dPick) && dropoffNorm.includes(dDrop)) ||
+                (dropoffNorm.includes(dPick) && pickupNorm.includes(dDrop));
+        });
+
+        if (exactMatch && hasPricingData(exactMatch)) {
+            matchedOverride = exactMatch;
+            exactMatchFound = true;
+            console.log(`[Pricing] Found Legacy String Match: ${exactMatch.name || exactMatch.title}`);
+        }
+    }
+
     // A2. V2 Coordinate-based Base Price Zone Matching (if no exact match found)
     if (!exactMatchFound && pickupObj?.lat && pickupObj?.lng) {
         const zoneMatch = dynamicDestinations.find(d => {
@@ -295,22 +312,6 @@ export const calculateBasePrice = (distanceKm, vehicleData, tripType = 'one-way'
             matchedOverride = zoneMatch;
             exactMatchFound = true;
             console.log(`[Pricing] Found V2 Coordinate Zone Match: ${zoneMatch.name || zoneMatch.title}`);
-        }
-    }
-
-    // B. Legacy String Matching fallback
-    if (!exactMatchFound && pickupNorm && dropoffNorm) {
-        const exactMatch = dynamicDestinations.find(d => {
-            if (!d.pickupLocation) return false;
-            const dPick = normalizeName(d.pickupLocation);
-            const dDrop = normalizeName(d.name);
-            return (pickupNorm.includes(dPick) && dropoffNorm.includes(dDrop)) ||
-                (dropoffNorm.includes(dPick) && pickupNorm.includes(dDrop));
-        });
-
-        if (exactMatch && hasPricingData(exactMatch)) {
-            matchedOverride = exactMatch;
-            exactMatchFound = true;
         }
     }
 
