@@ -230,18 +230,11 @@ export const calculateBasePrice = (distanceKm, vehicleData, tripType = 'one-way'
     let distancePrice = 0;
     let overrideApplied = false;
 
-    // Hardcoded competitive rate override for Wagon R (mini-car) to/from Sigiriya or Ella
     const normalizeName = (n) => (n || '').toLowerCase().replace(/sri lanka/g, '').replace(/[,.-]/g, ' ').replace(/\s+/g, ' ').trim();
     const pickupNorm = normalizeName(pickup);
     const dropoffNorm = normalizeName(dropoff);
     const isSigiriyaOrEllaRoute = pickupNorm.includes('sigiriya') || dropoffNorm.includes('sigiriya') || pickupNorm.includes('ella') || dropoffNorm.includes('ella');
     const isWagonRVehicle = vehicleData && (vehicleData.vehicleType === 'mini-car' || vehicleData.vehicleSlug === 'mini-car');
-
-    if (isWagonRVehicle && isSigiriyaOrEllaRoute && distKm > 0 && tripType !== 'airport-round-tour' && tripType !== 'normal-round-tour' && !isAirportTransfer) {
-        distancePrice = distKm * 200;
-        overrideApplied = true;
-        console.log(`[Pricing Override] Wagon R route to/from Sigiriya/Ella: LKR ${distancePrice} (Rs. 200/km)`);
-    }
 
     // 1. Try to find an EXACT point-to-point match using Coordinate Routing Engine or fallback string matching
     let matchedOverride = null;
@@ -275,6 +268,36 @@ export const calculateBasePrice = (distanceKm, vehicleData, tripType = 'one-way'
         }
     }
 
+    // A2. V2 Coordinate-based Base Price Zone Matching (if no exact match found)
+    if (!exactMatchFound && pickupObj?.lat && pickupObj?.lng) {
+        const zoneMatch = dynamicDestinations.find(d => {
+            if (!d.pickup_location?.latitude) return false;
+
+            // Check if pickup is within 5 KM of the zone's pickup location
+            const distPickup = calculateDistance(pickupObj.lat, pickupObj.lng, d.pickup_location.latitude, d.pickup_location.longitude);
+            const RADIUS_KM = 5;
+
+            if (distPickup === null || distPickup > RADIUS_KM) return false;
+
+            // It's a zone if pickupLocation and name are the same (or if it's a self-route)
+            const isSelfRoute = d.pickupLocation && d.name &&
+                (normalizeName(d.pickupLocation) === normalizeName(d.name) ||
+                    d.pickupLocation.toLowerCase().includes(d.name.toLowerCase()) ||
+                    d.name.toLowerCase().includes(d.pickupLocation.toLowerCase()));
+
+            return isSelfRoute && (
+                (d.base_prices_per_vehicle && d.base_prices_per_vehicle.length > 0) ||
+                (d.vehicleTiers && (d.vehicleTiers.size > 0 || Object.keys(d.vehicleTiers).length > 0))
+            );
+        });
+
+        if (zoneMatch) {
+            matchedOverride = zoneMatch;
+            exactMatchFound = true;
+            console.log(`[Pricing] Found V2 Coordinate Zone Match: ${zoneMatch.name || zoneMatch.title}`);
+        }
+    }
+
     // B. Legacy String Matching fallback
     if (!exactMatchFound && pickupNorm && dropoffNorm) {
         const exactMatch = dynamicDestinations.find(d => {
@@ -288,6 +311,31 @@ export const calculateBasePrice = (distanceKm, vehicleData, tripType = 'one-way'
         if (exactMatch && hasPricingData(exactMatch)) {
             matchedOverride = exactMatch;
             exactMatchFound = true;
+        }
+    }
+
+    // B2. Name-based Base Price Zone Matching (if no exact match found)
+    if (!exactMatchFound && pickupNorm) {
+        const zoneMatch = dynamicDestinations.find(d => {
+            if (!d.pickupLocation || !d.name) return false;
+
+            const dPick = normalizeName(d.pickupLocation);
+            const dDrop = normalizeName(d.name);
+
+            // Check if it's a self-route/zone
+            const isSelfRoute = dPick === dDrop || dPick.includes(dDrop) || dDrop.includes(dPick);
+            if (!isSelfRoute) return false;
+
+            // Check if pickup matches the zone name
+            const isPickupMatch = pickupNorm.includes(dPick) || dPick.includes(pickupNorm);
+
+            return isPickupMatch && hasPricingData(d);
+        });
+
+        if (zoneMatch) {
+            matchedOverride = zoneMatch;
+            exactMatchFound = true;
+            console.log(`[Pricing] Found Name-based Zone Match: ${zoneMatch.name || zoneMatch.title}`);
         }
     }
 
@@ -415,7 +463,14 @@ export const calculateBasePrice = (distanceKm, vehicleData, tripType = 'one-way'
     }
 
     if (!overrideApplied) {
-        if (tiers.length > 0) {
+        // Hardcoded competitive rate override for Wagon R (mini-car) to/from Sigiriya or Ella as a fallback
+        if (isWagonRVehicle && isSigiriyaOrEllaRoute && distKm > 0 && tripType !== 'airport-round-tour' && tripType !== 'normal-round-tour' && !isAirportTransfer) {
+            distancePrice = distKm * 200;
+            overrideApplied = true;
+            console.log(`[Pricing Override] Wagon R route to/from Sigiriya/Ella: LKR ${distancePrice} (Rs. 200/km)`);
+        }
+
+        if (!overrideApplied && tiers.length > 0) {
             // Priority 1: Exact Flat Rate Matching for Tiers (Robust)
             const matchingTier = tiers.find(t => distKm >= t.min && distKm <= (t.max || Infinity));
 

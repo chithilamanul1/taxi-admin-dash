@@ -138,7 +138,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
     // Auto-swap vehicle if capacity exceeded or passenger count changed
     useEffect(() => {
         if (!formData.vehicle || !pricing || pricing.length === 0) return;
-        
+
         const adults = Number(formData.passengerCount?.adults) || 1;
         const children = Number(formData.passengerCount?.children) || 0;
         const luggage = Number(formData.passengerCount?.luggage) || 0;
@@ -153,7 +153,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
             const vehiclePax = currentVehicle.capacity || 4;
             const vehicleLargeBags = currentVehicle.luggage || 0;
             const vehicleSmallBags = currentVehicle.handLuggage || 0;
-            
+
             const spareSeats = Math.max(0, vehiclePax - totalPax);
             const extraBagCapacity = spareSeats * 1.5;
             const maxBagUnits = vehicleLargeBags + (vehicleSmallBags * 0.5) + extraBagCapacity;
@@ -176,7 +176,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                 const vMaxBag = (v.luggage || 0) + ((v.handLuggage || 0) * 0.5) + (vSpare * 1.5);
                 return requestedBagUnits <= vMaxBag;
             });
-            
+
             if (suitableVehicles.length > 0) {
                 // Sort by basePrice, perKmRate, or lowest tier to ensure cheapest vehicle is selected
                 suitableVehicles.sort((a, b) => {
@@ -189,16 +189,16 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                 }
             }
         }
-        
+
         prevPassengerCountRef.current = formData.passengerCount;
     }, [formData.passengerCount, pricing, formData.vehicle]);
 
     // Fetch Settings and Destinations
     useEffect(() => {
         if (!isOpen) return;
-        
+
         document.body.classList.add('booking-active');
-        
+
         const fetchSettings = async () => {
             try {
                 const res = await fetch('/api/admin/pricing-settings', { cache: 'no-store' });
@@ -208,7 +208,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                 }
             } catch (err) { console.error("Fetch Settings Error:", err); }
         };
-        
+
         const fetchDestinations = async () => {
             try {
                 const res = await fetch('/api/admin/destinations', { cache: 'no-store' });
@@ -221,7 +221,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
 
         fetchSettings();
         fetchDestinations();
-        
+
         return () => document.body.classList.remove('booking-active');
     }, [isOpen]);
 
@@ -258,8 +258,8 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
 
     useEffect(() => {
         if (isOpen && !isInitializedRef.current) {
-            setFormData(prev => ({ 
-                ...prev, 
+            setFormData(prev => ({
+                ...prev,
                 ...initialData,
                 pickup: initialData.pickup || prev.pickup,
                 dropoff: initialData.drop || initialData.dropoff || prev.dropoff,
@@ -270,7 +270,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                 roundTripPackageId: initialData.roundTripPackageId || prev.roundTripPackageId,
                 hasNameBoard: !isAirportService ? false : (prev.hasNameBoard !== null ? prev.hasNameBoard : ((initialData.hasNameBoard === true || initialData.hasNameBoard === false) ? initialData.hasNameBoard : null))
             }));
-            
+
             setIsVehicleExpanded(!initialData.vehicle);
             setStep(1);
 
@@ -324,7 +324,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                             if (!address || !keyword) return false;
                             const addr = address.toLowerCase().trim();
                             const kw = keyword.toLowerCase().trim();
-                            
+
                             const streetPattern1 = kw + ' road';
                             const streetPattern2 = kw + ' face';
                             const streetPattern3 = kw + ' street';
@@ -338,11 +338,11 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                     .split(streetPattern3).join('')
                                     .split(streetPattern4).join('')
                                     .split(streetPattern5).join('');
-                                    
+
                                 const regex = new RegExp(`\\b${kw}\\b`, 'i');
                                 return regex.test(cleanedAddr);
                             }
-                            
+
                             const regex = new RegExp(`\\b${kw}\\b`, 'i');
                             return regex.test(addr);
                         };
@@ -365,7 +365,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                     console.error("Auto-coupon detection failed", err);
                 }
             };
-            
+
             const timer = setTimeout(detectBestCoupon, 1000);
             return () => clearTimeout(timer);
         }
@@ -408,7 +408,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                         if (!address || !keyword) return false;
                         const addr = address.toLowerCase().trim();
                         const kw = keyword.toLowerCase().trim();
-                        
+
                         const streetPattern1 = kw + ' road';
                         const streetPattern2 = kw + ' face';
                         const streetPattern3 = kw + ' street';
@@ -422,11 +422,11 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                 .split(streetPattern3).join('')
                                 .split(streetPattern4).join('')
                                 .split(streetPattern5).join('');
-                                
+
                             const regex = new RegExp(`\\b${kw}\\b`, 'i');
                             return regex.test(cleanedAddr);
                         }
-                        
+
                         const regex = new RegExp(`\\b${kw}\\b`, 'i');
                         return regex.test(addr);
                     };
@@ -467,9 +467,9 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
             const res = await fetch('/api/coupons/validate', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ 
-                    code: input, 
-                    pickup: contextPickup, 
+                body: JSON.stringify({
+                    code: input,
+                    pickup: contextPickup,
                     dropoff: contextDropoff,
                     tripType: pricingCategory === 'airport-transfer' ? 'pickup' : (pricingCategory === 'ride-now' ? 'ride' : 'tour')
                 })
@@ -516,7 +516,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                 return { total: 0, subtotal: 0, surcharges: 0, payNow: 0, balance: 0, lkr: { total: 0, payNow: 0, balance: 0, surcharges: 0, subtotal: 0 }, originalLKR: 0 };
             }
 
-            const baseTotal = calculateBasePrice(distKm, vehicleData, formData.tripType, formData.pickup, formData.dropoff, destinations, { 
+            const baseTotal = calculateBasePrice(distKm, vehicleData, formData.tripType, { name: formData.pickup, lat: formData.pickupCoords?.lat, lng: formData.pickupCoords?.lng }, { name: formData.dropoff, lat: formData.dropoffCoords?.lat, lng: formData.dropoffCoords?.lng }, destinations, {
                 roundTripPackageId: formData.roundTripPackageId,
                 roundTripPackages: pricingSettings?.roundTripPackages,
                 airportRoundTripPackages: pricingSettings?.airportRoundTripPackages,
@@ -618,7 +618,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
         const distKm = Number(distance || initialData.distance || 0);
 
         return pricing.map(v => {
-            const baseTotal = calculateBasePrice(distKm, v, formData.tripType, formData.pickup, formData.dropoff, destinations, { 
+            const baseTotal = calculateBasePrice(distKm, v, formData.tripType, { name: formData.pickup, lat: formData.pickupCoords?.lat, lng: formData.pickupCoords?.lng }, { name: formData.dropoff, lat: formData.dropoffCoords?.lat, lng: formData.dropoffCoords?.lng }, destinations, {
                 roundTripPackageId: formData.roundTripPackageId,
                 roundTripPackages: pricingSettings?.roundTripPackages,
                 airportRoundTripPackages: pricingSettings?.airportRoundTripPackages,
@@ -630,14 +630,14 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                 hasNameBoard: formData.hasNameBoard,
                 nameBoardPrice: pricingSettings?.nameBoardPrice
             }, v);
-            
+
             const tripTime = formData.time || formData.flightArrivalTime;
             const tripDate = formData.date || formData.flightArrivalDate;
             const surgePercent = calculateTrafficSurge(tripTime, tripDate, surgeRules, distKm);
             const surgeAmount = surgePercent > 0 ? baseTotal * (surgePercent / 100) : 0;
 
             const paymentSurcharge = calculatePaymentFees(baseTotal + surcharges + surgeAmount, formData.paymentMethod, currency, v.vehicleType);
-            
+
             let total = baseTotal + surcharges + surgeAmount + paymentSurcharge;
 
             let couponDiscountAmount = 0;
@@ -667,7 +667,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
             // Wait, paymentSurcharge in getPriceBreakdown uses `currency`. Wait. If VehicleCarousel expects LKR, it should be calculated with 'LKR'.
             const paymentSurchargeLKR = calculatePaymentFees(baseTotal + surcharges + surgeAmount, formData.paymentMethod, 'LKR', v.vehicleType);
             let totalLKR = baseTotal + surcharges + surgeAmount + paymentSurchargeLKR;
-            
+
             let couponDiscountAmountLKR = 0;
             if (verifiedCoupons && verifiedCoupons.length > 0) {
                 verifiedCoupons.forEach(coupon => {
@@ -758,7 +758,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
         if (targetStep >= 1) {
             if (!formData.pickup) newErrors.pickup = true;
             if (!formData.dropoff) newErrors.dropoff = true;
-            
+
             if (isAirportPickup) {
                 if (formData.hasNameBoard === null) newErrors.hasNameBoard = true;
                 if (!formData.flightNumber) newErrors.flightNumber = true;
@@ -767,7 +767,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
             }
             if (!formData.passengerCount.adults || formData.passengerCount.adults < 1) newErrors.adults = true;
         }
-        
+
         if (targetStep >= 2) {
             if (!formData.name) newErrors.name = true;
             if (!formData.phone || formData.phone.length < 8) newErrors.phone = true;
@@ -781,7 +781,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                 }
             }
         }
-        
+
         setErrors(newErrors);
         if (Object.keys(newErrors).length > 0) {
             const isMissingExtraPass = Object.keys(newErrors).some(k => k.startsWith('additionalPassenger_'));
@@ -956,7 +956,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                 </div>
                                 <div className="flex flex-col">
                                     <span className="text-[8px] font-black text-[#FACC15] uppercase tracking-widest leading-none mb-1">Step {step} of 3</span>
-                                    <span className="text-[10px] font-black text-black dark:text-white uppercase tracking-tight leading-none">{STEPS[step-1].title}</span>
+                                    <span className="text-[10px] font-black text-black dark:text-white uppercase tracking-tight leading-none">{STEPS[step - 1].title}</span>
                                 </div>
                             </div>
                         </div>
@@ -984,7 +984,8 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                         <LocationInput
                                             id="field-pickup"
                                             value={formData.pickup}
-                                            onChange={(val, coords) => setFormData(prev => ({ ...prev, pickup: val, pickupCoords: coords }))}
+                                            onChange={(val) => setFormData(prev => ({ ...prev, pickup: val }))}
+                                            onSelect={(loc) => setFormData(prev => ({ ...prev, pickup: loc.address, pickupCoords: { lat: loc.lat, lng: loc.lng } }))}
                                             placeholder="Enter Airport or Hotel Name"
                                             className={errors.pickup ? 'border-red-500 animate-shake' : ''}
                                         />
@@ -996,7 +997,8 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                         <LocationInput
                                             id="field-dropoff"
                                             value={formData.dropoff}
-                                            onChange={(val, coords) => setFormData(prev => ({ ...prev, dropoff: val, dropoffCoords: coords }))}
+                                            onChange={(val) => setFormData(prev => ({ ...prev, dropoff: val }))}
+                                            onSelect={(loc) => setFormData(prev => ({ ...prev, dropoff: loc.address, dropoffCoords: { lat: loc.lat, lng: loc.lng } }))}
                                             placeholder="Where are you heading?"
                                             className={errors.dropoff ? 'border-red-500 animate-shake' : ''}
                                         />
@@ -1064,15 +1066,15 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                                         Arrival Date & Time <span className="text-[#FACC15]">*Required</span>
                                                     </label>
                                                     <div className="relative">
-                                                        <CustomDateTimePicker 
-                                                            date={formData.flightArrivalDate} 
-                                                            time={formData.flightArrivalTime} 
-                                                            onChange={(d, t) => { 
-                                                                setFormData(prev => ({ ...prev, flightArrivalDate: d, date: d, flightArrivalTime: t, time: t })); 
+                                                        <CustomDateTimePicker
+                                                            date={formData.flightArrivalDate}
+                                                            time={formData.flightArrivalTime}
+                                                            onChange={(d, t) => {
+                                                                setFormData(prev => ({ ...prev, flightArrivalDate: d, date: d, flightArrivalTime: t, time: t }));
                                                                 if (errors.date || errors.flightArrivalTime) {
                                                                     setErrors(prev => ({ ...prev, date: false, flightArrivalTime: false, time: false }));
                                                                 }
-                                                            }} 
+                                                            }}
                                                             className={`w-full h-11 sm:h-12 bg-slate-50 dark:bg-white/5 border px-12 rounded-2xl font-black text-xs sm:text-sm uppercase tracking-widest outline-none focus:border-[#FACC15] transition-all focus:ring-2 focus:ring-[#FACC15] ${errors.date || errors.flightArrivalTime ? 'border-red-500 ring-2 ring-red-500/20 animate-shake' : 'border-slate-300 dark:border-white/15'}`}
                                                         />
                                                         <div className="absolute left-4 top-1/2 -translate-y-1/2 text-[#FACC15] pointer-events-none">
@@ -1202,15 +1204,15 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                             Pickup Date & Time <span className="text-[#FACC15]">*Required</span>
                                         </label>
                                         <div className="relative">
-                                            <CustomDateTimePicker 
-                                                date={formData.date} 
-                                                time={formData.time} 
-                                                onChange={(d, t) => { 
-                                                    setFormData(prev => ({ ...prev, date: d, time: t })); 
+                                            <CustomDateTimePicker
+                                                date={formData.date}
+                                                time={formData.time}
+                                                onChange={(d, t) => {
+                                                    setFormData(prev => ({ ...prev, date: d, time: t }));
                                                     if (errors.date || errors.time) {
                                                         setErrors(prev => ({ ...prev, date: false, time: false }));
                                                     }
-                                                }} 
+                                                }}
                                                 className={`w-full h-14 bg-slate-50 dark:bg-white/5 border px-12 rounded-2xl font-black text-sm sm:text-base uppercase tracking-widest outline-none focus:border-[#FACC15] transition-all focus:ring-2 focus:ring-[#FACC15] ${errors.date || errors.time ? 'border-red-500 ring-2 ring-red-500/20 animate-shake' : 'border-slate-200 dark:border-white/10'}`}
                                             />
                                             <div className="absolute left-4 top-1/2 -translate-y-1/2 text-[#FACC15] pointer-events-none">
@@ -1219,7 +1221,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                         </div>
                                     </div>
                                 )}
-                                
+
                                 <div className="space-y-6">
                                     <div className="flex items-center gap-4">
                                         <div className="h-px flex-1 bg-slate-100 dark:bg-white/5"></div>
@@ -1436,7 +1438,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                                     const ampm = h >= 12 ? 'PM' : 'AM';
                                                     const h12 = h % 12 === 0 ? 12 : h % 12;
                                                     const tz = detectLocalTimezone() || 'SLST';
-                                                    const formatted = `${h12.toString().padStart(2,'0')}:${m.toString().padStart(2,'0')} ${ampm} ${tz}`;
+                                                    const formatted = `${h12.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')} ${ampm} ${tz}`;
                                                     setFormData(prev => ({ ...prev, time: formatted, flightArrivalTime: formatted }));
                                                     if (errors.time) setErrors(prev => ({ ...prev, time: false }));
                                                 }}
@@ -1461,15 +1463,15 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                             Return Date & Time (Optional)
                                         </label>
                                         <div className="relative">
-                                            <CustomDateTimePicker 
-                                                date={formData.returnDate} 
-                                                time={formData.returnTime} 
-                                                onChange={(d, t) => { 
-                                                    setFormData(prev => ({ ...prev, returnDate: d, returnTime: t })); 
+                                            <CustomDateTimePicker
+                                                date={formData.returnDate}
+                                                time={formData.returnTime}
+                                                onChange={(d, t) => {
+                                                    setFormData(prev => ({ ...prev, returnDate: d, returnTime: t }));
                                                     if (errors.returnDate || errors.returnTime) {
                                                         setErrors(prev => ({ ...prev, returnDate: false, returnTime: false }));
                                                     }
-                                                }} 
+                                                }}
                                                 className={`w-full h-14 bg-slate-50 dark:bg-white/5 border px-12 rounded-2xl font-black text-sm sm:text-base uppercase tracking-widest outline-none focus:border-[#FACC15] transition-all focus:ring-2 focus:ring-[#FACC15] ${errors.returnDate || errors.returnTime ? 'border-red-500 ring-2 ring-red-500/20 animate-shake' : 'border-slate-200 dark:border-white/10'}`}
                                             />
                                             <div className="absolute left-4 top-1/2 -translate-y-1/2 text-[#FACC15] pointer-events-none">
@@ -1618,87 +1620,87 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                                 <div className="h-px flex-1 bg-slate-100 dark:bg-white/5"></div>
                                             </div>
                                             <div className="grid grid-cols-2 gap-2 sm:gap-4">
-                                            {['card', 'cash'].map(m => (
-                                                <button
-                                                    key={m}
-                                                    onClick={() => setFormData({ 
-                                                        ...formData, 
-                                                        paymentMethod: m, 
-                                                        ...(m === 'cash' ? { paymentType: 'full' } : {}) 
-                                                    })}
-                                                    className={`p-4 sm:p-6 rounded-3xl sm:rounded-[2rem] border transition-all flex flex-col items-center gap-2 sm:gap-3 ${formData.paymentMethod === m ? 'bg-[#FACC15] border-transparent text-white shadow-xl' : 'bg-white dark:bg-zinc-900 border-slate-100 dark:border-white/10 text-slate-600 hover:border-[#FACC15]'}`}
-                                                >
-                                                    {m === 'cash' ? <Coins size={22} /> : <CreditCard size={22} />}
-                                                    <span className="text-[10px] font-black uppercase tracking-widest">{m === 'cash' ? 'Cash' : 'Card'}</span>
-                                                </button>
-                                            ))}
-                                        </div>
-                                    </div>
-
-                                    {formData.paymentMethod === 'card' && (
-                                        <div className="space-y-6 animate-slide-in">
-                                            <div className="grid grid-cols-2 gap-2 sm:gap-3 p-2 sm:p-3 bg-slate-50 dark:bg-white/5 rounded-[1.8rem] border border-slate-100 dark:border-white/10 shadow-inner">
-                                                {['full', 'partial'].map(t => (
+                                                {['card', 'cash'].map(m => (
                                                     <button
-                                                        key={t}
-                                                        onClick={() => setFormData(prev => ({ ...prev, paymentType: t }))}
-                                                        className={`py-3 sm:py-4 rounded-2xl text-[8px] sm:text-[9px] font-black uppercase tracking-widest transition-all ${formData.paymentType === t ? 'bg-[#FACC15] text-white shadow-xl' : 'text-slate-400 hover:text-[#FACC15]'}`}
+                                                        key={m}
+                                                        onClick={() => setFormData({
+                                                            ...formData,
+                                                            paymentMethod: m,
+                                                            ...(m === 'cash' ? { paymentType: 'full' } : {})
+                                                        })}
+                                                        className={`p-4 sm:p-6 rounded-3xl sm:rounded-[2rem] border transition-all flex flex-col items-center gap-2 sm:gap-3 ${formData.paymentMethod === m ? 'bg-[#FACC15] border-transparent text-white shadow-xl' : 'bg-white dark:bg-zinc-900 border-slate-100 dark:border-white/10 text-slate-600 hover:border-[#FACC15]'}`}
                                                     >
-                                                        {t === 'full' ? 'Complete (100%)' : 'Deposit (50%)'}
+                                                        {m === 'cash' ? <Coins size={22} /> : <CreditCard size={22} />}
+                                                        <span className="text-[10px] font-black uppercase tracking-widest">{m === 'cash' ? 'Cash' : 'Card'}</span>
                                                     </button>
                                                 ))}
                                             </div>
                                         </div>
-                                    )}
 
-                                    <div className="space-y-6 pt-6">
-                                        <h4 className="text-[9px] font-black text-slate-400 uppercase tracking-[0.4em] pl-6">Promo Code</h4>
-                                        <div className="bg-slate-50 dark:bg-white/5 border border-slate-100 dark:border-white/10 p-2 sm:p-3 rounded-3xl sm:rounded-[2rem] flex gap-2 sm:gap-4 shadow-inner">
-                                            <input
-                                                value={couponInput}
-                                                onChange={e => setCouponInput(e.target.value.toUpperCase())}
-                                                placeholder="CODE?"
-                                                className="flex-1 min-w-0 h-12 sm:h-14 bg-white dark:bg-zinc-900 border border-slate-100 dark:border-white/10 px-4 sm:px-8 rounded-2xl text-[10px] font-black uppercase tracking-widest outline-none text-emerald-950 dark:text-white shadow-sm"
-                                            />
-                                            <button
-                                                onClick={() => handleApplyCoupon()}
-                                                disabled={couponLoading || !couponInput}
-                                                className="px-4 sm:px-8 bg-emerald-950 text-white rounded-2xl text-[10px] font-black uppercase tracking-widest active:scale-95 transition-all shadow-xl whitespace-nowrap"
-                                            >
-                                                {couponLoading ? <Loader2 className="animate-spin" size={16} /> : 'Apply'}
-                                            </button>
+                                        {formData.paymentMethod === 'card' && (
+                                            <div className="space-y-6 animate-slide-in">
+                                                <div className="grid grid-cols-2 gap-2 sm:gap-3 p-2 sm:p-3 bg-slate-50 dark:bg-white/5 rounded-[1.8rem] border border-slate-100 dark:border-white/10 shadow-inner">
+                                                    {['full', 'partial'].map(t => (
+                                                        <button
+                                                            key={t}
+                                                            onClick={() => setFormData(prev => ({ ...prev, paymentType: t }))}
+                                                            className={`py-3 sm:py-4 rounded-2xl text-[8px] sm:text-[9px] font-black uppercase tracking-widest transition-all ${formData.paymentType === t ? 'bg-[#FACC15] text-white shadow-xl' : 'text-slate-400 hover:text-[#FACC15]'}`}
+                                                        >
+                                                            {t === 'full' ? 'Complete (100%)' : 'Deposit (50%)'}
+                                                        </button>
+                                                    ))}
+                                                </div>
+                                            </div>
+                                        )}
+
+                                        <div className="space-y-6 pt-6">
+                                            <h4 className="text-[9px] font-black text-slate-400 uppercase tracking-[0.4em] pl-6">Promo Code</h4>
+                                            <div className="bg-slate-50 dark:bg-white/5 border border-slate-100 dark:border-white/10 p-2 sm:p-3 rounded-3xl sm:rounded-[2rem] flex gap-2 sm:gap-4 shadow-inner">
+                                                <input
+                                                    value={couponInput}
+                                                    onChange={e => setCouponInput(e.target.value.toUpperCase())}
+                                                    placeholder="CODE?"
+                                                    className="flex-1 min-w-0 h-12 sm:h-14 bg-white dark:bg-zinc-900 border border-slate-100 dark:border-white/10 px-4 sm:px-8 rounded-2xl text-[10px] font-black uppercase tracking-widest outline-none text-emerald-950 dark:text-white shadow-sm"
+                                                />
+                                                <button
+                                                    onClick={() => handleApplyCoupon()}
+                                                    disabled={couponLoading || !couponInput}
+                                                    className="px-4 sm:px-8 bg-emerald-950 text-white rounded-2xl text-[10px] font-black uppercase tracking-widest active:scale-95 transition-all shadow-xl whitespace-nowrap"
+                                                >
+                                                    {couponLoading ? <Loader2 className="animate-spin" size={16} /> : 'Apply'}
+                                                </button>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                )}
+                    )}
                 </div>
 
-                    <div className="p-6 sm:p-10 border-t border-slate-100 dark:border-white/5 bg-white dark:bg-zinc-950 shrink-0">
-                        <div className="flex flex-row items-center justify-between gap-3 sm:gap-4">
+                <div className="p-6 sm:p-10 border-t border-slate-100 dark:border-white/5 bg-white dark:bg-zinc-950 shrink-0">
+                    <div className="flex flex-row items-center justify-between gap-3 sm:gap-4">
+                        <button
+                            onClick={() => (step > 1 ? setStep(step - 1) : onClose())}
+                            className="flex-none flex items-center justify-center gap-2 px-3 sm:px-8 py-3 sm:py-4 text-[9px] sm:text-xs font-black uppercase tracking-widest text-slate-500 hover:text-black transition-all bg-slate-50 dark:bg-white/5 rounded-2xl border border-slate-100 dark:border-white/5"
+                        >
+                            {step === 1 ? 'Cancel' : 'Back'}
+                        </button>
+
+                        <div className="flex flex-1 sm:flex-none gap-2">
+
                             <button
-                                onClick={() => (step > 1 ? setStep(step - 1) : onClose())}
-                                className="flex-none flex items-center justify-center gap-2 px-3 sm:px-8 py-3 sm:py-4 text-[9px] sm:text-xs font-black uppercase tracking-widest text-slate-500 hover:text-black transition-all bg-slate-50 dark:bg-white/5 rounded-2xl border border-slate-100 dark:border-white/5"
+                                onClick={handleNext}
+                                disabled={loading}
+                                className="flex-[2] sm:flex-none flex items-center justify-center gap-1 sm:gap-3 px-3 sm:px-12 py-3 sm:py-5 bg-[#FACC15] hover:bg-yellow-500 text-black hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 rounded-[2rem] text-[9px] sm:text-xs font-black uppercase tracking-[0.2em] transition-all group"
                             >
-                                {step === 1 ? 'Cancel' : 'Back'}
+                                {step === 1 ? 'Next Step' : step === 2 ? 'Checkout' : loading ? 'Wait...' : 'Confirm'}
+                                <ArrowRight size={14} strokeWidth={3} className="group-hover:translate-x-1 transition-transform" />
                             </button>
-
-                            <div className="flex flex-1 sm:flex-none gap-2">
-
-                                <button
-                                    onClick={handleNext}
-                                    disabled={loading}
-                                    className="flex-[2] sm:flex-none flex items-center justify-center gap-1 sm:gap-3 px-3 sm:px-12 py-3 sm:py-5 bg-[#FACC15] hover:bg-yellow-500 text-black hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 rounded-[2rem] text-[9px] sm:text-xs font-black uppercase tracking-[0.2em] transition-all group"
-                                >
-                                    {step === 1 ? 'Next Step' : step === 2 ? 'Checkout' : loading ? 'Wait...' : 'Confirm'}
-                                    <ArrowRight size={14} strokeWidth={3} className="group-hover:translate-x-1 transition-transform" />
-                                </button>
-                            </div>
                         </div>
                     </div>
                 </div>
             </div>
+        </div>
     );
 }
