@@ -13,7 +13,7 @@ export const metadata = {
         title: 'Airport Drop Off & Taxi Service Sri Lanka | Cab Booking',
         description: 'Book our premier Taxi Service for an Airport Drop Off, Airport Cab, or quick Shuttle. Transparent Price Lists for Round Tours and Day Trips.',
         url: 'https://airporttaxis.lk/airport-drop',
-        siteName: 'Airport Taxis Pvt (Ltd)',
+        siteName: 'Airport Taxis (Pvt) Ltd',
         images: [
             {
                 url: '/logo.png',

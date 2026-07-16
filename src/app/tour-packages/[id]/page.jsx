@@ -27,7 +27,7 @@ export async function generateMetadata({ params }) {
     if (!tour) return { title: 'Tour Not Found' }
 
     return {
-        title: `${tour.title} - Sri Lanka Tour Package - Airport Taxis Pvt (Ltd)`,
+        title: `${tour.title} - Sri Lanka Tour Package - Airport Taxis (Pvt) Ltd`,
         description: `${tour.description?.slice(0, 160) || ''}... Book this multi-day tour package across ${tour.destinations?.join(', ')}. Professional guides and premium transport included.`,
         keywords: `${tour.title}, Sri Lanka Tour ${tour.slug}, ${tour.destinations?.join(', ')} Tour, Sri Lanka Multi-day Trip, Private Tour Sri Lanka`,
         openGraph: {

@@ -104,7 +104,7 @@ const COLORS = {
 };
 
 // Premium Base Template with Dark Theme
-const getPremiumTemplate = (content, title = 'Airport Taxis Pvt (Ltd)') => `
+const getPremiumTemplate = (content, title = 'Airport Taxis (Pvt) Ltd') => `
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -204,7 +204,7 @@ const getPremiumTemplate = (content, title = 'Airport Taxis Pvt (Ltd)') => `
                                 📞 +94 722 885 885 · 0719 885 885 · 0712 100 500
                             </p>
                             <p style="margin: 20px 0 0; color: #475569; font-size: 11px; text-align: center; letter-spacing: 1px;">
-                                © ${new Date().getFullYear()} AIRPORT TAXIS PVT (LTD) · ALL RIGHTS RESERVED
+                                © ${new Date().getFullYear()} Airport Taxis (Pvt) Ltd · ALL RIGHTS RESERVED
                             </p>
                         </td>
                     </tr>
@@ -276,7 +276,7 @@ const getPrintFriendlyTemplate = (content, title = 'Booking Details') => `
         <tr>
             <td style="padding: 10px 0; border-top: 1px solid #e5e7eb; text-align: center;">
                 <p style="margin: 0; font-size: 9px; color: #9ca3af;">
-                    Airport Taxis Pvt (Ltd) · 118/5 St. Joseph Street, Grandpass, Colombo 14
+                    Airport Taxis (Pvt) Ltd · 118/5 St. Joseph Street, Grandpass, Colombo 14
                 </p>
                 <p style="margin: 2px 0 0; font-size: 9px; color: #9ca3af;">
                     📞 +94 722 885 885 · 0719 885 885 · 0712 100 500 · ✉️ info@srilankantaxi.lk · 🌐 srilankantaxi.lk

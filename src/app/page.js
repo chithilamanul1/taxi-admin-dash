@@ -50,7 +50,7 @@ export default function Home() {
                         "dateModified": new Date().toISOString().split('T')[0],
                         "publisher": {
                             "@type": "Organization",
-                            "name": "Airport Taxis Pvt (Ltd)",
+                            "name": "Airport Taxis (Pvt) Ltd",
                             "logo": "https://airporttaxis.lk/logo.png"
                         }
                     })

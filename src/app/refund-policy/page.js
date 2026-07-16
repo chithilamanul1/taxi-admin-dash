@@ -26,7 +26,7 @@ export default function RefundPolicyPage() {
                 <div className="max-w-4xl mx-auto bg-white rounded-3xl shadow-2xl overflow-hidden">
                     <div className="bg-emerald-50 p-8 border-b border-emerald-100">
                         <p className="text-emerald-900 text-lg leading-relaxed">
-                            At <strong>Airport Taxis Pvt (Ltd)</strong>, we understand plans can change. This policy outlines our fair and transparent cancellation and refund procedures.
+                            At <strong>Airport Taxis (Pvt) Ltd</strong>, we understand plans can change. This policy outlines our fair and transparent cancellation and refund procedures.
                         </p>
                     </div>
 
@@ -178,7 +178,7 @@ export default function RefundPolicyPage() {
                             <div className="space-y-4">
                                 <div className="flex flex-col gap-1">
                                     <p className="text-sm text-slate-500 font-medium">
-                                        Official Refund Policy of Airport Taxis Pvt (Ltd). Last updated January 2024.
+                                        Official Refund Policy of Airport Taxis (Pvt) Ltd. Last updated January 2024.
                                     </p>
                                     <a href="mailto:info@airporttaxis.lk" className="flex items-center gap-2 text-emerald-600 font-bold hover:underline">
                                         <Mail size={16} /> info@airporttaxis.lk

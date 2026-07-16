@@ -110,7 +110,7 @@ const About = () => {
                         
                         <div className="space-y-6 text-slate-600 dark:text-slate-400 text-lg leading-relaxed">
                             <p className="font-bold text-slate-900 dark:text-slate-200">
-                                Airport Taxis Pvt (Ltd) is Sri Lanka's premier transportation provider, dedicated to offering safety, reliability, and comfort.
+                                Airport Taxis (Pvt) Ltd is Sri Lanka's premier transportation provider, dedicated to offering safety, reliability, and comfort.
                             </p>
                             <p>
                                 Whether you need a quick airport transfer or a multi-day island adventure, our fleet of modern vehicles and professional drivers ensures a premium experience at competitive rates.

@@ -68,7 +68,7 @@ export default function ReviewsPage() {
     const reviewsSchema = {
         "@context": "https://schema.org",
         "@type": "LocalBusiness",
-        "name": "Airport Taxis Pvt (Ltd)",
+        "name": "Airport Taxis (Pvt) Ltd",
         "image": "https://airporttaxis.lk/og-image.jpg",
         "url": "https://airporttaxis.lk/reviews",
         "aggregateRating": {

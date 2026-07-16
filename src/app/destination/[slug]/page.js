@@ -16,7 +16,7 @@ export async function generateMetadata({ params }) {
 
     return {
         title: `Colombo Airport to ${city} Taxi - Fixed Price $${destination.price} - 24/7 Service`,
-        description: `Looking for a taxi from Colombo Airport (CMB) to ${city}? Book a reliable private transfer with Airport Taxis Pvt (Ltd). Fixed rates from $${destination.price}. Professional drivers and 24/7 support. ${destination.description.slice(0, 100)}...`,
+        description: `Looking for a taxi from Colombo Airport (CMB) to ${city}? Book a reliable private transfer with Airport Taxis (Pvt) Ltd. Fixed rates from $${destination.price}. Professional drivers and 24/7 support. ${destination.description.slice(0, 100)}...`,
         keywords: `Taxi from Colombo Airport to ${city}, CMB to ${city} Taxi, Colombo Airport Transfer to ${city}, ${city} Sri Lanka Taxi Service, ${city} Airport Pickup`,
         alternates: {
             canonical: `${baseUrl}/destination/${slug}`,

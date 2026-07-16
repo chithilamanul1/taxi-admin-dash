@@ -93,7 +93,7 @@ export const templates = {
                 </div>
 
                 <div style="background-color: #f3f4f6; padding: 20px; text-align: center; color: #9ca3af; font-size: 12px;">
-                    <p style="margin: 0;">© ${new Date().getFullYear()} Airport Taxis Pvt (Ltd). Sri Lanka.</p>
+                    <p style="margin: 0;">© ${new Date().getFullYear()} Airport Taxis (Pvt) Ltd. Sri Lanka.</p>
                     <p style="margin: 10px 0 0;">If you'd rather not receive these emails, <a href="https://srilankantaxi.lk/unsubscribe" style="color: #6b7280; text-decoration: underline;">unsubscribe here</a>.</p>
                 </div>
             </div>

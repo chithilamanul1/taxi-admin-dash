@@ -109,7 +109,7 @@ export default async function SinglePostPage({ params }) {
         },
         "publisher": {
             "@type": "Organization",
-            "name": "Airport Taxis Pvt (Ltd)",
+            "name": "Airport Taxis (Pvt) Ltd",
             "logo": {
                 "@type": "ImageObject",
                 "url": "https://airporttaxis.lk/logo.png"

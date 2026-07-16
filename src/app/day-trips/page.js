@@ -11,7 +11,7 @@ export const metadata = {
         title: 'Explore Sri Lanka with Private Day Trips & Tours',
         description: 'Expertly curated single-day experiences across Sri Lanka. Visit iconic UNESCO sites with professional transport and English-speaking drivers.',
         url: 'https://airporttaxis.lk/day-trips',
-        siteName: 'Airport Taxis Pvt (Ltd)',
+        siteName: 'Airport Taxis (Pvt) Ltd',
         images: [
             {
                 url: '/sigiriya-new-hero.png',

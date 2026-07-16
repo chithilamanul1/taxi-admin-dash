@@ -11,7 +11,7 @@ export const metadata = {
         title: 'Authentic Sri Lanka Tour Packages & Adventures',
         description: 'Complete tour packages with transport, hotels, and expert guides. Experience the best of Sri Lanka with our trusted local team.',
         url: 'https://airporttaxis.lk/tour-packages',
-        siteName: 'Airport Taxis Pvt (Ltd)',
+        siteName: 'Airport Taxis (Pvt) Ltd',
         images: [
             {
                 url: '/sigiriya-new-hero.png',

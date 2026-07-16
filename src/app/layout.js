@@ -37,9 +37,9 @@ export async function generateMetadata() {
             'airporttaxis.lk', 'srilankantaxi.lk', 'airporttaxicab.lk', 'touris.lk', 'taxiairport.lk', 'tourtaxi.lk',
             'sri lankan taxi', 'airport taxis', 'airport taxi cab', 'touris', 'taxi airport', 'tour taxi', 'cab'
         ],
-        authors: [{ name: 'Airport Taxis Pvt (Ltd)' }],
-        creator: 'Airport Taxis Pvt (Ltd)',
-        publisher: 'Airport Taxis Pvt (Ltd)',
+        authors: [{ name: 'Airport Taxis (Pvt) Ltd' }],
+        creator: 'Airport Taxis (Pvt) Ltd',
+        publisher: 'Airport Taxis (Pvt) Ltd',
         formatDetection: {
             email: false,
             address: false,

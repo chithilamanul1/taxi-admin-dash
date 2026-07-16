@@ -13,7 +13,7 @@ export const metadata = {
         title: 'Airport Pick Up Sri Lanka: Reliable Airport Taxi & Cab Services',
         description: 'Seamless airport pickup Sri Lanka services alongside convenient airport drop-offs. Book your comfortable, hassle-free ride today!',
         url: 'https://airporttaxis.lk/airport-pickup',
-        siteName: 'Airport Taxis Pvt (Ltd)',
+        siteName: 'Airport Taxis (Pvt) Ltd',
         images: [
             {
                 url: '/logo.png',

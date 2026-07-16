@@ -42,7 +42,7 @@ export const generateBookingPDF = (booking) => {
     doc.setFontSize(9);
     doc.setTextColor(...COLORS.black);
     doc.setFont(undefined, 'bold');
-    doc.text("Airport Taxis Pvt (Ltd)", 15, 38);
+    doc.text("Airport Taxis (Pvt) Ltd", 15, 38);
     doc.setFont(undefined, 'normal');
     doc.setTextColor(...COLORS.slate);
     doc.setFontSize(8);

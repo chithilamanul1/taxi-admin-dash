@@ -13,7 +13,7 @@ export const metadata = {
         title: 'Best Sri Lankan Taxi Cab Service | Secure Online Cab Booking',
         description: 'Premium cab service across all tourism areas with convenient island-wide service. Book your ride today!',
         url: 'https://airporttaxis.lk/ride',
-        siteName: 'Airport Taxis Pvt (Ltd)',
+        siteName: 'Airport Taxis (Pvt) Ltd',
         images: [
             {
                 url: '/logo.png',
