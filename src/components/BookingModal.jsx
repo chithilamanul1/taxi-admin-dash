@@ -1645,7 +1645,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                                         <button
                                                             key={t}
                                                             onClick={() => setFormData(prev => ({ ...prev, paymentType: t }))}
-                                                            className={`py-3 sm:py-4 rounded-2xl text-[8px] sm:text-[9px] font-black uppercase tracking-widest transition-all ${formData.paymentType === t ? 'bg-[#FACC15] text-black shadow-xl ring-2 ring-[#FACC15]/20' : 'text-slate-400 hover:text-[#FACC15] opacity-60 hover:opacity-100'}`}
+                                                            className={`py-3 sm:py-4 rounded-2xl text-[8px] sm:text-[9px] font-black uppercase tracking-widest transition-all ${formData.paymentType === t ? 'bg-[#FACC15] text-black shadow-xl ring-2 ring-[#FACC15]/20' : 'text-slate-600 dark:text-slate-400 bg-slate-100 dark:bg-zinc-800 hover:bg-slate-200 dark:hover:bg-zinc-700 hover:text-[#FACC15]'}`}
                                                         >
                                                             {t === 'full' ? 'Complete (100%)' : 'Deposit (50%)'}
                                                         </button>
