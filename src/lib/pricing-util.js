@@ -236,6 +236,38 @@ export const calculateBasePrice = (distanceKm, vehicleData, tripType = 'one-way'
     const isSigiriyaOrEllaRoute = pickupNorm.includes('sigiriya') || dropoffNorm.includes('sigiriya') || pickupNorm.includes('ella') || dropoffNorm.includes('ella');
     const isWagonRVehicle = vehicleData && (vehicleData.vehicleType === 'mini-car' || vehicleData.vehicleSlug === 'mini-car');
 
+    // 0. PRIORITY: Hardcoded Sigiriya/Ella tier rates for LOCAL rides (not airport transfers)
+    // This must run BEFORE database matching to prevent the "Airport to Sigiriya" fixed rate from being applied to local rides.
+    if (isSigiriyaOrEllaRoute && distKm > 0 && !isAirportTransfer && tripType !== 'airport-round-tour' && tripType !== 'normal-round-tour') {
+        const vSlug = vehicleData.vehicleSlug || vehicleData.vehicleType;
+        const vType = vehicleData.vehicleType;
+        const isMiniCar = vSlug === 'mini-car' || vType === 'mini-car';
+        const isSedan = vSlug === 'sedan' || vType === 'sedan';
+
+        if (isMiniCar || isSedan) {
+            let tierPrice = 0;
+
+            if (distKm <= 20) {
+                tierPrice = isMiniCar ? 7000 : 9000;
+            } else if (distKm <= 40) {
+                tierPrice = isMiniCar ? 9000 : 11000;
+            } else if (distKm <= 60) {
+                tierPrice = distKm * (isMiniCar ? 150 : 180);
+            } else if (distKm <= 100) {
+                tierPrice = distKm * (isMiniCar ? 150 : 170);
+            } else {
+                tierPrice = distKm * (isMiniCar ? 135 : 155);
+            }
+
+            let baseTotal = tierPrice;
+            if (tripType === 'round-trip' && !roundTripPackageId) {
+                baseTotal *= 2;
+            }
+            console.log(`[Pricing] Sigiriya/Ella Local Tier Rate applied: LKR ${tierPrice} for ${distKm}km (${vType})`);
+            return Math.round(baseTotal);
+        }
+    }
+
     // 1. Try to find an EXACT point-to-point match using Coordinate Routing Engine or fallback string matching
     let matchedOverride = null;
     let exactMatchFound = false;
