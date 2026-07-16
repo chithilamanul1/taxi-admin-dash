@@ -1070,7 +1070,7 @@ const BookingWidgetContent = ({ defaultTab = 'pickup', onTabChange }) => {
                             </div>
 
                             {/* STEPS */}
-                            <AnimatePresence>
+                            <AnimatePresence mode="popLayout">
 
                                 {step === 1 && (
                                     <motion.div key="step1" initial={{ opacity: 0, x: -16 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -16 }} transition={{ duration: 0.2 }}>

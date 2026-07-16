@@ -346,7 +346,9 @@ export const calculateBasePrice = (distanceKm, vehicleData, tripType = 'one-way'
         const genericDestinations = dynamicDestinations.filter(d => !d.pickupLocation || d.pickupLocation.trim() === '');
         const pickupOverride = findMatchingDestination(pickup, genericDestinations);
         const dropoffOverride = findMatchingDestination(dropoff, genericDestinations);
-        const genericMatch = hasPricingData(dropoffOverride) ? dropoffOverride : (hasPricingData(pickupOverride) ? pickupOverride : null);
+
+        // Prioritize pickup zone pricing over dropoff zone pricing
+        const genericMatch = hasPricingData(pickupOverride) ? pickupOverride : (hasPricingData(dropoffOverride) ? dropoffOverride : null);
 
         if (genericMatch) {
             const rideType = genericMatch.applicableRideType || 'all';

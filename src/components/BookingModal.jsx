@@ -1617,7 +1617,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                         <div className="space-y-6">
                                             <div className="flex items-center gap-4">
                                                 <div className="h-px flex-1 bg-slate-100 dark:bg-white/5"></div>
-                                                <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Payment Method</span>
+                                                <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest text-center">Select your payment (Card or Cash)</span>
                                                 <div className="h-px flex-1 bg-slate-100 dark:bg-white/5"></div>
                                             </div>
                                             <div className="grid grid-cols-2 gap-2 sm:gap-4">
@@ -1629,7 +1629,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                                             paymentMethod: m,
                                                             ...(m === 'cash' ? { paymentType: 'full' } : {})
                                                         })}
-                                                        className={`p-4 sm:p-6 rounded-3xl sm:rounded-[2rem] border transition-all flex flex-col items-center gap-2 sm:gap-3 ${formData.paymentMethod === m ? 'bg-[#FACC15] border-transparent text-white shadow-xl' : 'bg-white dark:bg-zinc-900 border-slate-100 dark:border-white/10 text-slate-600 hover:border-[#FACC15]'}`}
+                                                        className={`p-4 sm:p-6 rounded-3xl sm:rounded-[2rem] border transition-all flex flex-col items-center gap-2 sm:gap-3 ${formData.paymentMethod === m ? 'bg-[#FACC15] border-transparent text-black shadow-xl ring-4 ring-[#FACC15]/20' : 'bg-white dark:bg-zinc-900 border-slate-100 dark:border-white/10 text-slate-600 hover:border-[#FACC15] opacity-60 hover:opacity-100 scale-[0.98]'}`}
                                                     >
                                                         {m === 'cash' ? <Coins size={22} /> : <CreditCard size={22} />}
                                                         <span className="text-[10px] font-black uppercase tracking-widest">{m === 'cash' ? 'Cash' : 'Card'}</span>
@@ -1645,7 +1645,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                                         <button
                                                             key={t}
                                                             onClick={() => setFormData(prev => ({ ...prev, paymentType: t }))}
-                                                            className={`py-3 sm:py-4 rounded-2xl text-[8px] sm:text-[9px] font-black uppercase tracking-widest transition-all ${formData.paymentType === t ? 'bg-[#FACC15] text-white shadow-xl' : 'text-slate-400 hover:text-[#FACC15]'}`}
+                                                            className={`py-3 sm:py-4 rounded-2xl text-[8px] sm:text-[9px] font-black uppercase tracking-widest transition-all ${formData.paymentType === t ? 'bg-[#FACC15] text-black shadow-xl ring-2 ring-[#FACC15]/20' : 'text-slate-400 hover:text-[#FACC15] opacity-60 hover:opacity-100'}`}
                                                         >
                                                             {t === 'full' ? 'Complete (100%)' : 'Deposit (50%)'}
                                                         </button>
