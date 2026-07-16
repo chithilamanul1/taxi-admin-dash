@@ -479,11 +479,36 @@ export const calculateBasePrice = (distanceKm, vehicleData, tripType = 'one-way'
     }
 
     if (!overrideApplied) {
-        // Hardcoded competitive rate override for Wagon R (mini-car) to/from Sigiriya or Ella as a fallback
-        if (isWagonRVehicle && isSigiriyaOrEllaRoute && distKm > 0 && tripType !== 'airport-round-tour' && tripType !== 'normal-round-tour' && !isAirportTransfer) {
-            distancePrice = distKm * 200;
-            overrideApplied = true;
-            console.log(`[Pricing Override] Wagon R route to/from Sigiriya/Ella: LKR ${distancePrice} (Rs. 200/km)`);
+        // Hardcoded competitive tier rates for Sigiriya and Ella local rides (non-airport)
+        if (isSigiriyaOrEllaRoute && distKm > 0 && tripType !== 'airport-round-tour' && tripType !== 'normal-round-tour' && !isAirportTransfer) {
+            const isMiniCar = vehicleSlug === 'mini-car' || vehicleType === 'mini-car';
+            const isSedan = vehicleSlug === 'sedan' || vehicleType === 'sedan';
+
+            if (isMiniCar || isSedan) {
+                let flatRate = 0;
+                let perKmRate = 0;
+
+                if (distKm <= 20) {
+                    flatRate = isMiniCar ? 7000 : 9000;
+                } else if (distKm <= 40) {
+                    flatRate = isMiniCar ? 9000 : 11000;
+                } else if (distKm <= 60) {
+                    perKmRate = isMiniCar ? 150 : 180;
+                } else if (distKm <= 100) {
+                    perKmRate = isMiniCar ? 150 : 170;
+                } else {
+                    perKmRate = isMiniCar ? 135 : 155;
+                }
+
+                if (flatRate > 0) {
+                    distancePrice = flatRate;
+                } else if (perKmRate > 0) {
+                    distancePrice = distKm * perKmRate;
+                }
+
+                overrideApplied = true;
+                console.log(`[Pricing Override] Sigiriya/Ella Local Route (${vehicleType}): LKR ${distancePrice}`);
+            }
         }
 
         if (!overrideApplied && tiers.length > 0) {
