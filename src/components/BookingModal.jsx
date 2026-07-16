@@ -1629,7 +1629,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                                             paymentMethod: m,
                                                             ...(m === 'cash' ? { paymentType: 'full' } : {})
                                                         })}
-                                                        className={`p-4 sm:p-6 rounded-3xl sm:rounded-[2rem] border transition-all flex flex-col items-center gap-2 sm:gap-3 ${formData.paymentMethod === m ? 'bg-[#FACC15] border-transparent text-black shadow-xl ring-4 ring-[#FACC15]/20' : 'bg-white dark:bg-zinc-900 border-slate-100 dark:border-white/10 text-slate-600 hover:border-[#FACC15] opacity-60 hover:opacity-100 scale-[0.98]'}`}
+                                                        className={`p-4 sm:p-6 rounded-3xl sm:rounded-[2rem] border transition-all flex flex-col items-center gap-2 sm:gap-3 ${formData.paymentMethod === m ? 'bg-[#FACC15] border-transparent text-black shadow-xl ring-4 ring-[#FACC15]/20' : 'bg-white dark:bg-zinc-900 border-slate-200 dark:border-white/20 text-slate-800 dark:text-white hover:border-[#FACC15]'}`}
                                                     >
                                                         {m === 'cash' ? <Coins size={22} /> : <CreditCard size={22} />}
                                                         <span className="text-[10px] font-black uppercase tracking-widest">{m === 'cash' ? 'Cash' : 'Card'}</span>
@@ -1645,7 +1645,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                                         <button
                                                             key={t}
                                                             onClick={() => setFormData(prev => ({ ...prev, paymentType: t }))}
-                                                            className={`py-3 sm:py-4 rounded-2xl text-[8px] sm:text-[9px] font-black uppercase tracking-widest transition-all ${formData.paymentType === t ? 'bg-[#FACC15] text-black shadow-xl ring-2 ring-[#FACC15]/20' : 'text-slate-600 dark:text-slate-400 bg-slate-100 dark:bg-zinc-800 hover:bg-slate-200 dark:hover:bg-zinc-700 hover:text-[#FACC15]'}`}
+                                                            className={`py-3 sm:py-4 rounded-2xl text-[8px] sm:text-[9px] font-black uppercase tracking-widest transition-all ${formData.paymentType === t ? 'bg-[#FACC15] text-black shadow-xl ring-2 ring-[#FACC15]/20' : 'text-slate-800 dark:text-white bg-slate-200 dark:bg-zinc-700 hover:bg-slate-300 dark:hover:bg-zinc-600 hover:text-[#FACC15]'}`}
                                                         >
                                                             {t === 'full' ? 'Complete (100%)' : 'Deposit (50%)'}
                                                         </button>
