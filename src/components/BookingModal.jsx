@@ -774,21 +774,11 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
             if (!formData.phone || formData.phone.length < 8) newErrors.phone = true;
             if (!formData.email) newErrors.email = true;
             if (!formData.whatsapp && (!formData.phone || formData.phone.length < 8)) newErrors.whatsapp = true;
-
-            const numExtra = Math.max(0, (Number(formData.passengerCount?.adults) || 1) + (Number(formData.passengerCount?.children) || 0) - 1);
-            for (let i = 0; i < numExtra; i++) {
-                if (!formData.additionalPassengers?.[i] || formData.additionalPassengers[i].trim() === '') {
-                    newErrors[`additionalPassenger_${i}`] = true;
-                }
-            }
         }
 
         setErrors(newErrors);
         if (Object.keys(newErrors).length > 0) {
-            const isMissingExtraPass = Object.keys(newErrors).some(k => k.startsWith('additionalPassenger_'));
-            if (isMissingExtraPass) {
-                alert("✓ Please enter the names for all your passengers.");
-            } else if (newErrors.adults) {
+            if (newErrors.adults) {
                 alert("Please select at least one adult passenger to proceed.");
                 if (passengerRef.current) {
                     passengerRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
@@ -1380,27 +1370,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                         )}
                                     </div>
                                 ))}
-                                {Array.from({ length: Math.max(0, (Number(formData.passengerCount?.adults) || 1) + (Number(formData.passengerCount?.children) || 0) - 1) }).map((_, idx) => (
-                                    <div key={`extra-passenger-${idx}`}>
-                                        <label className={`text-[10px] font-black uppercase tracking-[0.3em] mb-4 flex items-center gap-3 transition-colors ${errors[`additionalPassenger_${idx}`] ? 'text-red-500' : 'text-slate-500 dark:text-slate-400'}`}>
-                                            <User size={14} className={errors[`additionalPassenger_${idx}`] ? 'text-red-500' : 'text-[#FACC15]'} strokeWidth={3} /> Passenger {idx + 2} Name
-                                        </label>
-                                        <input
-                                            type="text"
-                                            value={formData.additionalPassengers?.[idx] || ''}
-                                            onChange={e => {
-                                                const val = e.target.value;
-                                                setFormData(prev => {
-                                                    const newPass = [...(prev.additionalPassengers || [])];
-                                                    newPass[idx] = val;
-                                                    return { ...prev, additionalPassengers: newPass };
-                                                });
-                                            }}
-                                            className={`w-full h-12 sm:h-14 bg-slate-50 dark:bg-white/5 border border-slate-300 dark:border-white/15 px-10 rounded-2xl outline-none font-black text-black dark:text-white placeholder:text-slate-700 dark:placeholder:text-slate-300 text-sm uppercase tracking-widest ${errors[`additionalPassenger_${idx}`] ? '!border-red-500 ring-2 ring-red-500/50 animate-shake' : ''}`}
-                                            placeholder={`Passenger ${idx + 2} Full Name`}
-                                        />
-                                    </div>
-                                ))}
+
                             </div>
 
                             <div className="pt-12 border-t border-slate-200 dark:border-white/10 relative">
