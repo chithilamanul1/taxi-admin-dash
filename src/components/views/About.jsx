@@ -18,7 +18,7 @@ const About = () => {
                     <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-transparent to-slate-50/100 dark:to-slate-950/100"></div>
                 </div>
 
-                <motion.div 
+                <motion.div
                     initial={{ opacity: 0, y: 30 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
@@ -29,7 +29,7 @@ const About = () => {
                         <span className="text-xs font-black text-black uppercase tracking-[0.2em]">Our Legacy Since 2010</span>
                     </div>
                     <h1 className="text-3xl sm:text-5xl md:text-8xl font-black text-white mb-8 tracking-tighter uppercase leading-[0.9]">
-                        Elevating <span className="text-amber-400">Sri Lanka's </span> <br /> 
+                        Elevating <span className="text-amber-400">Sri Lanka's </span> <br />
                         Travel Experience
                     </h1>
                     <p className="text-white/80 max-w-2xl mx-auto text-base md:text-lg font-medium leading-relaxed">
@@ -48,7 +48,7 @@ const About = () => {
                         { label: 'Experience Years', value: '14+', icon: <Award className="text-amber-400" /> },
                         { label: 'Expert Drivers', value: '80+', icon: <Shield className="text-amber-400" /> },
                     ].map((stat, i) => (
-                        <motion.div 
+                        <motion.div
                             key={i}
                             initial={{ opacity: 0, scale: 0.9 }}
                             whileInView={{ opacity: 1, scale: 1 }}
@@ -66,18 +66,18 @@ const About = () => {
 
                 {/* Main Content Grid */}
                 <div className="grid lg:grid-cols-2 gap-20 items-center mb-40">
-                    <motion.div 
+                    <motion.div
                         initial={{ opacity: 0, x: -50 }}
                         whileInView={{ opacity: 1, x: 0 }}
                         className="relative"
                     >
                         <div className="absolute -top-10 -left-10 w-40 h-40 bg-amber-400/20 rounded-full blur-3xl"></div>
                         <div className="absolute -bottom-10 -right-10 w-60 h-60 bg-blue-400/10 rounded-full blur-3xl"></div>
-                        
+
                         <div className="relative z-10 aspect-[4/5] rounded-[3rem] overflow-hidden border-8 border-white dark:border-slate-800 shadow-2xl bg-slate-200 dark:bg-slate-800">
                             <img
-                                src="https://images.pexels.com/photos/3184418/pexels-photo-3184418.jpeg?auto=compress&cs=tinysrgb&w=800" 
-                                alt="Our Local Team"
+                                src="/images/ceo.jpg"
+                                alt="Our CEO"
                                 className="w-full h-full object-cover transition-transform duration-700 hover:scale-105"
                                 onError={(e) => {
                                     e.target.src = "https://images.pexels.com/photos/1643330/pexels-photo-1643330.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
@@ -95,7 +95,7 @@ const About = () => {
                         </div>
                     </motion.div>
 
-                    <motion.div 
+                    <motion.div
                         initial={{ opacity: 0, x: 50 }}
                         whileInView={{ opacity: 1, x: 0 }}
                         className="space-y-10"
@@ -107,7 +107,7 @@ const About = () => {
                                 <span className="text-amber-400">Taxi Service</span>
                             </h2>
                         </div>
-                        
+
                         <div className="space-y-6 text-slate-600 dark:text-slate-400 text-lg leading-relaxed">
                             <p className="font-bold text-slate-900 dark:text-slate-200">
                                 Airport Taxis (Pvt) Ltd is Sri Lanka's premier transportation provider, dedicated to offering safety, reliability, and comfort.
@@ -165,7 +165,7 @@ const About = () => {
                             color: 'amber'
                         }
                     ].map((value, i) => (
-                        <motion.div 
+                        <motion.div
                             key={i}
                             initial={{ opacity: 0, y: 20 }}
                             whileInView={{ opacity: 1, y: 0 }}
