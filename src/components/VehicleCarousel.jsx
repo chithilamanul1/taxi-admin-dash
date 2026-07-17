@@ -228,7 +228,7 @@ const VehicleCarousel = ({ vehicles, selectedId, onSelect, passengerCount, picku
                                 rounded-[2rem] bg-white dark:bg-zinc-900 overflow-hidden
                                 ${!suitable ? 'opacity-50 grayscale' : ''}
                                 ${isSelected
-                                    ? 'border-[3px] border-[#FACC15] bg-[#FACC15]/10 dark:bg-[#FACC15]/20 shadow-[0_0_20px_rgba(250,204,21,0.2)] ring-4 ring-[#FACC15]/20'
+                                    ? 'border-[3px] border-[#FACC15] bg-[#FACC15]/10 dark:bg-[#FACC15]/20'
                                     : 'border-2 border-slate-100 dark:border-white/5 hover:border-slate-200 dark:hover:border-white/10'
                                 }
                             `}
