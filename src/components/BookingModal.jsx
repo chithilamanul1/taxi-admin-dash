@@ -774,903 +774,904 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
             if (!formData.phone || formData.phone.length < 8) newErrors.phone = true;
             if (!formData.email) newErrors.email = true;
             if (!formData.whatsapp && (!formData.phone || formData.phone.length < 8)) newErrors.whatsapp = true;
+        }
 
-            setErrors(newErrors);
-            if (Object.keys(newErrors).length > 0) {
-                if (newErrors.adults) {
-                    alert("Please select at least one adult passenger to proceed.");
-                    if (passengerRef.current) {
-                        passengerRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                        return false;
-                    }
+        setErrors(newErrors);
+        if (Object.keys(newErrors).length > 0) {
+            if (newErrors.adults) {
+                alert("Please select at least one adult passenger to proceed.");
+                if (passengerRef.current) {
+                    passengerRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    return false;
                 }
-                // Scroll to the first error element
-                setTimeout(() => {
-                    const firstError = Object.keys(newErrors)[0];
-                    const errorLabel = Array.from(document.querySelectorAll('label.text-red-500'))[0];
-                    if (errorLabel) {
-                        errorLabel.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                        // find the next input and focus it
-                        const input = errorLabel.parentElement.querySelector('input');
-                        if (input) input.focus();
-                    } else {
-                        const errorInput = document.querySelector('.border-red-500');
-                        if (errorInput) {
-                            errorInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                            errorInput.focus();
-                        }
-                    }
-                }, 50);
-                return false;
             }
-            return true;
-        };
-
-        const handleNext = () => {
-            if (step === 1) {
-                if (!formData.pickup || !formData.dropoff || !formData.distance || !formData.vehicle) {
-                    alert("Please fill all required fields in Step 1.");
-                    return;
-                }
-                const isAirportPickup = (formData.pickup?.toLowerCase().includes('airport') || (typeof initialData.pickup === 'string' && initialData.pickup.toLowerCase().includes('airport')));
-                if (isAirportPickup && initialData.isAirportPickup && formData.tripType !== 'tour') {
-                    const newErrors = {};
-                    if (formData.hasNameBoard === null) newErrors.hasNameBoard = true;
-                    if (!formData.flightNumber) newErrors.flightNumber = true;
-                    if (!formData.flightArrivalDate) newErrors.date = true;
-                    if (!formData.flightArrivalTime) newErrors.time = true;
-                    if (Object.keys(newErrors).length > 0) {
-                        setErrors(prev => ({ ...prev, ...newErrors }));
-                        setTimeout(() => {
-                            if (newErrors.hasNameBoard) {
-                                document.getElementById('airport-greeting-section')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                            } else {
-                                const errorInput = document.querySelector('.border-red-500');
-                                if (errorInput) {
-                                    errorInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                                    errorInput.focus();
-                                }
-                            }
-                        }, 50);
-                        return;
-                    }
-                }
-                if ((Number(formData.passengerCount?.adults) || 0) === 0) {
-                    setErrors(prev => ({ ...prev, adults: true }));
-                    alert("Please select at least one adult passenger to proceed");
-                    passengerRef.current?.scrollIntoView({ behavior: 'smooth' });
-                    return;
-                }
-                setErrors({});
-                setStep(2);
-            } else if (step === 2 && validateForm(2)) setStep(3);
-            else if (step === 3) handleSubmit();
-        };
-
-        const handleSubmit = async () => {
-            if (!validateForm(2)) return;
-            setLoading(true);
-            try {
-                const breakdown = getPriceBreakdown();
-                const { lkr } = breakdown;
-                if (lkr.total === 0) {
-                    alert("Pricing is not available for this selection. Please try selecting a different vehicle or route.");
-                    setLoading(false);
-                    return;
-                }
-
-                const bookingData = {
-                    customer: session?.user?.id || null,
-                    pickupLocation: { address: formData.pickup, lat: formData.pickupCoords?.lat || null, lng: formData.pickupCoords?.lng || null },
-                    dropoffLocation: { address: formData.dropoff, lat: formData.dropoffCoords?.lat || null, lng: formData.dropoffCoords?.lng || null },
-                    waypoints: formData.waypoints.map(wp => ({ address: wp.name, lat: wp.lat, lng: wp.lng })),
-                    vehicleType: formData.vehicle,
-                    tripType: formData.tripType,
-                    passengerCount: formData.passengerCount,
-                    distanceKm: distance,
-                    duration: formData.duration,
-                    totalPrice: lkr.total,
-                    paidAmount: lkr.payNow,
-                    balanceAmount: lkr.balance,
-                    displayPrice: breakdown.total,
-                    displayPaidAmount: breakdown.payNow,
-                    displayBalanceAmount: breakdown.balance,
-                    currency: currency || 'LKR',
-                    scheduledDate: formData.date || formData.flightArrivalDate,
-                    scheduledTime: formData.time || formData.flightArrivalTime,
-                    customerName: formData.name,
-                    customerEmail: formData.email,
-                    guestPhone: formData.phone,
-                    whatsappNumber: formData.whatsapp || formData.phone,
-                    passport: formData.passport,
-                    nameBoard: { enabled: formData.hasNameBoard, text: formData.nameBoardText },
-                    paymentMethod: formData.paymentMethod,
-                    flightNumber: formData.flightNumber,
-                    returnDate: formData.returnDate,
-                    returnTime: formData.returnTime,
-                    notes: formData.notes,
-                    taxiTourKm: formData.taxiTourKm || null,
-                    taxiTourHours: formData.taxiTourHours || null,
-                    roundTripPackageId: formData.roundTripPackageId || null
-                };
-
-                const res = await fetch('/api/payment/initiate', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(bookingData),
-                });
-
-                const data = await res.json();
-                if (data.success) {
-                    window.location.href = formData.paymentMethod === 'card' ? data.paymentUrl : `/payment/success?bookingId=${data.bookingId}`;
+            // Scroll to the first error element
+            setTimeout(() => {
+                const firstError = Object.keys(newErrors)[0];
+                const errorLabel = Array.from(document.querySelectorAll('label.text-red-500'))[0];
+                if (errorLabel) {
+                    errorLabel.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    // find the next input and focus it
+                    const input = errorLabel.parentElement.querySelector('input');
+                    if (input) input.focus();
                 } else {
-                    alert('Booking failed: ' + (data.message || 'Server error'));
+                    const errorInput = document.querySelector('.border-red-500');
+                    if (errorInput) {
+                        errorInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        errorInput.focus();
+                    }
                 }
-            } catch (error) {
-                console.error("Submit Error:", error);
-                alert('An error occurred.');
-            } finally {
-                setLoading(false);
+            }, 50);
+            return false;
+        }
+        return true;
+    };
+
+    const handleNext = () => {
+        if (step === 1) {
+            if (!formData.pickup || !formData.dropoff || !formData.distance || !formData.vehicle) {
+                alert("Please fill all required fields in Step 1.");
+                return;
             }
-        };
+            const isAirportPickup = (formData.pickup?.toLowerCase().includes('airport') || (typeof initialData.pickup === 'string' && initialData.pickup.toLowerCase().includes('airport')));
+            if (isAirportPickup && initialData.isAirportPickup && formData.tripType !== 'tour') {
+                const newErrors = {};
+                if (formData.hasNameBoard === null) newErrors.hasNameBoard = true;
+                if (!formData.flightNumber) newErrors.flightNumber = true;
+                if (!formData.flightArrivalDate) newErrors.date = true;
+                if (!formData.flightArrivalTime) newErrors.time = true;
+                if (Object.keys(newErrors).length > 0) {
+                    setErrors(prev => ({ ...prev, ...newErrors }));
+                    setTimeout(() => {
+                        if (newErrors.hasNameBoard) {
+                            document.getElementById('airport-greeting-section')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        } else {
+                            const errorInput = document.querySelector('.border-red-500');
+                            if (errorInput) {
+                                errorInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                                errorInput.focus();
+                            }
+                        }
+                    }, 50);
+                    return;
+                }
+            }
+            if ((Number(formData.passengerCount?.adults) || 0) === 0) {
+                setErrors(prev => ({ ...prev, adults: true }));
+                alert("Please select at least one adult passenger to proceed");
+                passengerRef.current?.scrollIntoView({ behavior: 'smooth' });
+                return;
+            }
+            setErrors({});
+            setStep(2);
+        } else if (step === 2 && validateForm(2)) setStep(3);
+        else if (step === 3) handleSubmit();
+    };
 
-        if (!isOpen) return null;
+    const handleSubmit = async () => {
+        if (!validateForm(2)) return;
+        setLoading(true);
+        try {
+            const breakdown = getPriceBreakdown();
+            const { lkr } = breakdown;
+            if (lkr.total === 0) {
+                alert("Pricing is not available for this selection. Please try selecting a different vehicle or route.");
+                setLoading(false);
+                return;
+            }
 
-        const selectedVehicle = pricing.find(p => p.vehicleType === formData.vehicle);
+            const bookingData = {
+                customer: session?.user?.id || null,
+                pickupLocation: { address: formData.pickup, lat: formData.pickupCoords?.lat || null, lng: formData.pickupCoords?.lng || null },
+                dropoffLocation: { address: formData.dropoff, lat: formData.dropoffCoords?.lat || null, lng: formData.dropoffCoords?.lng || null },
+                waypoints: formData.waypoints.map(wp => ({ address: wp.name, lat: wp.lat, lng: wp.lng })),
+                vehicleType: formData.vehicle,
+                tripType: formData.tripType,
+                passengerCount: formData.passengerCount,
+                distanceKm: distance,
+                duration: formData.duration,
+                totalPrice: lkr.total,
+                paidAmount: lkr.payNow,
+                balanceAmount: lkr.balance,
+                displayPrice: breakdown.total,
+                displayPaidAmount: breakdown.payNow,
+                displayBalanceAmount: breakdown.balance,
+                currency: currency || 'LKR',
+                scheduledDate: formData.date || formData.flightArrivalDate,
+                scheduledTime: formData.time || formData.flightArrivalTime,
+                customerName: formData.name,
+                customerEmail: formData.email,
+                guestPhone: formData.phone,
+                whatsappNumber: formData.whatsapp || formData.phone,
+                passport: formData.passport,
+                nameBoard: { enabled: formData.hasNameBoard, text: formData.nameBoardText },
+                paymentMethod: formData.paymentMethod,
+                flightNumber: formData.flightNumber,
+                returnDate: formData.returnDate,
+                returnTime: formData.returnTime,
+                notes: formData.notes,
+                taxiTourKm: formData.taxiTourKm || null,
+                taxiTourHours: formData.taxiTourHours || null,
+                roundTripPackageId: formData.roundTripPackageId || null
+            };
 
-        return (
-            <div className="fixed inset-0 z-[10000] flex items-center justify-center p-0 sm:p-4 md:p-8 bg-emerald-950/20 backdrop-blur-xl">
-                <div className="w-full h-[100dvh] sm:h-[95vh] max-h-full max-w-7xl bg-white dark:bg-zinc-950 sm:rounded-[3rem] shadow-[0_0_100px_rgba(0,0,0,0.2)] dark:shadow-none overflow-hidden flex flex-col relative border border-white/20">
-                    {/* Header */}
-                    <div className="p-6 sm:p-10 border-b border-slate-100 dark:border-white/5 bg-white/80 dark:bg-zinc-950/80 backdrop-blur-md sticky top-0 z-50 shrink-0">
-                        <div className="flex items-center justify-between">
-                            <div className="flex items-center gap-6">
-                                <button onClick={onClose} className="w-12 h-12 flex items-center justify-center rounded-2xl bg-slate-50 dark:bg-white/5 text-slate-400 hover:text-[#FACC15] transition-all hover:scale-110 active:scale-95 group">
-                                    <X size={20} className="group-hover:rotate-90 transition-transform duration-500" />
-                                </button>
-                                <div className="h-10 w-px bg-slate-100 dark:bg-white/10 mx-2 hidden sm:block"></div>
-                                <div className="hidden sm:flex items-center gap-10">
-                                    {STEPS.map((s, idx) => (
-                                        <div key={s.id} className="flex items-center gap-4">
-                                            <div className={`w-8 h-8 rounded-xl flex items-center justify-center text-[10px] font-black transition-all duration-500 ${step >= s.id ? 'bg-[#FACC15] text-white shadow-lg scale-110' : 'bg-slate-50 dark:bg-white/5 text-slate-300'}`}>
-                                                {step > s.id ? <Check size={14} strokeWidth={4} /> : s.id}
-                                            </div>
-                                            <span className={`text-[10px] font-black uppercase tracking-[0.2em] transition-all duration-500 ${step >= s.id ? 'text-black dark:text-white' : 'text-slate-300'}`}>{s.title}</span>
-                                            {idx < STEPS.length - 1 && <ChevronRight size={14} className="text-slate-100 dark:text-white/5 mx-2" />}
-                                        </div>
-                                    ))}
-                                </div>
-                                <div className="flex sm:hidden items-center gap-3">
-                                    <div className="w-10 h-10 rounded-2xl bg-[#FACC15] text-white flex items-center justify-center shadow-lg">
-                                        <span className="text-xs font-black">{step}</span>
-                                    </div>
-                                    <div className="flex flex-col">
-                                        <span className="text-[8px] font-black text-[#FACC15] uppercase tracking-widest leading-none mb-1">Step {step} of 3</span>
-                                        <span className="text-[10px] font-black text-black dark:text-white uppercase tracking-tight leading-none">{STEPS[step - 1].title}</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+            const res = await fetch('/api/payment/initiate', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(bookingData),
+            });
 
-                    <div ref={scrollContainerRef} className="flex-1 overflow-y-auto overflow-x-hidden p-6 sm:p-12 space-y-12 w-full">
-                        {step === 1 && (
-                            <div className="animate-slide-up space-y-12">
-                                <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 pb-8 border-b border-slate-100 dark:border-white/10">
-                                    <div>
-                                        <h3 className="text-3xl sm:text-5xl md:text-6xl font-black text-black dark:text-white tracking-tighter uppercase leading-none mb-3 break-words">
-                                            Route <span className="text-[#FACC15]">& Vehicle</span>
-                                        </h3>
-                                        <p className="text-[10px] sm:text-xs font-black text-slate-400 uppercase tracking-[0.4em]">Initialize Your Elite Transfer</p>
-                                    </div>
-                                </div>
+            const data = await res.json();
+            if (data.success) {
+                window.location.href = formData.paymentMethod === 'card' ? data.paymentUrl : `/payment/success?bookingId=${data.bookingId}`;
+            } else {
+                alert('Booking failed: ' + (data.message || 'Server error'));
+            }
+        } catch (error) {
+            console.error("Submit Error:", error);
+            alert('An error occurred.');
+        } finally {
+            setLoading(false);
+        }
+    };
 
-                                <div className="grid md:grid-cols-2 gap-10">
-                                    <div className="space-y-8">
-                                        <div className="group/field relative">
-                                            <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-4 flex items-center gap-3">
-                                                <MapPin size={14} className="text-[#FACC15]" strokeWidth={3} /> Pickup Location
-                                            </label>
-                                            <LocationInput
-                                                id="field-pickup"
-                                                value={formData.pickup}
-                                                onChange={(val) => setFormData(prev => ({ ...prev, pickup: val }))}
-                                                onSelect={(loc) => setFormData(prev => ({ ...prev, pickup: loc.address, pickupCoords: { lat: loc.lat, lng: loc.lng } }))}
-                                                placeholder="Enter Airport or Hotel Name"
-                                                className={errors.pickup ? 'border-red-500 animate-shake' : ''}
-                                            />
-                                        </div>
-                                        <div className="group/field relative">
-                                            <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-4 flex items-center gap-3">
-                                                <Navigation size={14} className="text-[#FACC15]" strokeWidth={3} /> Dropoff Location
-                                            </label>
-                                            <LocationInput
-                                                id="field-dropoff"
-                                                value={formData.dropoff}
-                                                onChange={(val) => setFormData(prev => ({ ...prev, dropoff: val }))}
-                                                onSelect={(loc) => setFormData(prev => ({ ...prev, dropoff: loc.address, dropoffCoords: { lat: loc.lat, lng: loc.lng } }))}
-                                                placeholder="Where are you heading?"
-                                                className={errors.dropoff ? 'border-red-500 animate-shake' : ''}
-                                            />
-                                        </div>
-                                    </div>
+    if (!isOpen) return null;
 
-                                    {isAirportService && initialData.isAirportPickup && formData.tripType !== 'tour' && (
-                                        <div id="airport-greeting-section" className="space-y-8">
-                                            <label className={`text-[10px] font-black uppercase tracking-widest mb-4 flex items-center gap-3 ${errors.hasNameBoard ? 'text-red-500 animate-pulse' : 'text-slate-500'}`}>
-                                                <Signpost size={14} className={errors.hasNameBoard ? 'text-red-500' : 'text-[#FACC15]'} strokeWidth={3} /> Airport Greeting Service {errors.hasNameBoard && <span className="text-red-500 lowercase">*required</span>}
-                                            </label>
-                                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
-                                                {[
-                                                    { val: true, label: 'Name Board', sub: 'Standard Service', emoji: '🪧', color: 'emerald' },
-                                                    { val: false, label: 'No Board', sub: 'Direct Pickup', icon: X, color: 'rose' }
-                                                ].map(opt => (
-                                                    <button
-                                                        key={opt.label}
-                                                        onClick={() => { setFormData({ ...formData, hasNameBoard: opt.val }); setErrors(prev => ({ ...prev, hasNameBoard: false })); }}
-                                                        className={`p-3 sm:p-4 rounded-2xl border-2 text-left transition-all relative overflow-hidden group flex items-center justify-between gap-4 ${formData.hasNameBoard === opt.val ? 'bg-[#FACC15] border-black dark:border-white text-black shadow-xl' : (errors.hasNameBoard ? 'bg-red-50/50 border-red-500 animate-shake ring-2 ring-red-500/20' : 'bg-slate-50 dark:bg-white/5 border-black dark:border-white hover:bg-slate-100 dark:hover:bg-white/10')}`}
-                                                    >
-                                                        <div className="flex flex-col min-w-0">
-                                                            <span className={`block text-[11px] sm:text-xs font-black uppercase tracking-widest mb-1 ${formData.hasNameBoard === opt.val ? 'text-black' : 'text-slate-900 dark:text-white'}`}>{opt.label}</span>
-                                                            <span className={`text-[9px] sm:text-[10px] font-bold uppercase tracking-widest ${formData.hasNameBoard === opt.val ? 'text-black/70' : 'text-slate-400'}`}>{opt.sub}</span>
-                                                        </div>
-                                                        <div className="flex items-center gap-3 shrink-0">
-                                                            <div className={`w-10 h-10 sm:w-12 sm:h-12 rounded-2xl flex items-center justify-center transition-all border-2 border-black dark:border-white ${formData.hasNameBoard === opt.val ? 'bg-white' : 'bg-white dark:bg-zinc-900 shadow-sm'}`}>
-                                                                {opt.emoji ? (
-                                                                    <span className="text-2xl sm:text-3xl leading-none">{opt.emoji}</span>
-                                                                ) : (
-                                                                    <opt.icon size={24} strokeWidth={4} className={formData.hasNameBoard === opt.val ? 'text-black' : 'text-rose-500'} />
-                                                                )}
-                                                            </div>
-                                                            {formData.hasNameBoard === opt.val && (
-                                                                <div className="w-2.5 h-2.5 rounded-full bg-black animate-pulse"></div>
-                                                            )}
-                                                        </div>
-                                                    </button>
-                                                ))}
-                                            </div>
+    const selectedVehicle = pricing.find(p => p.vehicleType === formData.vehicle);
 
-                                            {formData.hasNameBoard !== null && (
-                                                <div className="space-y-6 animate-slide-up pt-4">
-                                                    {/* Flight Number — always required for airport pickup */}
-                                                    <div className="space-y-3">
-                                                        <label className={`text-xs font-black uppercase tracking-widest pl-4 ${errors.flightNumber ? 'text-red-500' : 'text-slate-500'}`}>
-                                                            ✈ Flight Number <span className="text-[#FACC15]">*Required</span>
-                                                        </label>
-                                                        <div className="relative">
-                                                            <input
-                                                                value={formData.flightNumber || ''}
-                                                                onChange={e => setFormData({ ...formData, flightNumber: e.target.value })}
-                                                                className={`w-full h-11 sm:h-12 bg-slate-50 dark:bg-white/5 border px-12 rounded-2xl font-black text-xs sm:text-sm uppercase tracking-widest outline-none focus:border-[#FACC15] transition-all placeholder:text-[10px] placeholder:font-black ${errors.flightNumber ? 'border-red-500 ring-2 ring-red-500/20 animate-shake' : 'border-slate-300 dark:border-white/15'}`}
-                                                                placeholder="E.G. UL 504"
-                                                            />
-                                                            <div className="absolute left-4 top-1/2 -translate-y-1/2 text-[#FACC15]">
-                                                                <PlaneTakeoff size={18} strokeWidth={3} />
-                                                            </div>
-                                                        </div>
-                                                    </div>
-
-                                                    {/* Arrival Date & Time — large and prominent */}
-                                                    <div className="space-y-3 relative">
-                                                        <label className={`text-xs font-black uppercase tracking-widest pl-4 ${errors.date || errors.flightArrivalTime ? 'text-red-500' : 'text-slate-500'}`}>
-                                                            Arrival Date & Time <span className="text-[#FACC15]">*Required</span>
-                                                        </label>
-                                                        <div className="relative">
-                                                            <CustomDateTimePicker
-                                                                date={formData.flightArrivalDate}
-                                                                time={formData.flightArrivalTime}
-                                                                onChange={(d, t) => {
-                                                                    setFormData(prev => ({ ...prev, flightArrivalDate: d, date: d, flightArrivalTime: t, time: t }));
-                                                                    if (errors.date || errors.flightArrivalTime) {
-                                                                        setErrors(prev => ({ ...prev, date: false, flightArrivalTime: false, time: false }));
-                                                                    }
-                                                                }}
-                                                                className={`w-full h-11 sm:h-12 bg-slate-50 dark:bg-white/5 border px-12 rounded-2xl font-black text-xs sm:text-sm uppercase tracking-widest outline-none focus:border-[#FACC15] transition-all focus:ring-2 focus:ring-[#FACC15] ${errors.date || errors.flightArrivalTime ? 'border-red-500 ring-2 ring-red-500/20 animate-shake' : 'border-slate-300 dark:border-white/15'}`}
-                                                            />
-                                                            <div className="absolute left-4 top-1/2 -translate-y-1/2 text-[#FACC15] pointer-events-none">
-                                                                <Calendar size={18} strokeWidth={3} />
-                                                            </div>
-                                                        </div>
-                                                    </div>
-
-                                                    {/* Customer Name on Board — shown only when Name Board is selected */}
-                                                    {formData.hasNameBoard && (
-                                                        <div className="space-y-3 animate-slide-up">
-                                                            <label className={`text-xs font-black uppercase tracking-widest pl-4 ${errors.nameBoardText ? 'text-red-500' : 'text-slate-500'}`}>
-                                                                Customer's Name on Board
-                                                            </label>
-                                                            <div className="relative">
-                                                                <input
-                                                                    value={formData.nameBoardText || ''}
-                                                                    onChange={e => {
-                                                                        const val = e.target.value;
-                                                                        setFormData(prev => ({
-                                                                            ...prev,
-                                                                            nameBoardText: val,
-                                                                            name: prev.name ? prev.name : val
-                                                                        }));
-                                                                    }}
-                                                                    className={`w-full h-11 sm:h-12 bg-slate-50 dark:bg-white/5 border px-12 rounded-2xl font-black text-xs sm:text-sm uppercase tracking-widest outline-none focus:border-[#FACC15] transition-all placeholder:text-[10px] sm:placeholder:text-xs placeholder:font-black ${errors.nameBoardText ? 'border-red-500 ring-2 ring-red-500/20 animate-shake' : 'border-slate-300 dark:border-white/15'}`}
-                                                                    placeholder="ENTER NAME FOR WELCOME BOARD"
-                                                                />
-                                                                <div className="absolute left-4 top-1/2 -translate-y-1/2 text-[#FACC15]">
-                                                                    <User size={18} strokeWidth={3} />
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    )}
-                                                </div>
-                                            )}
-                                        </div>
-                                    )}
-                                </div>
-
-                                <div className="space-y-4 pt-8 border-t border-slate-100 dark:border-white/10" ref={passengerRef}>
-                                    <label className="text-xs font-black text-slate-900 dark:text-white uppercase tracking-widest pl-1 leading-none flex items-center gap-2">
-                                        Passenger and Luggage <span className="text-[9px] bg-red-600 text-white px-2 py-0.5 rounded-full lowercase tracking-tight shadow-sm">required</span>
-                                    </label>
-                                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-4">
-                                        {[{ id: 'adults', label: 'Adults' }, { id: 'children', label: 'Children' }, ...(formData.tripType === 'tour' ? [] : [{ id: 'luggage', label: 'Luggage' }, { id: 'handLuggage', label: 'Hand Luggage' }])].map(c => {
-                                            const isFieldUnselected = (errors.adults && c.id === 'adults') || (errors.luggage && c.id === 'luggage') || (errors.handLuggage && c.id === 'handLuggage');
-                                            return (
-                                                <div key={c.id} className={`bg-slate-50 dark:bg-white/5 border p-4 rounded-2xl flex items-center justify-between transition-all h-16 ${isFieldUnselected ? 'border-red-500 ring-2 ring-red-500/20 animate-pulse' : 'border-slate-100 dark:border-white/10'}`}>
-                                                    <span className={`text-[11px] font-black uppercase tracking-widest ${isFieldUnselected ? 'text-red-500' : 'text-slate-800 dark:text-slate-200'}`}>{c.label}</span>
-                                                    <div className="flex items-center gap-3 shrink-0">
-                                                        <button onClick={() => setFormData(p => ({ ...p, passengerCount: { ...p.passengerCount, [c.id]: Math.max(0, (Number(p.passengerCount[c.id]) || 0) - 1) } }))} className="w-8 h-8 rounded-lg bg-white dark:bg-zinc-800 border border-slate-200 dark:border-white/10 flex items-center justify-center hover:bg-slate-100 active:scale-95 transition-all text-slate-600 dark:text-white"><Minus size={14} strokeWidth={2.5} /></button>
-                                                        <span className={`font-bold text-base min-w-[20px] text-center ${isFieldUnselected ? 'text-red-500' : 'text-slate-800 dark:text-white'}`}>{formData.passengerCount[c.id] || 0}</span>
-                                                        <button onClick={() => setFormData(p => ({ ...p, passengerCount: { ...p.passengerCount, [c.id]: (Number(p.passengerCount[c.id]) || 0) + 1 } }))} className="w-8 h-8 rounded-lg bg-[#FACC15] text-black flex items-center justify-center hover:bg-yellow-400 active:scale-95 transition-all shadow-sm"><Plus size={14} strokeWidth={2.5} /></button>
-                                                    </div>
-                                                </div>
-                                            );
-                                        })}
-                                    </div>
-                                </div>
-
-                                <div className="space-y-10 pt-10 border-t border-slate-100 dark:border-white/10">
-                                    <div className="flex items-center justify-between">
-                                        <h4 className="text-2xl font-black text-black dark:text-white uppercase tracking-tight">Select <span className="text-[#FACC15]">Fleet</span></h4>
-                                        <div className="bg-rose-600 text-white text-[8px] font-black px-4 py-1.5 rounded-full shadow-lg shadow-rose-600/20 uppercase tracking-widest flex items-center gap-2">
-                                            <Info size={10} strokeWidth={4} />
-                                            SEE ALL OPTIONS
-                                        </div>
-                                    </div>
-                                    <VehicleCarousel
-                                        vehicles={pricingWithTotals}
-                                        selectedId={formData.vehicle}
-                                        onSelect={(v) => {
-                                            // VehicleCarousel passes vehicleType string directly
-                                            const vehicleType = typeof v === 'string' ? v : v.vehicleType;
-                                            setFormData(prev => ({ ...prev, vehicle: vehicleType }));
-                                            setIsFleetExpanded(false);
-                                        }}
-                                        passengerCount={formData.passengerCount}
-                                        currency={currency}
-                                        rates={rates}
-                                        isCondensed={!isFleetExpanded && !!formData.vehicle}
-                                        onToggleExpand={() => setIsFleetExpanded(true)}
-                                    />
-
-                                    {/* Live Price Breakdown on Step 1 */}
-                                    {formData.vehicle && totalPrice > 0 && (
-                                        <div className="mt-8 bg-gradient-to-br from-zinc-950 to-zinc-900 text-white rounded-[2rem] p-6 sm:p-8 border border-white/5 shadow-2xl animate-slide-up">
-                                            <div className="flex items-center justify-between mb-5">
-                                                <div className="flex items-center gap-3">
-                                                    <div className="w-8 h-8 rounded-xl bg-[#FACC15] flex items-center justify-center">
-                                                        <Coins size={14} className="text-black" strokeWidth={3} />
-                                                    </div>
-                                                    <span className="text-[10px] font-black uppercase tracking-[0.25em] text-white/60">Estimated Total</span>
-                                                </div>
-                                                <span className="text-[9px] font-black uppercase tracking-widest text-white/30">Live Calculation</span>
-                                            </div>
-                                            <div className="flex items-baseline gap-2 mb-4">
-                                                <span className="text-2xl font-black text-[#FACC15]">{currentSymbol}</span>
-                                                <span className="text-5xl sm:text-6xl font-black tracking-tighter leading-none">{(Number(totalPrice) || 0).toLocaleString()}</span>
-                                            </div>
-                                            <div className="grid grid-cols-2 gap-3 pt-4 border-t border-white/10">
-                                                <div>
-                                                    <p className="text-[8px] font-black uppercase tracking-widest text-white/40 mb-1">Base Fare</p>
-                                                    <p className="text-sm font-black text-white">{currentSymbol} {(subtotal || 0).toLocaleString()}</p>
-                                                </div>
-                                                {(surcharges || 0) > 0 && (
-                                                    <div>
-                                                        <p className="text-[8px] font-black uppercase tracking-widest text-white/40 mb-1">Add-ons</p>
-                                                        <p className="text-sm font-black text-[#FACC15]">+{currentSymbol} {(surcharges || 0).toLocaleString()}</p>
-                                                    </div>
-                                                )}
-                                            </div>
-                                            {verifiedCoupons.length > 0 && (
-                                                <div className="mt-3 flex items-center gap-2 text-emerald-400">
-                                                    <Tag size={12} />
-                                                    <span className="text-[9px] font-black uppercase tracking-widest">Coupon "{verifiedCoupons[0].code}" Applied</span>
-                                                </div>
-                                            )}
-                                        </div>
-                                    )}
-
-                                    {/* Pickup Date & Time for non-airport-pickup contexts */}
-                                    {!isAirportService && (
-                                        <div className="space-y-3 mt-6 pt-8 border-t border-slate-100 dark:border-white/10 relative">
-                                            <label className={`text-xs font-black uppercase tracking-widest pl-4 ${errors.date || errors.time ? 'text-red-500' : 'text-slate-500'}`}>
-                                                Pickup Date & Time <span className="text-[#FACC15]">*Required</span>
-                                            </label>
-                                            <div className="relative">
-                                                <CustomDateTimePicker
-                                                    date={formData.date}
-                                                    time={formData.time}
-                                                    onChange={(d, t) => {
-                                                        setFormData(prev => ({ ...prev, date: d, time: t }));
-                                                        if (errors.date || errors.time) {
-                                                            setErrors(prev => ({ ...prev, date: false, time: false }));
-                                                        }
-                                                    }}
-                                                    className={`w-full h-14 bg-slate-50 dark:bg-white/5 border px-12 rounded-2xl font-black text-sm sm:text-base uppercase tracking-widest outline-none focus:border-[#FACC15] transition-all focus:ring-2 focus:ring-[#FACC15] ${errors.date || errors.time ? 'border-red-500 ring-2 ring-red-500/20 animate-shake' : 'border-slate-200 dark:border-white/10'}`}
-                                                />
-                                                <div className="absolute left-4 top-1/2 -translate-y-1/2 text-[#FACC15] pointer-events-none">
-                                                    <Calendar size={18} strokeWidth={3} />
-                                                </div>
-                                            </div>
-                                        </div>
-                                    )}
-
-                                    <div className="space-y-6">
-                                        <div className="flex items-center gap-4">
-                                            <div className="h-px flex-1 bg-slate-100 dark:bg-white/5"></div>
-                                            <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Global Pricing</span>
-                                            <div className="h-px flex-1 bg-slate-100 dark:bg-white/5"></div>
-                                        </div>
-                                        <div className="flex flex-wrap gap-2 justify-center">
-                                            {convertToAllCurrencies(totalPrice / (rates?.[currency] || 1)).map((c) => (
-                                                <button
-                                                    key={c.code}
-                                                    type="button"
-                                                    onClick={() => changeCurrency(c.code)}
-                                                    className={`px-4 py-2.5 rounded-xl border transition-all flex items-center gap-3 text-left cursor-pointer group/curr ${currency === c.code ? 'bg-[#FACC15] border-transparent text-white shadow-lg' : 'bg-slate-50 dark:bg-white/5 border-slate-100 dark:border-white/10 hover:border-[#FACC15] text-slate-400 hover:text-[#FACC15]'}`}
-                                                >
-                                                    <div className="w-5 h-5 rounded-full overflow-hidden shrink-0 border border-white dark:border-zinc-800 shadow-sm">
-                                                        <img src={c.flag} alt={c.code} className="w-full h-full object-cover" />
-                                                    </div>
-                                                    <span className="text-[10px] font-black uppercase tracking-widest">{c.code}</span>
-                                                </button>
-                                            ))}
-                                        </div>
-                                    </div>
-                                    {verifiedCoupons.length > 0 && (
-                                        <div className="flex items-center justify-center text-center gap-3 bg-emerald-50 dark:bg-emerald-400/10 text-emerald-600 dark:text-emerald-400 px-4 py-3 rounded-2xl border border-emerald-100 dark:border-emerald-400/20 w-full max-w-sm mx-auto animate-bounce mt-6 shadow-sm">
-                                            <Tag size={14} className="shrink-0" />
-                                            <span className="text-[10px] font-black uppercase tracking-widest leading-tight">
-                                                Special Offer "{verifiedCoupons[0].code}" Automatically Applied!
-                                            </span>
-                                        </div>
-                                    )}
-                                </div>
-                            </div>
-                        )}
-
-                        {step === 2 && (
-                            <div className="animate-slide-up space-y-10">
-                                <div className="bg-white dark:bg-zinc-900 border border-slate-100 dark:border-white/10 rounded-[2.5rem] overflow-hidden shadow-2xl relative">
-                                    <div className="absolute top-4 left-6 z-20 flex items-center gap-2">
-                                        <div className="bg-[#FACC15] text-black text-[9px] font-black px-3 py-1 rounded-full shadow-lg uppercase tracking-widest">Selected Fleet</div>
-                                        <button onClick={() => setStep(1)} className="bg-white dark:bg-zinc-800 text-black dark:text-white text-[9px] font-black px-3 py-1 rounded-full border border-slate-100 dark:border-white/10 shadow-lg uppercase tracking-widest hover:bg-slate-50 transition-all">Change</button>
-                                    </div>
-                                    <div className="flex flex-col md:flex-row items-center p-6 md:p-10 gap-8 md:gap-12">
-                                        <div className="w-full md:w-1/3 flex justify-center relative mt-6 md:mt-0">
-                                            <img src={selectedVehicle?.image} alt={selectedVehicle?.name} className="w-full max-w-[280px] object-contain scale-125 md:scale-150 drop-shadow-2xl" />
-                                        </div>
-                                        <div className="flex-1 space-y-5">
-                                            <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
-                                                <div>
-                                                    <h4 className="text-3xl font-black text-black dark:text-white uppercase tracking-tighter mb-1">{displayVehicleName(selectedVehicle?.name)}</h4>
-                                                </div>
-                                                <div className="text-right">
-                                                    <div className="flex items-baseline justify-end gap-1.5">
-                                                        <span className="text-xl font-black text-[#FACC15]">{currentSymbol}</span>
-                                                        <span className="text-4xl font-black text-black dark:text-white tracking-tighter leading-none">{(Number(totalPrice) || 0).toLocaleString()}</span>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div className="grid grid-cols-4 gap-2.5">
-                                                {[
-                                                    { icon: Users, label: 'MAX PAX', value: selectedVehicle?.capacity || 4 },
-                                                    { icon: Briefcase, label: 'MAX LUG', value: selectedVehicle?.luggage || selectedVehicle?.suitcases || 2 },
-                                                    { icon: ShoppingBag, label: 'MAX HAND', value: selectedVehicle?.handLuggage || 2 },
-                                                    { icon: Wind, label: 'AC', value: 'ON' }
-                                                ].map((item, i) => (
-                                                    <div key={i} className="bg-slate-50 dark:bg-white/5 rounded-xl p-3 border border-slate-100 dark:border-white/10 flex flex-col items-center justify-center">
-                                                        <item.icon size={14} className="text-[#FACC15] mb-1.5" strokeWidth={3} />
-                                                        <span className="text-xs font-black text-black dark:text-white leading-none">{item.value}</span>
-                                                        <span className="text-[8px] font-bold text-slate-400 uppercase tracking-widest leading-none mt-1">{item.label}</span>
-                                                    </div>
-                                                ))}
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div className="bg-slate-50 dark:bg-white/5 border border-slate-100 dark:border-white/10 rounded-2xl p-4 sm:p-6 flex flex-wrap gap-4 sm:gap-8 items-center justify-between">
-                                    <div className="flex flex-col">
-                                        <span className="text-[9px] font-black uppercase tracking-widest text-slate-400 mb-1">Your Passengers</span>
-                                        <div className="flex items-center gap-2">
-                                            <div className="flex items-center gap-1.5 bg-white dark:bg-zinc-800 px-3 py-1.5 rounded-lg border border-slate-200 dark:border-white/10 shadow-sm">
-                                                <Users size={12} className="text-[#FACC15]" />
-                                                <span className="text-xs font-black text-slate-800 dark:text-white">{formData.passengerCount.adults || 0} Adults</span>
-                                            </div>
-                                            {formData.passengerCount.children > 0 && (
-                                                <div className="flex items-center gap-1.5 bg-white dark:bg-zinc-800 px-3 py-1.5 rounded-lg border border-slate-200 dark:border-white/10 shadow-sm">
-                                                    <User size={12} className="text-[#FACC15]" />
-                                                    <span className="text-xs font-black text-slate-800 dark:text-white">{formData.passengerCount.children} Children</span>
-                                                </div>
-                                            )}
-                                        </div>
-                                    </div>
-                                    <div className="flex flex-col">
-                                        <span className="text-[9px] font-black uppercase tracking-widest text-slate-400 mb-1">Your Luggage</span>
-                                        <div className="flex items-center gap-2">
-                                            <div className="flex items-center gap-1.5 bg-white dark:bg-zinc-800 px-3 py-1.5 rounded-lg border border-slate-200 dark:border-white/10 shadow-sm">
-                                                <Briefcase size={12} className="text-[#FACC15]" />
-                                                {formData.tripType !== 'tour' ? (
-                                                    <>
-                                                        <span className="text-xs font-black text-slate-800 dark:text-white">{formData.passengerCount.luggage || 0} Bags</span>
-                                                        {formData.passengerCount.handLuggage > 0 && (
-                                                            <>
-                                                                <span className="text-slate-300 dark:text-slate-600 font-bold">•</span>
-                                                                <span className="text-xs font-black text-slate-800 dark:text-white">{formData.passengerCount.handLuggage} Hand</span>
-                                                            </>
-                                                        )}
-                                                    </>
-                                                ) : (
-                                                    <span className="text-xs font-black text-slate-800 dark:text-white">N/A</span>
-                                                )}
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div className="grid md:grid-cols-2 gap-4 sm:gap-6">
-                                    {[
-                                        { label: 'Full Legal Name', key: 'name', type: 'text', placeholder: 'Passenger Name', icon: User },
-                                        { label: 'Email Address', key: 'email', type: 'email', placeholder: 'for confirmation', icon: Mail },
-                                        { label: 'Primary Contact No', key: 'phone', type: 'tel', placeholder: '+94 XXX XXX XXX', icon: Phone },
-                                        { label: 'WhatsApp Number', key: 'whatsapp', type: 'tel', placeholder: 'For driver chat', icon: MessageSquare },
-                                        ...(formData.hasNameBoard ? [] : [])
-                                    ].map(f => (
-                                        <div key={f.key} id={`field-${f.key}`}>
-                                            <label className={`text-[10px] font-black uppercase tracking-[0.3em] mb-4 flex items-center gap-3 transition-colors ${errors[f.key] ? 'text-red-500' : 'text-slate-500 dark:text-slate-400'}`}>
-                                                <f.icon size={14} className={errors[f.key] ? 'text-red-500' : 'text-[#FACC15]'} strokeWidth={3} /> {f.label}
-                                            </label>
-                                            {f.type === 'tel' ? (
-                                                <PhoneInput
-                                                    defaultCountry="lk"
-                                                    value={formData[f.key] || ''}
-                                                    onChange={(phone) => setFormData({ ...formData, [f.key]: phone })}
-                                                    inputClassName="!w-full !h-12 sm:!h-14 !bg-transparent !border-none !pl-2 !pr-8 !outline-none !font-black !text-black dark:!text-white placeholder:text-slate-700 dark:placeholder:text-slate-300 !text-sm !uppercase !tracking-widest"
-                                                    countrySelectorStyleProps={{
-                                                        buttonClassName: "!bg-transparent !border-none !h-12 sm:!h-14 !pl-6 !pr-2 hover:!bg-slate-100/50 dark:hover:!bg-white/5 !transition-colors !rounded-l-3xl",
-                                                    }}
-                                                    className={`w-full bg-slate-50 dark:bg-white/5 border border-slate-300 dark:border-white/15 rounded-2xl flex items-center transition-all overflow-hidden ${errors[f.key] ? '!border-red-500 ring-2 ring-red-500/50 animate-shake' : ''}`}
-                                                />
-                                            ) : (
-                                                <input
-                                                    type={f.type}
-                                                    value={formData[f.key] || ''}
-                                                    onChange={e => {
-                                                        const val = e.target.value;
-                                                        setFormData(prev => {
-                                                            const updated = { ...prev, [f.key]: val };
-                                                            if (f.key === 'name' && prev.hasNameBoard) {
-                                                                updated.nameBoardText = val;
-                                                            }
-                                                            return updated;
-                                                        });
-                                                    }}
-                                                    className={`w-full h-12 sm:h-14 bg-slate-50 dark:bg-white/5 border border-slate-300 dark:border-white/15 px-10 rounded-2xl outline-none font-black text-black dark:text-white placeholder:text-slate-700 dark:placeholder:text-slate-300 text-sm uppercase tracking-widest ${errors[f.key] ? '!border-red-500 ring-2 ring-red-500/50 animate-shake' : ''}`}
-                                                    placeholder={f.placeholder}
-                                                />
-                                            )}
-                                        </div>
-                                    ))}
-
-                                </div>
-
-                                <div className="pt-12 border-t border-slate-200 dark:border-white/10 relative">
-                                    <div className="space-y-4">
-                                        <div className="grid grid-cols-2 gap-3">
-                                            <div className="space-y-2">
-                                                <label className={`text-[9px] sm:text-[10px] font-black uppercase tracking-widest pl-3 flex items-center gap-2 ${errors.date ? 'text-red-500' : 'text-slate-500'}`}>
-                                                    <Calendar size={12} strokeWidth={3} className={errors.date ? 'text-red-500' : 'text-[#FACC15]'} /> Pickup Date
-                                                </label>
-                                                <input
-                                                    type="date"
-                                                    value={formData.date || formData.flightArrivalDate || ''}
-                                                    onChange={(e) => {
-                                                        const d = e.target.value;
-                                                        setFormData(prev => ({ ...prev, date: d, flightArrivalDate: d }));
-                                                        if (errors.date) setErrors(prev => ({ ...prev, date: false }));
-                                                    }}
-                                                    className={`w-full h-11 sm:h-12 bg-slate-50 dark:bg-white/5 border px-4 rounded-2xl font-black text-xs sm:text-sm outline-none focus:border-[#FACC15] transition-all cursor-pointer ${errors.date ? 'border-red-500 ring-2 ring-red-500/20' : 'border-slate-300 dark:border-white/15'}`}
-                                                    style={{ colorScheme: 'light' }}
-                                                    aria-label="Pickup date"
-                                                />
-                                            </div>
-                                            <div className="space-y-2">
-                                                <label className={`text-[9px] sm:text-[10px] font-black uppercase tracking-widest pl-3 flex items-center gap-2 ${errors.time ? 'text-red-500' : 'text-slate-500'}`}>
-                                                    <Clock size={12} strokeWidth={3} className={errors.time ? 'text-red-500' : 'text-[#FACC15]'} /> Pickup Time
-                                                </label>
-                                                <input
-                                                    type="time"
-                                                    value={(() => { const parsed = parseStoredTime(formData.time || formData.flightArrivalTime); return parsed.time24h || ''; })()}
-                                                    onChange={(e) => {
-                                                        const newTime24 = e.target.value;
-                                                        if (!newTime24) return;
-                                                        const [hStr, mStr] = newTime24.split(':');
-                                                        let h = parseInt(hStr, 10);
-                                                        const m = parseInt(mStr, 10);
-                                                        const ampm = h >= 12 ? 'PM' : 'AM';
-                                                        const h12 = h % 12 === 0 ? 12 : h % 12;
-                                                        const tz = detectLocalTimezone() || 'SLST';
-                                                        const formatted = `${h12.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')} ${ampm} ${tz}`;
-                                                        setFormData(prev => ({ ...prev, time: formatted, flightArrivalTime: formatted }));
-                                                        if (errors.time) setErrors(prev => ({ ...prev, time: false }));
-                                                    }}
-                                                    step={1800}
-                                                    className={`w-full h-11 sm:h-12 bg-slate-50 dark:bg-white/5 border px-4 rounded-2xl font-black text-xs sm:text-sm outline-none focus:border-[#FACC15] transition-all cursor-pointer ${errors.time ? 'border-red-500 ring-2 ring-red-500/20' : 'border-slate-300 dark:border-white/15'}`}
-                                                    style={{ colorScheme: 'light' }}
-                                                    aria-label="Pickup time"
-                                                />
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                {formData.tripType === 'round-trip' && (
-                                    <div className="animate-slide-up space-y-8 pt-10 border-t border-slate-100 dark:border-white/10">
-                                        <div className="flex items-center gap-3 mb-2">
-                                            <div className="w-2 h-2 bg-[#FACC15] rounded-full animate-pulse"></div>
-                                            <h4 className="text-xl font-black text-black dark:text-white uppercase tracking-tight">Return Journey <span className="text-[#FACC15]">Details</span></h4>
-                                        </div>
-                                        <div className="space-y-4 relative">
-                                            <label className={`text-xs font-black uppercase tracking-widest pl-4 ${errors.returnDate || errors.returnTime ? 'text-red-500' : 'text-slate-500'}`}>
-                                                Return Date & Time (Optional)
-                                            </label>
-                                            <div className="relative">
-                                                <CustomDateTimePicker
-                                                    date={formData.returnDate}
-                                                    time={formData.returnTime}
-                                                    onChange={(d, t) => {
-                                                        setFormData(prev => ({ ...prev, returnDate: d, returnTime: t }));
-                                                        if (errors.returnDate || errors.returnTime) {
-                                                            setErrors(prev => ({ ...prev, returnDate: false, returnTime: false }));
-                                                        }
-                                                    }}
-                                                    className={`w-full h-14 bg-slate-50 dark:bg-white/5 border px-12 rounded-2xl font-black text-sm sm:text-base uppercase tracking-widest outline-none focus:border-[#FACC15] transition-all focus:ring-2 focus:ring-[#FACC15] ${errors.returnDate || errors.returnTime ? 'border-red-500 ring-2 ring-red-500/20 animate-shake' : 'border-slate-200 dark:border-white/10'}`}
-                                                />
-                                                <div className="absolute left-4 top-1/2 -translate-y-1/2 text-[#FACC15] pointer-events-none">
-                                                    <Calendar size={18} strokeWidth={3} />
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                )}
-                            </div>
-                        )}
-
-                        {step === 3 && (
-                            <div className="animate-slide-up">
-                                <div className="grid lg:grid-cols-12 gap-12">
-                                    <div className="lg:col-span-7 space-y-8">
-                                        <div className="p-6 sm:p-10 bg-white dark:bg-zinc-900/40 rounded-3xl sm:rounded-[3rem] text-emerald-950 dark:text-white border border-slate-100 dark:border-white/10 shadow-2xl relative overflow-hidden">
-                                            <div className="relative z-10 space-y-10">
-                                                <div className="flex items-center justify-between pb-8 border-b border-slate-100 dark:border-white/5">
-                                                    <div className="px-6 py-2.5 bg-[#FACC15] text-white rounded-full text-[10px] font-black uppercase tracking-widest">Booking Summary</div>
-                                                    <div className="text-[10px] font-black text-slate-700 dark:text-slate-200 uppercase tracking-[0.3em]">{formData.tripType.replace('-', ' ')}</div>
-                                                </div>
-                                                <div className="space-y-6">
-                                                    <div className="flex flex-col sm:flex-row items-center gap-6 bg-slate-50 dark:bg-white/5 p-6 sm:p-8 rounded-[2rem] sm:rounded-[2.5rem] border border-slate-100 dark:border-white/10 shadow-inner">
-                                                        <div className="w-40 sm:w-32 h-28 sm:h-24 bg-white dark:bg-zinc-800 rounded-2xl flex items-center justify-center p-2 overflow-hidden shrink-0 shadow-sm">
-                                                            <img src={selectedVehicle?.image} alt={selectedVehicle?.name} className="w-full h-full object-contain scale-[1.2]" />
-                                                        </div>
-                                                        <div className="min-w-0 flex-1 text-center sm:text-left">
-                                                            <p className="text-base sm:text-sm font-black text-emerald-950 dark:text-white uppercase truncate tracking-tight">{displayVehicleName(selectedVehicle?.name)}</p>
-                                                            <div className="flex items-center justify-center sm:justify-start gap-4 mt-2">
-                                                                <div className="flex items-center gap-2">
-                                                                    <Users size={12} className="text-[#FACC15]" />
-                                                                    <span className="text-[9px] font-black text-slate-700 dark:text-slate-200 uppercase tracking-widest">
-                                                                        {(formData.passengerCount?.adults || 0) + (formData.passengerCount?.children || 0)} Pax
-                                                                    </span>
-                                                                </div>
-                                                                <div className="flex items-center gap-2">
-                                                                    <Briefcase size={12} className="text-[#FACC15]" />
-                                                                    <span className="text-[9px] font-black text-slate-700 dark:text-slate-200 uppercase tracking-widest">
-                                                                        {formData.passengerCount?.luggage || 0} Bags
-                                                                    </span>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-
-
-                                                    <div className="grid sm:grid-cols-2 gap-8 px-2">
-                                                        <div className="flex gap-5">
-                                                            <div className="w-12 h-12 rounded-2xl bg-emerald-950 text-white flex items-center justify-center shrink-0 shadow-xl"><MapPin size={22} /></div>
-                                                            <div className="min-w-0">
-                                                                <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-2">Origin</p>
-                                                                <p className="text-[11px] font-black text-emerald-950 dark:text-white uppercase line-clamp-2">{formData.pickup}</p>
-                                                            </div>
-                                                        </div>
-                                                        <div className="flex gap-5">
-                                                            <div className="w-12 h-12 rounded-2xl bg-[#FACC15] text-white flex items-center justify-center shrink-0 shadow-xl"><Navigation size={22} /></div>
-                                                            <div className="min-w-0">
-                                                                <p className="text-[9px] font-black text-slate-600 dark:text-slate-300 uppercase tracking-widest mb-2">Destination</p>
-                                                                <p className="text-[11px] font-black text-emerald-950 dark:text-white uppercase line-clamp-2">{formData.dropoff}</p>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-
-                                                    {formData.hasNameBoard && (
-                                                        <div className="flex gap-6 bg-emerald-50 dark:bg-yellow-400/5 p-6 rounded-[2.5rem] border border-emerald-100 dark:border-yellow-400/10 shadow-sm group/board mt-4">
-                                                            <div className="w-14 h-14 rounded-2xl bg-white dark:bg-zinc-800 flex items-center justify-center shrink-0 border border-emerald-100 dark:border-white/5 overflow-hidden shadow-sm group-hover/board:border-yellow-400 transition-colors">
-                                                                <Signpost size={28} className="text-[#FACC15]" strokeWidth={3} />
-                                                            </div>
-                                                            <div className="min-w-0">
-                                                                <p className="text-[9px] font-black text-[#FACC15] uppercase tracking-widest mb-2">Airport Greeting</p>
-                                                                <p className="text-[11px] font-black text-emerald-950 dark:text-white uppercase truncate">"{formData.nameBoardText || 'Elite Greeting'}"</p>
-                                                            </div>
-                                                        </div>
-                                                    )}
-                                                </div>
-
-                                                <div className="space-y-4 pt-8 mt-4 border-t border-slate-100 dark:border-white/10">
-                                                    <div className="flex justify-between items-center text-[10px] font-black uppercase tracking-widest text-slate-900 dark:text-slate-100">
-                                                        <span>Trip Base Fare</span>
-                                                        <span className="font-black">{currentSymbol} {subtotal.toLocaleString()}</span>
-                                                    </div>
-                                                    {detailedBreakdown.detailedExtras?.filter(s => s.value > 0).map((s, idx) => (
-                                                        <div key={idx} className="flex justify-between items-center text-[10px] font-black uppercase tracking-widest">
-                                                            <span>{s.label}</span>
-                                                            <span className="text-[#FACC15] font-black">+{currentSymbol} {s.value.toLocaleString()}</span>
-                                                        </div>
-                                                    ))}
-                                                    <div className="pt-6 sm:pt-8 mt-6 border-t border-slate-100 dark:border-white/10">
-                                                        <div className="flex flex-col gap-2">
-                                                            <p className="text-[10px] font-black text-[#FACC15] tracking-[0.2em] uppercase">
-                                                                {formData.paymentType === 'partial' ? 'Secure Deposit (50%)' : 'Total Amount (Fixed)'}
-                                                            </p>
-                                                            <p className="text-3xl xs:text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black tracking-tighter text-emerald-950 dark:text-white leading-none break-words">
-                                                                <span className="text-lg sm:text-2xl font-black mr-2 text-slate-500/50">{currentSymbol}</span>
-                                                                {payNow.toLocaleString()}
-                                                            </p>
-                                                        </div>
-                                                    </div>
-
-                                                    {/* Cost Disclosures */}
-                                                    <div className="mt-8 p-6 bg-slate-50 dark:bg-white/5 rounded-[2rem] border border-slate-100 dark:border-white/10 space-y-4">
-                                                        <div className="flex items-start gap-4">
-                                                            <div className="w-8 h-8 rounded-xl bg-amber-100 dark:bg-amber-400/20 text-amber-600 flex items-center justify-center shrink-0 shadow-sm">
-                                                                <Info size={16} strokeWidth={3} />
-                                                            </div>
-                                                            <div>
-                                                                <p className="text-[10px] font-black text-slate-900 dark:text-white uppercase tracking-widest mb-1">Hire Charge Only</p>
-                                                                <p className="text-[9px] font-bold text-slate-500 dark:text-slate-400 leading-relaxed uppercase tracking-tight">
-                                                                    The quoted price covers the vehicle hire charge and fuel only.
-                                                                </p>
-                                                            </div>
-                                                        </div>
-                                                        <div className="flex items-start gap-4 border-t border-slate-200/50 dark:border-white/5 pt-4">
-                                                            <div className="w-8 h-8 rounded-xl bg-rose-100 dark:bg-rose-400/20 text-rose-600 flex items-center justify-center shrink-0 shadow-sm">
-                                                                <AlertCircle size={16} strokeWidth={3} />
-                                                            </div>
-                                                            <div>
-                                                                <p className="text-[10px] font-black text-rose-600 uppercase tracking-widest mb-1">Customer Responsibility</p>
-                                                                <p className="text-[9px] font-bold text-slate-500 dark:text-slate-400 leading-relaxed uppercase tracking-tight">
-                                                                    Parking tickets and highway tolls are the responsibility of the customer.
-                                                                </p>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-
-                                                    <div className="flex flex-wrap gap-3 mt-6">
-                                                        {convertToAllCurrencies(detailedBreakdown.lkr?.payNow || 0)
-                                                            .filter(c => ['USD', 'EUR', 'GBP'].includes(c.code) && c.code !== currency)
-                                                            .map(c => (
-                                                                <span key={c.code} className="text-[10px] font-black text-slate-600 dark:text-slate-400 uppercase tracking-widest bg-slate-100 dark:bg-white/5 px-2 py-1 rounded-lg border border-slate-200 dark:border-white/5">
-                                                                    ≈ {c.symbol}{c.value.toLocaleString()}
-                                                                </span>
-                                                            ))
-                                                        }
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div className="lg:col-span-5 space-y-12">
-                                            <div className="space-y-6">
-                                                <div className="flex items-center gap-4">
-                                                    <div className="h-px flex-1 bg-slate-100 dark:bg-white/5"></div>
-                                                    <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest text-center">Select your payment (Card or Cash)</span>
-                                                    <div className="h-px flex-1 bg-slate-100 dark:bg-white/5"></div>
-                                                </div>
-                                                <div className="grid grid-cols-2 gap-2 sm:gap-4">
-                                                    {['card', 'cash'].map(m => (
-                                                        <button
-                                                            key={m}
-                                                            onClick={() => setFormData({
-                                                                ...formData,
-                                                                paymentMethod: m,
-                                                                ...(m === 'cash' ? { paymentType: 'full' } : {})
-                                                            })}
-                                                            className={`p-4 sm:p-6 rounded-3xl sm:rounded-[2rem] border transition-all flex flex-col items-center gap-2 sm:gap-3 ${formData.paymentMethod === m ? 'bg-[#FACC15] border-transparent text-black shadow-xl ring-4 ring-[#FACC15]/20' : 'bg-white dark:bg-zinc-900 border-slate-200 dark:border-white/20 text-slate-800 dark:text-white hover:border-[#FACC15]'}`}
-                                                        >
-                                                            {m === 'cash' ? <Coins size={22} /> : <CreditCard size={22} />}
-                                                            <span className="text-[10px] font-black uppercase tracking-widest">{m === 'cash' ? 'Cash' : 'Card'}</span>
-                                                        </button>
-                                                    ))}
-                                                </div>
-                                            </div>
-
-                                            {formData.paymentMethod === 'card' && (
-                                                <div className="space-y-6 animate-slide-in">
-                                                    <div className="grid grid-cols-2 gap-2 sm:gap-3 p-2 sm:p-3 bg-slate-50 dark:bg-white/5 rounded-[1.8rem] border border-slate-100 dark:border-white/10 shadow-inner">
-                                                        {['full', 'partial'].map(t => (
-                                                            <button
-                                                                key={t}
-                                                                onClick={() => setFormData(prev => ({ ...prev, paymentType: t }))}
-                                                                className={`py-3 sm:py-4 rounded-2xl text-[8px] sm:text-[9px] font-black uppercase tracking-widest transition-all ${formData.paymentType === t ? 'bg-[#FACC15] text-black shadow-xl ring-2 ring-[#FACC15]/20' : 'text-slate-800 dark:text-white bg-slate-200 dark:bg-zinc-700 hover:bg-slate-300 dark:hover:bg-zinc-600 hover:text-[#FACC15]'}`}
-                                                            >
-                                                                {t === 'full' ? 'Complete (100%)' : 'Deposit (50%)'}
-                                                            </button>
-                                                        ))}
-                                                    </div>
-                                                </div>
-                                            )}
-
-                                            <div className="space-y-6 pt-6">
-                                                <h4 className="text-[9px] font-black text-slate-400 uppercase tracking-[0.4em] pl-6">Promo Code</h4>
-                                                <div className="bg-slate-50 dark:bg-white/5 border border-slate-100 dark:border-white/10 p-2 sm:p-3 rounded-3xl sm:rounded-[2rem] flex gap-2 sm:gap-4 shadow-inner">
-                                                    <input
-                                                        value={couponInput}
-                                                        onChange={e => setCouponInput(e.target.value.toUpperCase())}
-                                                        placeholder="CODE?"
-                                                        className="flex-1 min-w-0 h-12 sm:h-14 bg-white dark:bg-zinc-900 border border-slate-100 dark:border-white/10 px-4 sm:px-8 rounded-2xl text-[10px] font-black uppercase tracking-widest outline-none text-emerald-950 dark:text-white shadow-sm"
-                                                    />
-                                                    <button
-                                                        onClick={() => handleApplyCoupon()}
-                                                        disabled={couponLoading || !couponInput}
-                                                        className="px-4 sm:px-8 bg-emerald-950 text-white rounded-2xl text-[10px] font-black uppercase tracking-widest active:scale-95 transition-all shadow-xl whitespace-nowrap"
-                                                    >
-                                                        {couponLoading ? <Loader2 className="animate-spin" size={16} /> : 'Apply'}
-                                                    </button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        )}
-                    </div>
-
-                    <div className="p-6 sm:p-10 border-t border-slate-100 dark:border-white/5 bg-white dark:bg-zinc-950 shrink-0">
-                        <div className="flex flex-row items-center justify-between gap-3 sm:gap-4">
-                            <button
-                                onClick={() => (step > 1 ? setStep(step - 1) : onClose())}
-                                className="flex-none flex items-center justify-center gap-2 px-3 sm:px-8 py-3 sm:py-4 text-[9px] sm:text-xs font-black uppercase tracking-widest text-slate-500 hover:text-black transition-all bg-slate-50 dark:bg-white/5 rounded-2xl border border-slate-100 dark:border-white/5"
-                            >
-                                {step === 1 ? 'Cancel' : 'Back'}
+    return (
+        <div className="fixed inset-0 z-[10000] flex items-center justify-center p-0 sm:p-4 md:p-8 bg-emerald-950/20 backdrop-blur-xl">
+            <div className="w-full h-[100dvh] sm:h-[95vh] max-h-full max-w-7xl bg-white dark:bg-zinc-950 sm:rounded-[3rem] shadow-[0_0_100px_rgba(0,0,0,0.2)] dark:shadow-none overflow-hidden flex flex-col relative border border-white/20">
+                {/* Header */}
+                <div className="p-6 sm:p-10 border-b border-slate-100 dark:border-white/5 bg-white/80 dark:bg-zinc-950/80 backdrop-blur-md sticky top-0 z-50 shrink-0">
+                    <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-6">
+                            <button onClick={onClose} className="w-12 h-12 flex items-center justify-center rounded-2xl bg-slate-50 dark:bg-white/5 text-slate-400 hover:text-[#FACC15] transition-all hover:scale-110 active:scale-95 group">
+                                <X size={20} className="group-hover:rotate-90 transition-transform duration-500" />
                             </button>
-
-                            <div className="flex flex-1 sm:flex-none gap-2">
-
-                                <button
-                                    onClick={handleNext}
-                                    disabled={loading}
-                                    className="flex-[2] sm:flex-none flex items-center justify-center gap-1 sm:gap-3 px-3 sm:px-12 py-3 sm:py-5 bg-[#FACC15] hover:bg-yellow-500 text-black hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 rounded-[2rem] text-[9px] sm:text-xs font-black uppercase tracking-[0.2em] transition-all group"
-                                >
-                                    {step === 1 ? 'Next Step' : step === 2 ? 'Checkout' : loading ? 'Wait...' : 'Confirm'}
-                                    <ArrowRight size={14} strokeWidth={3} className="group-hover:translate-x-1 transition-transform" />
-                                </button>
+                            <div className="h-10 w-px bg-slate-100 dark:bg-white/10 mx-2 hidden sm:block"></div>
+                            <div className="hidden sm:flex items-center gap-10">
+                                {STEPS.map((s, idx) => (
+                                    <div key={s.id} className="flex items-center gap-4">
+                                        <div className={`w-8 h-8 rounded-xl flex items-center justify-center text-[10px] font-black transition-all duration-500 ${step >= s.id ? 'bg-[#FACC15] text-white shadow-lg scale-110' : 'bg-slate-50 dark:bg-white/5 text-slate-300'}`}>
+                                            {step > s.id ? <Check size={14} strokeWidth={4} /> : s.id}
+                                        </div>
+                                        <span className={`text-[10px] font-black uppercase tracking-[0.2em] transition-all duration-500 ${step >= s.id ? 'text-black dark:text-white' : 'text-slate-300'}`}>{s.title}</span>
+                                        {idx < STEPS.length - 1 && <ChevronRight size={14} className="text-slate-100 dark:text-white/5 mx-2" />}
+                                    </div>
+                                ))}
+                            </div>
+                            <div className="flex sm:hidden items-center gap-3">
+                                <div className="w-10 h-10 rounded-2xl bg-[#FACC15] text-white flex items-center justify-center shadow-lg">
+                                    <span className="text-xs font-black">{step}</span>
+                                </div>
+                                <div className="flex flex-col">
+                                    <span className="text-[8px] font-black text-[#FACC15] uppercase tracking-widest leading-none mb-1">Step {step} of 3</span>
+                                    <span className="text-[10px] font-black text-black dark:text-white uppercase tracking-tight leading-none">{STEPS[step - 1].title}</span>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
+
+                <div ref={scrollContainerRef} className="flex-1 overflow-y-auto overflow-x-hidden p-6 sm:p-12 space-y-12 w-full">
+                    {step === 1 && (
+                        <div className="animate-slide-up space-y-12">
+                            <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 pb-8 border-b border-slate-100 dark:border-white/10">
+                                <div>
+                                    <h3 className="text-3xl sm:text-5xl md:text-6xl font-black text-black dark:text-white tracking-tighter uppercase leading-none mb-3 break-words">
+                                        Route <span className="text-[#FACC15]">& Vehicle</span>
+                                    </h3>
+                                    <p className="text-[10px] sm:text-xs font-black text-slate-400 uppercase tracking-[0.4em]">Initialize Your Elite Transfer</p>
+                                </div>
+                            </div>
+
+                            <div className="grid md:grid-cols-2 gap-10">
+                                <div className="space-y-8">
+                                    <div className="group/field relative">
+                                        <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-4 flex items-center gap-3">
+                                            <MapPin size={14} className="text-[#FACC15]" strokeWidth={3} /> Pickup Location
+                                        </label>
+                                        <LocationInput
+                                            id="field-pickup"
+                                            value={formData.pickup}
+                                            onChange={(val) => setFormData(prev => ({ ...prev, pickup: val }))}
+                                            onSelect={(loc) => setFormData(prev => ({ ...prev, pickup: loc.address, pickupCoords: { lat: loc.lat, lng: loc.lng } }))}
+                                            placeholder="Enter Airport or Hotel Name"
+                                            className={errors.pickup ? 'border-red-500 animate-shake' : ''}
+                                        />
+                                    </div>
+                                    <div className="group/field relative">
+                                        <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-4 flex items-center gap-3">
+                                            <Navigation size={14} className="text-[#FACC15]" strokeWidth={3} /> Dropoff Location
+                                        </label>
+                                        <LocationInput
+                                            id="field-dropoff"
+                                            value={formData.dropoff}
+                                            onChange={(val) => setFormData(prev => ({ ...prev, dropoff: val }))}
+                                            onSelect={(loc) => setFormData(prev => ({ ...prev, dropoff: loc.address, dropoffCoords: { lat: loc.lat, lng: loc.lng } }))}
+                                            placeholder="Where are you heading?"
+                                            className={errors.dropoff ? 'border-red-500 animate-shake' : ''}
+                                        />
+                                    </div>
+                                </div>
+
+                                {isAirportService && initialData.isAirportPickup && formData.tripType !== 'tour' && (
+                                    <div id="airport-greeting-section" className="space-y-8">
+                                        <label className={`text-[10px] font-black uppercase tracking-widest mb-4 flex items-center gap-3 ${errors.hasNameBoard ? 'text-red-500 animate-pulse' : 'text-slate-500'}`}>
+                                            <Signpost size={14} className={errors.hasNameBoard ? 'text-red-500' : 'text-[#FACC15]'} strokeWidth={3} /> Airport Greeting Service {errors.hasNameBoard && <span className="text-red-500 lowercase">*required</span>}
+                                        </label>
+                                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+                                            {[
+                                                { val: true, label: 'Name Board', sub: 'Standard Service', emoji: '🪧', color: 'emerald' },
+                                                { val: false, label: 'No Board', sub: 'Direct Pickup', icon: X, color: 'rose' }
+                                            ].map(opt => (
+                                                <button
+                                                    key={opt.label}
+                                                    onClick={() => { setFormData({ ...formData, hasNameBoard: opt.val }); setErrors(prev => ({ ...prev, hasNameBoard: false })); }}
+                                                    className={`p-3 sm:p-4 rounded-2xl border-2 text-left transition-all relative overflow-hidden group flex items-center justify-between gap-4 ${formData.hasNameBoard === opt.val ? 'bg-[#FACC15] border-black dark:border-white text-black shadow-xl' : (errors.hasNameBoard ? 'bg-red-50/50 border-red-500 animate-shake ring-2 ring-red-500/20' : 'bg-slate-50 dark:bg-white/5 border-black dark:border-white hover:bg-slate-100 dark:hover:bg-white/10')}`}
+                                                >
+                                                    <div className="flex flex-col min-w-0">
+                                                        <span className={`block text-[11px] sm:text-xs font-black uppercase tracking-widest mb-1 ${formData.hasNameBoard === opt.val ? 'text-black' : 'text-slate-900 dark:text-white'}`}>{opt.label}</span>
+                                                        <span className={`text-[9px] sm:text-[10px] font-bold uppercase tracking-widest ${formData.hasNameBoard === opt.val ? 'text-black/70' : 'text-slate-400'}`}>{opt.sub}</span>
+                                                    </div>
+                                                    <div className="flex items-center gap-3 shrink-0">
+                                                        <div className={`w-10 h-10 sm:w-12 sm:h-12 rounded-2xl flex items-center justify-center transition-all border-2 border-black dark:border-white ${formData.hasNameBoard === opt.val ? 'bg-white' : 'bg-white dark:bg-zinc-900 shadow-sm'}`}>
+                                                            {opt.emoji ? (
+                                                                <span className="text-2xl sm:text-3xl leading-none">{opt.emoji}</span>
+                                                            ) : (
+                                                                <opt.icon size={24} strokeWidth={4} className={formData.hasNameBoard === opt.val ? 'text-black' : 'text-rose-500'} />
+                                                            )}
+                                                        </div>
+                                                        {formData.hasNameBoard === opt.val && (
+                                                            <div className="w-2.5 h-2.5 rounded-full bg-black animate-pulse"></div>
+                                                        )}
+                                                    </div>
+                                                </button>
+                                            ))}
+                                        </div>
+
+                                        {formData.hasNameBoard !== null && (
+                                            <div className="space-y-6 animate-slide-up pt-4">
+                                                {/* Flight Number — always required for airport pickup */}
+                                                <div className="space-y-3">
+                                                    <label className={`text-xs font-black uppercase tracking-widest pl-4 ${errors.flightNumber ? 'text-red-500' : 'text-slate-500'}`}>
+                                                        ✈ Flight Number <span className="text-[#FACC15]">*Required</span>
+                                                    </label>
+                                                    <div className="relative">
+                                                        <input
+                                                            value={formData.flightNumber || ''}
+                                                            onChange={e => setFormData({ ...formData, flightNumber: e.target.value })}
+                                                            className={`w-full h-11 sm:h-12 bg-slate-50 dark:bg-white/5 border px-12 rounded-2xl font-black text-xs sm:text-sm uppercase tracking-widest outline-none focus:border-[#FACC15] transition-all placeholder:text-[10px] placeholder:font-black ${errors.flightNumber ? 'border-red-500 ring-2 ring-red-500/20 animate-shake' : 'border-slate-300 dark:border-white/15'}`}
+                                                            placeholder="E.G. UL 504"
+                                                        />
+                                                        <div className="absolute left-4 top-1/2 -translate-y-1/2 text-[#FACC15]">
+                                                            <PlaneTakeoff size={18} strokeWidth={3} />
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                {/* Arrival Date & Time — large and prominent */}
+                                                <div className="space-y-3 relative">
+                                                    <label className={`text-xs font-black uppercase tracking-widest pl-4 ${errors.date || errors.flightArrivalTime ? 'text-red-500' : 'text-slate-500'}`}>
+                                                        Arrival Date & Time <span className="text-[#FACC15]">*Required</span>
+                                                    </label>
+                                                    <div className="relative">
+                                                        <CustomDateTimePicker
+                                                            date={formData.flightArrivalDate}
+                                                            time={formData.flightArrivalTime}
+                                                            onChange={(d, t) => {
+                                                                setFormData(prev => ({ ...prev, flightArrivalDate: d, date: d, flightArrivalTime: t, time: t }));
+                                                                if (errors.date || errors.flightArrivalTime) {
+                                                                    setErrors(prev => ({ ...prev, date: false, flightArrivalTime: false, time: false }));
+                                                                }
+                                                            }}
+                                                            className={`w-full h-11 sm:h-12 bg-slate-50 dark:bg-white/5 border px-12 rounded-2xl font-black text-xs sm:text-sm uppercase tracking-widest outline-none focus:border-[#FACC15] transition-all focus:ring-2 focus:ring-[#FACC15] ${errors.date || errors.flightArrivalTime ? 'border-red-500 ring-2 ring-red-500/20 animate-shake' : 'border-slate-300 dark:border-white/15'}`}
+                                                        />
+                                                        <div className="absolute left-4 top-1/2 -translate-y-1/2 text-[#FACC15] pointer-events-none">
+                                                            <Calendar size={18} strokeWidth={3} />
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                {/* Customer Name on Board — shown only when Name Board is selected */}
+                                                {formData.hasNameBoard && (
+                                                    <div className="space-y-3 animate-slide-up">
+                                                        <label className={`text-xs font-black uppercase tracking-widest pl-4 ${errors.nameBoardText ? 'text-red-500' : 'text-slate-500'}`}>
+                                                            Customer's Name on Board
+                                                        </label>
+                                                        <div className="relative">
+                                                            <input
+                                                                value={formData.nameBoardText || ''}
+                                                                onChange={e => {
+                                                                    const val = e.target.value;
+                                                                    setFormData(prev => ({
+                                                                        ...prev,
+                                                                        nameBoardText: val,
+                                                                        name: prev.name ? prev.name : val
+                                                                    }));
+                                                                }}
+                                                                className={`w-full h-11 sm:h-12 bg-slate-50 dark:bg-white/5 border px-12 rounded-2xl font-black text-xs sm:text-sm uppercase tracking-widest outline-none focus:border-[#FACC15] transition-all placeholder:text-[10px] sm:placeholder:text-xs placeholder:font-black ${errors.nameBoardText ? 'border-red-500 ring-2 ring-red-500/20 animate-shake' : 'border-slate-300 dark:border-white/15'}`}
+                                                                placeholder="ENTER NAME FOR WELCOME BOARD"
+                                                            />
+                                                            <div className="absolute left-4 top-1/2 -translate-y-1/2 text-[#FACC15]">
+                                                                <User size={18} strokeWidth={3} />
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                )}
+                                            </div>
+                                        )}
+                                    </div>
+                                )}
+                            </div>
+
+                            <div className="space-y-4 pt-8 border-t border-slate-100 dark:border-white/10" ref={passengerRef}>
+                                <label className="text-xs font-black text-slate-900 dark:text-white uppercase tracking-widest pl-1 leading-none flex items-center gap-2">
+                                    Passenger and Luggage <span className="text-[9px] bg-red-600 text-white px-2 py-0.5 rounded-full lowercase tracking-tight shadow-sm">required</span>
+                                </label>
+                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-4">
+                                    {[{ id: 'adults', label: 'Adults' }, { id: 'children', label: 'Children' }, ...(formData.tripType === 'tour' ? [] : [{ id: 'luggage', label: 'Luggage' }, { id: 'handLuggage', label: 'Hand Luggage' }])].map(c => {
+                                        const isFieldUnselected = (errors.adults && c.id === 'adults') || (errors.luggage && c.id === 'luggage') || (errors.handLuggage && c.id === 'handLuggage');
+                                        return (
+                                            <div key={c.id} className={`bg-slate-50 dark:bg-white/5 border p-4 rounded-2xl flex items-center justify-between transition-all h-16 ${isFieldUnselected ? 'border-red-500 ring-2 ring-red-500/20 animate-pulse' : 'border-slate-100 dark:border-white/10'}`}>
+                                                <span className={`text-[11px] font-black uppercase tracking-widest ${isFieldUnselected ? 'text-red-500' : 'text-slate-800 dark:text-slate-200'}`}>{c.label}</span>
+                                                <div className="flex items-center gap-3 shrink-0">
+                                                    <button onClick={() => setFormData(p => ({ ...p, passengerCount: { ...p.passengerCount, [c.id]: Math.max(0, (Number(p.passengerCount[c.id]) || 0) - 1) } }))} className="w-8 h-8 rounded-lg bg-white dark:bg-zinc-800 border border-slate-200 dark:border-white/10 flex items-center justify-center hover:bg-slate-100 active:scale-95 transition-all text-slate-600 dark:text-white"><Minus size={14} strokeWidth={2.5} /></button>
+                                                    <span className={`font-bold text-base min-w-[20px] text-center ${isFieldUnselected ? 'text-red-500' : 'text-slate-800 dark:text-white'}`}>{formData.passengerCount[c.id] || 0}</span>
+                                                    <button onClick={() => setFormData(p => ({ ...p, passengerCount: { ...p.passengerCount, [c.id]: (Number(p.passengerCount[c.id]) || 0) + 1 } }))} className="w-8 h-8 rounded-lg bg-[#FACC15] text-black flex items-center justify-center hover:bg-yellow-400 active:scale-95 transition-all shadow-sm"><Plus size={14} strokeWidth={2.5} /></button>
+                                                </div>
+                                            </div>
+                                        );
+                                    })}
+                                </div>
+                            </div>
+
+                            <div className="space-y-10 pt-10 border-t border-slate-100 dark:border-white/10">
+                                <div className="flex items-center justify-between">
+                                    <h4 className="text-2xl font-black text-black dark:text-white uppercase tracking-tight">Select <span className="text-[#FACC15]">Fleet</span></h4>
+                                    <div className="bg-rose-600 text-white text-[8px] font-black px-4 py-1.5 rounded-full shadow-lg shadow-rose-600/20 uppercase tracking-widest flex items-center gap-2">
+                                        <Info size={10} strokeWidth={4} />
+                                        SEE ALL OPTIONS
+                                    </div>
+                                </div>
+                                <VehicleCarousel
+                                    vehicles={pricingWithTotals}
+                                    selectedId={formData.vehicle}
+                                    onSelect={(v) => {
+                                        // VehicleCarousel passes vehicleType string directly
+                                        const vehicleType = typeof v === 'string' ? v : v.vehicleType;
+                                        setFormData(prev => ({ ...prev, vehicle: vehicleType }));
+                                        setIsFleetExpanded(false);
+                                    }}
+                                    passengerCount={formData.passengerCount}
+                                    currency={currency}
+                                    rates={rates}
+                                    isCondensed={!isFleetExpanded && !!formData.vehicle}
+                                    onToggleExpand={() => setIsFleetExpanded(true)}
+                                />
+
+                                {/* Live Price Breakdown on Step 1 */}
+                                {formData.vehicle && totalPrice > 0 && (
+                                    <div className="mt-8 bg-gradient-to-br from-zinc-950 to-zinc-900 text-white rounded-[2rem] p-6 sm:p-8 border border-white/5 shadow-2xl animate-slide-up">
+                                        <div className="flex items-center justify-between mb-5">
+                                            <div className="flex items-center gap-3">
+                                                <div className="w-8 h-8 rounded-xl bg-[#FACC15] flex items-center justify-center">
+                                                    <Coins size={14} className="text-black" strokeWidth={3} />
+                                                </div>
+                                                <span className="text-[10px] font-black uppercase tracking-[0.25em] text-white/60">Estimated Total</span>
+                                            </div>
+                                            <span className="text-[9px] font-black uppercase tracking-widest text-white/30">Live Calculation</span>
+                                        </div>
+                                        <div className="flex items-baseline gap-2 mb-4">
+                                            <span className="text-2xl font-black text-[#FACC15]">{currentSymbol}</span>
+                                            <span className="text-5xl sm:text-6xl font-black tracking-tighter leading-none">{(Number(totalPrice) || 0).toLocaleString()}</span>
+                                        </div>
+                                        <div className="grid grid-cols-2 gap-3 pt-4 border-t border-white/10">
+                                            <div>
+                                                <p className="text-[8px] font-black uppercase tracking-widest text-white/40 mb-1">Base Fare</p>
+                                                <p className="text-sm font-black text-white">{currentSymbol} {(subtotal || 0).toLocaleString()}</p>
+                                            </div>
+                                            {(surcharges || 0) > 0 && (
+                                                <div>
+                                                    <p className="text-[8px] font-black uppercase tracking-widest text-white/40 mb-1">Add-ons</p>
+                                                    <p className="text-sm font-black text-[#FACC15]">+{currentSymbol} {(surcharges || 0).toLocaleString()}</p>
+                                                </div>
+                                            )}
+                                        </div>
+                                        {verifiedCoupons.length > 0 && (
+                                            <div className="mt-3 flex items-center gap-2 text-emerald-400">
+                                                <Tag size={12} />
+                                                <span className="text-[9px] font-black uppercase tracking-widest">Coupon "{verifiedCoupons[0].code}" Applied</span>
+                                            </div>
+                                        )}
+                                    </div>
+                                )}
+
+                                {/* Pickup Date & Time for non-airport-pickup contexts */}
+                                {!isAirportService && (
+                                    <div className="space-y-3 mt-6 pt-8 border-t border-slate-100 dark:border-white/10 relative">
+                                        <label className={`text-xs font-black uppercase tracking-widest pl-4 ${errors.date || errors.time ? 'text-red-500' : 'text-slate-500'}`}>
+                                            Pickup Date & Time <span className="text-[#FACC15]">*Required</span>
+                                        </label>
+                                        <div className="relative">
+                                            <CustomDateTimePicker
+                                                date={formData.date}
+                                                time={formData.time}
+                                                onChange={(d, t) => {
+                                                    setFormData(prev => ({ ...prev, date: d, time: t }));
+                                                    if (errors.date || errors.time) {
+                                                        setErrors(prev => ({ ...prev, date: false, time: false }));
+                                                    }
+                                                }}
+                                                className={`w-full h-14 bg-slate-50 dark:bg-white/5 border px-12 rounded-2xl font-black text-sm sm:text-base uppercase tracking-widest outline-none focus:border-[#FACC15] transition-all focus:ring-2 focus:ring-[#FACC15] ${errors.date || errors.time ? 'border-red-500 ring-2 ring-red-500/20 animate-shake' : 'border-slate-200 dark:border-white/10'}`}
+                                            />
+                                            <div className="absolute left-4 top-1/2 -translate-y-1/2 text-[#FACC15] pointer-events-none">
+                                                <Calendar size={18} strokeWidth={3} />
+                                            </div>
+                                        </div>
+                                    </div>
+                                )}
+
+                                <div className="space-y-6">
+                                    <div className="flex items-center gap-4">
+                                        <div className="h-px flex-1 bg-slate-100 dark:bg-white/5"></div>
+                                        <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Global Pricing</span>
+                                        <div className="h-px flex-1 bg-slate-100 dark:bg-white/5"></div>
+                                    </div>
+                                    <div className="flex flex-wrap gap-2 justify-center">
+                                        {convertToAllCurrencies(totalPrice / (rates?.[currency] || 1)).map((c) => (
+                                            <button
+                                                key={c.code}
+                                                type="button"
+                                                onClick={() => changeCurrency(c.code)}
+                                                className={`px-4 py-2.5 rounded-xl border transition-all flex items-center gap-3 text-left cursor-pointer group/curr ${currency === c.code ? 'bg-[#FACC15] border-transparent text-white shadow-lg' : 'bg-slate-50 dark:bg-white/5 border-slate-100 dark:border-white/10 hover:border-[#FACC15] text-slate-400 hover:text-[#FACC15]'}`}
+                                            >
+                                                <div className="w-5 h-5 rounded-full overflow-hidden shrink-0 border border-white dark:border-zinc-800 shadow-sm">
+                                                    <img src={c.flag} alt={c.code} className="w-full h-full object-cover" />
+                                                </div>
+                                                <span className="text-[10px] font-black uppercase tracking-widest">{c.code}</span>
+                                            </button>
+                                        ))}
+                                    </div>
+                                </div>
+                                {verifiedCoupons.length > 0 && (
+                                    <div className="flex items-center justify-center text-center gap-3 bg-emerald-50 dark:bg-emerald-400/10 text-emerald-600 dark:text-emerald-400 px-4 py-3 rounded-2xl border border-emerald-100 dark:border-emerald-400/20 w-full max-w-sm mx-auto animate-bounce mt-6 shadow-sm">
+                                        <Tag size={14} className="shrink-0" />
+                                        <span className="text-[10px] font-black uppercase tracking-widest leading-tight">
+                                            Special Offer "{verifiedCoupons[0].code}" Automatically Applied!
+                                        </span>
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+                    )}
+
+                    {step === 2 && (
+                        <div className="animate-slide-up space-y-10">
+                            <div className="bg-white dark:bg-zinc-900 border border-slate-100 dark:border-white/10 rounded-[2.5rem] overflow-hidden shadow-2xl relative">
+                                <div className="absolute top-4 left-6 z-20 flex items-center gap-2">
+                                    <div className="bg-[#FACC15] text-black text-[9px] font-black px-3 py-1 rounded-full shadow-lg uppercase tracking-widest">Selected Fleet</div>
+                                    <button onClick={() => setStep(1)} className="bg-white dark:bg-zinc-800 text-black dark:text-white text-[9px] font-black px-3 py-1 rounded-full border border-slate-100 dark:border-white/10 shadow-lg uppercase tracking-widest hover:bg-slate-50 transition-all">Change</button>
+                                </div>
+                                <div className="flex flex-col md:flex-row items-center p-6 md:p-10 gap-8 md:gap-12">
+                                    <div className="w-full md:w-1/3 flex justify-center relative mt-6 md:mt-0">
+                                        <img src={selectedVehicle?.image} alt={selectedVehicle?.name} className="w-full max-w-[280px] object-contain scale-125 md:scale-150 drop-shadow-2xl" />
+                                    </div>
+                                    <div className="flex-1 space-y-5">
+                                        <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
+                                            <div>
+                                                <h4 className="text-3xl font-black text-black dark:text-white uppercase tracking-tighter mb-1">{displayVehicleName(selectedVehicle?.name)}</h4>
+                                            </div>
+                                            <div className="text-right">
+                                                <div className="flex items-baseline justify-end gap-1.5">
+                                                    <span className="text-xl font-black text-[#FACC15]">{currentSymbol}</span>
+                                                    <span className="text-4xl font-black text-black dark:text-white tracking-tighter leading-none">{(Number(totalPrice) || 0).toLocaleString()}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div className="grid grid-cols-4 gap-2.5">
+                                            {[
+                                                { icon: Users, label: 'MAX PAX', value: selectedVehicle?.capacity || 4 },
+                                                { icon: Briefcase, label: 'MAX LUG', value: selectedVehicle?.luggage || selectedVehicle?.suitcases || 2 },
+                                                { icon: ShoppingBag, label: 'MAX HAND', value: selectedVehicle?.handLuggage || 2 },
+                                                { icon: Wind, label: 'AC', value: 'ON' }
+                                            ].map((item, i) => (
+                                                <div key={i} className="bg-slate-50 dark:bg-white/5 rounded-xl p-3 border border-slate-100 dark:border-white/10 flex flex-col items-center justify-center">
+                                                    <item.icon size={14} className="text-[#FACC15] mb-1.5" strokeWidth={3} />
+                                                    <span className="text-xs font-black text-black dark:text-white leading-none">{item.value}</span>
+                                                    <span className="text-[8px] font-bold text-slate-400 uppercase tracking-widest leading-none mt-1">{item.label}</span>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className="bg-slate-50 dark:bg-white/5 border border-slate-100 dark:border-white/10 rounded-2xl p-4 sm:p-6 flex flex-wrap gap-4 sm:gap-8 items-center justify-between">
+                                <div className="flex flex-col">
+                                    <span className="text-[9px] font-black uppercase tracking-widest text-slate-400 mb-1">Your Passengers</span>
+                                    <div className="flex items-center gap-2">
+                                        <div className="flex items-center gap-1.5 bg-white dark:bg-zinc-800 px-3 py-1.5 rounded-lg border border-slate-200 dark:border-white/10 shadow-sm">
+                                            <Users size={12} className="text-[#FACC15]" />
+                                            <span className="text-xs font-black text-slate-800 dark:text-white">{formData.passengerCount.adults || 0} Adults</span>
+                                        </div>
+                                        {formData.passengerCount.children > 0 && (
+                                            <div className="flex items-center gap-1.5 bg-white dark:bg-zinc-800 px-3 py-1.5 rounded-lg border border-slate-200 dark:border-white/10 shadow-sm">
+                                                <User size={12} className="text-[#FACC15]" />
+                                                <span className="text-xs font-black text-slate-800 dark:text-white">{formData.passengerCount.children} Children</span>
+                                            </div>
+                                        )}
+                                    </div>
+                                </div>
+                                <div className="flex flex-col">
+                                    <span className="text-[9px] font-black uppercase tracking-widest text-slate-400 mb-1">Your Luggage</span>
+                                    <div className="flex items-center gap-2">
+                                        <div className="flex items-center gap-1.5 bg-white dark:bg-zinc-800 px-3 py-1.5 rounded-lg border border-slate-200 dark:border-white/10 shadow-sm">
+                                            <Briefcase size={12} className="text-[#FACC15]" />
+                                            {formData.tripType !== 'tour' ? (
+                                                <>
+                                                    <span className="text-xs font-black text-slate-800 dark:text-white">{formData.passengerCount.luggage || 0} Bags</span>
+                                                    {formData.passengerCount.handLuggage > 0 && (
+                                                        <>
+                                                            <span className="text-slate-300 dark:text-slate-600 font-bold">•</span>
+                                                            <span className="text-xs font-black text-slate-800 dark:text-white">{formData.passengerCount.handLuggage} Hand</span>
+                                                        </>
+                                                    )}
+                                                </>
+                                            ) : (
+                                                <span className="text-xs font-black text-slate-800 dark:text-white">N/A</span>
+                                            )}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className="grid md:grid-cols-2 gap-4 sm:gap-6">
+                                {[
+                                    { label: 'Full Legal Name', key: 'name', type: 'text', placeholder: 'Passenger Name', icon: User },
+                                    { label: 'Email Address', key: 'email', type: 'email', placeholder: 'for confirmation', icon: Mail },
+                                    { label: 'Primary Contact No', key: 'phone', type: 'tel', placeholder: '+94 XXX XXX XXX', icon: Phone },
+                                    { label: 'WhatsApp Number', key: 'whatsapp', type: 'tel', placeholder: 'For driver chat', icon: MessageSquare },
+                                    ...(formData.hasNameBoard ? [] : [])
+                                ].map(f => (
+                                    <div key={f.key} id={`field-${f.key}`}>
+                                        <label className={`text-[10px] font-black uppercase tracking-[0.3em] mb-4 flex items-center gap-3 transition-colors ${errors[f.key] ? 'text-red-500' : 'text-slate-500 dark:text-slate-400'}`}>
+                                            <f.icon size={14} className={errors[f.key] ? 'text-red-500' : 'text-[#FACC15]'} strokeWidth={3} /> {f.label}
+                                        </label>
+                                        {f.type === 'tel' ? (
+                                            <PhoneInput
+                                                defaultCountry="lk"
+                                                value={formData[f.key] || ''}
+                                                onChange={(phone) => setFormData({ ...formData, [f.key]: phone })}
+                                                inputClassName="!w-full !h-12 sm:!h-14 !bg-transparent !border-none !pl-2 !pr-8 !outline-none !font-black !text-black dark:!text-white placeholder:text-slate-700 dark:placeholder:text-slate-300 !text-sm !uppercase !tracking-widest"
+                                                countrySelectorStyleProps={{
+                                                    buttonClassName: "!bg-transparent !border-none !h-12 sm:!h-14 !pl-6 !pr-2 hover:!bg-slate-100/50 dark:hover:!bg-white/5 !transition-colors !rounded-l-3xl",
+                                                }}
+                                                className={`w-full bg-slate-50 dark:bg-white/5 border border-slate-300 dark:border-white/15 rounded-2xl flex items-center transition-all overflow-hidden ${errors[f.key] ? '!border-red-500 ring-2 ring-red-500/50 animate-shake' : ''}`}
+                                            />
+                                        ) : (
+                                            <input
+                                                type={f.type}
+                                                value={formData[f.key] || ''}
+                                                onChange={e => {
+                                                    const val = e.target.value;
+                                                    setFormData(prev => {
+                                                        const updated = { ...prev, [f.key]: val };
+                                                        if (f.key === 'name' && prev.hasNameBoard) {
+                                                            updated.nameBoardText = val;
+                                                        }
+                                                        return updated;
+                                                    });
+                                                }}
+                                                className={`w-full h-12 sm:h-14 bg-slate-50 dark:bg-white/5 border border-slate-300 dark:border-white/15 px-10 rounded-2xl outline-none font-black text-black dark:text-white placeholder:text-slate-700 dark:placeholder:text-slate-300 text-sm uppercase tracking-widest ${errors[f.key] ? '!border-red-500 ring-2 ring-red-500/50 animate-shake' : ''}`}
+                                                placeholder={f.placeholder}
+                                            />
+                                        )}
+                                    </div>
+                                ))}
+
+                            </div>
+
+                            <div className="pt-12 border-t border-slate-200 dark:border-white/10 relative">
+                                <div className="space-y-4">
+                                    <div className="grid grid-cols-2 gap-3">
+                                        <div className="space-y-2">
+                                            <label className={`text-[9px] sm:text-[10px] font-black uppercase tracking-widest pl-3 flex items-center gap-2 ${errors.date ? 'text-red-500' : 'text-slate-500'}`}>
+                                                <Calendar size={12} strokeWidth={3} className={errors.date ? 'text-red-500' : 'text-[#FACC15]'} /> Pickup Date
+                                            </label>
+                                            <input
+                                                type="date"
+                                                value={formData.date || formData.flightArrivalDate || ''}
+                                                onChange={(e) => {
+                                                    const d = e.target.value;
+                                                    setFormData(prev => ({ ...prev, date: d, flightArrivalDate: d }));
+                                                    if (errors.date) setErrors(prev => ({ ...prev, date: false }));
+                                                }}
+                                                className={`w-full h-11 sm:h-12 bg-slate-50 dark:bg-white/5 border px-4 rounded-2xl font-black text-xs sm:text-sm outline-none focus:border-[#FACC15] transition-all cursor-pointer ${errors.date ? 'border-red-500 ring-2 ring-red-500/20' : 'border-slate-300 dark:border-white/15'}`}
+                                                style={{ colorScheme: 'light' }}
+                                                aria-label="Pickup date"
+                                            />
+                                        </div>
+                                        <div className="space-y-2">
+                                            <label className={`text-[9px] sm:text-[10px] font-black uppercase tracking-widest pl-3 flex items-center gap-2 ${errors.time ? 'text-red-500' : 'text-slate-500'}`}>
+                                                <Clock size={12} strokeWidth={3} className={errors.time ? 'text-red-500' : 'text-[#FACC15]'} /> Pickup Time
+                                            </label>
+                                            <input
+                                                type="time"
+                                                value={(() => { const parsed = parseStoredTime(formData.time || formData.flightArrivalTime); return parsed.time24h || ''; })()}
+                                                onChange={(e) => {
+                                                    const newTime24 = e.target.value;
+                                                    if (!newTime24) return;
+                                                    const [hStr, mStr] = newTime24.split(':');
+                                                    let h = parseInt(hStr, 10);
+                                                    const m = parseInt(mStr, 10);
+                                                    const ampm = h >= 12 ? 'PM' : 'AM';
+                                                    const h12 = h % 12 === 0 ? 12 : h % 12;
+                                                    const tz = detectLocalTimezone() || 'SLST';
+                                                    const formatted = `${h12.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')} ${ampm} ${tz}`;
+                                                    setFormData(prev => ({ ...prev, time: formatted, flightArrivalTime: formatted }));
+                                                    if (errors.time) setErrors(prev => ({ ...prev, time: false }));
+                                                }}
+                                                step={1800}
+                                                className={`w-full h-11 sm:h-12 bg-slate-50 dark:bg-white/5 border px-4 rounded-2xl font-black text-xs sm:text-sm outline-none focus:border-[#FACC15] transition-all cursor-pointer ${errors.time ? 'border-red-500 ring-2 ring-red-500/20' : 'border-slate-300 dark:border-white/15'}`}
+                                                style={{ colorScheme: 'light' }}
+                                                aria-label="Pickup time"
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {formData.tripType === 'round-trip' && (
+                                <div className="animate-slide-up space-y-8 pt-10 border-t border-slate-100 dark:border-white/10">
+                                    <div className="flex items-center gap-3 mb-2">
+                                        <div className="w-2 h-2 bg-[#FACC15] rounded-full animate-pulse"></div>
+                                        <h4 className="text-xl font-black text-black dark:text-white uppercase tracking-tight">Return Journey <span className="text-[#FACC15]">Details</span></h4>
+                                    </div>
+                                    <div className="space-y-4 relative">
+                                        <label className={`text-xs font-black uppercase tracking-widest pl-4 ${errors.returnDate || errors.returnTime ? 'text-red-500' : 'text-slate-500'}`}>
+                                            Return Date & Time (Optional)
+                                        </label>
+                                        <div className="relative">
+                                            <CustomDateTimePicker
+                                                date={formData.returnDate}
+                                                time={formData.returnTime}
+                                                onChange={(d, t) => {
+                                                    setFormData(prev => ({ ...prev, returnDate: d, returnTime: t }));
+                                                    if (errors.returnDate || errors.returnTime) {
+                                                        setErrors(prev => ({ ...prev, returnDate: false, returnTime: false }));
+                                                    }
+                                                }}
+                                                className={`w-full h-14 bg-slate-50 dark:bg-white/5 border px-12 rounded-2xl font-black text-sm sm:text-base uppercase tracking-widest outline-none focus:border-[#FACC15] transition-all focus:ring-2 focus:ring-[#FACC15] ${errors.returnDate || errors.returnTime ? 'border-red-500 ring-2 ring-red-500/20 animate-shake' : 'border-slate-200 dark:border-white/10'}`}
+                                            />
+                                            <div className="absolute left-4 top-1/2 -translate-y-1/2 text-[#FACC15] pointer-events-none">
+                                                <Calendar size={18} strokeWidth={3} />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
+                        </div>
+                    )}
+
+                    {step === 3 && (
+                        <div className="animate-slide-up">
+                            <div className="grid lg:grid-cols-12 gap-12">
+                                <div className="lg:col-span-7 space-y-8">
+                                    <div className="p-6 sm:p-10 bg-white dark:bg-zinc-900/40 rounded-3xl sm:rounded-[3rem] text-emerald-950 dark:text-white border border-slate-100 dark:border-white/10 shadow-2xl relative overflow-hidden">
+                                        <div className="relative z-10 space-y-10">
+                                            <div className="flex items-center justify-between pb-8 border-b border-slate-100 dark:border-white/5">
+                                                <div className="px-6 py-2.5 bg-[#FACC15] text-white rounded-full text-[10px] font-black uppercase tracking-widest">Booking Summary</div>
+                                                <div className="text-[10px] font-black text-slate-700 dark:text-slate-200 uppercase tracking-[0.3em]">{formData.tripType.replace('-', ' ')}</div>
+                                            </div>
+                                            <div className="space-y-6">
+                                                <div className="flex flex-col sm:flex-row items-center gap-6 bg-slate-50 dark:bg-white/5 p-6 sm:p-8 rounded-[2rem] sm:rounded-[2.5rem] border border-slate-100 dark:border-white/10 shadow-inner">
+                                                    <div className="w-40 sm:w-32 h-28 sm:h-24 bg-white dark:bg-zinc-800 rounded-2xl flex items-center justify-center p-2 overflow-hidden shrink-0 shadow-sm">
+                                                        <img src={selectedVehicle?.image} alt={selectedVehicle?.name} className="w-full h-full object-contain scale-[1.2]" />
+                                                    </div>
+                                                    <div className="min-w-0 flex-1 text-center sm:text-left">
+                                                        <p className="text-base sm:text-sm font-black text-emerald-950 dark:text-white uppercase truncate tracking-tight">{displayVehicleName(selectedVehicle?.name)}</p>
+                                                        <div className="flex items-center justify-center sm:justify-start gap-4 mt-2">
+                                                            <div className="flex items-center gap-2">
+                                                                <Users size={12} className="text-[#FACC15]" />
+                                                                <span className="text-[9px] font-black text-slate-700 dark:text-slate-200 uppercase tracking-widest">
+                                                                    {(formData.passengerCount?.adults || 0) + (formData.passengerCount?.children || 0)} Pax
+                                                                </span>
+                                                            </div>
+                                                            <div className="flex items-center gap-2">
+                                                                <Briefcase size={12} className="text-[#FACC15]" />
+                                                                <span className="text-[9px] font-black text-slate-700 dark:text-slate-200 uppercase tracking-widest">
+                                                                    {formData.passengerCount?.luggage || 0} Bags
+                                                                </span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+
+                                                <div className="grid sm:grid-cols-2 gap-8 px-2">
+                                                    <div className="flex gap-5">
+                                                        <div className="w-12 h-12 rounded-2xl bg-emerald-950 text-white flex items-center justify-center shrink-0 shadow-xl"><MapPin size={22} /></div>
+                                                        <div className="min-w-0">
+                                                            <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-2">Origin</p>
+                                                            <p className="text-[11px] font-black text-emerald-950 dark:text-white uppercase line-clamp-2">{formData.pickup}</p>
+                                                        </div>
+                                                    </div>
+                                                    <div className="flex gap-5">
+                                                        <div className="w-12 h-12 rounded-2xl bg-[#FACC15] text-white flex items-center justify-center shrink-0 shadow-xl"><Navigation size={22} /></div>
+                                                        <div className="min-w-0">
+                                                            <p className="text-[9px] font-black text-slate-600 dark:text-slate-300 uppercase tracking-widest mb-2">Destination</p>
+                                                            <p className="text-[11px] font-black text-emerald-950 dark:text-white uppercase line-clamp-2">{formData.dropoff}</p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                {formData.hasNameBoard && (
+                                                    <div className="flex gap-6 bg-emerald-50 dark:bg-yellow-400/5 p-6 rounded-[2.5rem] border border-emerald-100 dark:border-yellow-400/10 shadow-sm group/board mt-4">
+                                                        <div className="w-14 h-14 rounded-2xl bg-white dark:bg-zinc-800 flex items-center justify-center shrink-0 border border-emerald-100 dark:border-white/5 overflow-hidden shadow-sm group-hover/board:border-yellow-400 transition-colors">
+                                                            <Signpost size={28} className="text-[#FACC15]" strokeWidth={3} />
+                                                        </div>
+                                                        <div className="min-w-0">
+                                                            <p className="text-[9px] font-black text-[#FACC15] uppercase tracking-widest mb-2">Airport Greeting</p>
+                                                            <p className="text-[11px] font-black text-emerald-950 dark:text-white uppercase truncate">"{formData.nameBoardText || 'Elite Greeting'}"</p>
+                                                        </div>
+                                                    </div>
+                                                )}
+                                            </div>
+
+                                            <div className="space-y-4 pt-8 mt-4 border-t border-slate-100 dark:border-white/10">
+                                                <div className="flex justify-between items-center text-[10px] font-black uppercase tracking-widest text-slate-900 dark:text-slate-100">
+                                                    <span>Trip Base Fare</span>
+                                                    <span className="font-black">{currentSymbol} {subtotal.toLocaleString()}</span>
+                                                </div>
+                                                {detailedBreakdown.detailedExtras?.filter(s => s.value > 0).map((s, idx) => (
+                                                    <div key={idx} className="flex justify-between items-center text-[10px] font-black uppercase tracking-widest">
+                                                        <span>{s.label}</span>
+                                                        <span className="text-[#FACC15] font-black">+{currentSymbol} {s.value.toLocaleString()}</span>
+                                                    </div>
+                                                ))}
+                                                <div className="pt-6 sm:pt-8 mt-6 border-t border-slate-100 dark:border-white/10">
+                                                    <div className="flex flex-col gap-2">
+                                                        <p className="text-[10px] font-black text-[#FACC15] tracking-[0.2em] uppercase">
+                                                            {formData.paymentType === 'partial' ? 'Secure Deposit (50%)' : 'Total Amount (Fixed)'}
+                                                        </p>
+                                                        <p className="text-3xl xs:text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black tracking-tighter text-emerald-950 dark:text-white leading-none break-words">
+                                                            <span className="text-lg sm:text-2xl font-black mr-2 text-slate-500/50">{currentSymbol}</span>
+                                                            {payNow.toLocaleString()}
+                                                        </p>
+                                                    </div>
+                                                </div>
+
+                                                {/* Cost Disclosures */}
+                                                <div className="mt-8 p-6 bg-slate-50 dark:bg-white/5 rounded-[2rem] border border-slate-100 dark:border-white/10 space-y-4">
+                                                    <div className="flex items-start gap-4">
+                                                        <div className="w-8 h-8 rounded-xl bg-amber-100 dark:bg-amber-400/20 text-amber-600 flex items-center justify-center shrink-0 shadow-sm">
+                                                            <Info size={16} strokeWidth={3} />
+                                                        </div>
+                                                        <div>
+                                                            <p className="text-[10px] font-black text-slate-900 dark:text-white uppercase tracking-widest mb-1">Hire Charge Only</p>
+                                                            <p className="text-[9px] font-bold text-slate-500 dark:text-slate-400 leading-relaxed uppercase tracking-tight">
+                                                                The quoted price covers the vehicle hire charge and fuel only.
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                    <div className="flex items-start gap-4 border-t border-slate-200/50 dark:border-white/5 pt-4">
+                                                        <div className="w-8 h-8 rounded-xl bg-rose-100 dark:bg-rose-400/20 text-rose-600 flex items-center justify-center shrink-0 shadow-sm">
+                                                            <AlertCircle size={16} strokeWidth={3} />
+                                                        </div>
+                                                        <div>
+                                                            <p className="text-[10px] font-black text-rose-600 uppercase tracking-widest mb-1">Customer Responsibility</p>
+                                                            <p className="text-[9px] font-bold text-slate-500 dark:text-slate-400 leading-relaxed uppercase tracking-tight">
+                                                                Parking tickets and highway tolls are the responsibility of the customer.
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div className="flex flex-wrap gap-3 mt-6">
+                                                    {convertToAllCurrencies(detailedBreakdown.lkr?.payNow || 0)
+                                                        .filter(c => ['USD', 'EUR', 'GBP'].includes(c.code) && c.code !== currency)
+                                                        .map(c => (
+                                                            <span key={c.code} className="text-[10px] font-black text-slate-600 dark:text-slate-400 uppercase tracking-widest bg-slate-100 dark:bg-white/5 px-2 py-1 rounded-lg border border-slate-200 dark:border-white/5">
+                                                                ≈ {c.symbol}{c.value.toLocaleString()}
+                                                            </span>
+                                                        ))
+                                                    }
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div className="lg:col-span-5 space-y-12">
+                                        <div className="space-y-6">
+                                            <div className="flex items-center gap-4">
+                                                <div className="h-px flex-1 bg-slate-100 dark:bg-white/5"></div>
+                                                <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest text-center">Select your payment (Card or Cash)</span>
+                                                <div className="h-px flex-1 bg-slate-100 dark:bg-white/5"></div>
+                                            </div>
+                                            <div className="grid grid-cols-2 gap-2 sm:gap-4">
+                                                {['card', 'cash'].map(m => (
+                                                    <button
+                                                        key={m}
+                                                        onClick={() => setFormData({
+                                                            ...formData,
+                                                            paymentMethod: m,
+                                                            ...(m === 'cash' ? { paymentType: 'full' } : {})
+                                                        })}
+                                                        className={`p-4 sm:p-6 rounded-3xl sm:rounded-[2rem] border transition-all flex flex-col items-center gap-2 sm:gap-3 ${formData.paymentMethod === m ? 'bg-[#FACC15] border-transparent text-black shadow-xl ring-4 ring-[#FACC15]/20' : 'bg-white dark:bg-zinc-900 border-slate-200 dark:border-white/20 text-slate-800 dark:text-white hover:border-[#FACC15]'}`}
+                                                    >
+                                                        {m === 'cash' ? <Coins size={22} /> : <CreditCard size={22} />}
+                                                        <span className="text-[10px] font-black uppercase tracking-widest">{m === 'cash' ? 'Cash' : 'Card'}</span>
+                                                    </button>
+                                                ))}
+                                            </div>
+                                        </div>
+
+                                        {formData.paymentMethod === 'card' && (
+                                            <div className="space-y-6 animate-slide-in">
+                                                <div className="grid grid-cols-2 gap-2 sm:gap-3 p-2 sm:p-3 bg-slate-50 dark:bg-white/5 rounded-[1.8rem] border border-slate-100 dark:border-white/10 shadow-inner">
+                                                    {['full', 'partial'].map(t => (
+                                                        <button
+                                                            key={t}
+                                                            onClick={() => setFormData(prev => ({ ...prev, paymentType: t }))}
+                                                            className={`py-3 sm:py-4 rounded-2xl text-[8px] sm:text-[9px] font-black uppercase tracking-widest transition-all ${formData.paymentType === t ? 'bg-[#FACC15] text-black shadow-xl ring-2 ring-[#FACC15]/20' : 'text-slate-800 dark:text-white bg-slate-200 dark:bg-zinc-700 hover:bg-slate-300 dark:hover:bg-zinc-600 hover:text-[#FACC15]'}`}
+                                                        >
+                                                            {t === 'full' ? 'Complete (100%)' : 'Deposit (50%)'}
+                                                        </button>
+                                                    ))}
+                                                </div>
+                                            </div>
+                                        )}
+
+                                        <div className="space-y-6 pt-6">
+                                            <h4 className="text-[9px] font-black text-slate-400 uppercase tracking-[0.4em] pl-6">Promo Code</h4>
+                                            <div className="bg-slate-50 dark:bg-white/5 border border-slate-100 dark:border-white/10 p-2 sm:p-3 rounded-3xl sm:rounded-[2rem] flex gap-2 sm:gap-4 shadow-inner">
+                                                <input
+                                                    value={couponInput}
+                                                    onChange={e => setCouponInput(e.target.value.toUpperCase())}
+                                                    placeholder="CODE?"
+                                                    className="flex-1 min-w-0 h-12 sm:h-14 bg-white dark:bg-zinc-900 border border-slate-100 dark:border-white/10 px-4 sm:px-8 rounded-2xl text-[10px] font-black uppercase tracking-widest outline-none text-emerald-950 dark:text-white shadow-sm"
+                                                />
+                                                <button
+                                                    onClick={() => handleApplyCoupon()}
+                                                    disabled={couponLoading || !couponInput}
+                                                    className="px-4 sm:px-8 bg-emerald-950 text-white rounded-2xl text-[10px] font-black uppercase tracking-widest active:scale-95 transition-all shadow-xl whitespace-nowrap"
+                                                >
+                                                    {couponLoading ? <Loader2 className="animate-spin" size={16} /> : 'Apply'}
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    )}
+                </div>
+
+                <div className="p-6 sm:p-10 border-t border-slate-100 dark:border-white/5 bg-white dark:bg-zinc-950 shrink-0">
+                    <div className="flex flex-row items-center justify-between gap-3 sm:gap-4">
+                        <button
+                            onClick={() => (step > 1 ? setStep(step - 1) : onClose())}
+                            className="flex-none flex items-center justify-center gap-2 px-3 sm:px-8 py-3 sm:py-4 text-[9px] sm:text-xs font-black uppercase tracking-widest text-slate-500 hover:text-black transition-all bg-slate-50 dark:bg-white/5 rounded-2xl border border-slate-100 dark:border-white/5"
+                        >
+                            {step === 1 ? 'Cancel' : 'Back'}
+                        </button>
+
+                        <div className="flex flex-1 sm:flex-none gap-2">
+
+                            <button
+                                onClick={handleNext}
+                                disabled={loading}
+                                className="flex-[2] sm:flex-none flex items-center justify-center gap-1 sm:gap-3 px-3 sm:px-12 py-3 sm:py-5 bg-[#FACC15] hover:bg-yellow-500 text-black hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 rounded-[2rem] text-[9px] sm:text-xs font-black uppercase tracking-[0.2em] transition-all group"
+                            >
+                                {step === 1 ? 'Next Step' : step === 2 ? 'Checkout' : loading ? 'Wait...' : 'Confirm'}
+                                <ArrowRight size={14} strokeWidth={3} className="group-hover:translate-x-1 transition-transform" />
+                            </button>
+                        </div>
+                    </div>
+                </div>
             </div>
-        );
-    }
+        </div>
+    );
+}
