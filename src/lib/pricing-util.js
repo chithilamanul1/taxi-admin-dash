@@ -233,12 +233,17 @@ export const calculateBasePrice = (distanceKm, vehicleData, tripType = 'one-way'
     const normalizeName = (n) => (n || '').toLowerCase().replace(/sri lanka/g, '').replace(/[,.-]/g, ' ').replace(/\s+/g, ' ').trim();
     const pickupNorm = normalizeName(pickup);
     const dropoffNorm = normalizeName(dropoff);
-    const isSigiriyaOrEllaRoute = pickupNorm.includes('sigiriya') || dropoffNorm.includes('sigiriya') || pickupNorm.includes('ella') || dropoffNorm.includes('ella');
+    const isSpecialLocalRoute = pickupNorm.includes('sigiriya') || dropoffNorm.includes('sigiriya') ||
+        pickupNorm.includes('ella') || dropoffNorm.includes('ella') ||
+        pickupNorm.includes('udawalawa') || dropoffNorm.includes('udawalawa') ||
+        pickupNorm.includes('udawalawe') || dropoffNorm.includes('udawalawe') ||
+        pickupNorm.includes('nuwara eliya') || dropoffNorm.includes('nuwara eliya') ||
+        pickupNorm.includes('nuwaraeliya') || dropoffNorm.includes('nuwaraeliya');
     const isWagonRVehicle = vehicleData && (vehicleData.vehicleType === 'mini-car' || vehicleData.vehicleSlug === 'mini-car');
 
     // HARDCODED FIXED RATES for specific Sigiriya/Ella intercity routes
     // These run before database matching to avoid Map serialization issues
-    if (!isAirportTransfer && tripType !== 'airport-round-tour' && tripType !== 'normal-round-tour' && isSigiriyaOrEllaRoute) {
+    if (!isAirportTransfer && tripType !== 'airport-round-tour' && tripType !== 'normal-round-tour' && isSpecialLocalRoute) {
         const vSlug = (vehicleData.vehicleSlug || vehicleData.vehicleType || '').toLowerCase();
 
         // Fixed prices per route per vehicle
@@ -517,8 +522,8 @@ export const calculateBasePrice = (distanceKm, vehicleData, tripType = 'one-way'
     }
 
     if (!overrideApplied) {
-        // Hardcoded competitive tier rates for Sigiriya and Ella local rides (non-airport)
-        if (isSigiriyaOrEllaRoute && distKm > 0 && tripType !== 'airport-round-tour' && tripType !== 'normal-round-tour' && !isAirportTransfer) {
+        // Hardcoded competitive tier rates for Sigiriya, Ella, Udawalawa, Nuwara Eliya local rides (non-airport)
+        if (isSpecialLocalRoute && distKm > 0 && tripType !== 'airport-round-tour' && tripType !== 'normal-round-tour' && !isAirportTransfer) {
             const isMiniCar = vehicleSlug === 'mini-car' || vehicleType === 'mini-car';
             const isSedan = vehicleSlug === 'sedan' || vehicleType === 'sedan';
 
@@ -545,7 +550,7 @@ export const calculateBasePrice = (distanceKm, vehicleData, tripType = 'one-way'
                 }
 
                 overrideApplied = true;
-                console.log(`[Pricing Override] Sigiriya/Ella Local Route (${vehicleType}): LKR ${distancePrice}`);
+                console.log(`[Pricing Override] Special Local Route (${vehicleType}): LKR ${distancePrice}`);
             }
         }
 
