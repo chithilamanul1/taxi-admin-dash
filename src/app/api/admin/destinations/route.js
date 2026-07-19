@@ -50,12 +50,16 @@ export async function POST(req) {
         if (safeBody.name) {
             safeBody.slug = slugify(safeBody.name);
         }
-        
+
         // Auto-generate route_id if missing for coordinate-based routing
         if (!safeBody.route_id) {
             const prefix = safeBody.pickup_location?.name ? slugify(safeBody.pickup_location.name).substring(0, 10) : 'global';
             const suffix = safeBody.destination_location?.name ? slugify(safeBody.destination_location.name).substring(0, 10) : 'dest';
             safeBody.route_id = `route_${prefix}_${suffix}_${Date.now().toString().slice(-6)}`;
+        }
+
+        if (!safeBody.id) {
+            safeBody.id = `loc-${Date.now()}`;
         }
 
         const dest = await Destination.create(safeBody);

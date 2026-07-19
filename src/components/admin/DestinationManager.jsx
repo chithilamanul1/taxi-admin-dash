@@ -392,9 +392,19 @@ export default function DestinationManager() {
                                                         const vBg = VEHICLE_ICONS[vt.slug]?.bg || 'bg-slate-500/10';
 
                                                         const currentBasePrices = form.base_prices_per_vehicle || [];
+
+                                                        // Check for alternative slugs in pricing map
+                                                        const getPricing = (slug) => {
+                                                            const p = form.pricing || {};
+                                                            if (p[slug] !== undefined) return p[slug];
+                                                            if (slug === 'normal-kdh' || slug === 'kdh-van') return p['kdh'] || p['normal-kdh'] || p['kdh-van'] || 0;
+                                                            if (slug === 'mini-van-every' || slug === 'mini-van-05') return p['mini-van'] || p['mini-van-every'] || p['mini-van-05'] || 0;
+                                                            return 0;
+                                                        };
+
                                                         const vehicleBaseData = currentBasePrices.find(bp => bp.vehicle_category === vt.slug) || {
                                                             vehicle_category: vt.slug,
-                                                            base_fare_flat: (form.pricing || {})[vt.slug] || 0,
+                                                            base_fare_flat: getPricing(vt.slug),
                                                             included_km: 0,
                                                             per_extra_km: 0
                                                         };
