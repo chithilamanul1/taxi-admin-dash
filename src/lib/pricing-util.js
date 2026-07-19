@@ -236,6 +236,42 @@ export const calculateBasePrice = (distanceKm, vehicleData, tripType = 'one-way'
     const isSigiriyaOrEllaRoute = pickupNorm.includes('sigiriya') || dropoffNorm.includes('sigiriya') || pickupNorm.includes('ella') || dropoffNorm.includes('ella');
     const isWagonRVehicle = vehicleData && (vehicleData.vehicleType === 'mini-car' || vehicleData.vehicleSlug === 'mini-car');
 
+    // HARDCODED FIXED RATES for specific Sigiriya/Ella intercity routes
+    // These run before database matching to avoid Map serialization issues
+    if (!isAirportTransfer && tripType !== 'airport-round-tour' && tripType !== 'normal-round-tour' && isSigiriyaOrEllaRoute) {
+        const vSlug = (vehicleData.vehicleSlug || vehicleData.vehicleType || '').toLowerCase();
+
+        // Fixed prices per route per vehicle
+        const FIXED_ROUTES = [
+            { from: 'sigiriya', to: 'kandy', prices: { 'mini-car': 15000, 'sedan': 17000, 'normal-kdh': 25000, 'kdh-van': 25000, 'mini-van-every': 14000 } },
+            { from: 'sigiriya', to: 'ella', prices: { 'mini-car': 30000, 'sedan': 35000, 'normal-kdh': 45000, 'kdh-van': 45000, 'mini-van-every': 28000 } },
+            { from: 'sigiriya', to: 'polonnaruwa', prices: { 'mini-car': 15000, 'sedan': 18000, 'normal-kdh': 30000, 'kdh-van': 30000, 'mini-van-every': 14000 } },
+            { from: 'ella', to: 'kandy', prices: { 'mini-car': 20000, 'sedan': 25000, 'normal-kdh': 35000, 'kdh-van': 35000, 'mini-van-every': 18000 } },
+            { from: 'ella', to: 'sigiriya', prices: { 'mini-car': 30000, 'sedan': 35000, 'normal-kdh': 45000, 'kdh-van': 45000, 'mini-van-every': 28000 } },
+            { from: 'ella', to: 'udawalawe', prices: { 'mini-car': 15000, 'sedan': 18000, 'normal-kdh': 30000, 'kdh-van': 30000, 'mini-van-every': 14000 } },
+            { from: 'ella', to: 'udawalawa', prices: { 'mini-car': 15000, 'sedan': 18000, 'normal-kdh': 30000, 'kdh-van': 30000, 'mini-van-every': 14000 } },
+            { from: 'kandy', to: 'sigiriya', prices: { 'mini-car': 15000, 'sedan': 17000, 'normal-kdh': 25000, 'kdh-van': 25000, 'mini-van-every': 14000 } },
+            { from: 'kandy', to: 'ella', prices: { 'mini-car': 20000, 'sedan': 25000, 'normal-kdh': 35000, 'kdh-van': 35000, 'mini-van-every': 18000 } },
+            { from: 'polonnaruwa', to: 'sigiriya', prices: { 'mini-car': 15000, 'sedan': 18000, 'normal-kdh': 30000, 'kdh-van': 30000, 'mini-van-every': 14000 } },
+            { from: 'udawalawe', to: 'ella', prices: { 'mini-car': 15000, 'sedan': 18000, 'normal-kdh': 30000, 'kdh-van': 30000, 'mini-van-every': 14000 } },
+            { from: 'udawalawa', to: 'ella', prices: { 'mini-car': 15000, 'sedan': 18000, 'normal-kdh': 30000, 'kdh-van': 30000, 'mini-van-every': 14000 } },
+        ];
+
+        const matchedRoute = FIXED_ROUTES.find(r =>
+            (pickupNorm.includes(r.from) && dropoffNorm.includes(r.to)) ||
+            (pickupNorm.includes(r.to) && dropoffNorm.includes(r.from))
+        );
+
+        if (matchedRoute) {
+            const fixedPrice = matchedRoute.prices[vSlug] || null;
+            if (fixedPrice) {
+                let total = fixedPrice;
+                if (tripType === 'round-trip' && !roundTripPackageId) total *= 2;
+                console.log(`[Pricing] Hardcoded Fixed Route: ${pickup} → ${dropoff} | ${vSlug}: LKR ${total}`);
+                return Math.round(total);
+            }
+        }
+    }
 
 
     // 1. Try to find an EXACT point-to-point match using Coordinate Routing Engine or fallback string matching
