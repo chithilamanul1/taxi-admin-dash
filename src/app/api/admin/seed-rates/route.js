@@ -3,6 +3,7 @@ import dbConnect from '@/lib/db';
 import Destination from '@/models/Destination';
 
 // Specific fixed-rate routes for Sigiriya and Ella
+// Pricing keys include all vehicle slug variants used in the system
 const ROUTES = [
     {
         route_id: 'route_sigiriya_kandy',
@@ -13,7 +14,7 @@ const ROUTES = [
         applicableRideType: 'non-airport-only',
         pickup_location: { name: 'Sigiriya, Sri Lanka', latitude: 7.9573, longitude: 80.7601 },
         destination_location: { name: 'Kandy, Sri Lanka', latitude: 7.2906, longitude: 80.6337 },
-        pricing: { 'mini-car': 15000, 'sedan': 17000, 'kdh': 25000 },
+        pricing: { 'mini-car': 15000, 'sedan': 17000, 'kdh': 25000, 'normal-kdh': 25000, 'kdh-van': 25000 },
     },
     {
         route_id: 'route_sigiriya_ella',
@@ -24,7 +25,7 @@ const ROUTES = [
         applicableRideType: 'non-airport-only',
         pickup_location: { name: 'Sigiriya, Sri Lanka', latitude: 7.9573, longitude: 80.7601 },
         destination_location: { name: 'Ella, Sri Lanka', latitude: 6.8667, longitude: 81.0464 },
-        pricing: { 'mini-car': 30000, 'sedan': 35000, 'kdh': 45000 },
+        pricing: { 'mini-car': 30000, 'sedan': 35000, 'kdh': 45000, 'normal-kdh': 45000, 'kdh-van': 45000 },
     },
     {
         route_id: 'route_sigiriya_polonnaruwa',
@@ -35,7 +36,7 @@ const ROUTES = [
         applicableRideType: 'non-airport-only',
         pickup_location: { name: 'Sigiriya, Sri Lanka', latitude: 7.9573, longitude: 80.7601 },
         destination_location: { name: 'Polonnaruwa, Sri Lanka', latitude: 7.9403, longitude: 81.0188 },
-        pricing: { 'mini-car': 15000, 'sedan': 18000, 'kdh': 30000 },
+        pricing: { 'mini-car': 15000, 'sedan': 18000, 'kdh': 30000, 'normal-kdh': 30000, 'kdh-van': 30000 },
     },
     {
         route_id: 'route_ella_kandy',
@@ -46,7 +47,7 @@ const ROUTES = [
         applicableRideType: 'non-airport-only',
         pickup_location: { name: 'Ella, Sri Lanka', latitude: 6.8667, longitude: 81.0464 },
         destination_location: { name: 'Kandy, Sri Lanka', latitude: 7.2906, longitude: 80.6337 },
-        pricing: { 'mini-car': 20000, 'sedan': 25000, 'kdh': 35000 },
+        pricing: { 'mini-car': 20000, 'sedan': 25000, 'kdh': 35000, 'normal-kdh': 35000, 'kdh-van': 35000 },
     },
     {
         route_id: 'route_ella_sigiriya',
@@ -57,7 +58,7 @@ const ROUTES = [
         applicableRideType: 'non-airport-only',
         pickup_location: { name: 'Ella, Sri Lanka', latitude: 6.8667, longitude: 81.0464 },
         destination_location: { name: 'Sigiriya, Sri Lanka', latitude: 7.9573, longitude: 80.7601 },
-        pricing: { 'mini-car': 30000, 'sedan': 35000, 'kdh': 45000 },
+        pricing: { 'mini-car': 30000, 'sedan': 35000, 'kdh': 45000, 'normal-kdh': 45000, 'kdh-van': 45000 },
     },
     {
         route_id: 'route_ella_udawalawe',
@@ -68,7 +69,7 @@ const ROUTES = [
         applicableRideType: 'non-airport-only',
         pickup_location: { name: 'Ella, Sri Lanka', latitude: 6.8667, longitude: 81.0464 },
         destination_location: { name: 'Udawalawe, Sri Lanka', latitude: 6.4374, longitude: 80.8979 },
-        pricing: { 'mini-car': 15000, 'sedan': 18000, 'kdh': 30000 },
+        pricing: { 'mini-car': 15000, 'sedan': 18000, 'kdh': 30000, 'normal-kdh': 30000, 'kdh-van': 30000 },
     },
 ];
 
