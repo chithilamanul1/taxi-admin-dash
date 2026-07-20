@@ -67,11 +67,30 @@ export default function DestinationManager() {
         e.preventDefault();
         setSaving(true);
         const method = form._id ? 'PUT' : 'POST';
+
+        // Clean up empty strings to prevent Mongoose CastErrors
+        const payload = { ...form };
+        if (payload.pricing) {
+            payload.pricing = Object.fromEntries(Object.entries(payload.pricing).filter(([_, v]) => v !== '' && v !== null));
+        }
+        if (payload.vehicleRateOverrides) {
+            payload.vehicleRateOverrides = Object.fromEntries(Object.entries(payload.vehicleRateOverrides).filter(([_, v]) => v !== '' && v !== null));
+        }
+        if (payload.base_prices_per_vehicle) {
+            payload.base_prices_per_vehicle = payload.base_prices_per_vehicle.map(bp => {
+                const cleanBp = { ...bp };
+                if (cleanBp.base_fare_flat === '') cleanBp.base_fare_flat = null;
+                if (cleanBp.included_km === '') cleanBp.included_km = null;
+                if (cleanBp.per_extra_km === '') cleanBp.per_extra_km = null;
+                return cleanBp;
+            });
+        }
+
         try {
             const res = await fetch('/api/admin/destinations', {
                 method,
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(form)
+                body: JSON.stringify(payload)
             });
             const data = await res.json();
             if (data.success) {
@@ -358,9 +377,9 @@ export default function DestinationManager() {
                                                 <div className="space-y-2 pt-2">
                                                     <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest pl-1">Apply this rate to:</label>
                                                     <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
-                                                        <button type="button" onClick={() => setForm({ ...form, applicableRideType: 'airport-only' })} className={`px-3 py-2 rounded-xl text-xs font-bold border ${form.applicableRideType === 'airport-only' ? 'bg-blue-500/10 border-blue-500 text-blue-600 dark:text-blue-400' : 'bg-slate-50 dark:bg-zinc-800 border-slate-200 dark:border-zinc-700 text-slate-500 hover:border-slate-300'}`}>Airport Transfers Only</button>
-                                                        <button type="button" onClick={() => setForm({ ...form, applicableRideType: 'non-airport-only' })} className={`px-3 py-2 rounded-xl text-xs font-bold border ${form.applicableRideType === 'non-airport-only' ? 'bg-emerald-500/10 border-emerald-500 text-emerald-600 dark:text-emerald-400' : 'bg-slate-50 dark:bg-zinc-800 border-slate-200 dark:border-zinc-700 text-slate-500 hover:border-slate-300'}`}>Non-Airport Only</button>
-                                                        <button type="button" onClick={() => setForm({ ...form, applicableRideType: 'all' })} className={`px-3 py-2 rounded-xl text-xs font-bold border ${form.applicableRideType === 'all' || !form.applicableRideType ? 'bg-purple-500/10 border-purple-500 text-purple-600 dark:text-purple-400' : 'bg-slate-50 dark:bg-zinc-800 border-slate-200 dark:border-zinc-700 text-slate-500 hover:border-slate-300'}`}>All Rides</button>
+                                                        <button type="button" onClick={() => setForm({ ...form, applicableRideType: 'airport-only' })} className={`px-3 py-2 rounded-xl text-xs font-bold border ${form.applicableRideType === 'airport-only' ? 'bg-blue-500/10 border-blue-500 text-blue-600 dark:text-blue-400' : 'bg-slate-50 dark:bg-zinc-800 border-slate-200 dark:border-zinc-700 text-slate-500 hover:border-slate-300'}`}>Airport Fixed Rate</button>
+                                                        <button type="button" onClick={() => setForm({ ...form, applicableRideType: 'non-airport-only' })} className={`px-3 py-2 rounded-xl text-xs font-bold border ${form.applicableRideType === 'non-airport-only' ? 'bg-emerald-500/10 border-emerald-500 text-emerald-600 dark:text-emerald-400' : 'bg-slate-50 dark:bg-zinc-800 border-slate-200 dark:border-zinc-700 text-slate-500 hover:border-slate-300'}`}>Destination Based rate</button>
+                                                        <button type="button" onClick={() => setForm({ ...form, applicableRideType: 'all' })} className={`px-3 py-2 rounded-xl text-xs font-bold border ${form.applicableRideType === 'all' || !form.applicableRideType ? 'bg-purple-500/10 border-purple-500 text-purple-600 dark:text-purple-400' : 'bg-slate-50 dark:bg-zinc-800 border-slate-200 dark:border-zinc-700 text-slate-500 hover:border-slate-300'}`}>Destination Fixed rate</button>
                                                     </div>
                                                 </div>
                                             )}
@@ -435,19 +454,9 @@ export default function DestinationManager() {
                                                             if (existingIndex >= 0) {
                                                                 const currentItem = newBasePrices[existingIndex];
                                                                 const updatedItem = { ...currentItem, [field]: parsedValue };
-
-                                                                // Auto-populate Inc. KM and Per Ex. KM when Flat Fare is entered and they are currently empty/0
-                                                                if (field === 'base_fare_flat' && parsedValue > 0) {
-                                                                    if (!currentItem.included_km) updatedItem.included_km = defaultInc;
-                                                                    if (!currentItem.per_extra_km) updatedItem.per_extra_km = defaultPerKm;
-                                                                }
                                                                 newBasePrices[existingIndex] = updatedItem;
                                                             } else {
                                                                 const newItem = { ...vehicleBaseData, [field]: parsedValue };
-                                                                if (field === 'base_fare_flat' && parsedValue > 0) {
-                                                                    if (!newItem.included_km) newItem.included_km = defaultInc;
-                                                                    if (!newItem.per_extra_km) newItem.per_extra_km = defaultPerKm;
-                                                                }
                                                                 newBasePrices.push(newItem);
                                                             }
 
