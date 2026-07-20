@@ -47,8 +47,8 @@ export async function POST(req) {
         }
 
         // Manual slug generation
-        if (safeBody.name) {
-            safeBody.slug = slugify(safeBody.name);
+        if (safeBody.title) {
+            safeBody.slug = slugify(safeBody.title);
         }
 
         // Auto-generate route_id if missing for coordinate-based routing
@@ -81,9 +81,9 @@ export async function PUT(req) {
 
         if (!_id) return NextResponse.json({ success: false, error: 'Module ID missing' }, { status: 400 });
 
-        // Manual slug update if name changed
-        if (updateData.name) {
-            updateData.slug = slugify(updateData.name);
+        // Manual slug update if title changed
+        if (updateData.title) {
+            updateData.slug = slugify(updateData.title);
         }
 
         // Auto-generate route_id if missing for coordinate-based routing
