@@ -473,10 +473,17 @@ export default function DestinationManager() {
                                                                     </div>
                                                                     <span className="text-xs font-black text-slate-700 dark:text-slate-200 uppercase tracking-tight">{vt.label}</span>
                                                                 </div>
-                                                                <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
+                                                                <div className="grid grid-cols-1 md:grid-cols-4 gap-2">
                                                                     <div className="space-y-1">
                                                                         <label className="text-[9px] font-bold text-slate-400 uppercase">Flat Fare</label>
                                                                         <input type="number" min="0" placeholder="0" value={vehicleBaseData.base_fare_flat || ''} onChange={e => updateBaseData('base_fare_flat', e.target.value)} className="w-full bg-slate-50 dark:bg-zinc-800 border border-slate-200 dark:border-slate-600 rounded-lg px-2 py-1.5 text-xs font-bold text-emerald-700 dark:text-emerald-400 outline-none" />
+                                                                    </div>
+                                                                    <div className="space-y-1">
+                                                                        <label className="text-[9px] font-bold text-slate-400 uppercase">Per KM Rate</label>
+                                                                        <input type="number" min="0" placeholder="0" value={(form.vehicleRateOverrides || {})[vt.slug] || ''} onChange={e => {
+                                                                            const val = parseNum(e.target.value);
+                                                                            setForm({ ...form, vehicleRateOverrides: { ...(form.vehicleRateOverrides || {}), [vt.slug]: val } });
+                                                                        }} className="w-full bg-slate-50 dark:bg-zinc-800 border border-slate-200 dark:border-slate-600 rounded-lg px-2 py-1.5 text-xs font-bold text-purple-700 dark:text-purple-400 outline-none" />
                                                                     </div>
                                                                     <div className="space-y-1">
                                                                         <label className="text-[9px] font-bold text-slate-400 uppercase">Inc. KM</label>
