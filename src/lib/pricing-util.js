@@ -249,24 +249,25 @@ export const calculateBasePrice = (distanceKm, vehicleData, tripType = 'one-way'
 
     // A. V2 Coordinate Matching (Radius: 5 KM)
     if (pickupObj?.lat && pickupObj?.lng && dropoffObj?.lat && dropoffObj?.lng) {
-        const exactCoordMatch = dynamicDestinations.find(d => {
-            if (!d.pickup_location?.latitude || !d.destination_location?.latitude) return false;
+        const RADIUS_KM = 5;
 
-            // Check direct route
+        // First try exact directional match (A -> B)
+        let exactCoordMatch = dynamicDestinations.find(d => {
+            if (!d.pickup_location?.latitude || !d.destination_location?.latitude) return false;
             const distPickup = calculateDistance(pickupObj.lat, pickupObj.lng, d.pickup_location.latitude, d.pickup_location.longitude);
             const distDropoff = calculateDistance(dropoffObj.lat, dropoffObj.lng, d.destination_location.latitude, d.destination_location.longitude);
-
-            // Check reverse route
-            const distReversePickup = calculateDistance(pickupObj.lat, pickupObj.lng, d.destination_location.latitude, d.destination_location.longitude);
-            const distReverseDropoff = calculateDistance(dropoffObj.lat, dropoffObj.lng, d.pickup_location.latitude, d.pickup_location.longitude);
-
-            const RADIUS_KM = 5;
-
-            const isDirectMatch = (distPickup !== null && distPickup <= RADIUS_KM) && (distDropoff !== null && distDropoff <= RADIUS_KM);
-            const isReverseMatch = (distReversePickup !== null && distReversePickup <= RADIUS_KM) && (distReverseDropoff !== null && distReverseDropoff <= RADIUS_KM);
-
-            return isDirectMatch || isReverseMatch;
+            return (distPickup !== null && distPickup <= RADIUS_KM) && (distDropoff !== null && distDropoff <= RADIUS_KM);
         });
+
+        // Fallback to reverse match (B -> A) if no exact match
+        if (!exactCoordMatch) {
+            exactCoordMatch = dynamicDestinations.find(d => {
+                if (!d.pickup_location?.latitude || !d.destination_location?.latitude) return false;
+                const distReversePickup = calculateDistance(pickupObj.lat, pickupObj.lng, d.destination_location.latitude, d.destination_location.longitude);
+                const distReverseDropoff = calculateDistance(dropoffObj.lat, dropoffObj.lng, d.pickup_location.latitude, d.pickup_location.longitude);
+                return (distReversePickup !== null && distReversePickup <= RADIUS_KM) && (distReverseDropoff !== null && distReverseDropoff <= RADIUS_KM);
+            });
+        }
 
         if (exactCoordMatch) {
             matchedOverride = exactCoordMatch;
@@ -277,13 +278,23 @@ export const calculateBasePrice = (distanceKm, vehicleData, tripType = 'one-way'
 
     // B. Legacy String Matching fallback (Exact point-to-point)
     if (!exactMatchFound && pickupNorm && dropoffNorm) {
-        const exactMatch = dynamicDestinations.find(d => {
+        // First try exact directional match (A -> B)
+        let exactMatch = dynamicDestinations.find(d => {
             if (!d.pickupLocation) return false;
             const dPick = normalizeName(d.pickupLocation);
             const dDrop = normalizeName(d.name);
-            return (pickupNorm.includes(dPick) && dropoffNorm.includes(dDrop)) ||
-                (dropoffNorm.includes(dPick) && pickupNorm.includes(dDrop));
+            return pickupNorm.includes(dPick) && dropoffNorm.includes(dDrop);
         });
+
+        // Fallback to reverse match (B -> A) if no exact match
+        if (!exactMatch) {
+            exactMatch = dynamicDestinations.find(d => {
+                if (!d.pickupLocation) return false;
+                const dPick = normalizeName(d.pickupLocation);
+                const dDrop = normalizeName(d.name);
+                return dropoffNorm.includes(dPick) && pickupNorm.includes(dDrop);
+            });
+        }
 
         if (exactMatch && hasPricingData(exactMatch)) {
             matchedOverride = exactMatch;

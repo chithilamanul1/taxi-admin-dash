@@ -3,6 +3,8 @@ import dbConnect from '@/lib/db';
 import Destination from '@/models/Destination';
 import { isAdmin } from '@/lib/admin-check';
 
+export const dynamic = 'force-dynamic';
+
 // Robust inlined slugify to avoid import crashes in certain environments
 function slugify(text) {
     if (!text) return '';
