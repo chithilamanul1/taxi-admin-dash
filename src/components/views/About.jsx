@@ -76,8 +76,8 @@ const About = () => {
 
                         <div className="relative z-10 aspect-[4/5] rounded-[3rem] overflow-hidden border-8 border-white dark:border-slate-800 shadow-2xl bg-slate-200 dark:bg-slate-800">
                             <img
-                                src="/images/ceo.jpg"
-                                alt="Our CEO"
+                                src="https://images.pexels.com/photos/3184418/pexels-photo-3184418.jpeg?auto=compress&cs=tinysrgb&w=800"
+                                alt="Our Local Team"
                                 className="w-full h-full object-cover transition-transform duration-700 hover:scale-105"
                                 onError={(e) => {
                                     e.target.src = "https://images.pexels.com/photos/1643330/pexels-photo-1643330.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"

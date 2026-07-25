@@ -74,8 +74,11 @@ pricingSchema.methods.calculatePrice = function (distanceKm, tripType = 'one-way
 
     // Add Waiting Charges
     if (waitingHours > 0) {
-        if (this.waitingCharges && this.waitingCharges.length >= waitingHours) {
-            totalPrice += this.waitingCharges[waitingHours - 1];
+        if (this.waitingCharges && this.waitingCharges.length > 0) {
+            for (let i = 0; i < waitingHours; i++) {
+                const chargeIndex = Math.min(i, this.waitingCharges.length - 1);
+                totalPrice += this.waitingCharges[chargeIndex] || 0;
+            }
         } else {
             // Fallback hourly rate
             totalPrice += waitingHours * (this.hourlyRate || 0);

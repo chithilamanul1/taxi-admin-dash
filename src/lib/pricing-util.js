@@ -578,8 +578,11 @@ export const calculateSurcharges = (params, vehicleData) => {
     const waitTime = parseInt(waitingHours || 0, 10);
 
     if (waitTime > 0) {
-        if (vehicleData.waitingCharges && Array.isArray(vehicleData.waitingCharges) && vehicleData.waitingCharges.length >= waitTime) {
-            surcharges += Number(vehicleData.waitingCharges[waitTime - 1]) || 0;
+        if (vehicleData.waitingCharges && Array.isArray(vehicleData.waitingCharges) && vehicleData.waitingCharges.length > 0) {
+            for (let i = 0; i < waitTime; i++) {
+                const chargeIndex = Math.min(i, vehicleData.waitingCharges.length - 1);
+                surcharges += Number(vehicleData.waitingCharges[chargeIndex]) || 0;
+            }
         } else {
             const hourlyRate = Number(waitingHourRate) || Number(vehicleData.hourlyRate) || 1000;
             surcharges += (waitTime * hourlyRate);

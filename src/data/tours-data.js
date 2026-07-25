@@ -9,7 +9,7 @@ export const dayTrips = [
         price: { amount: 59, currency: 'USD' },
         category: 'Leisure & History',
         tags: ['Coastal', 'Family Friendly', 'Wildlife'],
-        image: 'https://images.unsplash.com/photo-1580881761697-359f47bc57c0?q=80&w=1600&auto=format&fit=crop',
+        image: '/images/tours/bentota.jpg',
         pickupLocations: ['Colombo', 'Negombo', 'Dehiwala', 'Mount Lavinia', 'Wadduwa', 'Kalutara'],
         destinations: ['Bentota', 'Madu Ganga', 'Hikkaduwa', 'Galle Fort'],
         highlights: [
@@ -171,7 +171,7 @@ export const dayTrips = [
         price: { amount: 85, currency: 'USD' },
         category: 'Heritage',
         tags: ['History', 'Spirituality', 'UNESCO'],
-        image: 'https://images.unsplash.com/photo-1582239454124-7186104bc7a0?q=80&w=1600&auto=format&fit=crop',
+        image: '/images/tours/anuradhapura.png',
         pickupLocations: ['Sigiriya', 'Habarana', 'Dambulla', 'Colombo'],
         destinations: ['Anuradhapura Sacred City', 'Mihintale'],
         highlights: [
@@ -211,7 +211,7 @@ export const dayTrips = [
         price: { amount: 65, currency: 'USD' },
         category: 'Adventure',
         tags: ['Rafting', 'Adrenaline', 'Rivers'],
-        image: 'https://images.unsplash.com/photo-1554593455-83f089304323?q=80&w=1600&auto=format&fit=crop',
+        image: '/images/tours/kitulgala.png',
         pickupLocations: ['Colombo', 'Negombo', 'Kandy'],
         destinations: ['Kitulgala', 'Kelani River'],
         highlights: [
@@ -251,7 +251,7 @@ export const dayTrips = [
         price: { amount: 94, currency: 'USD' },
         category: 'Cultural Heritage',
         tags: ['UNESCO sites', 'Private', 'History'],
-        image: 'https://images.unsplash.com/photo-1582239454124-7186104bc7a0?q=80&w=1600&auto=format&fit=crop',
+        image: '/images/tours/sigiriya.jpg',
         pickupLocations: ['Colombo', 'Negombo', 'Kalutara'],
         destinations: ['Sigiriya Rock', 'Dambulla Caves', 'Golden Temple'],
         highlights: [
@@ -299,7 +299,7 @@ export const dayTrips = [
         price: { amount: 75, currency: 'USD' },
         category: 'Leisure & Culture',
         tags: ['Coastal', 'Bestseller', 'Family Friendly'],
-        image: 'https://images.unsplash.com/photo-1580881761697-359f47bc57c0?q=80&w=1600&auto=format&fit=crop',
+        image: '/images/tours/galle.jpg',
         pickupLocations: ['Colombo', 'Negombo', 'Waikkal'],
         destinations: ['Bentota', 'Madu River', 'Kosgoda', 'Galle'],
         highlights: [
@@ -348,7 +348,7 @@ export const dayTrips = [
         price: { amount: 39, currency: 'USD' },
         category: 'City & Culture',
         tags: ['Capital', 'Sightseeing', 'Shopping'],
-        image: 'https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?q=80&w=1600&auto=format&fit=crop',
+        image: '/images/tours/colombo.jpg',
         pickupLocations: ['Colombo Hotels', 'Port of Colombo'],
         destinations: ['Colombo Fort', 'Pettah', 'Gangaramaya', 'Independence Square'],
         highlights: [
@@ -397,7 +397,7 @@ export const dayTrips = [
         price: { amount: 26.25, currency: 'USD' },
         category: 'Lifestyle',
         tags: ['Shopping', 'City', 'Private'],
-        image: 'https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?q=80&w=1600&auto=format&fit=crop',
+        image: '/images/tours/colombo2.jpg',
         pickupLocations: ['Colombo', 'Negombo', 'Mount Lavinia'],
         destinations: ['Colombo Shopping Districts'],
         highlights: [
@@ -446,7 +446,7 @@ export const dayTrips = [
         price: { amount: 120, currency: 'USD' },
         category: 'Leisure & History',
         tags: ['Coastal', 'Scenic', 'Private'],
-        image: 'https://images.unsplash.com/photo-1580881761697-359f47bc57c0?q=80&w=1600&auto=format&fit=crop',
+        image: '/images/tours/galle2.jpg',
         pickupLocations: ['Negombo Hotels'],
         destinations: ['Handunugoda', 'Ahangama', 'Galle Fort', 'Hikkaduwa'],
         highlights: [
@@ -495,7 +495,7 @@ export const dayTrips = [
         price: { amount: 67.55, currency: 'USD' },
         category: 'History & Wildlife',
         tags: ['Cultural Heritage', 'Safari', 'Exclusive'],
-        image: 'https://images.unsplash.com/photo-1582239454124-7186104bc7a0?q=80&w=1600&auto=format&fit=crop',
+        image: '/images/tours/safari_minneriya.png',
         pickupLocations: ['Negombo Hotels'],
         destinations: ['Sigiriya Lion Rock', 'Minneriya National Park', 'Dambulla Cave Temple'],
         highlights: [
@@ -543,7 +543,7 @@ export const dayTrips = [
         price: { amount: 75, currency: 'USD' },
         category: 'Nature & Spirituality',
         tags: ['Iconic Tower', 'Temple of Tooth', 'Private'],
-        image: 'https://images.unsplash.com/photo-1554593455-83f089304323?q=80&w=1600&auto=format&fit=crop',
+        image: '/images/tours/ambuluwawa.jpg',
         pickupLocations: ['Negombo', 'Katunayake', 'Colombo'],
         destinations: ['Ambuluwawa Tower', 'Temple of the Tooth', 'Kandy City'],
         highlights: [
@@ -641,7 +641,7 @@ export const dayTrips = [
         price: { amount: 85, currency: 'USD' },
         category: 'Nature & Heritage',
         tags: ['Highlands', 'Scenic', 'Photography'],
-        image: 'https://images.unsplash.com/photo-1554593455-83f089304323?q=80&w=1600&auto=format&fit=crop',
+        image: '/images/tours/nuwara_eliya.png',
         pickupLocations: ['Colombo', 'Negombo', 'Kandy'],
         destinations: ['Ramboda Falls', 'Tea Factory', 'Nuwara Eliya Town', 'Gregory Lake'],
         highlights: [
@@ -721,7 +721,7 @@ export const dayTrips = [
         price: { amount: 99, currency: 'USD' },
         category: 'Wildlife & Nature',
         tags: ['Safaris', 'Elephants', 'Conservation'],
-        image: 'https://images.unsplash.com/photo-1582239454124-7186104bc7a0?q=80&w=1600&auto=format&fit=crop',
+        image: '/images/tours/safari_udawalawe.png',
         pickupLocations: ['Colombo', 'Negombo', 'Bentota', 'Galle'],
         destinations: ['Udawalawe National Park', 'Elephant Transit Home'],
         highlights: [
@@ -760,7 +760,7 @@ export const dayTrips = [
         price: { amount: 99, currency: 'USD' },
         category: 'Wildlife',
         tags: ['Leopards', 'Safari', 'Bestseller'],
-        image: 'https://images.unsplash.com/photo-1582239454124-7186104bc7a0?q=80&w=1600&auto=format&fit=crop',
+        image: '/images/tours/safari_yala.png',
         pickupLocations: ['Bentota', 'Galle', 'Mirissa', 'Hambantota'],
         destinations: ['Yala National Park'],
         highlights: [
@@ -800,7 +800,7 @@ export const dayTrips = [
         price: { amount: 90, currency: 'USD' },
         category: 'Nature',
         tags: ['Eco-Tourism', 'Trekking', 'Birds'],
-        image: 'https://images.unsplash.com/photo-1554593455-83f089304323?q=80&w=1600&auto=format&fit=crop',
+        image: '/images/tours/sinharaja.png',
         pickupLocations: ['Colombo', 'Bentota', 'Galle'],
         destinations: ['Sinharaja Forest Reserve'],
         highlights: [
@@ -840,7 +840,7 @@ export const dayTrips = [
         price: { amount: 80.72, currency: 'USD' },
         category: 'History',
         tags: ['Archaeology', 'UNESCO', 'Cycling'],
-        image: 'https://images.unsplash.com/photo-1582239454124-7186104bc7a0?q=80&w=1600&auto=format&fit=crop',
+        image: '/images/tours/polonnaruwa.png',
         pickupLocations: ['Dambulla', 'Habarana', 'Sigiriya', 'Kandy'],
         destinations: ['Polonnaruwa Ancient City'],
         highlights: [
@@ -880,7 +880,7 @@ export const dayTrips = [
         price: { amount: 55, currency: 'USD' },
         category: 'Wildlife',
         tags: ['Whales', 'Dolphins', 'Ocean'],
-        image: 'https://images.unsplash.com/photo-1580881761697-359f47bc57c0?q=80&w=1600&auto=format&fit=crop',
+        image: '/mirissa-new-fix.png',
         pickupLocations: ['Galle', 'Unawatuna', 'Weligama', 'Mirissa'],
         destinations: ['Mirissa Harbor', 'Indian Ocean'],
         highlights: [
@@ -920,7 +920,7 @@ export const dayTrips = [
         price: { amount: 50, currency: 'USD' },
         category: 'Wildlife',
         tags: ['Elephants', 'Family Friendly', 'Educational'],
-        image: 'https://images.unsplash.com/photo-1582239454124-7186104bc7a0?q=80&w=1600&auto=format&fit=crop',
+        image: '/kandy-new.png',
         pickupLocations: ['Colombo', 'Negombo', 'Kandy'],
         destinations: ['Pinnawala Elephant Orphanage', 'Maha Oya River'],
         highlights: [
@@ -960,7 +960,7 @@ export const dayTrips = [
         price: { amount: 41.50, currency: 'USD' },
         category: 'Cultural',
         tags: ['Temple of Tooth', 'Botanical Gardens', 'Bazaar'],
-        image: 'https://images.unsplash.com/photo-1554593455-83f089304323?q=80&w=1600&auto=format&fit=crop',
+        image: '/images/tours/kandy.jpg',
         pickupLocations: ['Colombo', 'Negombo', 'Bentota'],
         destinations: ['Kandy City', 'Temple of the Tooth', 'Peradeniya Gardens'],
         highlights: [
@@ -1000,7 +1000,7 @@ export const dayTrips = [
         price: { amount: 75, currency: 'USD' },
         category: 'Heritage',
         tags: ['Gems', 'Mining', 'Local Life'],
-        image: 'https://images.unsplash.com/photo-1554593455-83f089304323?q=80&w=1600&auto=format&fit=crop',
+        image: '/images/tours/ratnapura.png',
         pickupLocations: ['Colombo', 'Bentota', 'Kalutara'],
         destinations: ['Ratnapura City', 'Gem Mines', 'Gem Museum'],
         highlights: [
@@ -1040,7 +1040,7 @@ export const dayTrips = [
         price: { amount: 45, currency: 'USD' },
         category: 'Nature',
         tags: ['Corals', 'Beach', 'Snorkeling'],
-        image: 'https://images.unsplash.com/photo-1580881761697-359f47bc57c0?q=80&w=1600&auto=format&fit=crop',
+        image: '/images/tours/bentota.jpg',
         pickupLocations: ['Galle', 'Bentota', 'Colombo'],
         destinations: ['Hikkaduwa Marine Park', 'Tsunami Museum'],
         highlights: [
@@ -1079,7 +1079,7 @@ export const dayTrips = [
         price: { amount: 35, currency: 'USD' },
         category: 'Leisure',
         tags: ['Fishing Village', 'Lagoon', 'Canals'],
-        image: 'https://images.unsplash.com/photo-1580881761697-359f47bc57c0?q=80&w=1600&auto=format&fit=crop',
+        image: '/images/tours/colombo.png',
         pickupLocations: ['Colombo', 'Airport Hotels', 'Katunayake'],
         destinations: ['Negombo Fish Market', 'Dutch Canal', 'Negombo Lagoon'],
         highlights: [
