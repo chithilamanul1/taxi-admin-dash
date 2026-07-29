@@ -124,25 +124,24 @@ const AdminPackageGroup = ({ hours, initialPackages, onSaveGroup, onDeleteGroup,
                     )}
                 </div>
                 <div className="flex items-center gap-2">
-                    <button 
+                    <button
                         onClick={(e) => {
                             e.preventDefault();
                             handleSave();
                         }}
                         disabled={isSaving}
-                        className={`px-3 py-1 text-[10px] font-bold text-white rounded-lg transition-colors uppercase tracking-wider flex items-center gap-1 shadow-sm ${
-                            saveSuccess 
-                                ? 'bg-green-500' 
-                                : isSaving 
-                                    ? 'bg-gray-400 cursor-wait' 
-                                    : typeColor === 'emerald' 
-                                        ? 'bg-emerald-600 hover:bg-emerald-700' 
+                        className={`px-3 py-1 text-[10px] font-bold text-white rounded-lg transition-colors uppercase tracking-wider flex items-center gap-1 shadow-sm ${saveSuccess
+                                ? 'bg-green-500'
+                                : isSaving
+                                    ? 'bg-gray-400 cursor-wait'
+                                    : typeColor === 'emerald'
+                                        ? 'bg-emerald-600 hover:bg-emerald-700'
                                         : 'bg-slate-800 hover:bg-slate-900'
-                        }`}
+                            }`}
                     >
                         {saveSuccess ? '✓ Saved!' : isSaving ? 'Saving...' : `Save ${hours}H Package`}
                     </button>
-                    <button 
+                    <button
                         onClick={() => onDeleteGroup(hours)}
                         className="px-3 py-1 text-[10px] font-bold text-red-500 hover:bg-red-50 rounded-lg transition-colors uppercase tracking-wider flex items-center gap-1"
                     >
@@ -173,7 +172,7 @@ const AdminPackageGroup = ({ hours, initialPackages, onSaveGroup, onDeleteGroup,
                                         <td key={tIdx} className="py-3 px-1 text-center">
                                             <div className="inline-block space-y-1 text-left">
                                                 <div className="flex items-center gap-1">
-                                                    <input 
+                                                    <input
                                                         type="number"
                                                         placeholder="KM"
                                                         value={pkg.tiers?.[tIdx]?.km ?? 0}
@@ -186,7 +185,7 @@ const AdminPackageGroup = ({ hours, initialPackages, onSaveGroup, onDeleteGroup,
                                                 </div>
                                                 <div className="flex items-center gap-1">
                                                     <span className={`text-[8px] font-black text-${typeColor === 'emerald' ? 'emerald-600' : 'slate-600'}`}>Rs.</span>
-                                                    <input 
+                                                    <input
                                                         type="number"
                                                         placeholder="Price"
                                                         value={pkg.tiers?.[tIdx]?.price ?? 0}
@@ -212,16 +211,16 @@ const AdminPackageGroup = ({ hours, initialPackages, onSaveGroup, onDeleteGroup,
 const ensureAllVehicles = (settingsData) => {
     if (!settingsData) return settingsData;
     const updatedSettings = { ...settingsData };
-    
-    
 
-    
+
+
+
 
     // Process destinationRoundTripPackages
     const existingDestinationPackages = updatedSettings.destinationRoundTripPackages || [];
     const destinationHours = [...new Set(existingDestinationPackages.map(p => p.hours))];
     const finalDestinationHours = destinationHours.length > 0 ? destinationHours : [2, 4, 6, 8, 10, 12, 14];
-    
+
     const destinationPackages = [];
     finalDestinationHours.forEach(h => {
         ALL_VEHICLE_TYPES.forEach(vt => {
@@ -232,12 +231,12 @@ const ensureAllVehicles = (settingsData) => {
                     tiers.push({ km: 60 + tiers.length * 10, price: 0 });
                 }
                 const packageId = existing.id || `dest-pkg-${h}h-${vt.value}-${Date.now()}`;
-                destinationPackages.push({ 
-                    ...existing, 
-                    id: packageId, 
+                destinationPackages.push({
+                    ...existing,
+                    id: packageId,
                     hours: existing.hours || h,
                     vehicleType: existing.vehicleType || vt.value,
-                    tiers 
+                    tiers
                 });
             } else {
                 destinationPackages.push({
@@ -255,7 +254,7 @@ const ensureAllVehicles = (settingsData) => {
         });
     });
     updatedSettings.destinationRoundTripPackages = destinationPackages;
-    
+
     return updatedSettings;
 };
 
@@ -416,10 +415,10 @@ export default function AdminDashboard() {
             alert('An error occurred while creating the coupon.');
         }
     }
-    
+
     const handlePurgeData = async () => {
         if (!window.confirm('CRITICAL: This will PERMANENTLY DELETE all booking data. Are you absolutely sure?')) return;
-        
+
         setIsPurging(true)
         try {
             const res = await fetch('/api/admin/clear-test-data', { method: 'DELETE' })
@@ -869,7 +868,7 @@ export default function AdminDashboard() {
                         <span className={`${!sidebarOpen && 'md:hidden'}`}>Gallery Images</span>
                     </button>
                     <button onClick={() => { setCurrentView('videos'); setSidebarOpen(false); }} className={`flex items-center gap-3 p-3 w-full rounded-xl transition-all duration-200 ${currentView === 'videos' ? 'bg-white text-emerald-900 shadow-lg shadow-white/20 font-bold' : 'hover:bg-white/10 text-white/80 hover:text-white'}`}>
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-video"><path d="m22 8-6 4 6 4V8Z"/><rect width="14" height="12" x="2" y="6" rx="2" ry="2"/></svg>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-video"><path d="m22 8-6 4 6 4V8Z" /><rect width="14" height="12" x="2" y="6" rx="2" ry="2" /></svg>
                         <span className={`${!sidebarOpen && 'md:hidden'}`}>Gallery Videos</span>
                     </button>
                     <button onClick={() => { setCurrentView('round-trips'); setSidebarOpen(false); }} className={`flex items-center gap-3 p-3 w-full rounded-xl transition-all duration-200 ${currentView === 'round-trips' ? 'bg-white text-emerald-900 shadow-lg shadow-white/20 font-bold' : 'hover:bg-white/10 text-white/80 hover:text-white'}`}>
@@ -923,7 +922,7 @@ export default function AdminDashboard() {
                         >
                             <div className={`w-1.5 h-1.5 rounded-full ${notificationsEnabled ? 'bg-emerald-500 animate-pulse' : 'bg-slate-400'}`}></div>
                         </button>
-                        <button 
+                        <button
                             onClick={handlePurgeData}
                             disabled={isPurging}
                             className="hidden sm:flex items-center gap-2 px-3 py-1.5 bg-red-50 text-red-600 border border-red-200 rounded-lg text-[10px] font-black uppercase tracking-wider hover:bg-red-100 transition-all disabled:opacity-50"
@@ -1063,8 +1062,8 @@ export default function AdminDashboard() {
                                                 </tr>
                                             ) : (
                                                 bookings.slice(0, 5).map((booking) => (
-                                                    <tr 
-                                                        key={booking._id} 
+                                                    <tr
+                                                        key={booking._id}
                                                         onClick={() => {
                                                             setCurrentView('bookings');
                                                             setSelectedBooking(booking);
@@ -1285,7 +1284,7 @@ export default function AdminDashboard() {
                                                 onClick={async () => {
                                                     const expiry = settings.find(s => s.key === 'OFFER_EXPIRY')?.value;
                                                     const offerDay = settings.find(s => s.key === 'OFFER_DAY')?.value || 'Everyday';
-                                                    
+
                                                     setIsLoading(true);
                                                     try {
                                                         // Save Expiry
@@ -1342,7 +1341,7 @@ export default function AdminDashboard() {
                                                                 })
                                                             });
                                                         }
-                                                        
+
                                                         alert('Marketing settings updated successfully!');
                                                     } catch (err) {
                                                         alert('Failed to update settings');
@@ -1366,7 +1365,7 @@ export default function AdminDashboard() {
                                         </div>
                                         <h3 className="text-xl font-bold mb-2">Banner Preview</h3>
                                         <p className="text-emerald-100/70 text-sm mb-6">This is how your live banners will appear to customers.</p>
-                                        
+
                                         <div className="space-y-3">
                                             <div className="bg-[#FACC15] text-black px-4 py-2 rounded-lg font-black text-[10px] uppercase tracking-widest shadow-lg">
                                                 (Yellow) Welcome Offer & Destinations
@@ -1430,38 +1429,38 @@ export default function AdminDashboard() {
                                                 <p className="text-xs text-emerald-800/60 font-medium mt-1">Pricing tiers for round tours starting from the Airport.</p>
                                             </div>
                                             <div className="flex items-center gap-3">
-                                                
-                                                <button 
-                                                onClick={() => {
-                                                    const hoursStr = prompt("Enter hour count for the new Airport Package (e.g. 5, 8, 12):");
-                                                    if (!hoursStr) return;
-                                                    const newHours = Number(hoursStr);
-                                                    if (isNaN(newHours) || newHours <= 0) {
-                                                        alert("Please enter a valid number of hours.");
-                                                        return;
-                                                    }
-                                                    const exists = airportTours.some(p => p.hours === newHours);
-                                                    if (exists) {
-                                                        alert(`Package for ${newHours} hours already exists.`);
-                                                        return;
-                                                    }
-                                                    const newPackages = ALL_VEHICLE_TYPES.map(vt => ({
-                                                        id: `air-pkg-${newHours}h-${vt.value}-${Date.now()}`,
-                                                        hours: newHours,
-                                                        vehicleType: vt.value,
-                                                        tiers: [
-                                                            { km: 50, price: 0 },
-                                                            { km: 100, price: 0 },
-                                                            { km: 150, price: 0 },
-                                                            { km: 200, price: 0 }
-                                                        ]
-                                                    }));
-                                                    setAirportTours([...airportTours, ...newPackages]);
-                                                }}
-                                                className="px-6 py-3 bg-emerald-600 text-white rounded-xl font-black text-xs uppercase tracking-[0.2em] hover:bg-emerald-700 transition-all shadow-lg shadow-emerald-900/10 flex items-center gap-2"
-                                            >
-                                                <Plus size={16} strokeWidth={3} /> Add Airport Package
-                                            </button>
+
+                                                <button
+                                                    onClick={() => {
+                                                        const hoursStr = prompt("Enter hour count for the new Airport Package (e.g. 5, 8, 12):");
+                                                        if (!hoursStr) return;
+                                                        const newHours = Number(hoursStr);
+                                                        if (isNaN(newHours) || newHours <= 0) {
+                                                            alert("Please enter a valid number of hours.");
+                                                            return;
+                                                        }
+                                                        const exists = airportTours.some(p => p.hours === newHours);
+                                                        if (exists) {
+                                                            alert(`Package for ${newHours} hours already exists.`);
+                                                            return;
+                                                        }
+                                                        const newPackages = ALL_VEHICLE_TYPES.map(vt => ({
+                                                            id: `air-pkg-${newHours}h-${vt.value}-${Date.now()}`,
+                                                            hours: newHours,
+                                                            vehicleType: vt.value,
+                                                            tiers: [
+                                                                { km: 50, price: 0 },
+                                                                { km: 100, price: 0 },
+                                                                { km: 150, price: 0 },
+                                                                { km: 200, price: 0 }
+                                                            ]
+                                                        }));
+                                                        setAirportTours([...airportTours, ...newPackages]);
+                                                    }}
+                                                    className="px-6 py-3 bg-emerald-600 text-white rounded-xl font-black text-xs uppercase tracking-[0.2em] hover:bg-emerald-700 transition-all shadow-lg shadow-emerald-900/10 flex items-center gap-2"
+                                                >
+                                                    <Plus size={16} strokeWidth={3} /> Add Airport Package
+                                                </button>
                                             </div>
                                         </div>
 
@@ -1480,7 +1479,7 @@ export default function AdminDashboard() {
                                             }
 
                                             return uniqueAirportHours.map(hours => (
-                                                <AdminPackageGroup 
+                                                <AdminPackageGroup
                                                     key={`air-group-${hours}`}
                                                     hours={hours}
                                                     typeColor="emerald"
@@ -1527,12 +1526,12 @@ export default function AdminDashboard() {
 
                                                         const results = await Promise.all(promises);
                                                         const allSuccess = (await Promise.all(results.map(r => r.json()))).every(data => data.success);
-                                                        
-                                                        if (allSuccess) { 
-                                                            alert(`${hours}H Package saved successfully!`); 
-                                                            router.refresh(); 
-                                                        } else { 
-                                                            alert('Failed to save some packages.'); 
+
+                                                        if (allSuccess) {
+                                                            alert(`${hours}H Package saved successfully!`);
+                                                            router.refresh();
+                                                        } else {
+                                                            alert('Failed to save some packages.');
                                                         }
                                                     }}
                                                 />
@@ -1560,7 +1559,7 @@ export default function AdminDashboard() {
                                                 <h4 className="font-black text-emerald-950 uppercase tracking-tight text-xl">Normal Round Tour Packages</h4>
                                                 <p className="text-xs text-slate-500 font-medium mt-1">Pricing tiers for normal round tours based on traditional hour limits.</p>
                                             </div>
-                                            <button 
+                                            <button
                                                 onClick={() => {
                                                     const hoursStr = prompt("Enter hour count for the new Normal Package (e.g. 2, 4, 8):");
                                                     if (!hoursStr) return;
@@ -1608,7 +1607,7 @@ export default function AdminDashboard() {
                                             }
 
                                             return uniqueNormalHours.map(hours => (
-                                                <AdminPackageGroup 
+                                                <AdminPackageGroup
                                                     key={`norm-group-${hours}`}
                                                     hours={hours}
                                                     typeColor="slate"
@@ -1655,12 +1654,12 @@ export default function AdminDashboard() {
 
                                                         const results = await Promise.all(promises);
                                                         const allSuccess = (await Promise.all(results.map(r => r.json()))).every(data => data.success);
-                                                        
-                                                        if (allSuccess) { 
-                                                            alert(`Normal Tour ${hours}H Package saved successfully!`); 
+
+                                                        if (allSuccess) {
+                                                            alert(`Normal Tour ${hours}H Package saved successfully!`);
                                                             router.refresh();
-                                                        } else { 
-                                                            alert('Failed to save some packages.'); 
+                                                        } else {
+                                                            alert('Failed to save some packages.');
                                                         }
                                                     }}
                                                 />
@@ -1683,14 +1682,14 @@ export default function AdminDashboard() {
                                     </div>
 
                                     <div className="bg-emerald-50/30 border border-emerald-100 rounded-[2rem] p-6 sm:p-8 shadow-sm mb-6">
-                                            <div className="flex items-center justify-between mb-8">
-                                                <div>
-                                                    <h4 className="font-black text-emerald-950 uppercase tracking-tight text-xl">Destination Round Tour Packages</h4>
-                                                    <p className="text-xs text-emerald-800/60 font-medium mt-1">Default pricing tiers for destination round tours.</p>
-                                                </div>
-                                                <div className="flex items-center gap-3">
-                                                    
-                                                    <button 
+                                        <div className="flex items-center justify-between mb-8">
+                                            <div>
+                                                <h4 className="font-black text-emerald-950 uppercase tracking-tight text-xl">Destination Round Tour Packages</h4>
+                                                <p className="text-xs text-emerald-800/60 font-medium mt-1">Default pricing tiers for destination round tours.</p>
+                                            </div>
+                                            <div className="flex items-center gap-3">
+
+                                                <button
                                                     onClick={() => {
                                                         const hoursStr = prompt("Enter hour count for the new Destination Package (e.g. 5, 8, 12):");
                                                         if (!hoursStr) return;
@@ -1724,101 +1723,101 @@ export default function AdminDashboard() {
                                                 >
                                                     <Plus size={16} strokeWidth={3} /> Add Destination Package
                                                 </button>
-                                                </div>
                                             </div>
+                                        </div>
 
-                                            {(() => {
-                                                const uniqueDestHours = [...new Set((pricingSettings.destinationRoundTripPackages || []).map(p => p.hours))].sort((a, b) => a - b);
-                                                if (uniqueDestHours.length === 0) {
-                                                    return (
-                                                        <div className="py-12 flex flex-col items-center justify-center border-2 border-dashed border-emerald-250 rounded-3xl bg-white/50">
-                                                            <div className="w-16 h-16 bg-emerald-50 rounded-full flex items-center justify-center text-emerald-400 mb-4">
-                                                                <Route size={32} />
-                                                            </div>
-                                                            <p className="text-sm font-bold text-emerald-600 uppercase tracking-widest">No Destination Packages</p>
-                                                            <p className="text-[10px] text-emerald-500 mt-1 uppercase">Click 'Add Destination Package' to create tiered tours.</p>
+                                        {(() => {
+                                            const uniqueDestHours = [...new Set((pricingSettings.destinationRoundTripPackages || []).map(p => p.hours))].sort((a, b) => a - b);
+                                            if (uniqueDestHours.length === 0) {
+                                                return (
+                                                    <div className="py-12 flex flex-col items-center justify-center border-2 border-dashed border-emerald-250 rounded-3xl bg-white/50">
+                                                        <div className="w-16 h-16 bg-emerald-50 rounded-full flex items-center justify-center text-emerald-400 mb-4">
+                                                            <Route size={32} />
                                                         </div>
-                                                    );
-                                                }
+                                                        <p className="text-sm font-bold text-emerald-600 uppercase tracking-widest">No Destination Packages</p>
+                                                        <p className="text-[10px] text-emerald-500 mt-1 uppercase">Click 'Add Destination Package' to create tiered tours.</p>
+                                                    </div>
+                                                );
+                                            }
 
-                                                return uniqueDestHours.map(hours => (
-                                                    <AdminPackageGroup 
-                                                        key={`dest-group-${hours}`}
-                                                        hours={hours}
-                                                        typeColor="emerald"
-                                                        initialPackages={(pricingSettings.destinationRoundTripPackages || []).filter(p => p.hours === hours)}
-                                                        onEditHours={(oldHours) => {
-                                                            const val = prompt(`Change hours for this package:`, oldHours);
-                                                            if (val === null) return;
-                                                            const newHours = Number(val);
-                                                            if (isNaN(newHours) || newHours <= 0) return;
-                                                            const updated = (pricingSettings.destinationRoundTripPackages || []).map(p => {
-                                                                if (p.hours === oldHours) {
-                                                                    return { ...p, hours: newHours };
-                                                                }
-                                                                return p;
-                                                            });
-                                                            setPricingSettings({ ...pricingSettings, destinationRoundTripPackages: updated });
-                                                        }}
-                                                        onDeleteGroup={async (h) => {
-                                                            if (!confirm(`Are you sure you want to delete all destination packages for ${h} hours?`)) return;
-                                                            const updated = (pricingSettings.destinationRoundTripPackages || []).filter(p => p.hours !== h);
-                                                            const updatedSettings = { ...pricingSettings, destinationRoundTripPackages: updated };
-                                                            setPricingSettings(updatedSettings);
-                                                            await fetch('/api/admin/pricing-settings', {
-                                                                method: 'PUT',
-                                                                headers: { 'Content-Type': 'application/json' },
-                                                                body: JSON.stringify(updatedSettings)
-                                                            });
-                                                        }}
-                                                        onSaveGroup={async (updatedPackages) => {
-                                                            const updated = (pricingSettings.destinationRoundTripPackages || []).map(p => {
-                                                                if (p.hours === hours) {
-                                                                    return updatedPackages.find(up => up.vehicleType === p.vehicleType) || p;
-                                                                }
-                                                                return p;
-                                                            });
-                                                            const newSettings = { ...pricingSettings, destinationRoundTripPackages: updated };
-                                                            setPricingSettings(newSettings);
-                                                            const res = await fetch('/api/admin/pricing-settings', {
-                                                                method: 'PUT',
-                                                                headers: { 'Content-Type': 'application/json' },
-                                                                body: JSON.stringify(newSettings)
-                                                            });
-                                                            const data = await res.json();
-                                                            if (data.success) {
-                                                                alert(`${hours}H Package saved successfully!`);
-                                                            } else {
-                                                                alert('Failed to save packages.');
+                                            return uniqueDestHours.map(hours => (
+                                                <AdminPackageGroup
+                                                    key={`dest-group-${hours}`}
+                                                    hours={hours}
+                                                    typeColor="emerald"
+                                                    initialPackages={(pricingSettings.destinationRoundTripPackages || []).filter(p => p.hours === hours)}
+                                                    onEditHours={(oldHours) => {
+                                                        const val = prompt(`Change hours for this package:`, oldHours);
+                                                        if (val === null) return;
+                                                        const newHours = Number(val);
+                                                        if (isNaN(newHours) || newHours <= 0) return;
+                                                        const updated = (pricingSettings.destinationRoundTripPackages || []).map(p => {
+                                                            if (p.hours === oldHours) {
+                                                                return { ...p, hours: newHours };
                                                             }
-                                                        }}
-                                                    />
-                                                ));
-                                            })()}
-                                        </div>
+                                                            return p;
+                                                        });
+                                                        setPricingSettings({ ...pricingSettings, destinationRoundTripPackages: updated });
+                                                    }}
+                                                    onDeleteGroup={async (h) => {
+                                                        if (!confirm(`Are you sure you want to delete all destination packages for ${h} hours?`)) return;
+                                                        const updated = (pricingSettings.destinationRoundTripPackages || []).filter(p => p.hours !== h);
+                                                        const updatedSettings = { ...pricingSettings, destinationRoundTripPackages: updated };
+                                                        setPricingSettings(updatedSettings);
+                                                        await fetch('/api/admin/pricing-settings', {
+                                                            method: 'PUT',
+                                                            headers: { 'Content-Type': 'application/json' },
+                                                            body: JSON.stringify(updatedSettings)
+                                                        });
+                                                    }}
+                                                    onSaveGroup={async (updatedPackages) => {
+                                                        const updated = (pricingSettings.destinationRoundTripPackages || []).map(p => {
+                                                            if (p.hours === hours) {
+                                                                return updatedPackages.find(up => up.vehicleType === p.vehicleType) || p;
+                                                            }
+                                                            return p;
+                                                        });
+                                                        const newSettings = { ...pricingSettings, destinationRoundTripPackages: updated };
+                                                        setPricingSettings(newSettings);
+                                                        const res = await fetch('/api/admin/pricing-settings', {
+                                                            method: 'PUT',
+                                                            headers: { 'Content-Type': 'application/json' },
+                                                            body: JSON.stringify(newSettings)
+                                                        });
+                                                        const data = await res.json();
+                                                        if (data.success) {
+                                                            alert(`${hours}H Package saved successfully!`);
+                                                        } else {
+                                                            alert('Failed to save packages.');
+                                                        }
+                                                    }}
+                                                />
+                                            ));
+                                        })()}
+                                    </div>
 
-                                        <div className="mt-8 pt-6 border-t border-slate-100 flex justify-end">
-                                            <button
-                                                onClick={async () => {
-                                                    const res = await fetch('/api/admin/pricing-settings', {
-                                                        method: 'PUT',
-                                                        headers: { 'Content-Type': 'application/json' },
-                                                        body: JSON.stringify(pricingSettings)
-                                                    });
-                                                    const data = await res.json();
-                                                    if (data.success) {
-                                                        alert('Packages saved successfully!');
-                                                        setRefreshTrigger(prev => prev + 1);
-                                                        router.refresh();
-                                                    } else {
-                                                        alert('Failed to save packages.');
-                                                    }
-                                                }}
-                                                className="px-8 py-3.5 bg-emerald-950 text-white rounded-xl font-black text-xs uppercase tracking-[0.2em] hover:bg-black transition-all shadow-xl shadow-emerald-950/20 flex items-center gap-3 active:scale-95"
-                                            >
-                                                <ShieldCheck size={18} /> Update All Packages
-                                            </button>
-                                        </div>
+                                    <div className="mt-8 pt-6 border-t border-slate-100 flex justify-end">
+                                        <button
+                                            onClick={async () => {
+                                                const res = await fetch('/api/admin/pricing-settings', {
+                                                    method: 'PUT',
+                                                    headers: { 'Content-Type': 'application/json' },
+                                                    body: JSON.stringify(pricingSettings)
+                                                });
+                                                const data = await res.json();
+                                                if (data.success) {
+                                                    alert('Packages saved successfully!');
+                                                    setRefreshTrigger(prev => prev + 1);
+                                                    router.refresh();
+                                                } else {
+                                                    alert('Failed to save packages.');
+                                                }
+                                            }}
+                                            className="px-8 py-3.5 bg-emerald-950 text-white rounded-xl font-black text-xs uppercase tracking-[0.2em] hover:bg-black transition-all shadow-xl shadow-emerald-950/20 flex items-center gap-3 active:scale-95"
+                                        >
+                                            <ShieldCheck size={18} /> Update All Packages
+                                        </button>
+                                    </div>
                                 </div>
                             )}
 
@@ -2002,7 +2001,7 @@ export default function AdminDashboard() {
                                                 <p className="text-xs text-amber-700 font-bold uppercase tracking-widest mt-0.5 opacity-70">Manage Peak-Hour Rates & Time Windows</p>
                                             </div>
                                         </div>
-                                    <button 
+                                        <button
                                             onClick={() => setCurrentView('traffic-surge')}
                                             className="w-full sm:w-auto px-6 py-3 bg-amber-600 text-white rounded-xl font-black text-xs uppercase tracking-[0.2em] hover:bg-amber-700 transition-all shadow-lg shadow-amber-600/20 active:scale-95"
                                         >
@@ -2021,7 +2020,14 @@ export default function AdminDashboard() {
                                     ].map(cat => (
                                         <button
                                             key={cat.id}
-                                            onClick={() => setPricingCategory(cat.id)}
+                                            onClick={() => {
+                                                if (cat.id === 'tours') {
+                                                    setCurrentView('tours');
+                                                    setTourCategoryFilter('tour-package');
+                                                } else {
+                                                    setPricingCategory(cat.id);
+                                                }
+                                            }}
                                             className={`px-6 py-2 rounded-lg text-sm font-bold transition-all ${pricingCategory === cat.id ? 'bg-emerald-900 text-white shadow-sm' : 'text-gray-500 hover:text-emerald-900'}`}
                                         >
                                             {cat.label}
@@ -2783,7 +2789,7 @@ export default function AdminDashboard() {
                                                 <div className="border border-slate-200 rounded-lg p-4 bg-slate-50">
                                                     <div className="flex justify-between items-center mb-4">
                                                         <label className="block text-sm font-bold text-emerald-900">Dynamic Passenger Pricing</label>
-                                                        <button 
+                                                        <button
                                                             onClick={(e) => {
                                                                 e.preventDefault();
                                                                 const currentPricing = tourForm.paxPricing || [];
@@ -2803,25 +2809,25 @@ export default function AdminDashboard() {
                                                         <div className="flex gap-2 items-end">
                                                             <div className="flex-1">
                                                                 <label className="block text-[10px] font-bold text-emerald-900 mb-1">Base Price (1 Pax) $</label>
-                                                                <input 
-                                                                    type="number" 
+                                                                <input
+                                                                    type="number"
                                                                     placeholder="e.g. 100"
                                                                     className="w-full px-2 py-1.5 border border-emerald-200 rounded outline-none text-sm focus:ring-1 focus:ring-emerald-500"
                                                                     value={tourForm._basePrice || ''}
-                                                                    onChange={e => setTourForm({...tourForm, _basePrice: e.target.value})}
+                                                                    onChange={e => setTourForm({ ...tourForm, _basePrice: e.target.value })}
                                                                 />
                                                             </div>
                                                             <div className="flex-1">
                                                                 <label className="block text-[10px] font-bold text-emerald-900 mb-1">Incremental Add-on $</label>
-                                                                <input 
-                                                                    type="number" 
+                                                                <input
+                                                                    type="number"
                                                                     placeholder="e.g. 20"
                                                                     className="w-full px-2 py-1.5 border border-emerald-200 rounded outline-none text-sm focus:ring-1 focus:ring-emerald-500"
                                                                     value={tourForm._incPrice || ''}
-                                                                    onChange={e => setTourForm({...tourForm, _incPrice: e.target.value})}
+                                                                    onChange={e => setTourForm({ ...tourForm, _incPrice: e.target.value })}
                                                                 />
                                                             </div>
-                                                            <button 
+                                                            <button
                                                                 onClick={(e) => {
                                                                     e.preventDefault();
                                                                     const base = Number(tourForm._basePrice) || 0;
@@ -2848,8 +2854,8 @@ export default function AdminDashboard() {
                                                             <div key={idx} className="flex items-center gap-3 bg-white p-2 rounded border">
                                                                 <div className="flex-1">
                                                                     <label className="block text-[10px] font-bold text-gray-400 uppercase mb-1">Passengers</label>
-                                                                    <input 
-                                                                        type="number" 
+                                                                    <input
+                                                                        type="number"
                                                                         className="w-full px-2 py-1 border rounded focus:ring-1 focus:ring-emerald-600 outline-none text-sm"
                                                                         value={tier.pax}
                                                                         onChange={(e) => {
@@ -2861,8 +2867,8 @@ export default function AdminDashboard() {
                                                                 </div>
                                                                 <div className="flex-1">
                                                                     <label className="block text-[10px] font-bold text-gray-400 uppercase mb-1">Total Price (USD)</label>
-                                                                    <input 
-                                                                        type="number" 
+                                                                    <input
+                                                                        type="number"
                                                                         className="w-full px-2 py-1 border rounded focus:ring-1 focus:ring-emerald-600 outline-none text-sm"
                                                                         value={tier.amount}
                                                                         onChange={(e) => {
@@ -2872,7 +2878,7 @@ export default function AdminDashboard() {
                                                                         }}
                                                                     />
                                                                 </div>
-                                                                <button 
+                                                                <button
                                                                     onClick={(e) => {
                                                                         e.preventDefault();
                                                                         const newPricing = (tourForm.paxPricing || []).filter((_, i) => i !== idx);
@@ -3265,7 +3271,7 @@ export default function AdminDashboard() {
                                             </h3>
                                             <button onClick={() => setShowAIGenerator(false)} className="text-gray-400 hover:text-gray-600"><X size={24} /></button>
                                         </div>
-                                        
+
                                         <div className="space-y-4">
                                             <div>
                                                 <label className="block text-sm font-medium text-gray-700 mb-1">Topic or Keyword</label>
@@ -3290,7 +3296,7 @@ export default function AdminDashboard() {
                                                 </button>
                                                 <button
                                                     onClick={async () => {
-                                                        if(!aiTopic) return alert("Enter a topic!");
+                                                        if (!aiTopic) return alert("Enter a topic!");
                                                         setIsGeneratingAI(true);
                                                         try {
                                                             const res = await fetch('/api/admin/generate-blog', {
@@ -3299,7 +3305,7 @@ export default function AdminDashboard() {
                                                                 body: JSON.stringify({ topic: aiTopic })
                                                             });
                                                             const data = await res.json();
-                                                            if(data.success) {
+                                                            if (data.success) {
                                                                 alert("Blog generated and published successfully!");
                                                                 setShowAIGenerator(false);
                                                                 setAiTopic("");
@@ -4108,46 +4114,46 @@ export default function AdminDashboard() {
                                                     Close
                                                 </button>
                                                 <button
-                                                onClick={async () => {
-                                                    setUpdatingStatus(true)
-                                                    try {
-                                                        // Assuming we need a PUT endpoint to update status
-                                                        const res = await fetch(`/api/bookings/${selectedBooking._id}`, {
-                                                            method: 'PUT',
-                                                            headers: { 'Content-Type': 'application/json' },
-                                                            body: JSON.stringify({
-                                                                status: selectedStatus,
-                                                                paymentStatus: selectedPaymentStatus,
-                                                                assignedDriver: selectedDriver || null
+                                                    onClick={async () => {
+                                                        setUpdatingStatus(true)
+                                                        try {
+                                                            // Assuming we need a PUT endpoint to update status
+                                                            const res = await fetch(`/api/bookings/${selectedBooking._id}`, {
+                                                                method: 'PUT',
+                                                                headers: { 'Content-Type': 'application/json' },
+                                                                body: JSON.stringify({
+                                                                    status: selectedStatus,
+                                                                    paymentStatus: selectedPaymentStatus,
+                                                                    assignedDriver: selectedDriver || null
+                                                                })
                                                             })
-                                                        })
 
-                                                        const data = await res.json()
+                                                            const data = await res.json()
 
-                                                        if (data.success) {
-                                                            // Update local state
-                                                            const updatedList = bookings.map(b =>
-                                                                b._id === selectedBooking._id ? { ...b, status: selectedStatus } : b
-                                                            )
-                                                            setBookings(updatedList)
-                                                            setSelectedBooking({ ...selectedBooking, status: selectedStatus })
-                                                            alert('Booking status updated successfully')
-                                                        } else {
-                                                            alert('Failed to update: ' + (data.error || 'Unknown error'))
+                                                            if (data.success) {
+                                                                // Update local state
+                                                                const updatedList = bookings.map(b =>
+                                                                    b._id === selectedBooking._id ? { ...b, status: selectedStatus } : b
+                                                                )
+                                                                setBookings(updatedList)
+                                                                setSelectedBooking({ ...selectedBooking, status: selectedStatus })
+                                                                alert('Booking status updated successfully')
+                                                            } else {
+                                                                alert('Failed to update: ' + (data.error || 'Unknown error'))
+                                                            }
+                                                        } catch (err) {
+                                                            console.error(err)
+                                                            alert('An error occurred while updating status')
+                                                        } finally {
+                                                            setUpdatingStatus(false)
                                                         }
-                                                    } catch (err) {
-                                                        console.error(err)
-                                                        alert('An error occurred while updating status')
-                                                    } finally {
-                                                        setUpdatingStatus(false)
-                                                    }
-                                                }}
-                                                disabled={updatingStatus}
-                                                className="px-8 py-2.5 bg-emerald-900 text-white rounded-lg font-bold hover:bg-emerald-800 transition-all disabled:opacity-50 min-w-[140px] shadow-lg flex items-center justify-center gap-2"
-                                            >
-                                                {updatingStatus ? <Loader2 size={16} className="animate-spin" /> : <Check size={16} />}
-                                                {updatingStatus ? 'Saving...' : 'Save Changes'}
-                                            </button>
+                                                    }}
+                                                    disabled={updatingStatus}
+                                                    className="px-8 py-2.5 bg-emerald-900 text-white rounded-lg font-bold hover:bg-emerald-800 transition-all disabled:opacity-50 min-w-[140px] shadow-lg flex items-center justify-center gap-2"
+                                                >
+                                                    {updatingStatus ? <Loader2 size={16} className="animate-spin" /> : <Check size={16} />}
+                                                    {updatingStatus ? 'Saving...' : 'Save Changes'}
+                                                </button>
                                             </div>
                                         </div>
                                     </div>

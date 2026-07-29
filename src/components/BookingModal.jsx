@@ -1599,7 +1599,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                                             paymentMethod: m,
                                                             ...(m === 'cash' ? { paymentType: 'full' } : {})
                                                         })}
-                                                        className={`p-4 sm:p-6 rounded-3xl sm:rounded-[2rem] border transition-all flex flex-col items-center gap-2 sm:gap-3 ${formData.paymentMethod === m ? 'bg-[#FACC15] border-transparent text-black shadow-xl ring-4 ring-[#FACC15]/20' : 'bg-white dark:bg-zinc-900 border-slate-200 dark:border-white/20 text-slate-800 dark:text-white hover:border-[#FACC15]'}`}
+                                                        className={`p-4 sm:p-6 rounded-3xl sm:rounded-[2rem] border-2 transition-all flex flex-col items-center gap-2 sm:gap-3 ${formData.paymentMethod === m ? 'bg-[#FACC15] border-[#FACC15] text-black shadow-xl ring-4 ring-[#FACC15]/20' : 'bg-white dark:bg-zinc-900 border-slate-300 dark:border-white/30 text-slate-800 dark:text-white hover:border-[#FACC15]'}`}
                                                     >
                                                         {m === 'cash' ? <Coins size={22} /> : <CreditCard size={22} />}
                                                         <span className="text-[10px] font-black uppercase tracking-widest">{m === 'cash' ? 'Cash' : 'Card'}</span>
