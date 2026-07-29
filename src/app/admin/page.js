@@ -131,12 +131,12 @@ const AdminPackageGroup = ({ hours, initialPackages, onSaveGroup, onDeleteGroup,
                         }}
                         disabled={isSaving}
                         className={`px-3 py-1 text-[10px] font-bold text-white rounded-lg transition-colors uppercase tracking-wider flex items-center gap-1 shadow-sm ${saveSuccess
-                                ? 'bg-green-500'
-                                : isSaving
-                                    ? 'bg-gray-400 cursor-wait'
-                                    : typeColor === 'emerald'
-                                        ? 'bg-emerald-600 hover:bg-emerald-700'
-                                        : 'bg-slate-800 hover:bg-slate-900'
+                            ? 'bg-green-500'
+                            : isSaving
+                                ? 'bg-gray-400 cursor-wait'
+                                : typeColor === 'emerald'
+                                    ? 'bg-emerald-600 hover:bg-emerald-700'
+                                    : 'bg-slate-800 hover:bg-slate-900'
                             }`}
                     >
                         {saveSuccess ? '✓ Saved!' : isSaving ? 'Saving...' : `Save ${hours}H Package`}
@@ -2016,6 +2016,7 @@ export default function AdminDashboard() {
                                     {[
                                         { id: 'airport-transfer', label: 'Airport Transfer' },
                                         { id: 'ride-now', label: 'Ride Now / P2P' },
+                                        { id: 'day-trip', label: 'Day Trips' },
                                         { id: 'tours', label: 'Tour Packages' }
                                     ].map(cat => (
                                         <button
@@ -2024,6 +2025,9 @@ export default function AdminDashboard() {
                                                 if (cat.id === 'tours') {
                                                     setCurrentView('tours');
                                                     setTourCategoryFilter('tour-package');
+                                                } else if (cat.id === 'day-trip') {
+                                                    setCurrentView('tours');
+                                                    setTourCategoryFilter('day-trip');
                                                 } else {
                                                     setPricingCategory(cat.id);
                                                 }
