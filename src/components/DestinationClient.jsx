@@ -9,6 +9,43 @@ export default function DestinationClient({ destination }) {
     const [isBookingOpen, setIsBookingOpen] = useState(false);
     const [openFaq, setOpenFaq] = useState(null);
 
+    // Build pricing array in the format BookingModal expects
+    const VEHICLE_SLUG_MAP = {
+        'Mini Car': 'mini-car',
+        'Sedan': 'sedan',
+        'Mini Van': 'mini-van',
+        'KDH Van': 'kdh-van',
+        'Large Van': 'large-van',
+    };
+    const VEHICLE_CAPACITY_MAP = {
+        'mini-car': { capacity: 3, luggage: 2, handLuggage: 2 },
+        'sedan': { capacity: 4, luggage: 3, handLuggage: 2 },
+        'mini-van': { capacity: 7, luggage: 5, handLuggage: 4 },
+        'kdh-van': { capacity: 14, luggage: 8, handLuggage: 6 },
+        'large-van': { capacity: 14, luggage: 8, handLuggage: 6 },
+    };
+
+    const pricingForModal = destination.pricing
+        ? Object.entries(destination.pricing).map(([label, priceUSD]) => {
+            const slug = VEHICLE_SLUG_MAP[label] || label.toLowerCase().replace(/\s+/g, '-');
+            const cap = VEHICLE_CAPACITY_MAP[slug] || { capacity: 4, luggage: 3, handLuggage: 2 };
+            // Convert USD to LKR (approx 300 LKR per 1 USD)
+            const priceLKR = Math.round(priceUSD * 300);
+            return {
+                vehicleType: slug,
+                label,
+                basePrice: priceLKR,
+                totalPrice: priceLKR,
+                currency: 'LKR',
+                ...cap,
+            };
+        })
+        : [];
+
+    const distanceKm = destination.distance
+        ? parseInt(destination.distance, 10)
+        : 0;
+
     return (
         <div className="bg-white dark:bg-emerald-900 min-h-screen pb-20">
             {/* Hero Section */}
@@ -174,8 +211,8 @@ export default function DestinationClient({ destination }) {
                                             <p className="text-emerald-100/70 mb-6 text-sm leading-relaxed">
                                                 Don't just travel to Kandy, experience it! Book a <strong>Round Trip Package</strong> to visit the Temple of the Tooth, Botanical Gardens, and more at your own pace.
                                             </p>
-                                            <a 
-                                                href="/tour-packages" 
+                                            <a
+                                                href="/tour-packages"
                                                 className="inline-flex items-center gap-3 bg-emerald-500 text-white px-6 py-3 rounded-xl font-black text-xs uppercase tracking-widest hover:bg-emerald-400 transition-all shadow-lg shadow-emerald-500/20"
                                             >
                                                 View Kandy Tour Packages <ArrowRight size={16} />
@@ -257,8 +294,13 @@ export default function DestinationClient({ destination }) {
                 isOpen={isBookingOpen}
                 onClose={() => setIsBookingOpen(false)}
                 initialData={{
-                    dropoff: destination.name,
-                    tripType: 'one-way'
+                    dropoff: destination.fullAddress || `${destination.name}, Sri Lanka`,
+                    dropoffCoords: destination.coords
+                        ? { lat: destination.coords.lat, lng: destination.coords.lon }
+                        : null,
+                    tripType: 'one-way',
+                    pricing: pricingForModal,
+                    distance: distanceKm,
                 }}
             />
         </div>
