@@ -26,7 +26,9 @@ export async function GET(req, { params }) {
                     link = {
                         _id: booking._id,
                         title: `Invoice Ref: ${booking._id.toString().slice(-6).toUpperCase()}`,
-                        price: booking.totalPrice,
+                        // Use displayPrice (admin-entered amount in booking currency) not totalPrice (always LKR)
+                        // This prevents showing Rs 21,450 with a $ symbol when currency is USD
+                        price: booking.displayPrice || booking.totalPrice,
                         currency: booking.currency || 'LKR',
                         img: '/logo.png',
                         allowedPaymentMode: 'both',
