@@ -195,6 +195,8 @@ const BookingWidgetContent = ({ defaultTab = 'pickup', onTabChange }) => {
     const pickupRef = useRef(null);
     const dropoffRef = useRef(null);
     const dateTimeRef = useRef(null);
+    // Stores destination from URL param so it persists when user switches tabs
+    const destinationRef = useRef(null);
     const [step1Errors, setStep1Errors] = useState({
         pickup: false,
         dropoff: false,
@@ -325,20 +327,11 @@ const BookingWidgetContent = ({ defaultTab = 'pickup', onTabChange }) => {
         }
 
         if (destParam) {
-            setDropoff({
-                address: destParam,
-                lat: null,
-                lng: null,
-                name: destParam
-            });
-            setDropoffSearch(destParam);
-
-            if (tabParam === 'ride') {
-                setPickup({ name: '', lat: null, lng: null });
-                setPickupSearch('');
-            } else if (!tabParam) {
-                setActiveTab('pickup');
-            }
+            // Save destination into ref so it persists across tab switches
+            destinationRef.current = { name: destParam, lat: null, lng: null };
+            // Default to Airport Pickup if no tab is specified
+            if (!tabParam) setActiveTab('pickup');
+            // Actual field injection happens reactively in the activeTab useEffect below
             needsUrlCleanup = true;
         }
 
@@ -386,21 +379,26 @@ const BookingWidgetContent = ({ defaultTab = 'pickup', onTabChange }) => {
     // Tab Logic - reset fields based on mode
     useEffect(() => {
         console.log("BookingWidget: Active Tab changed to:", activeTab);
+        // Retrieve any destination that was pre-loaded from URL params
+        const dest = destinationRef.current;
         if (activeTab === 'pickup') {
+            // Airport Pickup: CMB → destination
             setPickup({ name: 'Bandaranaike International Airport (CMB)', lat: 7.1804, lng: 79.8837 })
             setPickupSearch('Bandaranaike International Airport (CMB)')
-            setDropoff({ name: '', lat: null, lng: null })
-            setDropoffSearch('')
+            setDropoff(dest || { name: '', lat: null, lng: null })
+            setDropoffSearch(dest?.name || '')
             setTripType('one-way')
         } else if (activeTab === 'drop') {
-            setPickup({ name: '', lat: null, lng: null })
-            setPickupSearch('')
+            // Airport Dropoff: destination → CMB
+            setPickup(dest || { name: '', lat: null, lng: null })
+            setPickupSearch(dest?.name || '')
             setDropoff({ name: 'Bandaranaike International Airport (CMB)', lat: 7.1804, lng: 79.8837 })
             setDropoffSearch('Bandaranaike International Airport (CMB)')
             setTripType('one-way')
         } else if (activeTab === 'ride') {
-            setPickup({ name: '', lat: null, lng: null })
-            setPickupSearch('')
+            // Intercity Ride: destination → open
+            setPickup(dest || { name: '', lat: null, lng: null })
+            setPickupSearch(dest?.name || '')
             setDropoff({ name: '', lat: null, lng: null })
             setDropoffSearch('')
         }
