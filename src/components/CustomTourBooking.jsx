@@ -16,44 +16,44 @@ import { useCurrency } from '@/context/CurrencyContext';
 import { getGlobalVehiclePriority } from './BookingWidget';
 
 const getVehicleTransform = (imagePath, isSelected, isHovered = false, h_target = 0.58, b_target = 0.12) => {
-    const baseFilename = (imagePath || '').split('/').pop().split('?')[0].toLowerCase().replace(/\.(png|jpg|webp)$/, '');
-    
-    // Bounding box data for transparency correction
-    const imgData = {
-        'coach-bus': { h_orig: 0.7772, c_prime_orig: 1 - 183.5/359 },
-        'costerbus': { h_orig: 0.6373, c_prime_orig: 1 - 216.5/408 },
-        'hondavezel': { h_orig: 0.6889, c_prime_orig: 1 - 216.0/360 },
-        'suv': { h_orig: 0.6889, c_prime_orig: 0.43 },
-        'minicar': { h_orig: 0.5220, c_prime_orig: 1 - 251.0/500 },
-        'minivan5seat': { h_orig: 0.4642, c_prime_orig: 1 - 227.5/433 },
-        'sedan': { h_orig: 0.3040, c_prime_orig: 0.4934 },
-        'sedan2': { h_orig: 0.4300, c_prime_orig: 0.4801 },
-        'sedancar': { h_orig: 0.4668, c_prime_orig: 0.5310 },
-        'sedancar2': { h_orig: 0.4300, c_prime_orig: 0.4801 },
-        'susukievery': { h_orig: 0.5543, c_prime_orig: 1 - 228.5/433 },
-        'toyota-highroof': { h_orig: 0.65, c_prime_orig: 1 - 227.5/433 },
-        'van': { h_orig: 0.5497, c_prime_orig: 1 - 227.5/433 },
-    }[baseFilename] || { h_orig: 0.55, c_prime_orig: 0.5 }; // Default fallback
+  const baseFilename = (imagePath || '').split('/').pop().split('?')[0].toLowerCase().replace(/\.(png|jpg|webp)$/, '');
 
-    // Base scale to make bbox height exactly h_target
-    let scale = h_target / imgData.h_orig;
+  // Bounding box data for transparency correction
+  const imgData = {
+    'coach-bus': { h_orig: 0.7772, c_prime_orig: 1 - 183.5 / 359 },
+    'costerbus': { h_orig: 0.6373, c_prime_orig: 1 - 216.5 / 408 },
+    'hondavezel': { h_orig: 0.6889, c_prime_orig: 1 - 216.0 / 360 },
+    'suv': { h_orig: 0.6889, c_prime_orig: 0.43 },
+    'minicar': { h_orig: 0.5220, c_prime_orig: 1 - 251.0 / 500 },
+    'minivan5seat': { h_orig: 0.4642, c_prime_orig: 1 - 227.5 / 433 },
+    'sedan': { h_orig: 0.3040, c_prime_orig: 0.4934 },
+    'sedan2': { h_orig: 0.4300, c_prime_orig: 0.4801 },
+    'sedancar': { h_orig: 0.4668, c_prime_orig: 0.5310 },
+    'sedancar2': { h_orig: 0.4300, c_prime_orig: 0.4801 },
+    'susukievery': { h_orig: 0.5543, c_prime_orig: 1 - 228.5 / 433 },
+    'toyota-highroof': { h_orig: 0.65, c_prime_orig: 1 - 227.5 / 433 },
+    'van': { h_orig: 0.5497, c_prime_orig: 1 - 227.5 / 433 },
+  }[baseFilename] || { h_orig: 0.55, c_prime_orig: 0.5 }; // Default fallback
 
-    if (isSelected) {
-        scale *= 1.15; // Selected zoom
-    } else if (isHovered) {
-        scale *= 1.08; // Hover zoom
-    }
+  // Base scale to make bbox height exactly h_target
+  let scale = h_target / imgData.h_orig;
 
-    // Centering and baseline calculations
-    const c_prime_scaled = 0.5 + scale * (imgData.c_prime_orig - 0.5);
-    const b_scaled = c_prime_scaled - (scale * imgData.h_orig) / 2;
-    const shift_up = b_target - b_scaled;
-    const translateY = -shift_up * 100;
+  if (isSelected) {
+    scale *= 1.15; // Selected zoom
+  } else if (isHovered) {
+    scale *= 1.08; // Hover zoom
+  }
 
-    return { scale, translateY };
+  // Centering and baseline calculations
+  const c_prime_scaled = 0.5 + scale * (imgData.c_prime_orig - 0.5);
+  const b_scaled = c_prime_scaled - (scale * imgData.h_orig) / 2;
+  const shift_up = b_target - b_scaled;
+  const translateY = -shift_up * 100;
+
+  return { scale, translateY };
 };
 
-const CustomTourBooking = () => {
+const CustomTourBooking = ({ targetLocation }) => {
   const { data: session } = useSession();
   const { currency, changeCurrency, SUPPORTED_CURRENCIES, convertPrice } = useCurrency();
   const [isCurrencyOpen, setIsCurrencyOpen] = useState(false);
@@ -66,7 +66,7 @@ const CustomTourBooking = () => {
   const [isBooking, setIsBooking] = useState(false);
   const [isBooked, setIsBooked] = useState(false);
   const [googleLoaded, setGoogleLoaded] = useState(false);
-  const [locations, setLocations] = useState(['', '']);
+  const [locations, setLocations] = useState([targetLocation || '', '']);
   const [distance, setDistance] = useState(0);
   const [basePackage, setBasePackage] = useState({ hours: 2, km: 40 });
   const [appliedOffers, setAppliedOffers] = useState([]);
@@ -103,21 +103,21 @@ const CustomTourBooking = () => {
   // Auto-swap vehicle if capacity exceeded
   useEffect(() => {
     if (!selectedVehicle || vehicles.length === 0) return;
-    
+
     const pax = formData.passengers || 1;
     const lug = formData.luggage || 0;
-    
+
     const vehiclePax = selectedVehicle.capacity || 4;
     const vehicleLug = selectedVehicle.suitcases || selectedVehicle.luggage || 4;
 
     if (pax > vehiclePax || lug > vehicleLug) {
       const suitable = vehicles.filter(v => {
-         const vPax = v.capacity || 4;
-         const vLug = v.suitcases || v.luggage || 4;
-         return pax <= vPax && lug <= vLug;
+        const vPax = v.capacity || 4;
+        const vLug = v.suitcases || v.luggage || 4;
+        return pax <= vPax && lug <= vLug;
       });
       if (suitable.length > 0) {
-        suitable.sort((a,b) => getGlobalVehiclePriority(a.vehicleType || a.id) - getGlobalVehiclePriority(b.vehicleType || b.id));
+        suitable.sort((a, b) => getGlobalVehiclePriority(a.vehicleType || a.id) - getGlobalVehiclePriority(b.vehicleType || b.id));
         if (suitable[0].id !== selectedVehicle.id) {
           setSelectedVehicle(suitable[0]);
         }
@@ -151,7 +151,7 @@ const CustomTourBooking = () => {
               suitcases: v.luggage || 4
             };
           });
-          mapped.sort((a,b) => getGlobalVehiclePriority(a.vehicleType || a.id) - getGlobalVehiclePriority(b.vehicleType || b.id));
+          mapped.sort((a, b) => getGlobalVehiclePriority(a.vehicleType || a.id) - getGlobalVehiclePriority(b.vehicleType || b.id));
           setVehicles(mapped);
           if (mapped.length > 0) setSelectedVehicle(mapped[0]);
         } else {
@@ -174,16 +174,16 @@ const CustomTourBooking = () => {
       .catch(err => {
         console.error("Error fetching vehicles:", err);
         const defaults = [
-            { id: 'mini-car', name: 'MINI CAR', baseRate: 3500, perKm: 100, image: '/vehicles/minicar.png', capacity: 2, suitcases: 4 },
-            { id: 'sedan', name: 'SEDAN', baseRate: 4500, perKm: 130, image: '/vehicles/sedancar.png', capacity: 3, suitcases: 3 },
-            { id: 'vezel', name: 'HONDA VEZEL', baseRate: 5500, perKm: 130, image: '/vehicles/Hondavezel.png', capacity: 3, suitcases: 3 },
-            { id: 'suv', name: 'SUV', baseRate: 8000, perKm: 160, image: '/vehicles/suv.png', capacity: 3, suitcases: 3 },
-            { id: 'mini-van-every', name: 'MINI VAN EVERY', baseRate: 4500, perKm: 150, image: '/vehicles/susukievery.png', capacity: 3, suitcases: 3 },
-            { id: 'mini-van-05', name: 'MINI VAN 4 SEAT', baseRate: 6000, perKm: 200, image: '/vehicles/minivan5seat.png', capacity: 4, suitcases: 4 },
-            { id: 'normal-kdh', name: 'VAN KDH', baseRate: 8000, perKm: 175, image: '/vehicles/van.png', capacity: 6, suitcases: 7 },
-            { id: 'kdh-van', name: 'MINI BUS', baseRate: 8500, perKm: 180, image: '/vehicles/toyota-highroof.png', capacity: 8, suitcases: 8 },
-            { id: 'mini-bus', name: 'COASTER BUS', baseRate: 15000, perKm: 250, image: '/vehicles/costerbus.png', capacity: 25, suitcases: 20 },
-            { id: 'coach-bus', name: 'COACH BUS', baseRate: 18000, perKm: 300, image: '/vehicles/coach-bus.png', capacity: 40, suitcases: 40 }
+          { id: 'mini-car', name: 'MINI CAR', baseRate: 3500, perKm: 100, image: '/vehicles/minicar.png', capacity: 2, suitcases: 4 },
+          { id: 'sedan', name: 'SEDAN', baseRate: 4500, perKm: 130, image: '/vehicles/sedancar.png', capacity: 3, suitcases: 3 },
+          { id: 'vezel', name: 'HONDA VEZEL', baseRate: 5500, perKm: 130, image: '/vehicles/Hondavezel.png', capacity: 3, suitcases: 3 },
+          { id: 'suv', name: 'SUV', baseRate: 8000, perKm: 160, image: '/vehicles/suv.png', capacity: 3, suitcases: 3 },
+          { id: 'mini-van-every', name: 'MINI VAN EVERY', baseRate: 4500, perKm: 150, image: '/vehicles/susukievery.png', capacity: 3, suitcases: 3 },
+          { id: 'mini-van-05', name: 'MINI VAN 4 SEAT', baseRate: 6000, perKm: 200, image: '/vehicles/minivan5seat.png', capacity: 4, suitcases: 4 },
+          { id: 'normal-kdh', name: 'VAN KDH', baseRate: 8000, perKm: 175, image: '/vehicles/van.png', capacity: 6, suitcases: 7 },
+          { id: 'kdh-van', name: 'MINI BUS', baseRate: 8500, perKm: 180, image: '/vehicles/toyota-highroof.png', capacity: 8, suitcases: 8 },
+          { id: 'mini-bus', name: 'COASTER BUS', baseRate: 15000, perKm: 250, image: '/vehicles/costerbus.png', capacity: 25, suitcases: 20 },
+          { id: 'coach-bus', name: 'COACH BUS', baseRate: 18000, perKm: 300, image: '/vehicles/coach-bus.png', capacity: 40, suitcases: 40 }
         ];
         setVehicles(defaults);
         setSelectedVehicle(defaults[0]);
@@ -266,7 +266,7 @@ const CustomTourBooking = () => {
             if (!address || !keyword) return false;
             const addr = address.toLowerCase().trim();
             const kw = keyword.toLowerCase().trim();
-            
+
             const streetPattern1 = kw + ' road';
             const streetPattern2 = kw + ' face';
             const streetPattern3 = kw + ' street';
@@ -274,17 +274,17 @@ const CustomTourBooking = () => {
             const streetPattern5 = kw + ' hotel';
 
             if (addr.includes(streetPattern1) || addr.includes(streetPattern2) || addr.includes(streetPattern3) || addr.includes(streetPattern4) || addr.includes(streetPattern5)) {
-                const cleanedAddr = addr
-                    .split(streetPattern1).join('')
-                    .split(streetPattern2).join('')
-                    .split(streetPattern3).join('')
-                    .split(streetPattern4).join('')
-                    .split(streetPattern5).join('');
-                    
-                const regex = new RegExp(`\\b${kw}\\b`, 'i');
-                return regex.test(cleanedAddr);
+              const cleanedAddr = addr
+                .split(streetPattern1).join('')
+                .split(streetPattern2).join('')
+                .split(streetPattern3).join('')
+                .split(streetPattern4).join('')
+                .split(streetPattern5).join('');
+
+              const regex = new RegExp(`\\b${kw}\\b`, 'i');
+              return regex.test(cleanedAddr);
             }
-            
+
             const regex = new RegExp(`\\b${kw}\\b`, 'i');
             return regex.test(addr);
           };
@@ -332,7 +332,7 @@ const CustomTourBooking = () => {
     };
   }, [vehicles]);
 
-    // Auto-fill/clear pickup location based on tab
+  // Auto-fill/clear pickup location based on tab
   useEffect(() => {
     if (tab === 'airport') {
       setLocations(prev => {
@@ -343,13 +343,13 @@ const CustomTourBooking = () => {
     } else {
       setLocations(prev => {
         const newLocs = [...prev];
-        if (newLocs[0] === "Bandaranaike International Airport (CMB)") {
-          newLocs[0] = '';
+        if (newLocs[0] === "Bandaranaike International Airport (CMB)" || !newLocs[0]) {
+          newLocs[0] = targetLocation || '';
         }
         return newLocs;
       });
     }
-  }, [tab]);
+  }, [tab, targetLocation]);
 
   const getMatchingDestination = () => {
     if (!locations[0] || destinations.length === 0) return null;
@@ -372,9 +372,9 @@ const CustomTourBooking = () => {
   const getAvailableHours = () => {
     let pkgs = getActivePackages();
     if (selectedVehicle) {
-      pkgs = pkgs.filter(p => 
-        p.vehicleType === selectedVehicle.id || 
-        p.vehicleType === selectedVehicle.vehicleType || 
+      pkgs = pkgs.filter(p =>
+        p.vehicleType === selectedVehicle.id ||
+        p.vehicleType === selectedVehicle.vehicleType ||
         (selectedVehicle.id === 'normal-kdh' && p.vehicleType === 'kdh-van')
       );
     }
@@ -385,9 +385,9 @@ const CustomTourBooking = () => {
   const getAvailableKmLimits = () => {
     let pkgs = getActivePackages();
     if (selectedVehicle) {
-      pkgs = pkgs.filter(p => 
-        p.vehicleType === selectedVehicle.id || 
-        p.vehicleType === selectedVehicle.vehicleType || 
+      pkgs = pkgs.filter(p =>
+        p.vehicleType === selectedVehicle.id ||
+        p.vehicleType === selectedVehicle.vehicleType ||
         (selectedVehicle.id === 'normal-kdh' && p.vehicleType === 'kdh-van')
       );
     }
@@ -410,9 +410,9 @@ const CustomTourBooking = () => {
   const updateDuration = (newHours) => {
     let pkgs = getActivePackages();
     if (selectedVehicle) {
-      pkgs = pkgs.filter(p => 
-        p.vehicleType === selectedVehicle.id || 
-        p.vehicleType === selectedVehicle.vehicleType || 
+      pkgs = pkgs.filter(p =>
+        p.vehicleType === selectedVehicle.id ||
+        p.vehicleType === selectedVehicle.vehicleType ||
         (selectedVehicle.id === 'normal-kdh' && p.vehicleType === 'kdh-van')
       );
     }
@@ -425,9 +425,9 @@ const CustomTourBooking = () => {
   useEffect(() => {
     let pkgs = getActivePackages();
     if (selectedVehicle) {
-      pkgs = pkgs.filter(p => 
-        p.vehicleType === selectedVehicle.id || 
-        p.vehicleType === selectedVehicle.vehicleType || 
+      pkgs = pkgs.filter(p =>
+        p.vehicleType === selectedVehicle.id ||
+        p.vehicleType === selectedVehicle.vehicleType ||
         (selectedVehicle.id === 'normal-kdh' && p.vehicleType === 'kdh-van')
       );
     }
@@ -454,9 +454,9 @@ const CustomTourBooking = () => {
 
   const initAutocomplete = (node, index) => {
     if (!googleLoaded || !node || node.dataset.googleAutocomplete) return;
-    const autocomplete = new window.google.maps.places.Autocomplete(node, { 
-      componentRestrictions: { country: "lk" }, 
-      fields: ["formatted_address"] 
+    const autocomplete = new window.google.maps.places.Autocomplete(node, {
+      componentRestrictions: { country: "lk" },
+      fields: ["formatted_address"]
     });
     node.dataset.googleAutocomplete = 'true';
     autocomplete.addListener("place_changed", () => {
@@ -485,7 +485,7 @@ const CustomTourBooking = () => {
   // Auto-adjust package based on actual route requirements
   const handleRouteCalculated = (stats) => {
     setDistance(stats.distanceKm);
-    
+
     if (stats.distanceKm <= 0) return;
 
     // We add 30% buffer to driving time for traffic/stops to get realistic required hours
@@ -508,7 +508,7 @@ const CustomTourBooking = () => {
     if (match.length === 0) {
       match = pkgs.filter(p => p.hours === targetHours);
     }
-    
+
     let targetKm = basePackage.km;
     const minRequiredKm = Math.max(basePackage.km, reqKm);
     if (match.length > 0) {
@@ -521,7 +521,7 @@ const CustomTourBooking = () => {
         });
       });
       kms.sort((a, b) => a - b);
-      
+
       const validKms = kms.filter(k => k >= minRequiredKm);
       targetKm = validKms.length > 0 ? validKms[0] : kms[kms.length - 1];
     } else {
@@ -533,21 +533,21 @@ const CustomTourBooking = () => {
 
     // Only update state if it actually needs an upgrade/downgrade relative to current form values
     if (targetHours !== formData.taxiTourHours || targetKm !== formData.taxiTourKm) {
-       setFormData(prev => ({
-          ...prev,
-          taxiTourHours: targetHours,
-          taxiTourKm: targetKm
-       }));
+      setFormData(prev => ({
+        ...prev,
+        taxiTourHours: targetHours,
+        taxiTourKm: targetKm
+      }));
     }
   };
 
   // Calculate pricing based on selected vehicle & hours & KM limit
   const calculateTotalForVehicle = (veh) => {
     if (!veh) return 0;
-    
+
     let basePrice = 0;
     const pkgs = getActivePackages();
-      
+
     const pkg = pkgs.find(p => p.hours === Number(formData.taxiTourHours) && (p.vehicleType === veh.id || (veh.id === 'normal-kdh' && p.vehicleType === 'kdh-van')));
     if (pkg) {
       const tier = (pkg.tiers || []).find(t => t.km === Number(formData.taxiTourKm));
@@ -555,12 +555,12 @@ const CustomTourBooking = () => {
         basePrice = Math.round(tier.price);
       }
     }
-    
+
     if (!basePrice) {
       // Fallback calculation using taxiTourKm
       const tourPkg = TAXI_TOUR_PACKAGES.find(p => p.hours === Number(formData.taxiTourHours));
       let fallbackBasePrice = tourPkg ? tourPkg.price : (formData.taxiTourHours * 2500);
-      
+
       // Calculate extra KM if the selected km limit is higher than the standard package distance
       const defaultDist = tourPkg ? tourPkg.distance : (formData.taxiTourHours * 20);
       if (formData.taxiTourKm > defaultDist) {
@@ -575,7 +575,7 @@ const CustomTourBooking = () => {
       if (veh.id === 'van' || veh.id === 'kdh-van' || veh.id === 'normal-kdh' || veh.id === 'kdh-flatroof') fallbackBasePrice *= 1.7;
       if (veh.id === 'mini-bus' || veh.id === 'minibus' || veh.name.includes('MINI BUS')) fallbackBasePrice *= 2.5;
       if (veh.id === 'coach-bus') fallbackBasePrice *= 4.5;
-      
+
       basePrice = Math.round(fallbackBasePrice);
     }
 
@@ -589,8 +589,8 @@ const CustomTourBooking = () => {
 
   const baseTotal = calculateTotalForVehicle(selectedVehicle);
   const totalDiscount = appliedOffers.reduce((max, offer) => {
-      const val = (offer.discountAmount || (baseTotal * (offer.discountPercentage / 100)));
-      return Math.max(max, val);
+    const val = (offer.discountAmount || (baseTotal * (offer.discountPercentage / 100)));
+    return Math.max(max, val);
   }, 0);
   const totalPrice = Math.max(0, baseTotal - totalDiscount);
 
@@ -610,14 +610,14 @@ const CustomTourBooking = () => {
         const firstError = Object.keys(errors)[0];
         const element = document.querySelector(`[name="${firstError}"]`) || document.getElementById(`field-${firstError}`);
         if (element) {
-            element.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            element.focus();
+          element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          element.focus();
         } else {
-            const errorInput = document.querySelector('.border-red-500');
-            if (errorInput) {
-                errorInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                errorInput.focus();
-            }
+          const errorInput = document.querySelector('.border-red-500');
+          if (errorInput) {
+            errorInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            errorInput.focus();
+          }
         }
       }, 50);
       return;
@@ -670,13 +670,13 @@ const CustomTourBooking = () => {
       if (data.success) {
         // Redirect to gateway or success page
         window.location.href = data.paymentUrl;
-      } else { 
-        alert(data.message || "Booking failed"); 
+      } else {
+        alert(data.message || "Booking failed");
       }
-    } catch (e) { 
-      alert("An error occurred. Please try again."); 
-    } finally { 
-      setIsBooking(false); 
+    } catch (e) {
+      alert("An error occurred. Please try again.");
+    } finally {
+      setIsBooking(false);
     }
   };
 
@@ -684,53 +684,53 @@ const CustomTourBooking = () => {
   const renderVehicleIcon = (id, isActive) => {
     const strokeColor = isActive ? '#000000' : '#475569';
     const accentColor = isActive ? '#FACC15' : 'transparent';
-    
+
     if (id === 'mini-car' || id === 'mini') {
       return (
         <svg className="w-20 h-10 transition-all duration-300" viewBox="0 0 100 45" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M5 32H12C13.5 32 14.5 30.5 14.5 29C14.5 27.5 15.8 26.2 17.5 26.2C19.2 26.2 20.5 27.5 20.5 29C20.5 30.5 21.5 32 23 32H77C78.5 32 79.5 30.5 79.5 29C79.5 27.5 80.8 26.2 82.5 26.2C84.2 26.2 85.5 27.5 85.5 29C85.5 30.5 86.5 32 88 32H95C96.5 32 97.5 30.5 97.5 29V24C97.5 21 95 19 91 18.5L82 18L72 9C70.5 7.5 68 7 66 7H38C35 7 32.5 9 31 11.5L21 21H8C6 21 5 22.5 5 24V29C5 30.5 5 32 5 32Z" stroke={strokeColor} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" fill={accentColor} fillOpacity="0.2"/>
-          <path d="M34 8L36 21H68L65 8H38Z" stroke={strokeColor} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
-          <circle cx="17.5" cy="29" r="6" stroke={strokeColor} strokeWidth="2" fill="#fff"/>
-          <circle cx="17.5" cy="29" r="2.5" fill={strokeColor}/>
-          <circle cx="82.5" cy="29" r="6" stroke={strokeColor} strokeWidth="2" fill="#fff"/>
-          <circle cx="82.5" cy="29" r="2.5" fill={strokeColor}/>
+          <path d="M5 32H12C13.5 32 14.5 30.5 14.5 29C14.5 27.5 15.8 26.2 17.5 26.2C19.2 26.2 20.5 27.5 20.5 29C20.5 30.5 21.5 32 23 32H77C78.5 32 79.5 30.5 79.5 29C79.5 27.5 80.8 26.2 82.5 26.2C84.2 26.2 85.5 27.5 85.5 29C85.5 30.5 86.5 32 88 32H95C96.5 32 97.5 30.5 97.5 29V24C97.5 21 95 19 91 18.5L82 18L72 9C70.5 7.5 68 7 66 7H38C35 7 32.5 9 31 11.5L21 21H8C6 21 5 22.5 5 24V29C5 30.5 5 32 5 32Z" stroke={strokeColor} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" fill={accentColor} fillOpacity="0.2" />
+          <path d="M34 8L36 21H68L65 8H38Z" stroke={strokeColor} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+          <circle cx="17.5" cy="29" r="6" stroke={strokeColor} strokeWidth="2" fill="#fff" />
+          <circle cx="17.5" cy="29" r="2.5" fill={strokeColor} />
+          <circle cx="82.5" cy="29" r="6" stroke={strokeColor} strokeWidth="2" fill="#fff" />
+          <circle cx="82.5" cy="29" r="2.5" fill={strokeColor} />
         </svg>
       );
     }
     if (id === 'sedan') {
       return (
         <svg className="w-20 h-10 transition-all duration-300" viewBox="0 0 100 45" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M4 31H12C13.5 31 14.5 29.5 14.5 28C14.5 26.5 15.8 25.2 17.5 25.2C19.2 25.2 20.5 26.5 20.5 28C20.5 29.5 21.5 31 23 31H77C78.5 31 79.5 29.5 79.5 28C79.5 26.5 80.8 25.2 82.5 25.2C84.2 25.2 85.5 26.5 85.5 28C85.5 29.5 86.5 31 88 31H96C97.5 31 98.5 29.5 98.5 28V22C98.5 19 96 17.5 93 17.2L74 16.5L61 8C59 6.8 56.5 6.5 54 6.5H35C32.5 6.5 30 7.8 28.5 9.8L18 20.5H6C4 20.5 3 22 3 23.5V28C3 29.5 3 31 4 31Z" stroke={strokeColor} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" fill={accentColor} fillOpacity="0.2"/>
-          <path d="M30.5 10L32.5 20H60L56.5 10H35Z" stroke={strokeColor} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
-          <circle cx="17.5" cy="28" r="6" stroke={strokeColor} strokeWidth="2" fill="#fff"/>
-          <circle cx="17.5" cy="28" r="2.5" fill={strokeColor}/>
-          <circle cx="82.5" cy="28" r="6" stroke={strokeColor} strokeWidth="2" fill="#fff"/>
-          <circle cx="82.5" cy="28" r="2.5" fill={strokeColor}/>
+          <path d="M4 31H12C13.5 31 14.5 29.5 14.5 28C14.5 26.5 15.8 25.2 17.5 25.2C19.2 25.2 20.5 26.5 20.5 28C20.5 29.5 21.5 31 23 31H77C78.5 31 79.5 29.5 79.5 28C79.5 26.5 80.8 25.2 82.5 25.2C84.2 25.2 85.5 26.5 85.5 28C85.5 29.5 86.5 31 88 31H96C97.5 31 98.5 29.5 98.5 28V22C98.5 19 96 17.5 93 17.2L74 16.5L61 8C59 6.8 56.5 6.5 54 6.5H35C32.5 6.5 30 7.8 28.5 9.8L18 20.5H6C4 20.5 3 22 3 23.5V28C3 29.5 3 31 4 31Z" stroke={strokeColor} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" fill={accentColor} fillOpacity="0.2" />
+          <path d="M30.5 10L32.5 20H60L56.5 10H35Z" stroke={strokeColor} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+          <circle cx="17.5" cy="28" r="6" stroke={strokeColor} strokeWidth="2" fill="#fff" />
+          <circle cx="17.5" cy="28" r="2.5" fill={strokeColor} />
+          <circle cx="82.5" cy="28" r="6" stroke={strokeColor} strokeWidth="2" fill="#fff" />
+          <circle cx="82.5" cy="28" r="2.5" fill={strokeColor} />
         </svg>
       );
     }
     if (id === 'vezel' || id === 'suv') {
       return (
         <svg className="w-20 h-10 transition-all duration-300" viewBox="0 0 100 45" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M5 33H12C13.5 33 14.5 31.5 14.5 30C14.5 28.5 15.8 27.2 17.5 27.2C19.2 27.2 20.5 28.5 20.5 30C20.5 31.5 21.5 33 23 33H77C78.5 33 79.5 31.5 79.5 30C79.5 28.5 80.8 27.2 82.5 27.2C84.2 27.2 85.5 28.5 85.5 30C85.5 31.5 86.5 33 88 33H95C96.5 33 97.5 31.5 97.5 30V22C97.5 19 95 16.5 90 16L79 15.5L66 7.5C64.5 6.5 62 6 60 6H38C35.5 6 33.2 7.2 31.8 9.2L20 20H8C6 20 5 21.5 5 23V30C5 31.5 5 33 5 33Z" stroke={strokeColor} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" fill={accentColor} fillOpacity="0.2"/>
-          <path d="M33 9.5L35 19.5H64.5L59.5 9.5H38Z" stroke={strokeColor} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
-          <circle cx="17.5" cy="30" r="6" stroke={strokeColor} strokeWidth="2" fill="#fff"/>
-          <circle cx="17.5" cy="30" r="2.5" fill={strokeColor}/>
-          <circle cx="82.5" cy="30" r="6" stroke={strokeColor} strokeWidth="2" fill="#fff"/>
-          <circle cx="82.5" cy="30" r="2.5" fill={strokeColor}/>
+          <path d="M5 33H12C13.5 33 14.5 31.5 14.5 30C14.5 28.5 15.8 27.2 17.5 27.2C19.2 27.2 20.5 28.5 20.5 30C20.5 31.5 21.5 33 23 33H77C78.5 33 79.5 31.5 79.5 30C79.5 28.5 80.8 27.2 82.5 27.2C84.2 27.2 85.5 28.5 85.5 30C85.5 31.5 86.5 33 88 33H95C96.5 33 97.5 31.5 97.5 30V22C97.5 19 95 16.5 90 16L79 15.5L66 7.5C64.5 6.5 62 6 60 6H38C35.5 6 33.2 7.2 31.8 9.2L20 20H8C6 20 5 21.5 5 23V30C5 31.5 5 33 5 33Z" stroke={strokeColor} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" fill={accentColor} fillOpacity="0.2" />
+          <path d="M33 9.5L35 19.5H64.5L59.5 9.5H38Z" stroke={strokeColor} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+          <circle cx="17.5" cy="30" r="6" stroke={strokeColor} strokeWidth="2" fill="#fff" />
+          <circle cx="17.5" cy="30" r="2.5" fill={strokeColor} />
+          <circle cx="82.5" cy="30" r="6" stroke={strokeColor} strokeWidth="2" fill="#fff" />
+          <circle cx="82.5" cy="30" r="2.5" fill={strokeColor} />
         </svg>
       );
     }
     // Default Van Outline
     return (
       <svg className="w-20 h-10 transition-all duration-300" viewBox="0 0 100 45" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M4 33H12C13.5 33 14.5 31.5 14.5 30C14.5 28.5 15.8 27.2 17.5 27.2C19.2 27.2 20.5 28.5 20.5 30C20.5 31.5 21.5 33 23 33H77C78.5 33 79.5 31.5 79.5 30C79.5 28.5 80.8 27.2 82.5 27.2C84.2 27.2 85.5 28.5 85.5 30C85.5 31.5 86.5 33 88 33H96C97.5 33 98.5 31.5 98.5 30V19C98.5 14.5 96.5 12.5 92 12H72L58 6.5C56.2 5.8 54.2 5.5 52 5.5H24C19 5.5 16 8.5 15 13L10 20H6C4 20 3 21.5 3 23V30C3 31.5 3 33 4 33Z" stroke={strokeColor} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" fill={accentColor} fillOpacity="0.2"/>
-        <path d="M22 8L17 19.5H48L46 8H24Z" stroke={strokeColor} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
-        <path d="M51 8H76V19.5H49L51 8Z" stroke={strokeColor} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
-        <circle cx="17.5" cy="30" r="6" stroke={strokeColor} strokeWidth="2" fill="#fff"/>
-        <circle cx="17.5" cy="30" r="2.5" fill={strokeColor}/>
-        <circle cx="82.5" cy="30" r="6" stroke={strokeColor} strokeWidth="2" fill="#fff"/>
-        <circle cx="82.5" cy="30" r="2.5" fill={strokeColor}/>
+        <path d="M4 33H12C13.5 33 14.5 31.5 14.5 30C14.5 28.5 15.8 27.2 17.5 27.2C19.2 27.2 20.5 28.5 20.5 30C20.5 31.5 21.5 33 23 33H77C78.5 33 79.5 31.5 79.5 30C79.5 28.5 80.8 27.2 82.5 27.2C84.2 27.2 85.5 28.5 85.5 30C85.5 31.5 86.5 33 88 33H96C97.5 33 98.5 31.5 98.5 30V19C98.5 14.5 96.5 12.5 92 12H72L58 6.5C56.2 5.8 54.2 5.5 52 5.5H24C19 5.5 16 8.5 15 13L10 20H6C4 20 3 21.5 3 23V30C3 31.5 3 33 4 33Z" stroke={strokeColor} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" fill={accentColor} fillOpacity="0.2" />
+        <path d="M22 8L17 19.5H48L46 8H24Z" stroke={strokeColor} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+        <path d="M51 8H76V19.5H49L51 8Z" stroke={strokeColor} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+        <circle cx="17.5" cy="30" r="6" stroke={strokeColor} strokeWidth="2" fill="#fff" />
+        <circle cx="17.5" cy="30" r="2.5" fill={strokeColor} />
+        <circle cx="82.5" cy="30" r="6" stroke={strokeColor} strokeWidth="2" fill="#fff" />
+        <circle cx="82.5" cy="30" r="2.5" fill={strokeColor} />
       </svg>
     );
   };
@@ -753,7 +753,7 @@ const CustomTourBooking = () => {
   return (
     <div className="max-w-2xl mx-auto bg-white/95 dark:bg-zinc-900/95 backdrop-blur-xl rounded-[2rem] shadow-2xl overflow-hidden border border-slate-200/80 dark:border-white/10 p-4 sm:p-6 relative">
       <div className="absolute inset-0 bg-[url('/pattern.webp')] opacity-[0.06] dark:opacity-[0.02] pointer-events-none z-0"></div>
-      
+
       {/* Dynamic Header Step Indicator */}
       <div className="flex items-center justify-between mb-5 px-2 border-b border-slate-100 dark:border-white/5 pb-3">
         <div className="flex flex-col gap-0.5">
@@ -768,37 +768,37 @@ const CustomTourBooking = () => {
           {/* Currency Selector */}
           <div className="relative z-50">
             <button
-                type="button"
-                onClick={() => setIsCurrencyOpen(!isCurrencyOpen)}
-                className="flex items-center gap-2 bg-white border border-slate-200 px-3 py-1.5 rounded-xl text-[10px] font-black text-slate-700 hover:bg-slate-50 transition-colors shadow-sm"
-                aria-label="Select Currency"
+              type="button"
+              onClick={() => setIsCurrencyOpen(!isCurrencyOpen)}
+              className="flex items-center gap-2 bg-white border border-slate-200 px-3 py-1.5 rounded-xl text-[10px] font-black text-slate-700 hover:bg-slate-50 transition-colors shadow-sm"
+              aria-label="Select Currency"
             >
-                <div className="w-4 h-4 rounded-full overflow-hidden flex-shrink-0 bg-slate-100 flex items-center justify-center">
-                    <img src={SUPPORTED_CURRENCIES?.find(c => c.code === currency)?.flag || 'https://flagcdn.com/w40/lk.png'} alt={`${currency} flag`} className="w-full h-full object-cover scale-150" />
-                </div>
-                <span className="uppercase">{currency}</span>
-                <ChevronDown size={12} className={`opacity-70 transition-transform ${isCurrencyOpen ? 'rotate-180' : ''}`} aria-hidden="true" />
+              <div className="w-4 h-4 rounded-full overflow-hidden flex-shrink-0 bg-slate-100 flex items-center justify-center">
+                <img src={SUPPORTED_CURRENCIES?.find(c => c.code === currency)?.flag || 'https://flagcdn.com/w40/lk.png'} alt={`${currency} flag`} className="w-full h-full object-cover scale-150" />
+              </div>
+              <span className="uppercase">{currency}</span>
+              <ChevronDown size={12} className={`opacity-70 transition-transform ${isCurrencyOpen ? 'rotate-180' : ''}`} aria-hidden="true" />
             </button>
             {isCurrencyOpen && (
-                <>
-                    <div className="fixed inset-0 z-40" onClick={() => setIsCurrencyOpen(false)}></div>
-                    <div className="absolute right-0 top-full mt-2 w-48 bg-white dark:bg-zinc-800 rounded-xl shadow-xl border border-slate-100 dark:border-zinc-700 overflow-hidden z-50 py-1">
-                        {SUPPORTED_CURRENCIES?.map(c => (
-                            <button
-                                key={c.code}
-                                type="button"
-                                onClick={() => { changeCurrency(c.code); setIsCurrencyOpen(false); }}
-                                className={`w-full text-left px-4 py-2.5 text-[10px] font-black flex items-center gap-3 hover:bg-emerald-50 hover:text-emerald-600 transition-colors ${currency === c.code ? 'text-white bg-emerald-600 border-l-4 border-emerald-800' : 'text-slate-700 dark:text-white border-b border-slate-100 last:border-0'}`}
-                            >
-                                <div className="w-4 h-4 rounded-full overflow-hidden flex-shrink-0 bg-slate-100 flex items-center justify-center">
-                                    <img src={c.flag} alt={`${c.code} flag`} className="w-full h-full object-cover scale-150" />
-                                </div>
-                                <span className="flex-1">{c.name}</span>
-                                <span className="text-[9px] font-bold opacity-70">{c.code}</span>
-                            </button>
-                        ))}
-                    </div>
-                </>
+              <>
+                <div className="fixed inset-0 z-40" onClick={() => setIsCurrencyOpen(false)}></div>
+                <div className="absolute right-0 top-full mt-2 w-48 bg-white dark:bg-zinc-800 rounded-xl shadow-xl border border-slate-100 dark:border-zinc-700 overflow-hidden z-50 py-1">
+                  {SUPPORTED_CURRENCIES?.map(c => (
+                    <button
+                      key={c.code}
+                      type="button"
+                      onClick={() => { changeCurrency(c.code); setIsCurrencyOpen(false); }}
+                      className={`w-full text-left px-4 py-2.5 text-[10px] font-black flex items-center gap-3 hover:bg-emerald-50 hover:text-emerald-600 transition-colors ${currency === c.code ? 'text-white bg-emerald-600 border-l-4 border-emerald-800' : 'text-slate-700 dark:text-white border-b border-slate-100 last:border-0'}`}
+                    >
+                      <div className="w-4 h-4 rounded-full overflow-hidden flex-shrink-0 bg-slate-100 flex items-center justify-center">
+                        <img src={c.flag} alt={`${c.code} flag`} className="w-full h-full object-cover scale-150" />
+                      </div>
+                      <span className="flex-1">{c.name}</span>
+                      <span className="text-[9px] font-bold opacity-70">{c.code}</span>
+                    </button>
+                  ))}
+                </div>
+              </>
             )}
           </div>
           <span className="text-[9px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest hidden sm:block">
@@ -819,22 +819,22 @@ const CustomTourBooking = () => {
             {/* 1. Consolidated Category Selection (Segmented Toggle Control) */}
             <div className="flex justify-center">
               <div className="inline-flex w-full bg-slate-900 p-1.5 rounded-2xl border border-slate-800 relative">
-                <button 
+                <button
                   type="button"
-                  onClick={() => setTab('airport')} 
+                  onClick={() => setTab('airport')}
                   className={`flex-1 py-2.5 rounded-xl transition-all duration-300 font-black text-[9px] uppercase tracking-wider flex items-center justify-center gap-1.5 z-10
-                    ${tab === 'airport' 
-                      ? 'bg-[#FACC15] text-black shadow-md font-bold' 
+                    ${tab === 'airport'
+                      ? 'bg-[#FACC15] text-black shadow-md font-bold'
                       : 'text-slate-400 hover:text-slate-300'}`}
                 >
                   <Plane size={12} /> AirPort Round TOUR
                 </button>
-                <button 
+                <button
                   type="button"
-                  onClick={() => setTab('tour')} 
+                  onClick={() => setTab('tour')}
                   className={`flex-1 py-2.5 rounded-xl transition-all duration-300 font-black text-[9px] uppercase tracking-wider flex items-center justify-center gap-1.5 z-10
-                    ${tab === 'tour' 
-                      ? 'bg-[#FACC15] text-black shadow-md font-bold' 
+                    ${tab === 'tour'
+                      ? 'bg-[#FACC15] text-black shadow-md font-bold'
                       : 'text-slate-400 hover:text-slate-300'}`}
                 >
                   <Car size={12} /> Round TOUR
@@ -849,13 +849,13 @@ const CustomTourBooking = () => {
                   <div className="absolute left-3.5 top-1/2 -translate-y-1/2 text-emerald-600">
                     <MapPin size={14} />
                   </div>
-                  <input 
-                    type="text" 
-                    value={locations[0] || ''} 
-                    ref={(el) => initAutocomplete(el, 0)} 
-                    onChange={(e) => handleLocationChange(0, e.target.value)} 
-                    placeholder="Enter Pickup Location" 
-                    className="w-full bg-slate-100/70 dark:bg-zinc-800/60 border border-slate-400 dark:border-white/5 rounded-xl py-2.5 pl-9 pr-4 outline-none font-bold text-[11px] text-black dark:text-white focus:border-[#FACC15] focus:ring-2 focus:ring-[#FACC15]/20 transition-all shadow-sm" 
+                  <input
+                    type="text"
+                    value={locations[0] || ''}
+                    ref={(el) => initAutocomplete(el, 0)}
+                    onChange={(e) => handleLocationChange(0, e.target.value)}
+                    placeholder="Enter Pickup Location"
+                    className="w-full bg-slate-100/70 dark:bg-zinc-800/60 border border-slate-400 dark:border-white/5 rounded-xl py-2.5 pl-9 pr-4 outline-none font-bold text-[11px] text-black dark:text-white focus:border-[#FACC15] focus:ring-2 focus:ring-[#FACC15]/20 transition-all shadow-sm"
                   />
                 </div>
               </div>
@@ -865,22 +865,22 @@ const CustomTourBooking = () => {
               <label className="text-[9px] uppercase font-black text-slate-500 dark:text-slate-400 tracking-widest px-2 block">
                 Select Vehicle
               </label>
-              <div 
+              <div
                 className="flex overflow-x-auto snap-x snap-mandatory gap-2 pb-3 pt-0.5 px-1 no-scrollbar sm:grid sm:grid-cols-3 sm:gap-3 select-none"
                 style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
               >
                 {vehicles.map((v) => {
                   const isActive = selectedVehicle?.id === v.id;
                   const dynamicPrice = calculateTotalForVehicle(v);
-                  
+
                   return (
-                    <button 
-                      key={v.id} 
+                    <button
+                      key={v.id}
                       type="button"
-                      onClick={() => setSelectedVehicle(v)} 
+                      onClick={() => setSelectedVehicle(v)}
                       className={`flex-shrink-0 w-[44vw] sm:w-auto snap-start flex flex-col items-center p-2 sm:p-2.5 rounded-2xl transition-all duration-300 border text-center relative overflow-hidden group
-                        ${isActive 
-                          ? 'bg-[#FACC15]/10 dark:bg-zinc-800/80 border-2 border-[#FACC15]' 
+                        ${isActive
+                          ? 'bg-[#FACC15]/10 dark:bg-zinc-800/80 border-2 border-[#FACC15]'
                           : 'bg-white dark:bg-zinc-900 border border-slate-400 dark:border-white/10 hover:border-slate-500 dark:hover:border-white/20'}`}
                     >
                       {/* Vehicle images — uniform fixed box, object-contain handles all sizing */}
@@ -888,9 +888,9 @@ const CustomTourBooking = () => {
                         const { scale, translateY } = getVehicleTransform(v.image, isActive, false, 0.72, 0.12);
                         return (
                           <div className="h-24 sm:h-28 mb-1 flex items-center justify-center w-full group-hover:scale-105 transition-transform duration-300 relative overflow-hidden">
-                            <img 
-                              src={v.image || '/vehicles/minicar.png'} 
-                              alt={v.name} 
+                            <img
+                              src={v.image || '/vehicles/minicar.png'}
+                              alt={v.name}
                               className="w-full h-full object-contain select-none pointer-events-none transition-transform duration-500"
                               style={{
                                 transform: `scale(${scale}) translateY(${translateY}%)`,
@@ -900,10 +900,10 @@ const CustomTourBooking = () => {
                           </div>
                         );
                       })()}
-                      
+
                       <p className="text-[9px] font-black uppercase tracking-widest text-slate-800 dark:text-white mb-0.5">{v.name}</p>
                       <p className="text-[10px] font-black text-emerald-700 dark:text-emerald-400 mb-1">{convertPrice(dynamicPrice).symbol} {convertPrice(dynamicPrice).value.toLocaleString()}</p>
-                      
+
                       {/* Passenger capacity and baggage count details */}
                       <div className="flex gap-2.5 mt-2 ml-1 text-slate-500 justify-start w-full px-4">
                         <span className="flex items-center gap-1 text-[8px] font-bold"><User size={8} /> {v.capacity}</span>
@@ -921,7 +921,7 @@ const CustomTourBooking = () => {
               <div className="space-y-2">
                 <label className="text-[9px] uppercase font-black text-slate-500 dark:text-slate-400 tracking-widest px-2 block">Select hours</label>
                 <div className="flex items-center bg-white dark:bg-zinc-850 border border-slate-400 dark:border-white/10 p-1 rounded-2xl shadow-sm">
-                  <button 
+                  <button
                     type="button"
                     onClick={() => {
                       const avHours = getAvailableHours();
@@ -929,7 +929,7 @@ const CustomTourBooking = () => {
                       if (currentIndex > 0) {
                         updateDuration(avHours[currentIndex - 1]);
                       }
-                    }} 
+                    }}
                     className="w-10 h-10 rounded-xl bg-slate-50 dark:bg-zinc-700/50 flex items-center justify-center text-black dark:text-white hover:bg-slate-100 active:scale-95 transition-all shadow-sm"
                   >
                     <Minus size={16} strokeWidth={3} />
@@ -938,7 +938,7 @@ const CustomTourBooking = () => {
                     <span className="text-lg font-black">{formData.taxiTourHours}</span>
                     <span className="text-[9px] uppercase tracking-widest text-slate-500 font-bold">hours</span>
                   </div>
-                  <button 
+                  <button
                     type="button"
                     onClick={() => {
                       const avHours = getAvailableHours();
@@ -948,7 +948,7 @@ const CustomTourBooking = () => {
                       } else if (currentIndex === -1 && avHours.length > 0) {
                         updateDuration(avHours[0]);
                       }
-                    }} 
+                    }}
                     className="w-10 h-10 rounded-xl bg-slate-50 dark:bg-zinc-700/50 flex items-center justify-center text-black dark:text-white hover:bg-slate-100 active:scale-95 transition-all shadow-sm"
                   >
                     <Plus size={16} strokeWidth={3} />
@@ -968,8 +968,8 @@ const CustomTourBooking = () => {
                         key={km}
                         onClick={() => setFormData(prev => ({ ...prev, taxiTourKm: km }))}
                         className={`py-2 rounded-xl text-[10px] font-black transition-all border text-center tracking-widest
-                          ${isSelected 
-                            ? 'bg-[#FACC15] text-black border-[#FACC15] shadow-md' 
+                          ${isSelected
+                            ? 'bg-[#FACC15] text-black border-[#FACC15] shadow-md'
                             : 'bg-white dark:bg-zinc-850 text-black dark:text-slate-300 border-slate-400 dark:border-white/10 hover:border-yellow-400'}`}
                       >
                         {km} KM
@@ -985,77 +985,77 @@ const CustomTourBooking = () => {
             {/* Smart Offers Section */}
             <div className="mt-4 mb-2">
               <button onClick={() => setIsCouponOpen(!isCouponOpen)} className={`flex items-center gap-3 text-[10px] font-bold min-h-[3rem] transition-all px-4 py-2 rounded-2xl w-full justify-center uppercase tracking-widest border shadow-sm hover:shadow-md ${isCouponOpen ? 'bg-amber-50 dark:bg-amber-500/20 text-amber-900 dark:text-amber-400 border-amber-200 dark:border-amber-500/30' : 'bg-white dark:bg-zinc-800 text-slate-600 dark:text-slate-300 border-slate-200 dark:border-white/10 hover:bg-slate-50'}`}>
-                  <Tag size={14} className={`${isCouponOpen ? 'text-amber-600 dark:text-amber-400' : 'text-slate-400'} shrink-0`} fill="currentColor" />
-                  {isCouponOpen ? 'Close Offers' : 'Coupon Code?'}
+                <Tag size={14} className={`${isCouponOpen ? 'text-amber-600 dark:text-amber-400' : 'text-slate-400'} shrink-0`} fill="currentColor" />
+                {isCouponOpen ? 'Close Offers' : 'Coupon Code?'}
               </button>
               {appliedOffers.length > 0 && (
-                  <div className="flex flex-wrap gap-2 mt-3 animate-fade-in">
-                      {appliedOffers.map((offer, i) => (
-                          <div key={i} className="flex items-center gap-2 bg-[#FACC15] dark:bg-yellow-500/20 text-black dark:text-yellow-400 px-4 py-2 rounded-xl border border-yellow-400 dark:border-yellow-500/30 shadow-md">
-                              <Tag size={14} className="text-black/70 dark:text-yellow-500" />
-                              <span className="text-[10px] font-black uppercase tracking-widest">{offer.name}</span>
-                              <span className="text-[10px] font-bold opacity-80">(-{offer.discountPercentage > 0 ? `${offer.discountPercentage}%` : `Rs ${offer.discountAmount}`})</span>
-                              <button onClick={() => setAppliedOffers(prev => prev.filter(o => o.name !== offer.name))} className="ml-1.5 p-1 hover:bg-black/10 dark:hover:bg-yellow-500/30 rounded-md transition-colors"><X size={14} /></button>
-                          </div>
-                      ))}
-                  </div>
+                <div className="flex flex-wrap gap-2 mt-3 animate-fade-in">
+                  {appliedOffers.map((offer, i) => (
+                    <div key={i} className="flex items-center gap-2 bg-[#FACC15] dark:bg-yellow-500/20 text-black dark:text-yellow-400 px-4 py-2 rounded-xl border border-yellow-400 dark:border-yellow-500/30 shadow-md">
+                      <Tag size={14} className="text-black/70 dark:text-yellow-500" />
+                      <span className="text-[10px] font-black uppercase tracking-widest">{offer.name}</span>
+                      <span className="text-[10px] font-bold opacity-80">(-{offer.discountPercentage > 0 ? `${offer.discountPercentage}%` : `Rs ${offer.discountAmount}`})</span>
+                      <button onClick={() => setAppliedOffers(prev => prev.filter(o => o.name !== offer.name))} className="ml-1.5 p-1 hover:bg-black/10 dark:hover:bg-yellow-500/30 rounded-md transition-colors"><X size={14} /></button>
+                    </div>
+                  ))}
+                </div>
               )}
               <AnimatePresence>
-                  {isCouponOpen && (
-                      <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} exit={{ height: 0, opacity: 0 }} className="overflow-hidden mt-3">
-                          <div className="relative h-14 animate-slide-up">
-                              <Tag className="absolute left-6 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
-                              <input type="text" placeholder="ENTER COUPON CODE" value={couponCode} onChange={(e) => setCouponCode(e.target.value.toUpperCase())} className="w-full h-full pl-14 pr-24 rounded-2xl bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 text-sm font-bold outline-none uppercase text-emerald-950 dark:text-white placeholder:text-slate-500 tracking-widest focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 shadow-inner" aria-label="Coupon code" />
-                              <button onClick={async () => {
-                                  if (!couponCode) return;
-                                  try {
-                                      const res = await fetch('/api/coupons/validate', {
-                                          method: 'POST',
-                                          headers: { 'Content-Type': 'application/json' },
-                                          body: JSON.stringify({ code: couponCode, pickup: locations[0], dropoff: locations[locations.length - 1] || locations[0], tripType: 'tour' })
-                                      });
-                                      const data = await res.json();
-                                      if (data.valid) {
-                                          const known = data.coupon;
-                                          const couponOffer = {
-                                              _id: 'coupon-' + known.code,
-                                              name: known.code,
-                                              discountPercentage: known.discountType === 'percentage' ? known.value : 0,
-                                              discountAmount: known.discountType === 'flat' ? known.value : 0,
-                                              type: 'coupon',
-                                              applicableFor: known.applicableFor,
-                                              applicableLocations: known.applicableLocations
-                                          };
-                                          setAppliedOffers(prev => {
-                                              if (!prev.find(o => o.name === couponOffer.name)) {
-                                                  return [...prev.filter(o => o.type !== 'coupon'), couponOffer];
-                                              }
-                                              return prev;
-                                          });
-                                          setCouponCode('');
-                                          setIsCouponOpen(false);
-                                      } else {
-                                          alert(data.message || "Invalid or expired coupon code.");
-                                      }
-                                  } catch (e) {
-                                      alert("Validation failed.");
-                                  }
-                              }} aria-label="Apply Coupon" className="absolute right-2 top-2 bottom-2 bg-[#FACC15] text-black px-6 rounded-xl text-[10px] font-black uppercase hover:bg-yellow-400 transition-all shadow-lg shadow-yellow-500/10">Apply</button>
-                          </div>
-                      </motion.div>
-                  )}
+                {isCouponOpen && (
+                  <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} exit={{ height: 0, opacity: 0 }} className="overflow-hidden mt-3">
+                    <div className="relative h-14 animate-slide-up">
+                      <Tag className="absolute left-6 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
+                      <input type="text" placeholder="ENTER COUPON CODE" value={couponCode} onChange={(e) => setCouponCode(e.target.value.toUpperCase())} className="w-full h-full pl-14 pr-24 rounded-2xl bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 text-sm font-bold outline-none uppercase text-emerald-950 dark:text-white placeholder:text-slate-500 tracking-widest focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 shadow-inner" aria-label="Coupon code" />
+                      <button onClick={async () => {
+                        if (!couponCode) return;
+                        try {
+                          const res = await fetch('/api/coupons/validate', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ code: couponCode, pickup: locations[0], dropoff: locations[locations.length - 1] || locations[0], tripType: 'tour' })
+                          });
+                          const data = await res.json();
+                          if (data.valid) {
+                            const known = data.coupon;
+                            const couponOffer = {
+                              _id: 'coupon-' + known.code,
+                              name: known.code,
+                              discountPercentage: known.discountType === 'percentage' ? known.value : 0,
+                              discountAmount: known.discountType === 'flat' ? known.value : 0,
+                              type: 'coupon',
+                              applicableFor: known.applicableFor,
+                              applicableLocations: known.applicableLocations
+                            };
+                            setAppliedOffers(prev => {
+                              if (!prev.find(o => o.name === couponOffer.name)) {
+                                return [...prev.filter(o => o.type !== 'coupon'), couponOffer];
+                              }
+                              return prev;
+                            });
+                            setCouponCode('');
+                            setIsCouponOpen(false);
+                          } else {
+                            alert(data.message || "Invalid or expired coupon code.");
+                          }
+                        } catch (e) {
+                          alert("Validation failed.");
+                        }
+                      }} aria-label="Apply Coupon" className="absolute right-2 top-2 bottom-2 bg-[#FACC15] text-black px-6 rounded-xl text-[10px] font-black uppercase hover:bg-yellow-400 transition-all shadow-lg shadow-yellow-500/10">Apply</button>
+                    </div>
+                  </motion.div>
+                )}
               </AnimatePresence>
             </div>
 
             {/* Next Button */}
             <div className="pt-2 text-center">
-              <button 
+              <button
                 type="button"
                 disabled={!selectedVehicle || !formData.taxiTourKm}
                 onClick={() => {
                   setBasePackage({ hours: formData.taxiTourHours, km: formData.taxiTourKm });
                   setStep(2);
-                }} 
+                }}
                 className={`w-full py-3.5 bg-black hover:bg-slate-900 dark:bg-white dark:hover:bg-slate-100 text-white dark:text-black rounded-2xl font-black text-[10px] uppercase tracking-[0.25em] transition-all flex items-center justify-center gap-2 ${(!selectedVehicle || !formData.taxiTourKm) ? 'opacity-50 cursor-not-allowed' : 'shadow-xl hover:scale-[1.01] active:scale-95'}`}
               >
                 NEXT <ChevronRight size={14} strokeWidth={3} />
@@ -1080,9 +1080,9 @@ const CustomTourBooking = () => {
                     const { scale, translateY } = getVehicleTransform(selectedVehicle?.image || '/vehicles/sedancar.png', false, false, 0.75, 0.12);
                     return (
                       <div className="w-24 sm:w-32 h-14 sm:h-16 flex items-center justify-center relative shrink-0 overflow-hidden">
-                        <img 
+                        <img
                           src={selectedVehicle?.image || '/vehicles/sedancar.png'}
-                          alt="Vehicle" 
+                          alt="Vehicle"
                           className="w-full h-full object-contain select-none pointer-events-none transition-transform duration-500"
                           style={{
                             transform: `scale(${scale}) translateY(${translateY}%)`
@@ -1123,7 +1123,7 @@ const CustomTourBooking = () => {
                   <div>
                     <p className="text-[10px] font-black uppercase tracking-widest text-emerald-800 dark:text-emerald-400">Inclusions & Exclusions</p>
                     <p className="text-[10px] font-bold text-slate-600 dark:text-slate-400 mt-0.5 leading-tight">
-                      Included: Vehicle + Fuel Only.<br/>
+                      Included: Vehicle + Fuel Only.<br />
                       Excluded: All secondary travel expenses, including Highway Tickets, Parking Fees, and Entrance Tickets, must be paid separately by the passenger.
                     </p>
                   </div>
@@ -1146,13 +1146,13 @@ const CustomTourBooking = () => {
                     <div className="absolute left-3 top-1/2 -translate-y-1/2 text-emerald-600">
                       <MapPin size={14} />
                     </div>
-                    <input 
-                      type="text" 
-                      value={locations[0] || ''} 
-                      ref={(el) => initAutocomplete(el, 0)} 
-                      onChange={(e) => handleLocationChange(0, e.target.value)} 
-                      placeholder="Enter Pickup Location" 
-                      className="w-full bg-slate-50/50 dark:bg-zinc-900 border border-slate-400 dark:border-white/5 rounded-xl py-2.5 pl-9 pr-4 outline-none font-bold text-[11px] text-black dark:text-white focus:border-[#FACC15] focus:ring-2 focus:ring-[#FACC15]/20 transition-all shadow-sm" 
+                    <input
+                      type="text"
+                      value={locations[0] || ''}
+                      ref={(el) => initAutocomplete(el, 0)}
+                      onChange={(e) => handleLocationChange(0, e.target.value)}
+                      placeholder="Enter Pickup Location"
+                      className="w-full bg-slate-50/50 dark:bg-zinc-900 border border-slate-400 dark:border-white/5 rounded-xl py-2.5 pl-9 pr-4 outline-none font-bold text-[11px] text-black dark:text-white focus:border-[#FACC15] focus:ring-2 focus:ring-[#FACC15]/20 transition-all shadow-sm"
                     />
                   </div>
                 </div>
@@ -1162,7 +1162,7 @@ const CustomTourBooking = () => {
                   <div className="space-y-2">
                     <div className="flex items-center justify-between">
                       <label className="text-[9px] uppercase font-black text-slate-400 tracking-widest block">Itinerary Stops</label>
-                      <button 
+                      <button
                         type="button"
                         onClick={() => {
                           if (formData.placesList.length < 10) {
@@ -1178,7 +1178,7 @@ const CustomTourBooking = () => {
                       <div key={idx} className="relative group flex flex-col">
                         <div className="relative">
                           <div className={`absolute left-3 top-1/2 -translate-y-1/2 ${!place ? 'text-red-400' : 'text-slate-400'}`}><Sparkles size={12} /></div>
-                          <input 
+                          <input
                             type="text"
                             value={place}
                             onChange={e => {
@@ -1190,7 +1190,7 @@ const CustomTourBooking = () => {
                             className={`w-full rounded-xl py-2.5 pl-9 pr-8 outline-none font-bold text-[11px] transition-all shadow-sm ${!place ? 'bg-red-50 dark:bg-red-950/20 border-2 border-red-400 text-red-900 dark:text-red-200 placeholder:text-red-400/70 focus:border-red-500 focus:ring-2 focus:ring-red-500/20' : 'bg-white dark:bg-zinc-800 border border-slate-400 dark:border-white/10 text-black dark:text-white focus:border-[#FACC15]'}`}
                           />
                           {formData.placesList.length > 1 && (
-                            <button 
+                            <button
                               type="button"
                               onClick={() => {
                                 const newList = formData.placesList.filter((_, i) => i !== idx);
@@ -1236,33 +1236,33 @@ const CustomTourBooking = () => {
                 </div>
               )}
 
-                {/* Trip Map Component */}
-                <div className="w-full h-48 rounded-2xl overflow-hidden border border-slate-200/60 dark:border-white/10 mt-4 relative z-0">
-                  <TripMap 
-                    pickup={{ name: locations[0] || 'Bandaranaike International Airport' }} 
-                    dropoff={{ name: locations[0] || 'Bandaranaike International Airport' }} 
-                    waypoints={formData.placesList.filter(p => p.trim() !== '').map(p => ({ name: p }))} 
-                    onRouteCalculated={handleRouteCalculated}
-                  />
-                </div>
+              {/* Trip Map Component */}
+              <div className="w-full h-48 rounded-2xl overflow-hidden border border-slate-200/60 dark:border-white/10 mt-4 relative z-0">
+                <TripMap
+                  pickup={{ name: locations[0] || 'Bandaranaike International Airport' }}
+                  dropoff={{ name: locations[0] || 'Bandaranaike International Airport' }}
+                  waypoints={formData.placesList.filter(p => p.trim() !== '').map(p => ({ name: p }))}
+                  onRouteCalculated={handleRouteCalculated}
+                />
+              </div>
             </section>
 
             {/* Stepper buttons (Back & Next) */}
             <div className="grid grid-cols-2 gap-2 pt-1">
-              <button 
+              <button
                 type="button"
-                onClick={() => setStep(1)} 
+                onClick={() => setStep(1)}
                 className="py-3.5 bg-slate-100 dark:bg-zinc-800 hover:bg-slate-200 text-slate-700 dark:text-white rounded-2xl font-black text-[9px] uppercase tracking-widest transition-all flex items-center justify-center gap-1 shadow-sm"
               >
                 <ChevronLeft size={12} strokeWidth={3} /> CHANGE VEHICLE
               </button>
-              <button 
+              <button
                 type="button"
                 disabled={!locations[0] || !formData.placesList[0]}
                 onClick={() => {
                   setStep(3);
                   document.getElementById('calculator')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                }} 
+                }}
                 className={`py-3.5 bg-black hover:bg-slate-900 dark:bg-white dark:hover:bg-slate-100 text-white dark:text-black rounded-2xl font-black text-[10px] uppercase tracking-[0.25em] transition-all flex items-center justify-center gap-2 ${(!locations[0] || !formData.placesList[0]) ? 'opacity-50 cursor-not-allowed' : 'shadow-xl hover:scale-[1.01] active:scale-95'}`}
               >
                 NEXT <ChevronRight size={14} strokeWidth={3} />
@@ -1287,37 +1287,37 @@ const CustomTourBooking = () => {
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div className="space-y-0.5">
                   <label className="text-[8px] uppercase font-black text-slate-400 tracking-widest px-2">Pickup Date</label>
-                  <input name="date" type="date" value={formData.date} onChange={e => setFormData({ ...formData, date: e.target.value, ...setFormErrors({...formErrors, date: false}) })} className={`w-full bg-white dark:bg-zinc-800 border ${formErrors.date ? 'border-red-500 ring-2 ring-red-500/20' : 'border-slate-400 dark:border-white/10'} rounded-xl py-2 px-3 outline-none font-bold text-[11px] text-black dark:text-white transition-all`} />
+                  <input name="date" type="date" value={formData.date} onChange={e => setFormData({ ...formData, date: e.target.value, ...setFormErrors({ ...formErrors, date: false }) })} className={`w-full bg-white dark:bg-zinc-800 border ${formErrors.date ? 'border-red-500 ring-2 ring-red-500/20' : 'border-slate-400 dark:border-white/10'} rounded-xl py-2 px-3 outline-none font-bold text-[11px] text-black dark:text-white transition-all`} />
                 </div>
                 <div className="space-y-1.5">
                   <label className="text-[8px] uppercase font-black text-slate-400 tracking-widest px-2">Pickup Time</label>
                   <input name="time" type="time" value={(() => { const parsed = parseStoredTime(formData.time); return parsed.time24h || ''; })()} onChange={e => {
-                      const newTime24 = e.target.value;
-                      if (!newTime24) { setFormData({...formData, time: ''}); return; }
-                      const [hStr, mStr] = newTime24.split(':');
-                      let h = parseInt(hStr, 10); const m = parseInt(mStr, 10);
-                      const ampm = h >= 12 ? 'PM' : 'AM';
-                      const h12 = h % 12 === 0 ? 12 : h % 12;
-                      const tz = detectLocalTimezone() || 'SLST';
-                      const formattedTime = `${h12.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')} ${ampm} ${tz}`;
-                      setFormData({ ...formData, time: formattedTime });
-                      setFormErrors({...formErrors, time: false});
+                    const newTime24 = e.target.value;
+                    if (!newTime24) { setFormData({ ...formData, time: '' }); return; }
+                    const [hStr, mStr] = newTime24.split(':');
+                    let h = parseInt(hStr, 10); const m = parseInt(mStr, 10);
+                    const ampm = h >= 12 ? 'PM' : 'AM';
+                    const h12 = h % 12 === 0 ? 12 : h % 12;
+                    const tz = detectLocalTimezone() || 'SLST';
+                    const formattedTime = `${h12.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')} ${ampm} ${tz}`;
+                    setFormData({ ...formData, time: formattedTime });
+                    setFormErrors({ ...formErrors, time: false });
                   }} className={`w-full bg-white dark:bg-zinc-800 border ${formErrors.time ? 'border-red-500 ring-2 ring-red-500/20' : 'border-slate-400 dark:border-white/10'} rounded-xl py-2 px-3 outline-none font-bold text-[11px] text-black dark:text-white transition-all`} />
                 </div>
                 <div className="space-y-0.5">
                   <label className="text-[8px] uppercase font-black text-slate-400 tracking-widest px-2">Full Name</label>
-                  <input name="name" type="text" placeholder="John Doe" value={formData.name} onChange={e => setFormData({ ...formData, name: e.target.value, ...setFormErrors({...formErrors, name: false}) })} className={`w-full bg-white dark:bg-zinc-800 border ${formErrors.name ? 'border-red-500 ring-2 ring-red-500/20' : 'border-slate-400 dark:border-white/10'} rounded-xl py-2 px-3 outline-none font-bold text-[11px] text-black dark:text-white transition-all`} />
+                  <input name="name" type="text" placeholder="John Doe" value={formData.name} onChange={e => setFormData({ ...formData, name: e.target.value, ...setFormErrors({ ...formErrors, name: false }) })} className={`w-full bg-white dark:bg-zinc-800 border ${formErrors.name ? 'border-red-500 ring-2 ring-red-500/20' : 'border-slate-400 dark:border-white/10'} rounded-xl py-2 px-3 outline-none font-bold text-[11px] text-black dark:text-white transition-all`} />
                 </div>
                 <div className="space-y-0.5">
                   <label className="text-[8px] uppercase font-black text-slate-400 tracking-widest px-2">Email Address</label>
-                  <input name="email" type="email" placeholder="john@example.com" value={formData.email} onChange={e => setFormData({ ...formData, email: e.target.value, ...setFormErrors({...formErrors, email: false}) })} className={`w-full bg-white dark:bg-zinc-800 border ${formErrors.email ? 'border-red-500 ring-2 ring-red-500/20' : 'border-slate-400 dark:border-white/10'} rounded-xl py-2 px-3 outline-none font-bold text-[11px] text-black dark:text-white transition-all`} />
+                  <input name="email" type="email" placeholder="john@example.com" value={formData.email} onChange={e => setFormData({ ...formData, email: e.target.value, ...setFormErrors({ ...formErrors, email: false }) })} className={`w-full bg-white dark:bg-zinc-800 border ${formErrors.email ? 'border-red-500 ring-2 ring-red-500/20' : 'border-slate-400 dark:border-white/10'} rounded-xl py-2 px-3 outline-none font-bold text-[11px] text-black dark:text-white transition-all`} />
                 </div>
                 <div className="space-y-0.5" id="field-phone">
                   <label className="text-[8px] uppercase font-black text-slate-400 tracking-widest px-2">WhatsApp / Phone</label>
                   <PhoneInput
                     defaultCountry="lk"
                     value={formData.phone}
-                    onChange={(phone) => { setFormData({ ...formData, phone }); setFormErrors({...formErrors, phone: false}); }}
+                    onChange={(phone) => { setFormData({ ...formData, phone }); setFormErrors({ ...formErrors, phone: false }); }}
                     inputClassName={`!w-full !bg-white dark:!bg-zinc-800 !border-none !py-2 !px-3 !outline-none !font-bold !text-[11px] !text-black dark:!text-white !transition-all`}
                     countrySelectorStyleProps={{
                       buttonClassName: "!bg-slate-100 dark:!bg-zinc-800/80 !border-r !border-slate-400 dark:!border-white/10 !h-full !px-3",
@@ -1328,14 +1328,14 @@ const CustomTourBooking = () => {
                 <div className="space-y-0.5">
                   <label className="text-[8px] uppercase font-black text-slate-400 tracking-widest px-2">Payment Method</label>
                   <div className="flex bg-slate-100 dark:bg-zinc-800/60 p-0.5 rounded-xl border border-slate-200/80 dark:border-white/10 gap-0.5 h-[34px] items-center animate-fade-in">
-                    <button 
+                    <button
                       type="button"
                       onClick={() => setFormData({ ...formData, paymentMethod: 'card' })}
                       className={`flex-1 h-full rounded-lg text-[9px] font-black uppercase tracking-widest transition-all flex items-center justify-center gap-1 ${formData.paymentMethod === 'card' ? 'bg-[#FACC15] text-black shadow-md font-bold' : 'text-slate-500 hover:text-slate-700 dark:hover:text-slate-300'}`}
                     >
                       <CreditCard size={10} /> Card
                     </button>
-                    <button 
+                    <button
                       type="button"
                       onClick={() => setFormData({ ...formData, paymentMethod: 'cash' })}
                       className={`flex-1 h-full rounded-lg text-[9px] font-black uppercase tracking-widest transition-all flex items-center justify-center gap-1 ${formData.paymentMethod === 'cash' ? 'bg-[#FACC15] text-black shadow-md font-bold' : 'text-slate-500 hover:text-slate-700 dark:hover:text-slate-300'}`}
@@ -1360,16 +1360,16 @@ const CustomTourBooking = () => {
 
             {/* Stepper buttons (Back & Complete Booking) */}
             <div className="grid grid-cols-3 gap-2 pt-1">
-              <button 
+              <button
                 type="button"
-                onClick={() => setStep(2)} 
+                onClick={() => setStep(2)}
                 className="py-3.5 bg-slate-100 dark:bg-zinc-800 hover:bg-slate-200 text-slate-700 dark:text-white rounded-2xl font-black text-[9px] uppercase tracking-widest transition-all flex items-center justify-center gap-1 shadow-sm"
               >
                 <ChevronLeft size={12} strokeWidth={3} /> BACK TO ROUTE
               </button>
-              <button 
+              <button
                 type="button"
-                onClick={handleBooking} 
+                onClick={handleBooking}
                 disabled={isBooking}
                 className="col-span-2 py-3.5 bg-emerald-900 hover:bg-emerald-950 text-white rounded-2xl font-black text-[9px] uppercase tracking-[0.2em] shadow-xl flex items-center justify-center gap-1.5 transition-all disabled:opacity-50"
               >

@@ -5,6 +5,7 @@ import { MapPin, Clock, CheckCircle, Car, Info, Calendar, Landmark } from 'lucid
 import BookingWidget from '@/components/BookingWidget';
 
 export default function DestinationClient({ destination }) {
+    const targetLocation = destination.name;
     const defaultDropoff = {
         name: destination.fullAddress || `${destination.name}, Sri Lanka`,
         lat: destination.coords?.lat || null,
@@ -28,18 +29,13 @@ export default function DestinationClient({ destination }) {
                         <span className="inline-block px-4 py-1.5 rounded-full bg-emerald-500/20 backdrop-blur-md border border-emerald-400/30 text-emerald-200 text-xs font-bold uppercase tracking-widest mb-6">
                             {destination.badge}
                         </span>
-                        <h1 className="text-4xl md:text-7xl font-black text-white mb-6 drop-shadow-lg tracking-tight">
-                            {destination.title}
+                        <h1 className="text-4xl md:text-7xl font-black text-white mb-4 drop-shadow-lg tracking-tight">
+                            {destination.name}
                         </h1>
+                        <p className="text-lg md:text-xl text-white/90 font-medium mb-8 drop-shadow-md max-w-2xl mx-auto">
+                            {destination.description}
+                        </p>
                         <div className="flex flex-wrap items-center justify-center gap-6 text-white/90">
-                            <div className="flex items-center gap-2 font-bold bg-white/10 px-4 py-2 rounded-xl backdrop-blur-sm">
-                                <MapPin size={18} className="text-emerald-400" />
-                                {destination.distance}
-                            </div>
-                            <div className="flex items-center gap-2 font-bold bg-white/10 px-4 py-2 rounded-xl backdrop-blur-sm">
-                                <Clock size={18} className="text-emerald-400" />
-                                {destination.time}
-                            </div>
                             <div className="flex items-center gap-2 font-bold bg-white/10 px-4 py-2 rounded-xl backdrop-blur-sm">
                                 <Car size={18} className="text-emerald-400" />
                                 24/7 Service
@@ -55,8 +51,7 @@ export default function DestinationClient({ destination }) {
                 <div className="bg-white dark:bg-zinc-900 rounded-[2.5rem] shadow-2xl border border-slate-100 dark:border-white/5 overflow-hidden">
                     <BookingWidget
                         defaultTab="pickup"
-                        defaultDropoff={defaultDropoff}
-                        defaultDropoffSearch={defaultDropoff.name}
+                        targetLocation={targetLocation}
                     />
                 </div>
 

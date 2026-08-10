@@ -81,7 +81,7 @@ export const getGlobalVehiclePriority = (type) => {
     return 99;
 };
 
-const BookingWidgetContent = ({ defaultTab = 'pickup', onTabChange, defaultDropoff = { name: '', lat: null, lng: null }, defaultDropoffSearch = '' }) => {
+const BookingWidgetContent = ({ defaultTab = 'pickup', onTabChange, targetLocation = '' }) => {
     const router = useRouter();
     const [activeOffers, setActiveOffers] = useState([]);
     const [appliedOffers, setAppliedOffers] = useState([]); // Support multiple coupons
@@ -91,7 +91,7 @@ const BookingWidgetContent = ({ defaultTab = 'pickup', onTabChange, defaultDropo
     const [activeTab, setActiveTab] = useState(defaultTab);
     const [tripType, setTripType] = useState('one-way');
     const [pickup, setPickup] = useState({ name: 'Bandaranaike International Airport (CMB)', lat: 7.1804, lng: 79.8837 })
-    const [dropoff, setDropoff] = useState(defaultDropoff)
+    const [dropoff, setDropoff] = useState({ name: targetLocation, lat: null, lng: null })
 
     useEffect(() => {
         if (onTabChange) {
@@ -101,7 +101,7 @@ const BookingWidgetContent = ({ defaultTab = 'pickup', onTabChange, defaultDropo
 
     const [waypoints, setWaypoints] = useState([])
     const [pickupSearch, setPickupSearch] = useState('Bandaranaike International Airport (CMB)')
-    const [dropoffSearch, setDropoffSearch] = useState(defaultDropoffSearch)
+    const [dropoffSearch, setDropoffSearch] = useState(targetLocation)
     const [waypointSearches, setWaypointSearches] = useState([])
     const [roundTripPackageId, setRoundTripPackageId] = useState(null)
     const [pickupResults, setPickupResults] = useState([])
@@ -195,8 +195,8 @@ const BookingWidgetContent = ({ defaultTab = 'pickup', onTabChange, defaultDropo
     const pickupRef = useRef(null);
     const dropoffRef = useRef(null);
     const dateTimeRef = useRef(null);
-    // Stores destination from URL param so it persists when user switches tabs
-    const destinationRef = useRef(null);
+    // Stores destination from URL param or targetLocation prop so it persists when user switches tabs
+    const destinationRef = useRef(targetLocation ? { name: targetLocation, lat: null, lng: null } : null);
     const [step1Errors, setStep1Errors] = useState({
         pickup: false,
         dropoff: false,
@@ -994,7 +994,7 @@ const BookingWidgetContent = ({ defaultTab = 'pickup', onTabChange, defaultDropo
                     : 'bg-white dark:bg-zinc-900 rounded-[2rem] border border-slate-400 dark:border-white/10 p-4 sm:p-6 md:p-8 shadow-xl shadow-slate-200/50 dark:shadow-none'
                     }`}>
 
-                {activeTab === 'tours' ? <CustomTourBooking /> : (
+                {activeTab === 'tours' ? <CustomTourBooking targetLocation={targetLocation} /> : (
                     <div className="grid lg:grid-cols-[1.5fr,380px] xl:grid-cols-[1fr,380px] gap-8 lg:gap-10 min-w-0">
                         <div className="flex-1 text-center lg:text-left min-w-0">
                             {/* Step indicator + currency row */}
@@ -1778,14 +1778,13 @@ const BookingWidgetContent = ({ defaultTab = 'pickup', onTabChange, defaultDropo
     );
 }
 
-export default function BookingWidget({ defaultTab = 'pickup', onTabChange, defaultDropoff, defaultDropoffSearch }) {
+export default function BookingWidget({ defaultTab = 'pickup', onTabChange, targetLocation }) {
     return (
         <React.Suspense fallback={<div className="h-96 w-full animate-pulse bg-slate-100 dark:bg-zinc-900 rounded-3xl" />}>
             <BookingWidgetContent
                 defaultTab={defaultTab}
                 onTabChange={onTabChange}
-                defaultDropoff={defaultDropoff}
-                defaultDropoffSearch={defaultDropoffSearch}
+                targetLocation={targetLocation}
             />
         </React.Suspense>
     );
