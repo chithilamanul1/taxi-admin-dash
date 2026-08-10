@@ -31,7 +31,7 @@ const PIPELINE_PHASES = [
         color: 'text-purple-500',
         bg: 'bg-purple-50 border-purple-200',
         label: 'Content Strategy',
-        model: 'DeepSeek R1',
+        model: 'Gemini 2.5 Flash',
         desc: 'Analyzes SERP gaps and creates a detailed content brief with H2 outline, LSI keywords, and FAQ questions'
     },
     {
@@ -40,7 +40,7 @@ const PIPELINE_PHASES = [
         color: 'text-rose-500',
         bg: 'bg-rose-50 border-rose-200',
         label: 'Content Writing',
-        model: 'Claude 3.5 Sonnet',
+        model: 'Gemini 2.5 Flash',
         desc: 'Writes a 1400+ word human-quality article from the strategic brief with real Sri Lanka facts and CTAs'
     },
     {
@@ -220,7 +220,7 @@ export default function SEOEngineDashboard() {
                             <h2 className="text-2xl font-black tracking-tight">SEO Engine</h2>
                             <span className="text-xs bg-yellow-400 text-emerald-900 px-2 py-0.5 rounded-full font-black uppercase">4-Phase AI Pipeline</span>
                         </div>
-                        <p className="text-emerald-200 text-sm">SerpApi → DeepSeek R1 → Claude 3.5 Sonnet → MongoDB — Rank #1 in Sri Lanka</p>
+                        <p className="text-emerald-200 text-sm">SerpApi → Gemini 2.5 Flash → MongoDB — Rank #1 in Sri Lanka</p>
                     </div>
                     <button onClick={fetchKeywords} className="flex items-center gap-2 bg-white/20 hover:bg-white/30 px-4 py-2 rounded-xl text-sm font-bold transition-all">
                         <RefreshCw size={14} /> Refresh
@@ -282,7 +282,7 @@ export default function SEOEngineDashboard() {
                         onClick={() => setPipelineMode(true)}
                         className={`px-4 py-1.5 rounded-lg text-xs font-bold transition-all ${pipelineMode ? 'bg-emerald-700 text-white shadow-sm' : 'bg-white text-slate-500 border border-slate-200 hover:border-slate-300'}`}
                     >
-                        🧠 Full Pipeline (SerpApi + DeepSeek + Claude)
+                        🧠 Full Pipeline (SerpApi + Gemini 2.5 Flash)
                     </button>
                     <button
                         onClick={() => setPipelineMode(false)}
@@ -324,7 +324,7 @@ export default function SEOEngineDashboard() {
                     </div>
                     <p className="text-xs text-slate-400 mt-2">
                         {pipelineMode
-                            ? '⏱ ~2–3 min: SerpApi → DeepSeek R1 brief → Claude 3.5 Sonnet 1400+ word article'
+                            ? '⏱ ~2–3 min: SerpApi → Gemini 2.5 Flash brief → Gemini 2.5 Flash 1400+ word article'
                             : '⚡ ~30 sec: Gemini 2.5 Flash quick generation'}
                     </p>
                 </div>
@@ -484,7 +484,7 @@ export default function SEOEngineDashboard() {
                 </h3>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
                     {[
-                        { key: 'OPENROUTER_API_KEY', desc: 'Required — DeepSeek R1 + Claude 3.5 Sonnet', url: 'https://openrouter.ai/keys', required: true },
+                        { key: 'OPENROUTER_API_KEY', desc: 'Required — Gemini 2.5 Flash', url: 'https://openrouter.ai/keys', required: true },
                         { key: 'SERPAPI_KEY', desc: 'Recommended — Real Google SL SERP data (Phase 1)', url: 'https://serpapi.com/manage-api-key', required: false },
                         { key: 'UNSPLASH_ACCESS_KEY', desc: 'Optional — Royalty-free cover images', url: 'https://unsplash.com/developers', required: false },
                         { key: 'SEO_CRON_SECRET', desc: 'Optional — Protect the scheduler endpoint', url: null, required: false },

@@ -15,15 +15,15 @@ import { revalidatePath } from 'next/cache';
 
 const DISCORD_WEBHOOK_URL = 'https://discord.com/api/webhooks/1515670076726972486/WCQYeLEJp0P4az1GlvY3I1nAu2IybUv09Rp2FFSFDrsM5cEqsgPWFhgEoMsCzZRxQOhr';
 
-// Free model - no credits needed on OpenRouter
-const FREE_MODEL = 'meta-llama/llama-3.3-70b-instruct:free';
+// Using Gemini 2.5 Flash - extremely cheap and fast
+const FREE_MODEL = 'google/gemini-2.5-flash';
 
 // ─────────────────────────────────────────────
 // OPENROUTER HELPER
 // ─────────────────────────────────────────────
 async function callOpenRouter(messages, label, maxTokens = 3000, maxRetries = 3) {
     const OPENROUTER_API_KEY = process.env.OPENROUTER_API_KEY;
-    
+
     for (let attempt = 1; attempt <= maxRetries; attempt++) {
         const res = await fetch('https://openrouter.ai/api/v1/chat/completions', {
             method: 'POST',
@@ -47,7 +47,7 @@ async function callOpenRouter(messages, label, maxTokens = 3000, maxRetries = 3)
         }
 
         const errText = await res.text();
-        
+
         if (res.status === 429 && attempt < maxRetries) {
             let delayMs = 10000; // default 10 seconds
             try {
@@ -369,6 +369,9 @@ export async function runSEOPipeline(keyword) {
     const brief = await phase2_contentStrategy(serpData);
     const content = await phase3_writeContent(brief);
     const post = await phase4_publish(brief, content);
+
+    // Automatically ping search engines (Google, Bing, IndexNow) to index the new page
+    await pingSearchEngines(post.slug);
 
     return {
         success: true,
