@@ -35,6 +35,9 @@ export async function generateMetadata({ params }) {
             description: tour.description || '',
             url: `https://airporttaxis.lk/tour-packages/${slug}`,
             images: [{ url: tour.heroImage || tour.images?.[0], width: 1200, height: 630, alt: tour.title }]
+        },
+        alternates: {
+            canonical: `https://airporttaxis.lk/tour-packages/${slug}`,
         }
     }
 }

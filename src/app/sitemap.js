@@ -46,6 +46,9 @@ export default async function sitemap() {
 
     // Blog posts from MongoDB - auto-included after every AI publish
     let blogRoutes = [];
+    let tourRoutes = [];
+    let tourPackageRoutes = [];
+
     try {
         await dbConnect();
         const posts = await BlogPost.find(
@@ -59,9 +62,36 @@ export default async function sitemap() {
             changeFrequency: 'monthly',
             priority: 0.75
         }));
+
+        // Fetch Tours
+        const Tour = require('@/models/Tour').default || require('@/models/Tour');
+        const tours = await Tour.find({}, 'slug updatedAt createdAt').lean();
+
+        tourRoutes = tours.map(tour => ({
+            url: `${baseUrl}/tours/${tour.slug}`,
+            lastModified: new Date(tour.updatedAt || tour.createdAt || new Date()),
+            changeFrequency: 'weekly',
+            priority: 0.8
+        }));
+
+        tourPackageRoutes = tours.map(tour => ({
+            url: `${baseUrl}/tour-packages/${tour.slug}`,
+            lastModified: new Date(tour.updatedAt || tour.createdAt || new Date()),
+            changeFrequency: 'weekly',
+            priority: 0.8
+        }));
     } catch (err) {
-        console.error('[sitemap] Could not load blog posts:', err.message);
+        console.error('[sitemap] Could not load dynamic DB routes:', err.message);
     }
 
-    return [...staticRoutes, ...taxiRoutes, ...blogRoutes];
+    // Destinations
+    const { destinations } = require('@/lib/destinations');
+    const destinationRoutes = (destinations || []).map(d => ({
+        url: `${baseUrl}/destinations/${d.id}`,
+        lastModified: new Date(),
+        changeFrequency: 'weekly',
+        priority: 0.85
+    }));
+
+    return [...staticRoutes, ...taxiRoutes, ...blogRoutes, ...tourRoutes, ...tourPackageRoutes, ...destinationRoutes];
 }

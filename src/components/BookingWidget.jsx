@@ -81,7 +81,7 @@ export const getGlobalVehiclePriority = (type) => {
     return 99;
 };
 
-const BookingWidgetContent = ({ defaultTab = 'pickup', onTabChange }) => {
+const BookingWidgetContent = ({ defaultTab = 'pickup', onTabChange, defaultDropoff = { name: '', lat: null, lng: null }, defaultDropoffSearch = '' }) => {
     const router = useRouter();
     const [activeOffers, setActiveOffers] = useState([]);
     const [appliedOffers, setAppliedOffers] = useState([]); // Support multiple coupons
@@ -91,7 +91,7 @@ const BookingWidgetContent = ({ defaultTab = 'pickup', onTabChange }) => {
     const [activeTab, setActiveTab] = useState(defaultTab);
     const [tripType, setTripType] = useState('one-way');
     const [pickup, setPickup] = useState({ name: 'Bandaranaike International Airport (CMB)', lat: 7.1804, lng: 79.8837 })
-    const [dropoff, setDropoff] = useState({ name: '', lat: null, lng: null })
+    const [dropoff, setDropoff] = useState(defaultDropoff)
 
     useEffect(() => {
         if (onTabChange) {
@@ -101,7 +101,7 @@ const BookingWidgetContent = ({ defaultTab = 'pickup', onTabChange }) => {
 
     const [waypoints, setWaypoints] = useState([])
     const [pickupSearch, setPickupSearch] = useState('Bandaranaike International Airport (CMB)')
-    const [dropoffSearch, setDropoffSearch] = useState('')
+    const [dropoffSearch, setDropoffSearch] = useState(defaultDropoffSearch)
     const [waypointSearches, setWaypointSearches] = useState([])
     const [roundTripPackageId, setRoundTripPackageId] = useState(null)
     const [pickupResults, setPickupResults] = useState([])
@@ -1778,10 +1778,15 @@ const BookingWidgetContent = ({ defaultTab = 'pickup', onTabChange }) => {
     );
 }
 
-export default function BookingWidget(props) {
+export default function BookingWidget({ defaultTab = 'pickup', onTabChange, defaultDropoff, defaultDropoffSearch }) {
     return (
         <React.Suspense fallback={<div className="h-96 w-full animate-pulse bg-slate-100 dark:bg-zinc-900 rounded-3xl" />}>
-            <BookingWidgetContent {...props} />
+            <BookingWidgetContent
+                defaultTab={defaultTab}
+                onTabChange={onTabChange}
+                defaultDropoff={defaultDropoff}
+                defaultDropoffSearch={defaultDropoffSearch}
+            />
         </React.Suspense>
     );
 }

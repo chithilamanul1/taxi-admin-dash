@@ -18,7 +18,7 @@ async function getTour(slug) {
     } catch (e) {
         console.error("Tour fetch error", e);
     }
-    
+
     // Fallback to static safari data if not found in DB
     const fallbackTour = SAFARI_FALLBACK.find(t => t.slug === slug);
     if (fallbackTour) {
@@ -43,6 +43,9 @@ export async function generateMetadata({ params }) {
             description: tour.description || '',
             url: `https://airporttaxis.lk/tours/${slug}`,
             images: [{ url: tour.heroImage || tour.images?.[0], width: 1200, height: 630, alt: tour.title }]
+        },
+        alternates: {
+            canonical: `https://airporttaxis.lk/tours/${slug}`,
         }
     };
 }

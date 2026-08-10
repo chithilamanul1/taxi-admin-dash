@@ -46,9 +46,6 @@ export async function generateMetadata() {
             telephone: false,
         },
         metadataBase: new URL(baseUrl),
-        alternates: {
-            canonical: '/',
-        },
         openGraph: {
             title: 'Airport Taxis (Pvt) Ltd Sri Lanka | Airport Cabs & Transfers',
             description: 'Instant Booking! Reliable 24/7 airport transfers from Colombo Airport (CMB). Professional drivers, comfortable vehicles (Mini Car, Sedan, KDH Van). Best rates guaranteed for all-island tours.',
@@ -248,7 +245,7 @@ export default async function RootLayout({ children }) {
                     type="application/ld+json"
                     dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
                 />
-                
+
                 {/* Unregister stale service workers to fix Vercel DEPLOYMENT_NOT_FOUND errors */}
                 <script
                     dangerouslySetInnerHTML={{

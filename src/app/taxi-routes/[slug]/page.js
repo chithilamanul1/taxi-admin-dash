@@ -15,6 +15,9 @@ export async function generateMetadata({ params }) {
         title: `${route.title} - Cost $${route.price} - Reliable Transfers`,
         description: `Book a private taxi from ${route.origin} to ${route.destination}. Fixed rates from $${route.price}. ${route.description.slice(0, 150)}...`,
         keywords: `${route.origin} to ${route.destination} taxi, ${route.origin} to ${route.destination} transfer, private car ${route.origin} to ${route.destination}, ${route.origin} to ${route.destination} taxi cost`,
+        alternates: {
+            canonical: `https://airporttaxis.lk/taxi-routes/${slug}`,
+        }
     };
 }
 
@@ -26,8 +29,8 @@ export default async function RoutePage({ params }) {
 
     return (
         <main className="min-h-screen bg-white">
-            
-            
+
+
             {/* Hero Section */}
             <div className="bg-emerald-900 pt-32 pb-20">
                 <div className="container mx-auto px-6">
@@ -104,8 +107,8 @@ export default async function RoutePage({ params }) {
                             <div className="mt-8 bg-black text-white p-8 rounded-[2rem] text-center">
                                 <p className="text-sm font-bold opacity-60 uppercase tracking-widest mb-2">Need Help?</p>
                                 <p className="text-xl font-black mb-4">Chat with us on WhatsApp</p>
-                                <a 
-                                    href="https://wa.me/94716885880" 
+                                <a
+                                    href="https://wa.me/94716885880"
                                     className="inline-block bg-emerald-500 text-black px-8 py-4 rounded-xl font-black hover:bg-emerald-400 transition-colors"
                                 >
                                     OPEN WHATSAPP
@@ -116,7 +119,7 @@ export default async function RoutePage({ params }) {
                 </div>
             </div>
 
-            
+
         </main>
     );
 }

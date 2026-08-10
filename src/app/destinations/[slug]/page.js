@@ -17,9 +17,9 @@ export async function generateMetadata({ params }) {
     }
 
     return {
-        title: `${dest.title} | Airport Taxis Sri Lanka`,
-        description: `Book a private airport taxi to ${dest.name} from Colombo Airport (CMB). Fixed rates from $${dest.price}. ${dest.description}`,
-        keywords: [
+        title: dest.seoTitle || `${dest.title} | Airport Taxis Sri Lanka`,
+        description: dest.seoDescription || `Book a private airport taxi to ${dest.name} from Colombo Airport (CMB). Fixed rates from $${dest.price}. ${dest.description}`,
+        keywords: dest.seoKeywords || [
             `taxi to ${dest.name}`,
             `airport transfer to ${dest.name}`,
             `${dest.name} taxi`,
@@ -32,8 +32,8 @@ export async function generateMetadata({ params }) {
             canonical: `https://airporttaxis.lk/destinations/${dest.id}`,
         },
         openGraph: {
-            title: `${dest.title} | Airport Taxis Sri Lanka`,
-            description: `Fixed-rate airport taxi to ${dest.name}. Starting from $${dest.price}. Professional drivers, 24/7 service.`,
+            title: dest.seoTitle || `${dest.title} | Airport Taxis Sri Lanka`,
+            description: dest.seoDescription || `Fixed-rate airport taxi to ${dest.name}. Starting from $${dest.price}. Professional drivers, 24/7 service.`,
             url: `https://airporttaxis.lk/destinations/${dest.id}`,
             siteName: 'Airport Taxis (Pvt) Ltd Sri Lanka',
             images: [
@@ -49,8 +49,8 @@ export async function generateMetadata({ params }) {
         },
         twitter: {
             card: 'summary_large_image',
-            title: `Taxi to ${dest.name} | Airport Taxis Sri Lanka`,
-            description: `Fixed-rate private taxi from Colombo Airport to ${dest.name}. From $${dest.price}. Book instantly!`,
+            title: dest.seoTitle || `Taxi to ${dest.name} | Airport Taxis Sri Lanka`,
+            description: dest.seoDescription || `Fixed-rate private taxi from Colombo Airport to ${dest.name}. From $${dest.price}. Book instantly!`,
             images: [dest.img || '/og-image.jpg'],
         },
     };

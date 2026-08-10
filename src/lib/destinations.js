@@ -20,7 +20,23 @@ export const destinations = [
         highlights: ["Whale Watching", "Coconut Tree Hill", "Secret Beach", "Surfing"],
         pricing: { "Mini Car": 59, "Sedan": 65, "Mini Van": 75, "KDH Van": 85 },
         coords: { lat: 5.9483, lon: 80.4716 },
-        fullAddress: "Mirissa, Sri Lanka"
+        fullAddress: "Mirissa, Sri Lanka",
+        seoTitle: "Mirissa Taxi & Day Tours | Airport Taxi & Private Transfers to Any Destination in Sri Lanka",
+        seoDescription: "Book the best Mirissa Taxi for day tours, airport taxi transfers, and private trips. Travel from Mirissa to any destination in Sri Lanka with a safe, comfortable, reliable, and affordable taxi service. Enjoy hassle-free airport transfers and sightseeing tours with experienced drivers.",
+        seoKeywords: [
+            "Mirissa Taxi",
+            "Mirissa Taxi Service",
+            "Mirissa Day Tour",
+            "Mirissa Day Tours",
+            "Mirissa Airport Taxi",
+            "Mirissa Airport Transfer",
+            "Mirissa to Colombo Airport Taxi",
+            "Mirissa to Any Destination",
+            "Mirissa Private Taxi",
+            "Mirissa Sightseeing Tours",
+            "Sri Lanka Private Taxi",
+            "Sri Lanka Airport Taxi"
+        ]
     },
     {
         id: 'ahangama',

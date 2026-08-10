@@ -281,7 +281,7 @@ async function phase3_writeContent(brief) {
 
     const prompt = `You are an expert travel content writer for Airport Taxi Tours (airporttaxis.lk), Sri Lanka's top private driver and tour service.
 
-Write a comprehensive 1400+ word SEO blog post in Markdown for this brief:
+Write a comprehensive 1200-1500 word SEO blog post in Markdown for this brief:
 
 PRIMARY KEYWORD: "${brief.primaryKeyword}"
 H1 TITLE: ${brief.h1Title}
@@ -299,7 +299,7 @@ ${linksText}
 
 WRITING RULES:
 1. Start directly with "## [first H2 heading]" - do NOT write the H1
-2. Minimum 1400 words total
+2. Target around 1200-1500 words total (do not exceed 2000 words)
 3. Weave in ALL LSI keywords naturally throughout
 4. Include real Sri Lanka facts: place names, distances in km, journey times, LKR price ranges
 5. Each H2 section must be at least 150 words
