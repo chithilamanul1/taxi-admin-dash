@@ -86,29 +86,43 @@ export async function notifyDiscord(payload) {
 // SEARCH ENGINE PINGER
 // ─────────────────────────────────────────────
 export async function pingSearchEngines(slug) {
-    const SITE_URL = 'https://airporttaxis.lk';
-    const sitemapUrl = encodeURIComponent(`${SITE_URL}/sitemap.xml`);
-    const postUrl = encodeURIComponent(`${SITE_URL}/blog/${slug}`);
+    const DOMAINS = [
+        'https://airporttaxis.lk',
+        'https://airportcabs.lk',
+        'https://srilankantaxi.lk',
+        'https://airporttaxicab.lk',
+        'https://touris.lk'
 
-    const pings = [
-        `https://www.google.com/ping?sitemap=${sitemapUrl}`,
-        `https://www.bing.com/ping?sitemap=${sitemapUrl}`,
-        `https://api.indexnow.org/indexnow?url=${postUrl}&key=airporttaxis`
     ];
 
-    const results = await Promise.allSettled(
-        pings.map(url => fetch(url, { method: 'GET' }).then(r => ({ url, status: r.status })))
-    );
+    const allResults = [];
 
-    results.forEach(r => {
-        if (r.status === 'fulfilled') {
-            console.log(`[Ping] ${r.value.url} -> ${r.value.status}`);
-        } else {
-            console.warn(`[Ping] Failed: ${r.reason}`);
-        }
-    });
+    for (const SITE_URL of DOMAINS) {
+        const sitemapUrl = encodeURIComponent(`${SITE_URL}/sitemap.xml`);
+        const postUrl = encodeURIComponent(`${SITE_URL}/blog/${slug}`);
 
-    return results;
+        const pings = [
+            `https://www.google.com/ping?sitemap=${sitemapUrl}`,
+            `https://www.bing.com/ping?sitemap=${sitemapUrl}`,
+            `https://api.indexnow.org/indexnow?url=${postUrl}&key=airporttaxis`
+        ];
+
+        const results = await Promise.allSettled(
+            pings.map(url => fetch(url, { method: 'GET' }).then(r => ({ url, status: r.status })))
+        );
+
+        results.forEach(r => {
+            if (r.status === 'fulfilled') {
+                console.log(`[Ping] ${r.value.url} -> ${r.value.status}`);
+            } else {
+                console.warn(`[Ping] Failed: ${r.reason}`);
+            }
+        });
+
+        allResults.push(...results);
+    }
+
+    return allResults;
 }
 
 // ─────────────────────────────────────────────
