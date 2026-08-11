@@ -82,7 +82,26 @@ export const destinations = [
         highlights: ["Sigiriya Lion Rock", "Pidurangala Rock", "Minneriya National Park", "Village Tour"],
         pricing: { "Mini Car": 90, "Sedan": 100, "Mini Van": 115, "KDH Van": 130 },
         coords: { lat: 7.9570, lon: 80.7603 },
-        fullAddress: "Sigiriya, Sri Lanka"
+        fullAddress: "Sigiriya, Sri Lanka",
+        seoTitle: "Sigiriya Taxi & Round Tours | Airport Transfers, Hotel Transfers & Private Taxi Sri Lanka",
+        seoDescription: "Book reliable Sigiriya Taxi services in Sri Lanka for round tours, hotel transfers, airport transfers and private trips to any destination. Enjoy comfortable, safe and affordable taxi rides with professional drivers. Explore Sigiriya and travel Sri Lanka with ease.",
+        seoKeywords: [
+            "Sigiriya Taxi",
+            "Sigiriya Taxi Service",
+            "Sigiriya Private Taxi",
+            "Sigiriya Airport Transfer",
+            "Sigiriya Airport Taxi",
+            "Sigiriya Hotel Transfer",
+            "Sigiriya Round Tour",
+            "Sigiriya Day Tour",
+            "Private Taxi Sigiriya",
+            "Colombo Airport to Sigiriya Taxi",
+            "Sigiriya to Colombo Airport Taxi",
+            "Sigiriya to Any Destination",
+            "Sigiriya Private Tours",
+            "Sigiriya Taxi & Tours",
+            "Sri Lanka Private Taxi Service"
+        ]
     },
     {
         id: 'ella',
