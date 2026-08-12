@@ -28,7 +28,8 @@ export default async function sitemap() {
         '/refund-policy',
         '/terms',
         '/destination',
-        '/taxi-6-passengers'
+        '/taxi-6-passengers',
+        '/sigiriya'
     ].map((route) => ({
         url: `${baseUrl}${route}`,
         lastModified: new Date(),
