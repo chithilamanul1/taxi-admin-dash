@@ -147,7 +147,26 @@ export const destinations = [
         highlights: ["Temple of the Tooth", "Kandy Lake", "Botanical Gardens", "Cultural Dance"],
         pricing: { "Mini Car": 65, "Sedan": 70, "Mini Van": 85, "KDH Van": 95 },
         coords: { lat: 7.2906, lon: 80.6337 },
-        fullAddress: "Kandy, Sri Lanka"
+        fullAddress: "Kandy, Sri Lanka",
+        seoTitle: "Kandy Taxi & Round Tours | Airport Transfers & Dalada Perahera Tours Sri Lanka",
+        seoDescription: "Kandy Taxi & Round Tours offers reliable airport transfers, private taxi services and sightseeing tours across Sri Lanka. Travel from Kandy to any tourism destination with comfortable vehicles and experienced drivers. Explore the Temple of the Tooth and enjoy the famous Kandy Esala Perahera with a trusted local taxi service.",
+        seoKeywords: [
+            "Kandy Taxi",
+            "Kandy Taxi Service",
+            "Kandy Round Tour",
+            "Kandy Round Tours Sri Lanka",
+            "Kandy Airport Transfer",
+            "Kandy Airport Taxi",
+            "Kandy to Any Destination",
+            "Kandy Private Taxi",
+            "Kandy Day Tours",
+            "Kandy Sightseeing Tours",
+            "Kandy Dalada Perahera Taxi",
+            "Kandy Esala Perahera Taxi",
+            "Dalada Perahera Transport",
+            "Kandy to Colombo Airport Taxi",
+            "Kandy to Any Tourism Destination Sri Lanka"
+        ]
     },
     {
         id: 'galle',
@@ -161,21 +180,6 @@ export const destinations = [
         longDescription: "Galle Fort is a living time capsule, blending European architectural styles and South Asian traditions. Declared a UNESCO World Heritage site, the fort's car-free streets are lined with boutique shops, art galleries, and historic churches. Beyond the fort, the surrounding coastline offers golden beaches like Unawatuna and pristine snorkeling spots.",
         bestTimeToVisit: "November to April",
         localAttractions: ["Galle Dutch Fort", "Lighthouse", "Dutch Reformed Church", "Marine Museum", "Sea Turtle Hatchery"],
-        faqs: [
-            { q: "Does the taxi use the highway to Galle?", a: "Yes, we use the Southern Expressway for a smooth 2-hour journey." },
-            { q: "Can we visit the fort during the transfer?", a: "Our standard transfer is point-to-point, but custom tours can be arranged." }
-        ],
-        distance: "145 km",
-        time: "2 hours",
-        highlights: ["Galle Fort", "Lighthouse", "Dutch Museum", "Unawatuna Beach"],
-        pricing: { "Mini Car": 55, "Sedan": 60, "Mini Van": 75, "KDH Van": 85 },
-        coords: { lat: 6.0535, lon: 80.2210 },
-        fullAddress: "Galle, Sri Lanka"
-    },
-    {
-        id: 'arugambay',
-        title: "Airport to Arugam Bay",
-        name: "Arugam Bay",
         price: 180,
         badge: "Surfing Paradise",
         img: "/images/tours/arugambay.png",

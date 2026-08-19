@@ -29,7 +29,9 @@ export default async function sitemap() {
         '/terms',
         '/destination',
         '/taxi-6-passengers',
-        '/sigiriya'
+        '/sigiriya',
+        '/kandy',
+        '/galle'
     ].map((route) => ({
         url: `${baseUrl}${route}`,
         lastModified: new Date(),
