@@ -45,10 +45,10 @@ export default function DestinationClient({ destination }) {
                 </div>
             </div>
 
-            <div className="max-w-5xl mx-auto px-6 -mt-20 relative z-10 space-y-10">
+            <div className="max-w-5xl mx-auto px-4 md:px-6 -mt-20 relative z-10 space-y-10">
 
                 {/* Booking Widget */}
-                <div className="bg-white dark:bg-zinc-900 rounded-[2.5rem] shadow-2xl border border-slate-100 dark:border-white/5 overflow-hidden">
+                <div className="-mx-4 md:mx-0 bg-white dark:bg-zinc-900 rounded-t-[2.5rem] md:rounded-[2.5rem] shadow-2xl border-t border-slate-100 md:border dark:border-white/5 overflow-hidden">
                     <BookingWidget
                         defaultTab="pickup"
                         targetLocation={targetLocation}
