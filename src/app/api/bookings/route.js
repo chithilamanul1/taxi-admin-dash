@@ -26,7 +26,10 @@ export async function GET(request) {
         if (driverToken) {
             try {
                 const { verify } = await import('jsonwebtoken');
-                const secret = process.env.JWT_SECRET || process.env.NEXTAUTH_SECRET || 'seranex_secret_key_12345';
+                const secret = process.env.JWT_SECRET || process.env.NEXTAUTH_SECRET;
+                if (!secret) {
+                    return NextResponse.json({ success: false, message: 'JWT_SECRET is not configured' }, { status: 500 });
+                }
                 const decoded = verify(driverToken, secret);
                 if (decoded.role === 'driver') {
                     isDriver = true;

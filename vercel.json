@@ -3,7 +3,7 @@
     "buildCommand": "npm run build",
     "crons": [
         {
-            "path": "/api/admin/seo-scheduler?token=airporttaxis-seo-secret",
+            "path": "/api/admin/seo-scheduler",
             "schedule": "0 1 * * *"
         }
     ]

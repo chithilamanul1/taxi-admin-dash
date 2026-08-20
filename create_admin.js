@@ -28,7 +28,11 @@ async function createAdmin() {
         console.log('Connected to DB');
 
         const email = 'airporttaxis.lk@gmail.com';
-        const password = 'admin-secure-pass-2026';
+        const password = process.env.DEFAULT_ADMIN_PASSWORD;
+        if (!password) {
+            console.error('Error: DEFAULT_ADMIN_PASSWORD environment variable is not set.');
+            process.exit(1);
+        }
         const hashedPassword = await bcrypt.hash(password, 10);
 
         const result = await User.findOneAndUpdate(

@@ -49,7 +49,10 @@ export async function POST(req) {
         await driver.save();
 
         const { sign } = await import('jsonwebtoken');
-        const secret = process.env.JWT_SECRET || process.env.NEXTAUTH_SECRET || 'seranex_secret_key_12345';
+        const secret = process.env.JWT_SECRET || process.env.NEXTAUTH_SECRET;
+        if (!secret) {
+            return NextResponse.json({ success: false, message: 'JWT_SECRET is not configured' }, { status: 500 });
+        }
         const token = sign({ id: driver._id, role: 'driver' }, secret, { expiresIn: '7d' });
 
         const response = NextResponse.json({

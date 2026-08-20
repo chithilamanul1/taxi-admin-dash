@@ -22,7 +22,11 @@ async function setupAdmin() {
         console.log('Connected!');
 
         const email = 'airporttaxis.lk@gmail.com';
-        const rawPassword = 'admin-secure-pass-2026.';
+        const rawPassword = process.env.DEFAULT_ADMIN_PASSWORD;
+        if (!rawPassword) {
+            console.error('Error: DEFAULT_ADMIN_PASSWORD environment variable is not set.');
+            process.exit(1);
+        }
 
         const salt = await bcrypt.genSalt(10);
         const hashedPassword = await bcrypt.hash(rawPassword, salt);

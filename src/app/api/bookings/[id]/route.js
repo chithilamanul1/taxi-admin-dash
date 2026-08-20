@@ -24,7 +24,10 @@ async function checkAuth(bookingId) {
     if (driverToken) {
         try {
             const { verify } = await import('jsonwebtoken');
-            const secret = process.env.JWT_SECRET || process.env.NEXTAUTH_SECRET || 'seranex_secret_key_12345';
+            const secret = process.env.JWT_SECRET || process.env.NEXTAUTH_SECRET;
+            if (!secret) {
+                return NextResponse.json({ success: false, message: 'JWT_SECRET is not configured' }, { status: 500 });
+            }
             const decoded = verify(driverToken, secret);
             if (decoded.role === 'driver') {
                 return { role: 'driver', id: decoded.id };
@@ -95,7 +98,7 @@ export async function PATCH(request, { params }) {
         if (rating) update.rating = rating;
         if (review) update.review = review;
         if (actualKm) update.actualKm = actualKm;
-        
+
         let driverNewlyAssigned = false;
         if (assignedDriver) {
             update.driver = assignedDriver;
@@ -104,7 +107,7 @@ export async function PATCH(request, { params }) {
                 update.status = 'assigned'; // Automatically move to assigned status
             }
         }
-        
+
         if (status === 'completed' || update.status === 'completed') {
             update.completedAt = completedAt || new Date();
         }
@@ -121,15 +124,15 @@ export async function PATCH(request, { params }) {
             try {
                 const driverId = booking.driver._id;
                 // Find all completed bookings for this driver with a rating
-                const ratedBookings = await Booking.find({ 
-                    driver: driverId, 
-                    status: 'completed', 
-                    rating: { $exists: true } 
+                const ratedBookings = await Booking.find({
+                    driver: driverId,
+                    status: 'completed',
+                    rating: { $exists: true }
                 });
-                
+
                 if (ratedBookings.length > 0) {
                     const avgRating = ratedBookings.reduce((sum, b) => sum + b.rating, 0) / ratedBookings.length;
-                    await Driver.findByIdAndUpdate(driverId, { 
+                    await Driver.findByIdAndUpdate(driverId, {
                         ratings: Number(avgRating.toFixed(1)),
                         totalRides: await Booking.countDocuments({ driver: driverId, status: 'completed' })
                     });
@@ -201,11 +204,11 @@ export async function PATCH(request, { params }) {
                         time: `${booking.scheduledDate} ${booking.scheduledTime}`
                     });
                 }
-                
+
                 // 2. Email & SMS Notification
                 const { sendDriverAssignmentEmail } = await import('@/lib/email-service');
                 if (sendDriverAssignmentEmail) await sendDriverAssignmentEmail(booking);
-                
+
                 const smsService = await import('@/lib/sms').catch(() => null);
                 if (smsService && smsService.sendDriverAssignmentSMS) {
                     await smsService.sendDriverAssignmentSMS(booking);

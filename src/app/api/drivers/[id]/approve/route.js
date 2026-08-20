@@ -28,7 +28,7 @@ export async function POST(req, { params }) {
         if (action === 'approve') {
 
             // 1. Create User Account
-            const tempPassword = 'Driver@2025';
+            const tempPassword = process.env.DEFAULT_DRIVER_PASSWORD || Math.random().toString(36).slice(-10) + 'A1!';
             const hashedPassword = await bcrypt.hash(tempPassword, 10);
 
             // Check if user exists

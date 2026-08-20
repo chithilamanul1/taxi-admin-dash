@@ -17,7 +17,12 @@ const ADMIN_EMAILS = [
     'chithilamanul1@gmail.com'
 ];
 
-const NEW_PASSWORD = 'AdminPass123!';
+const NEW_PASSWORD = process.env.DEFAULT_ADMIN_PASSWORD;
+
+if (!NEW_PASSWORD) {
+    console.error('Error: DEFAULT_ADMIN_PASSWORD environment variable is not set.');
+    process.exit(1);
+}
 
 const UserSchema = new mongoose.Schema({
     email: String,

@@ -15,7 +15,7 @@ export default function DestinationClient({ destination }) {
     return (
         <div className="bg-white dark:bg-emerald-900 min-h-screen pb-20">
             {/* Hero Section */}
-            <div className="relative h-[65vh] w-full">
+            <div className="relative h-[45vh] md:h-[60vh] w-full">
                 <Image
                     src={destination.img || '/hero-bg.jpg'}
                     alt={destination.title}
@@ -29,10 +29,10 @@ export default function DestinationClient({ destination }) {
                         <span className="inline-block px-4 py-1.5 rounded-full bg-emerald-500/20 backdrop-blur-md border border-emerald-400/30 text-emerald-200 text-xs font-bold uppercase tracking-widest mb-6">
                             {destination.badge}
                         </span>
-                        <h1 className="text-4xl md:text-7xl font-black text-white mb-4 drop-shadow-lg tracking-tight">
+                        <h1 className="text-4xl md:text-7xl font-black text-white mb-2 md:mb-4 drop-shadow-lg tracking-tight">
                             {destination.name}
                         </h1>
-                        <p className="text-lg md:text-xl text-white/90 font-medium mb-8 drop-shadow-md max-w-2xl mx-auto">
+                        <p className="text-base md:text-xl text-white/90 font-medium mb-4 md:mb-8 drop-shadow-md max-w-2xl mx-auto line-clamp-2 md:line-clamp-none">
                             {destination.description}
                         </p>
                         <div className="flex flex-wrap items-center justify-center gap-6 text-white/90">

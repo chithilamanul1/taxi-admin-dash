@@ -6,7 +6,11 @@ const cors = require('cors');
 
 const app = express();
 const PORT = process.env.PORT || 4000;
-const AUTH_TOKEN = process.env.UPLOAD_AUTH_TOKEN || 'chithila123@';
+const AUTH_TOKEN = process.env.UPLOAD_AUTH_TOKEN;
+if (!AUTH_TOKEN) {
+    console.error('CRITICAL ERROR: UPLOAD_AUTH_TOKEN environment variable is not set. Exiting.');
+    process.exit(1);
+}
 
 // Ensure uploads directory exists
 const uploadDir = path.join(__dirname, 'uploads');

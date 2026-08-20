@@ -22,7 +22,11 @@ async function resetPassword() {
     try {
         await dbConnect();
         const email = 'admin@airporttaxitours.lk';
-        const newPassword = 'Admin@Taxi2026!'; // Temporary secure password
+        const newPassword = process.env.DEFAULT_ADMIN_PASSWORD;
+        if (!newPassword) {
+            console.error('Error: DEFAULT_ADMIN_PASSWORD environment variable is not set.');
+            process.exit(1);
+        }
 
         const salt = await bcrypt.genSalt(10);
         const hashedPassword = await bcrypt.hash(newPassword, salt);

@@ -7,11 +7,13 @@ import { runSEOPipeline, notifyDiscord, pingSearchEngines } from '@/lib/seo-pipe
 const SITE_URL = 'https://airporttaxis.lk';
 
 export async function GET(req) {
-    // Vercel Cron calls this as GET with a secret token
-    const { searchParams } = new URL(req.url);
-    const token = searchParams.get('token');
-    const cronSecret = process.env.SEO_CRON_SECRET || 'airporttaxis-seo-secret';
-    if (token !== cronSecret) {
+    // Vercel Cron calls this as GET with an Authorization header
+    const authHeader = req.headers.get('authorization');
+    const cronSecret = process.env.SEO_CRON_SECRET;
+    if (!cronSecret) {
+        return NextResponse.json({ success: false, message: 'SEO_CRON_SECRET is not configured' }, { status: 500 });
+    }
+    if (authHeader !== `Bearer ${cronSecret}`) {
         return NextResponse.json({ success: false, error: 'Unauthorized' }, { status: 401 });
     }
     return runScheduler();
