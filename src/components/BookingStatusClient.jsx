@@ -147,7 +147,7 @@ export default function BookingStatusClient({ booking }) {
                                    </div>
                                    <ArrowRight size={16} className="text-slate-400" />
                                 </button>
-                               <a href="https://wa.me/94716885880" target="_blank" className="flex items-center justify-between bg-emerald-500 text-white p-3 md:p-4 rounded-xl border border-emerald-400 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all">
+                               <a href="https://wa.me/94722885885" target="_blank" className="flex items-center justify-between bg-emerald-500 text-white p-3 md:p-4 rounded-xl border border-emerald-400 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all">
                                    <div className="flex items-center gap-2 md:gap-3">
                                        <MessageSquare size={16} className="md:w-[18px] md:h-[18px] text-white" strokeWidth={2.5} />
                                        <span className="text-[10px] md:text-[11px] font-bold uppercase tracking-widest">WhatsApp</span>

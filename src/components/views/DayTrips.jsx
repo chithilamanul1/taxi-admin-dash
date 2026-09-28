@@ -118,7 +118,7 @@ const DayTrips = () => {
                                      <button
                                          onClick={() => {
                                              const msg = `Inquiry about Day Trip: ${trip.title} (${trip.duration})`
-                                             window.open(`https://wa.me/94716885880?text=${msg}`, '_blank')
+                                             window.open(`https://wa.me/94722885885?text=${msg}`, '_blank')
                                          }}
                                          className="bg-[#FACC15] text-black p-3 rounded-none border-4 border-black hover:bg-black hover:text-[#FACC15] transition-all"
                                      >

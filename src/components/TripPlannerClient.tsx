@@ -169,7 +169,7 @@ export default function TripPlannerClient({ isEmbedded = false }: { isEmbedded?:
                             <button
                                 onClick={() => {
                                     const text = encodeURIComponent(`Hi, I'm interested in the AI trip: ${itinerary.title}. Itinerary includes ${itinerary.destinations?.join(', ')}.`);
-                                    window.open(`https://wa.me/+94716885880?text=${text}`, '_blank');
+                                    window.open(`https://wa.me/+94722885885?text=${text}`, '_blank');
                                 }}
                                 className="px-8 py-4 bg-emerald-500 text-white rounded-2xl font-black shadow-xl shadow-emerald-200 hover:scale-[1.02] transition-all flex items-center gap-2"
                             >
@@ -269,7 +269,7 @@ export default function TripPlannerClient({ isEmbedded = false }: { isEmbedded?:
                                             <Navigation size={18} className="rotate-45" /> Download Travel Plan
                                         </button>
                                         <button
-                                            onClick={() => window.open('https://wa.me/+94716885880', '_blank')}
+                                            onClick={() => window.open('https://wa.me/+94722885885', '_blank')}
                                             className="w-full py-5 bg-emerald-900 text-white rounded-2xl font-black transition-transform hover:scale-[1.02] shadow-xl"
                                         >
                                             Get Exact Quote

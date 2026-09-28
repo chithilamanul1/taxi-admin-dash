@@ -188,7 +188,7 @@ const getJsonLd = (baseUrl) => ({
             },
             contactPoint: {
                 '@type': 'ContactPoint',
-                telephone: '+94716885880',
+                telephone: '+94722885885',
                 contactType: 'customer service',
                 areaServed: 'LK',
                 availableLanguage: ['English', 'Sinhala']
@@ -196,7 +196,7 @@ const getJsonLd = (baseUrl) => ({
             sameAs: [
                 'https://www.facebook.com/airporttaxistours',
                 'https://www.instagram.com/airporttaxistours',
-                'https://wa.me/94716885880'
+                'https://wa.me/94722885885'
             ]
         }
     ]

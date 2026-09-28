@@ -437,7 +437,7 @@ export default function TourDetailsClient({ tour }) {
                                         <button onClick={() => setIsBookingOpen(true)} className="w-full h-20 bg-[#FACC15] text-black font-black uppercase tracking-[0.2em] text-lg rounded-xl hover:bg-yellow-400 transition-all shadow-xl shadow-yellow-500/20 border-none">
                                             Instant Booking
                                         </button>
-                                        <a href={`https://wa.me/+94716885880?text=${encodeURIComponent(`Hi, I'm interested in booking "${tour.title}".`)}`} target="_blank" className="w-full h-20 bg-white text-black font-black uppercase tracking-[0.2em] text-lg border border-slate-100 dark:border-white/10 shadow-md flex items-center justify-center gap-3 hover:bg-black hover:text-white transition-all">
+                                        <a href={`https://wa.me/+94722885885?text=${encodeURIComponent(`Hi, I'm interested in booking "${tour.title}".`)}`} target="_blank" className="w-full h-20 bg-white text-black font-black uppercase tracking-[0.2em] text-lg border border-slate-100 dark:border-white/10 shadow-md flex items-center justify-center gap-3 hover:bg-black hover:text-white transition-all">
                                             <MessageCircle size={22} /> WhatsApp Inquiry
                                         </a>
                                     </div>

@@ -108,7 +108,7 @@ export default async function RoutePage({ params }) {
                                 <p className="text-sm font-bold opacity-60 uppercase tracking-widest mb-2">Need Help?</p>
                                 <p className="text-xl font-black mb-4">Chat with us on WhatsApp</p>
                                 <a
-                                    href="https://wa.me/94716885880"
+                                    href="https://wa.me/94722885885"
                                     className="inline-block bg-emerald-500 text-black px-8 py-4 rounded-xl font-black hover:bg-emerald-400 transition-colors"
                                 >
                                     OPEN WHATSAPP

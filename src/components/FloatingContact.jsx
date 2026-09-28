@@ -17,7 +17,7 @@ export default function FloatingContact() {
                 <div className="flex flex-col gap-4 animate-fade-in-up items-end">
                     {/* WhatsApp */}
                     <a
-                        href="https://wa.me/94716885880"
+                        href="https://wa.me/94722885885"
                         className="group flex flex-col items-center gap-1"
                         aria-label="Contact us on WhatsApp"
                     >

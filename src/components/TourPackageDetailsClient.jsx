@@ -451,7 +451,7 @@ export default function TourPackageDetailsClient({ tour }) {
                                     <button onClick={() => setIsModalOpen(true)} className="w-full h-16 bg-[#FACC15] text-black font-black uppercase tracking-[0.2em] text-sm rounded-xl hover:bg-yellow-400 transition-all shadow-xl shadow-yellow-500/20 border-none">
                                         INSTANT BOOKING
                                     </button>
-                                    <a href={`https://wa.me/+94716885880?text=${encodeURIComponent(`Hi, I'm interested in booking "${tour.title}".`)}`} target="_blank" className="w-full h-16 bg-white text-black font-black uppercase tracking-[0.2em] text-[10px] rounded-xl border border-slate-200 dark:border-white/10 flex items-center justify-center gap-3 transition-all hover:bg-slate-50 dark:hover:bg-zinc-700 shadow-sm dark:bg-zinc-800 dark:text-white">
+                                    <a href={`https://wa.me/+94722885885?text=${encodeURIComponent(`Hi, I'm interested in booking "${tour.title}".`)}`} target="_blank" className="w-full h-16 bg-white text-black font-black uppercase tracking-[0.2em] text-[10px] rounded-xl border border-slate-200 dark:border-white/10 flex items-center justify-center gap-3 transition-all hover:bg-slate-50 dark:hover:bg-zinc-700 shadow-sm dark:bg-zinc-800 dark:text-white">
                                         <MessageCircle size={20} /> WHATSAPP INQUIRY
                                     </a>
                                 </div>
