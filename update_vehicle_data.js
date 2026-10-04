@@ -17,7 +17,7 @@ const UPDATES = [
     { type: 'mini-car', capacity: 2, luggage: 2, handLuggage: 2, name: 'Mini Car' },
     { type: 'sedan', capacity: 3, luggage: 3, handLuggage: 3, name: 'Sedan Car' },
     { type: 'mini-van-every', capacity: 3, luggage: 3, handLuggage: 3, name: 'Suzuki Every' },
-    { type: 'mini-van-05', capacity: 4, luggage: 4, handLuggage: 4, name: 'Mini Van (4 Seat)' },
+    { type: 'mini-van-05', capacity: 3, luggage: 3, handLuggage: 3, name: 'Mini Van (4 Seat)' },
     { type: 'suv', capacity: 3, luggage: 3, handLuggage: 3, name: 'SUV' },
     { type: 'vezel', capacity: 3, luggage: 3, handLuggage: 3, name: 'Honda Vezel' },
     { type: 'normal-kdh', capacity: 6, luggage: 7, handLuggage: 7, name: 'Van (KDH Flat Roof)' },

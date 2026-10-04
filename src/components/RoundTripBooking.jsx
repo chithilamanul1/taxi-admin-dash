@@ -86,7 +86,7 @@ const RoundTripBooking = () => {
             { id: 'vezel', vehicleType: 'vezel', name: 'HONDA VEZEL', baseRate: 5500, perKm: 130, image: '/vehicles/Hondavezel.png', capacity: 3, suitcases: 3, luggage: 3, handLuggage: 3 },
             { id: 'suv', vehicleType: 'suv', name: 'SUV', baseRate: 8000, perKm: 160, image: '/vehicles/suv.png', capacity: 3, suitcases: 3, luggage: 3, handLuggage: 3 },
             { id: 'mini-van-every', vehicleType: 'mini-van-every', name: 'MINI VAN EVERY', baseRate: 4500, perKm: 150, image: '/vehicles/susukievery.png', capacity: 3, suitcases: 3, luggage: 3, handLuggage: 3 },
-            { id: 'mini-van-05', vehicleType: 'mini-van-05', name: 'MINI VAN 4 SEAT', baseRate: 6000, perKm: 200, image: '/vehicles/minivan5seat.png', capacity: 4, suitcases: 4, luggage: 4, handLuggage: 4 },
+            { id: 'mini-van-05', vehicleType: 'mini-van-05', name: 'MINI VAN 4 SEAT', baseRate: 6000, perKm: 200, image: '/vehicles/minivan5seat.png', capacity: 3, suitcases: 3, luggage: 3, handLuggage: 3 },
             { id: 'normal-kdh', vehicleType: 'normal-kdh', name: 'VAN KDH', baseRate: 8000, perKm: 175, image: '/vehicles/van.png', capacity: 6, suitcases: 7, luggage: 7, handLuggage: 7 },
             { id: 'kdh-van', vehicleType: 'kdh-van', name: 'MINI BUS', baseRate: 8500, perKm: 180, image: '/vehicles/toyota-highroof.png', capacity: 8, suitcases: 8, luggage: 8, handLuggage: 6 },
             { id: 'mini-bus', vehicleType: 'mini-bus', name: 'COASTER BUS', baseRate: 15000, perKm: 250, image: '/vehicles/costerbus.png', capacity: 25, suitcases: 20, luggage: 20, handLuggage: 15 },

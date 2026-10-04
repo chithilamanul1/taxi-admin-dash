@@ -10,7 +10,7 @@ const VEHICLE_METADATA = {
     'vezel': { name: 'HONDA VEZEL', image: '/vehicles/Hondavezel.png', capacity: 3, luggage: 3, handLuggage: 3, sortOrder: 3 },
     'suv': { name: 'SUV', image: '/vehicles/suv.png', capacity: 3, luggage: 3, handLuggage: 3, sortOrder: 4 },
     'mini-van-every': { name: 'MINI VAN EVERY', image: '/vehicles/susukievery.png', capacity: 3, luggage: 3, handLuggage: 3, sortOrder: 5 },
-    'mini-van-05': { name: 'MINI VAN 4 SEAT', image: '/vehicles/minivan5seat.png', capacity: 4, luggage: 4, handLuggage: 4, sortOrder: 6 },
+    'mini-van-05': { name: 'MINI VAN 4 SEAT', image: '/vehicles/minivan5seat.png', capacity: 3, luggage: 3, handLuggage: 3, sortOrder: 6 },
     'normal-kdh': { name: 'VAN KDH', image: '/vehicles/van.png', capacity: 6, luggage: 7, handLuggage: 7, sortOrder: 7 },
     'kdh-van': { name: 'MINI BUS', image: '/vehicles/toyota-highroof.png', capacity: 8, luggage: 8, handLuggage: 6, sortOrder: 8 },
     'mini-bus': { name: 'COASTER BUS', image: '/vehicles/costerbus.png', capacity: 25, luggage: 20, handLuggage: 15, sortOrder: 9 },
